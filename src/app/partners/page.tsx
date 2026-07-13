@@ -31,6 +31,7 @@ const PATHWAYS = [
 ];
 
 const DIRECTORY = [
+  { name: "Development Authority of Bulloch County", description: "Supported development of GTCIO's $27 million training facility." },
   { name: "Koyo Bearings", description: "Manufacturer of precision bearings for heavy industrial machinery." },
   { name: "Georgia Power", description: "Utility provider for energy infrastructure and maintenance." },
   { name: "Ajin Georgia", description: "Automotive parts manufacturer with a strong regional maintenance and automation footprint." },
@@ -83,9 +84,10 @@ export default function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">Our Partners</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">
-            Placeholder directory — real partner logos and quotes go here once provided.
+            Confirmed and prospective partners — logos and additional quotes to be added as they're
+            provided.
           </p>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {DIRECTORY.map((partner) => (
               <div key={partner.name} className="border border-dashed border-brand-silver/60 p-6">
                 <div className="font-heading flex h-16 items-center text-lg font-bold text-brand-silver">

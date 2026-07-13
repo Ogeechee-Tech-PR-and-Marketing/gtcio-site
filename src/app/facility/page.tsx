@@ -8,22 +8,41 @@ export const metadata: Metadata = {
 
 const GALLERY_PLACEHOLDERS = ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"];
 
+const FACILITY_STATS = [
+  { value: "40,000 sq ft", label: "Purpose-built training space" },
+  { value: "$27M", label: "Facility investment" },
+  { value: "~460,000 hrs", label: "Instructional capacity per year" },
+];
+
 export default function FacilityPage() {
   return (
     <>
       <PageHero
         eyebrow="Facility"
         title="Built for hands-on training"
-        description="GTCIO's facility was designed so campus tours never interrupt day-to-day training and operations."
+        description="GTCIO's 40,000-square-foot, $27 million facility was designed so campus tours never interrupt day-to-day training and operations."
       />
+
+      <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
+          {FACILITY_STATS.map((stat) => (
+            <div key={stat.label} className="border-l-4 border-brand-red pl-5">
+              <p className="font-heading text-3xl font-bold text-brand-black">{stat.value}</p>
+              <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">Overview</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">
-            Placeholder overview copy — describe the facility's size, equipment, and layout here.
-            The space houses real industrial equipment across maintenance, automation, and controls,
-            giving students hands-on experience with the same tools they'll use on the job.
+            GTCIO&apos;s facility serves both credit students and incumbent workers, with real
+            industrial equipment across maintenance, automation, and controls — giving students
+            hands-on experience with the same tools they&apos;ll use on the job. Beyond academic
+            programs, the space also functions as an instructional training and certification site
+            for instructors from across Georgia and the nation.
           </p>
         </div>
       </section>

@@ -6,6 +6,27 @@ export const metadata: Metadata = {
   title: "IOT Diploma Program | GTCIO",
 };
 
+const CURRICULUM_STAGES = [
+  {
+    stage: "Foundation",
+    detail: "Mechanical, electrical, hydraulic, and pneumatic systems.",
+  },
+  {
+    stage: "Advanced",
+    detail: "Robotics, programmable logic controllers (PLCs), automation controls, smart sensors, industrial wiring, and motor controls.",
+  },
+  {
+    stage: "Credential",
+    detail: "Graduate with a diploma and the option to earn a globally recognized Smart Automation Certification Alliance (SACA) credential alongside it.",
+  },
+];
+
+const CAREERS = [
+  "Industrial Maintenance Technician",
+  "Operations Technician",
+  "Automation & Controls Specialist",
+];
+
 const JOB_DUTIES = [
   "Fixing things that break — diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems.",
   "Preventing things from breaking — scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs.",
@@ -22,7 +43,9 @@ const PAY_RANGES = [
 ];
 
 const FAQS = [
-  { q: "How much can I expect to earn after graduating?", a: "See the pay ranges above — most graduates start in entry-level/operator roles and grow from there." },
+  { q: "When does the program start?", a: "The Industrial Operations Technology diploma program launches in August 2026." },
+  { q: "How much can I expect to earn after graduating?", a: "See the pay ranges below — most graduates start in entry-level/operator roles and grow from there." },
+  { q: "What credential do I earn?", a: "A college diploma, plus the option to earn a globally recognized SACA (Smart Automation Certification Alliance) credential alongside it." },
   { q: "How much does the program cost?", a: "Placeholder — final tuition figure pending confirmation." },
   { q: "How long does it take to finish?", a: "Placeholder — final program length pending confirmation." },
 ];
@@ -31,7 +54,7 @@ export default function IotDiplomaProgramPage() {
   return (
     <>
       <PageHero
-        eyebrow="IOT Diploma Program"
+        eyebrow="IOT Diploma Program — Enrolling now for August 2026"
         title="What is Industrial Operations Technology?"
         description="In plain English: it's the training behind keeping factories, utilities, and logistics centers running — make things work, keep them working."
       />
@@ -57,7 +80,33 @@ export default function IotDiplomaProgramPage() {
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">What the job looks like</h2>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">Curriculum &amp; credentials</h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {CURRICULUM_STAGES.map((stage, i) => (
+              <div key={stage.stage} className="border border-brand-silver/40 p-6">
+                <p className="font-heading text-sm font-bold tracking-widest text-brand-gold">STAGE {i + 1}</p>
+                <h3 className="font-heading mt-2 text-lg font-bold text-brand-black">{stage.stage}</h3>
+                <p className="mt-2 text-sm text-brand-silver">{stage.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-black">Careers this prepares you for</h2>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {CAREERS.map((career) => (
+              <span
+                key={career}
+                className="font-heading border-2 border-brand-red px-4 py-2 text-sm font-bold tracking-wide text-brand-red"
+              >
+                {career}
+              </span>
+            ))}
+          </div>
+          <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">What the job looks like</h3>
           <ul className="mt-6 flex flex-col gap-4">
             {JOB_DUTIES.map((duty) => (
               <li key={duty} className="border-l-4 border-brand-red pl-5 text-brand-black">
@@ -109,7 +158,7 @@ export default function IotDiplomaProgramPage() {
       <section id="apply" className="scroll-mt-24 bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
         <h2 className="font-heading text-3xl font-bold">Sign up today, and we&apos;ll see you here!</h2>
         <div className="mt-8">
-          <Button href="/contact" variant="primary">GET STARTED</Button>
+          <Button href="https://www.ogeecheetech.edu/IOT" variant="primary">APPLY NOW</Button>
         </div>
       </section>
     </>

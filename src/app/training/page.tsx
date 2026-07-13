@@ -38,7 +38,9 @@ export default function TrainingPage() {
             <h2 className="font-heading text-2xl font-bold text-brand-red">For Employers</h2>
             <p className="mt-4 text-brand-silver">
               Custom training for your current staff, built around your equipment and processes —
-              reducing downtime and building internal maintenance capability.
+              reducing downtime and building internal maintenance capability. GTCIO also serves as
+              an instructional training and certification site for instructors from across Georgia
+              and the nation.
             </p>
             <div className="mt-6">
               <Button href="/contact" variant="outline">TALK TO US</Button>

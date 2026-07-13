@@ -21,6 +21,13 @@ export default function ContactPage() {
               <p>Phone: (912) 871-XXXX (placeholder)</p>
               <p>Email: gtcio@ogeecheetech.edu (placeholder)</p>
             </div>
+
+            <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Media Inquiries</h2>
+            <div className="mt-3 flex flex-col gap-2 text-brand-black">
+              <p>Sean Payne</p>
+              <p>spayne@ogeecheetech.edu</p>
+              <p>(O) 912-871-8559</p>
+            </div>
           </div>
           <div>
             <InquiryForm
