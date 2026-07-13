@@ -57,6 +57,8 @@ export default function IotDiplomaProgramPage() {
         eyebrow="IOT Diploma Program — Enrolling now for August 2026"
         title="What is Industrial Operations Technology?"
         description="In plain English: it's the training behind keeping factories, utilities, and logistics centers running — make things work, keep them working."
+        image="/images/hero-iot-program.jpg"
+        imageAlt="Engineer inspecting an industrial engine"
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
