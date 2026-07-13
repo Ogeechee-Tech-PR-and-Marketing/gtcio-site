@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Button from "@/components/Button";
 import Link from "next/link";
 
@@ -27,12 +26,15 @@ export default function Home() {
   return (
     <>
       <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
-        <Image
-          src="/images/hero-robotic-arm.jpg"
-          alt="Industrial robotic arm on an automated assembly line"
-          fill
-          priority
-          className="object-cover"
+        <video
+          src="/videos/hero-construction.mp4"
+          poster="/images/hero-construction-poster.jpg"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-brand-black/70" />
         <div className="relative mx-auto max-w-5xl">
