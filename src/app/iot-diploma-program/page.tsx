@@ -21,6 +21,13 @@ const CURRICULUM_STAGES = [
   },
 ];
 
+const PROGRAM_OPTIONS = [
+  { name: "Industrial Operations Technology Diploma", code: "IS32", detail: "The full program." },
+  { name: "Certificate — Electrical/Mechanical", detail: "Focused on the electrical and mechanical side of the curriculum." },
+  { name: "Certificate — PLC", detail: "Focused on programmable logic controllers." },
+  { name: "Certificate — Robotics", detail: "Focused on robotics." },
+];
+
 const CAREERS = [
   "Industrial Maintenance Technician",
   "Operations Technician",
@@ -48,6 +55,7 @@ const FAQS = [
   { q: "What credential do I earn?", a: "A college diploma, plus the option to add a SACA (Smart Automation Certification Alliance) credential — it's recognized industry-wide, not just in Georgia." },
   { q: "How much does the program cost?", a: "Placeholder — final tuition figure pending confirmation." },
   { q: "How long does it take to finish?", a: "Placeholder — final program length pending confirmation." },
+  { q: "Is this an online program?", a: "No — it's in-person, day classes. This is hands-on work, so you need to be in the shop." },
 ];
 
 export default function IotDiplomaProgramPage() {
@@ -96,6 +104,28 @@ export default function IotDiplomaProgramPage() {
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-black">More than one way in</h2>
+          <p className="mt-4 max-w-3xl text-brand-silver">
+            The diploma isn&apos;t the only option. OTC also breaks the same curriculum into three
+            standalone certificates, so you can start smaller — or focus on just the part of the job
+            you&apos;re after.
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {PROGRAM_OPTIONS.map((option) => (
+              <div key={option.name} className="border border-brand-silver/40 p-5">
+                <p className="font-bold text-brand-black">
+                  {option.name}
+                  {option.code && <span className="text-brand-silver"> ({option.code})</span>}
+                </p>
+                <p className="mt-1 text-sm text-brand-silver">{option.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">Careers this prepares you for</h2>
           <div className="mt-6 flex flex-wrap gap-3">
             {CAREERS.map((career) => (
@@ -107,6 +137,10 @@ export default function IotDiplomaProgramPage() {
               </span>
             ))}
           </div>
+          <p className="mt-4 text-sm text-brand-silver">
+            Stick with it and there&apos;s room to move up — into production supervisor or
+            operations manager roles.
+          </p>
           <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">What the job looks like</h3>
           <ul className="mt-6 flex flex-col gap-4">
             {JOB_DUTIES.map((duty) => (

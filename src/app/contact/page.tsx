@@ -17,9 +17,16 @@ export default function ContactPage() {
             <h2 className="font-heading text-xl font-bold text-brand-black">GTCIO</h2>
             <p className="mt-1 text-brand-silver">A Division of Ogeechee Technical College</p>
             <div className="mt-6 flex flex-col gap-2 text-brand-black">
-              <p>1189 Deloach Rd, Statesboro, GA 30458 (placeholder)</p>
-              <p>Phone: (912) 871-XXXX (placeholder)</p>
-              <p>Email: gtcio@ogeecheetech.edu (placeholder)</p>
+              <p>1 Joe Kennedy Blvd., Statesboro, GA 30458</p>
+              <p>Phone: (800) 646-1316</p>
+            </div>
+
+            <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Program Questions</h2>
+            <div className="mt-3 flex flex-col gap-2 text-brand-black">
+              <p>Jan Moore, Vice President for Economic Development</p>
+              <p>Office 1110, Jack Hill Building</p>
+              <p>912-688-6026</p>
+              <p>jmoore@ogeecheetech.edu</p>
             </div>
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Media Inquiries</h2>

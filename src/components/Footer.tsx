@@ -54,11 +54,10 @@ export default function Footer() {
         ))}
 
         <div>
-          <p className="font-heading text-sm font-bold tracking-widest text-brand-gold">Contact</p>
+          <p className="font-display text-sm text-brand-gold">Contact</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm text-brand-silver">
-            <li>1189 Deloach Rd, Statesboro, GA 30458 (placeholder)</li>
-            <li>Phone: (912) 871-XXXX (placeholder)</li>
-            <li>Email: gtcio@ogeecheetech.edu (placeholder)</li>
+            <li>1 Joe Kennedy Blvd., Statesboro, GA 30458</li>
+            <li>Phone: (800) 646-1316</li>
           </ul>
         </div>
       </div>
