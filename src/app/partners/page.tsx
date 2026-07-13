@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import InquiryForm from "@/components/InquiryForm";
@@ -31,11 +32,11 @@ const PATHWAYS = [
 ];
 
 const DIRECTORY = [
-  { name: "Development Authority of Bulloch County", description: "Supported development of GTCIO's $27 million training facility." },
-  { name: "Koyo Bearings", description: "Manufacturer of precision bearings for heavy industrial machinery." },
-  { name: "Georgia Power", description: "Utility provider for energy infrastructure and maintenance." },
-  { name: "Ajin Georgia", description: "Automotive parts manufacturer with a strong regional maintenance and automation footprint." },
-  { name: "Amazon", description: "Logistics and fulfillment operations with a growing footprint in the region." },
+  { name: "Development Authority of Bulloch County", logo: "/images/partners/bulloch-development-authority.svg", description: "Supported development of GTCIO's $27 million training facility." },
+  { name: "Koyo Bearings", logo: "/images/partners/koyo-bearings.jpg", description: "Manufacturer of precision bearings for heavy industrial machinery." },
+  { name: "Georgia Power", logo: "/images/partners/georgia-power.svg", description: "Utility provider for energy infrastructure and maintenance." },
+  { name: "Ajin Georgia", logo: "/images/partners/ajin-georgia.jpg", description: "Automotive parts manufacturer with a strong regional maintenance and automation footprint." },
+  { name: "Amazon", logo: "/images/partners/amazon.png", description: "Logistics and fulfillment operations with a growing footprint in the region." },
 ];
 
 export default function PartnersPage() {
@@ -85,16 +86,22 @@ export default function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">Our Partners</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">
-            Confirmed and prospective partners. Logos and additional quotes will be added as
-            they're provided.
+            A few of the organizations working with GTCIO to build Georgia&apos;s industrial
+            workforce.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {DIRECTORY.map((partner) => (
-              <div key={partner.name} className="border border-dashed border-brand-silver/60 p-6">
-                <div className="font-heading flex h-16 items-center text-lg font-bold text-brand-silver">
-                  {partner.name}
+              <div key={partner.name} className="border border-brand-silver/40 p-6">
+                <div className="relative flex h-16 items-center justify-center">
+                  <Image
+                    src={partner.logo}
+                    alt={`${partner.name} logo`}
+                    fill
+                    className="object-contain"
+                  />
                 </div>
-                <p className="mt-2 text-sm text-brand-silver">{partner.description}</p>
+                <p className="mt-3 text-center text-sm font-bold text-brand-black">{partner.name}</p>
+                <p className="mt-1 text-sm text-brand-silver">{partner.description}</p>
               </div>
             ))}
           </div>
