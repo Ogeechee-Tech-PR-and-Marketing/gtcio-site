@@ -1,65 +1,102 @@
-import Image from "next/image";
+import Button from "@/components/Button";
+import Link from "next/link";
+
+const STATS = [
+  { value: "600–700", label: "People trained last year" },
+  { value: "1", label: "Only program of its kind in the Technical College System of Georgia" },
+  { value: "3", label: "Career tracks: maintenance, automation, facilities/utilities" },
+];
+
+const PATHWAYS = [
+  {
+    title: "Students",
+    description: "Earn a diploma built around hands-on work with real industrial equipment, not just theory.",
+    href: "/iot-diploma-program",
+    cta: "Explore the IOT Diploma Program",
+  },
+  {
+    title: "Employers",
+    description: "Hire skilled graduates, upskill your current team, or shape the curriculum we teach.",
+    href: "/training",
+    cta: "See Training for Employers",
+  },
+  {
+    title: "Partners",
+    description: "Sponsor equipment, host tours, or join the advisory board building Georgia's industrial workforce.",
+    href: "/partners",
+    cta: "Become a Partner",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <section className="bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
+        <div className="mx-auto max-w-5xl">
+          <p className="font-heading mb-4 text-sm font-bold tracking-widest text-brand-gold">
+            GEORGIA TRAINING CENTER FOR INDUSTRIAL OPERATIONS
           </p>
+          <h1 className="font-heading text-5xl font-bold leading-tight sm:text-6xl">
+            Make things work.
+            <br />
+            Keep them working.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg text-brand-silver">
+            GTCIO trains Georgia&apos;s workforce for careers in Industrial Operations Technology —
+            the maintenance, automation, and controls skills that keep factories, utilities, and
+            logistics centers running.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-4">
+            <Button href="/iot-diploma-program" variant="primary">IOT DIPLOMA PROGRAM</Button>
+            <Button href="/facility#book-a-tour" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
+              BOOK A TOUR
+            </Button>
+            <Button href="/partners#become-a-partner" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
+              BECOME A PARTNER
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
+          {STATS.map((stat) => (
+            <div key={stat.label} className="border-l-4 border-brand-red pl-5">
+              <p className="font-heading text-4xl font-bold text-brand-black">{stat.value}</p>
+              <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
+            </div>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="px-6 py-20 sm:px-10">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-heading text-3xl font-bold text-brand-black">Training the next generation</h2>
+          <p className="mt-4 max-w-3xl text-brand-silver">
+            Beyond factories, the maintenance and automation skills taught at GTCIO transfer into
+            facilities management, utilities, and logistics — anywhere with equipment that has to
+            keep running. Whether you&apos;re a student building a career or a business building a
+            workforce, there&apos;s a path here for you.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {PATHWAYS.map((p) => (
+              <div key={p.title} className="flex flex-col justify-between border border-brand-silver/40 p-6">
+                <div>
+                  <h3 className="font-heading text-xl font-bold text-brand-black">{p.title}</h3>
+                  <p className="mt-2 text-sm text-brand-silver">{p.description}</p>
+                </div>
+                <Link
+                  href={p.href}
+                  className="font-heading mt-6 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
+                >
+                  {p.cta} →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
