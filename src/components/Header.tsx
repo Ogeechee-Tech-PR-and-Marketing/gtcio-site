@@ -43,7 +43,7 @@ export default function Header() {
               alt="GTCIO — Georgia Training Center for Industrial Operations"
               width={220}
               height={88}
-              className="h-12 w-auto sm:h-14"
+              className="h-16 w-auto sm:h-20"
               priority
             />
           </Link>

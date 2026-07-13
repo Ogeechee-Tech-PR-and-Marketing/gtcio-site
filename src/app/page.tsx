@@ -1,12 +1,6 @@
 import Button from "@/components/Button";
 import Link from "next/link";
 
-const STATS = [
-  { value: "$27M", label: "State-of-the-art facility investment" },
-  { value: "40,000 sq ft", label: "Purpose-built training space" },
-  { value: "1", label: "Only program of its kind in the Technical College System of Georgia" },
-];
-
 const PATHWAYS = [
   {
     title: "Students",
@@ -56,17 +50,6 @@ export default function Home() {
               BECOME A PARTNER
             </Button>
           </div>
-        </div>
-      </section>
-
-      <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="border-l-4 border-brand-red pl-5">
-              <p className="font-heading text-4xl font-bold text-brand-black">{stat.value}</p>
-              <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
-            </div>
-          ))}
         </div>
       </section>
 
