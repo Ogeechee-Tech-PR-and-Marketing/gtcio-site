@@ -46,6 +46,9 @@ export default function PartnersPage() {
         eyebrow="Partners"
         title="Bridges to industry"
         description="GTCIO's training only works when it's built alongside the employers who'll hire our graduates. Here's how to get involved."
+        image="/images/hero-partners.jpg"
+        imageAlt="Two technicians working together on robotic equipment"
+        imagePosition="center 5%"
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">

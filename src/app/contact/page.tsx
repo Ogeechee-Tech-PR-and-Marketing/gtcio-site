@@ -9,7 +9,13 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <PageHero eyebrow="Contact" title="Get in touch" />
+      <PageHero
+        eyebrow="Contact"
+        title="Get in touch"
+        image="/images/hero-contact.jpg"
+        imageAlt="Technician reviewing diagnostics on a tablet at an electrical control panel"
+        imagePosition="center 16%"
+      />
 
       <section className="px-6 py-16 sm:px-10">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2">
