@@ -81,6 +81,7 @@ export default function IotDiplomaProgramPage() {
         description="It's the training behind keeping factories, utilities, and logistics centers running. Make things work. Keep them working."
         image="/images/hero-iot-program.jpg"
         imageAlt="Engineer inspecting an industrial engine"
+        imagePosition="85% 32%"
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">

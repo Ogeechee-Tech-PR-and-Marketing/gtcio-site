@@ -23,6 +23,7 @@ export default function FacilityPage() {
         description="GTCIO's 40,000-square-foot, $27 million facility was designed so campus tours never interrupt day-to-day training and operations."
         image="/images/hero-facility.jpg"
         imageAlt="Technician repairing an automated robotic arm in a factory"
+        imagePosition="66% 36%"
       />
 
       <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">

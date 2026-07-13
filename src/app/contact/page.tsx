@@ -14,7 +14,7 @@ export default function ContactPage() {
         title="Get in touch"
         image="/images/hero-contact.jpg"
         imageAlt="Technician reviewing diagnostics on a tablet at an electrical control panel"
-        imagePosition="center 16%"
+        imagePosition="19% 28%"
       />
 
       <section className="px-6 py-16 sm:px-10">

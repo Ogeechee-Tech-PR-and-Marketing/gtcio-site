@@ -33,7 +33,7 @@ export default function AboutPage() {
         description="GTCIO exists to close the gap between the skills employers need and the training available to fill those roles."
         image="/images/hero-about.jpg"
         imageAlt="Engineer working with a robotic arm"
-        imagePosition="center 7%"
+        imagePosition="61% 25%"
       />
 
       <section id="mission" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
