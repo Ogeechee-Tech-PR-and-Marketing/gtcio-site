@@ -6,14 +6,22 @@ type PageHeroProps = {
   description?: string;
   image?: string;
   imageAlt?: string;
+  imagePosition?: string;
 };
 
-export default function PageHero({ eyebrow, title, description, image, imageAlt }: PageHeroProps) {
+export default function PageHero({ eyebrow, title, description, image, imageAlt, imagePosition }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden bg-brand-black px-6 py-16 text-brand-white sm:px-10 sm:py-24">
       {image && (
         <>
-          <Image src={image} alt={imageAlt ?? ""} fill priority className="object-cover" />
+          <Image
+            src={image}
+            alt={imageAlt ?? ""}
+            fill
+            priority
+            className="object-cover"
+            style={imagePosition ? { objectPosition: imagePosition } : undefined}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/70 to-brand-black/40" />
         </>
       )}
