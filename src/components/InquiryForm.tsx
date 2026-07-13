@@ -68,7 +68,7 @@ export default function InquiryForm({
       <div className="sm:col-span-2">
         <button
           type="submit"
-          className="font-heading bg-brand-red px-8 py-3 text-sm font-bold tracking-wide text-brand-white transition-colors hover:bg-black"
+          className="font-display bg-brand-red px-8 py-3 text-sm text-brand-white transition-colors hover:bg-black"
         >
           {submitLabel}
         </button>

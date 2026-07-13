@@ -84,7 +84,7 @@ export default function IotDiplomaProgramPage() {
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {CURRICULUM_STAGES.map((stage, i) => (
               <div key={stage.stage} className="border border-brand-silver/40 p-6">
-                <p className="font-heading text-sm font-bold tracking-widest text-brand-gold">STAGE {i + 1}</p>
+                <p className="font-display text-sm text-brand-gold">Stage {i + 1}</p>
                 <h3 className="font-heading mt-2 text-lg font-bold text-brand-black">{stage.stage}</h3>
                 <p className="mt-2 text-sm text-brand-silver">{stage.detail}</p>
               </div>

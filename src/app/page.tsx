@@ -36,10 +36,10 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-brand-black/70" />
         <div className="relative mx-auto max-w-5xl">
-          <p className="font-heading mb-4 text-sm font-bold tracking-widest text-brand-gold">
-            GEORGIA TRAINING CENTER FOR INDUSTRIAL OPERATIONS
+          <p className="font-display mb-4 text-sm text-brand-gold">
+            Georgia Training Center for Industrial Operations
           </p>
-          <h1 className="font-heading text-5xl font-bold leading-tight sm:text-6xl">
+          <h1 className="font-display text-5xl leading-tight sm:text-6xl">
             Make things work.
             <br />
             Keep them working.
@@ -59,19 +59,6 @@ export default function Home() {
               BECOME A PARTNER
             </Button>
           </div>
-        </div>
-      </section>
-
-      <section className="border-b border-brand-silver/30 px-6 py-20 sm:px-10">
-        <div className="mx-auto max-w-4xl">
-          <p className="font-heading text-2xl font-bold leading-snug text-brand-black sm:text-3xl">
-            &ldquo;We are surrounded by industries that are looking for employees with these skill
-            sets. The jobs pay well, offer excellent career growth opportunities, and the demand
-            continues to increase.&rdquo;
-          </p>
-          <p className="font-heading mt-4 text-sm font-bold tracking-wide text-brand-red">
-            JAN MOORE — VICE PRESIDENT FOR ECONOMIC DEVELOPMENT, OGEECHEE TECHNICAL COLLEGE
-          </p>
         </div>
       </section>
 

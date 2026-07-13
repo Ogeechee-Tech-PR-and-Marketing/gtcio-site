@@ -16,18 +16,23 @@
   --color-brand-silver: var(--color-brand-silver);
   --color-brand-teal: var(--color-brand-teal);
   --color-brand-gold: var(--color-brand-gold);
-  --font-heading: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", Arial, sans-serif;
-  --font-body: Arial, Helvetica, sans-serif;
+  --font-condensed: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", Arial, sans-serif;
 }
 
 body {
   background: var(--color-brand-white);
   color: var(--color-brand-black);
-  font-family: var(--font-body);
+  font-family: var(--font-condensed);
 }
 
-h1, h2, h3, h4, .font-heading {
-  font-family: var(--font-heading);
+/* OTC brand guide "Header" treatment: heavy weight, ALL CAPS — true headline/label elements only */
+.font-display {
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+}
+
+/* OTC brand guide "Subheader" treatment: bold, sentence case */
+.font-heading {
+  font-weight: 700;
 }

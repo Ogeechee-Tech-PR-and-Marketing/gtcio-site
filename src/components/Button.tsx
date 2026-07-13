@@ -17,7 +17,7 @@ export default function Button({ href, children, variant = "primary", className 
   return (
     <Link
       href={href}
-      className={`font-heading inline-block px-7 py-3 text-sm font-bold tracking-wide transition-colors ${variants[variant]} ${className}`}
+      className={`font-display inline-block px-7 py-3 text-sm transition-colors ${variants[variant]} ${className}`}
     >
       {children}
     </Link>

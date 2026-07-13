@@ -47,6 +47,16 @@ export default function AboutPage() {
           <p className="mt-4 text-sm text-brand-silver">
             (Formal mission-statement wording pending final sign-off from GTCIO leadership.)
           </p>
+          <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
+            <p className="text-lg italic text-brand-black">
+              &ldquo;We are surrounded by industries that are looking for employees with these skill
+              sets. The jobs pay well, offer excellent career growth opportunities, and the demand
+              continues to increase.&rdquo;
+            </p>
+            <p className="mt-3 text-sm text-brand-silver">
+              Jan Moore — Vice President for Economic Development, Ogeechee Technical College
+            </p>
+          </blockquote>
         </div>
       </section>
 
@@ -59,14 +69,14 @@ export default function AboutPage() {
             the region&apos;s workforce.
           </p>
           <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
-            <p className="text-lg text-brand-black">
+            <p className="text-lg italic text-brand-black">
               &ldquo;I cannot stress enough what an asset this will be for Bulloch County and the
               surrounding region. The training will range from foundational skills in industrial
               operations to that of an automation engineer. Finding that under one roof is almost
               unheard of. It will be life changing for many of our residents.&rdquo;
             </p>
-            <p className="font-heading mt-3 text-sm font-bold tracking-wide text-brand-red">
-              BENJY THOMPSON — CEO, DEVELOPMENT AUTHORITY OF BULLOCH COUNTY
+            <p className="mt-3 text-sm text-brand-silver">
+              Benjy Thompson — CEO, Development Authority of Bulloch County
             </p>
           </blockquote>
         </div>
