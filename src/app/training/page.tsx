@@ -20,6 +20,9 @@ export default function TrainingPage() {
         eyebrow="Training"
         title="Students on one side, employers on the other: same goal"
         description="GTCIO trains individual students building a career, and works directly with employers who need to upskill the team they've already got."
+        image="/images/hero-training.jpg"
+        imageAlt="Technician performing PLC maintenance on an electrical control panel"
+        imagePosition="center 10%"
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
