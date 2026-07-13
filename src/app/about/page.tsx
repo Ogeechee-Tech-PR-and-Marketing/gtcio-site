@@ -37,12 +37,10 @@ export default function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">Mission</h2>
           <p className="mt-4 text-brand-black">
-            GTCIO exists to equip students with the expertise needed to succeed and grow
-            professionally in today&apos;s automated industrial environments. Georgia&apos;s
-            employers are looking for workers with these skill sets — the jobs pay well, offer
-            excellent career growth, and demand keeps increasing. GTCIO is built to meet that
-            demand, for students entering the workforce and for employers upskilling the team they
-            already have.
+            GTCIO trains people for jobs in industrial automation — the kind of work Georgia
+            employers are actively short on candidates for. These jobs pay well, and the demand
+            isn&apos;t slowing down. GTCIO exists to meet that demand: training new workers coming
+            up, and helping employers upskill the ones they already have.
           </p>
           <p className="mt-4 text-sm text-brand-silver">
             (Formal mission-statement wording pending final sign-off from GTCIO leadership.)
@@ -64,9 +62,8 @@ export default function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">Development Authority of Bulloch County</h2>
           <p className="mt-4 text-brand-black">
-            GTCIO&apos;s new facility was built with the direct support of the Development
-            Authority of Bulloch County, recognizing what a training center of this scale means for
-            the region&apos;s workforce.
+            The Development Authority of Bulloch County helped make GTCIO&apos;s new facility
+            possible — a training center this size doesn&apos;t get built without local backing.
           </p>
           <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
             <p className="text-lg italic text-brand-black">
@@ -86,12 +83,12 @@ export default function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">History of Partnership</h2>
           <p className="mt-4 text-brand-black">
-            GTCIO is housed in a new $27 million, 40,000-square-foot facility built to serve both
-            credit students and incumbent workers — with capacity for nearly 460,000 hours of
-            instruction a year. The building was designed so tours never interrupt day-to-day
-            training, and beyond academic programs, it provides customized workforce development
-            and upskilling for regional employers, while also serving as an instructional training
-            and certification site for instructors from across Georgia and the nation.
+            GTCIO&apos;s home is a new $27 million, 40,000-square-foot facility with capacity for
+            nearly 460,000 hours of instruction a year. It serves credit students and incumbent
+            workers alike. Tours run through the building without interrupting day-to-day training —
+            that was a design decision from the start. Beyond academic programs, GTCIO also runs
+            customized workforce development for regional employers, and trains and certifies
+            instructors from across Georgia and the nation.
           </p>
           <p className="mt-4 text-sm text-brand-silver">
             (Full partnership history and timeline to be added.)

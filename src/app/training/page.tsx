@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 const EMPLOYER_FAQS = [
   { q: "What are graduates trained in?", a: "Maintenance, electrical/controls, PLCs, precision measurement, and preventive maintenance on real industrial equipment." },
   { q: "What's the value proposition for my business?", a: "A pipeline of work-ready technicians, plus custom training for your existing staff, trained on equipment similar to what you run." },
-  { q: "How long does custom training take?", a: "Depends on scope — placeholder, to be scoped per engagement." },
-  { q: "How much does it cost?", a: "Depends on scope — placeholder, to be scoped per engagement." },
+  { q: "How long does custom training take?", a: "It depends on what you need covered — placeholder, pricing and timelines get worked out per engagement." },
+  { q: "How much does it cost?", a: "Same answer as above — it's scoped per engagement, not a flat rate. Placeholder until we have real numbers to share." },
 ];
 
 export default function TrainingPage() {
@@ -18,8 +18,8 @@ export default function TrainingPage() {
     <>
       <PageHero
         eyebrow="Training"
-        title="Two audiences, one goal: a workforce that's ready"
-        description="GTCIO trains individual students building a career, and works directly with employers to train and upskill their teams."
+        title="Students on one side, employers on the other — same goal"
+        description="GTCIO trains individual students building a career, and works directly with employers who need to upskill the team they've already got."
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
@@ -37,10 +37,9 @@ export default function TrainingPage() {
           <div className="border border-brand-silver/40 p-8">
             <h2 className="font-heading text-2xl font-bold text-brand-red">For Employers</h2>
             <p className="mt-4 text-brand-silver">
-              Custom training for your current staff, built around your equipment and processes —
-              reducing downtime and building internal maintenance capability. GTCIO also serves as
-              an instructional training and certification site for instructors from across Georgia
-              and the nation.
+              Custom training for your current staff, built around your own equipment and processes.
+              Less downtime, more maintenance capability in-house. GTCIO also trains and certifies
+              instructors from across Georgia and the nation.
             </p>
             <div className="mt-6">
               <Button href="/contact" variant="outline">TALK TO US</Button>

@@ -11,13 +11,13 @@ const PATHWAYS = [
   },
   {
     title: "Employers",
-    description: "Hire skilled graduates, upskill your current team, or shape the curriculum we teach.",
+    description: "Need to hire skilled graduates or upskill the crew you've already got? GTCIO can help with both.",
     href: "/training",
     cta: "See Training for Employers",
   },
   {
     title: "Partners",
-    description: "Sponsor equipment, host tours, or join the advisory board building Georgia's industrial workforce.",
+    description: "Equipment sponsorships, facility tours, a seat on the advisory board — there's more than one way in.",
     href: "/partners",
     cta: "Become a Partner",
   },
@@ -46,9 +46,9 @@ export default function Home() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-brand-silver">
             GTCIO trains Georgia&apos;s workforce for careers in Industrial Operations Technology —
-            the maintenance, automation, and controls skills that keep factories, utilities, and
-            logistics centers running. The Industrial Operations Technology diploma program enrolls
-            now for its August 2026 launch.
+            the people who keep factories, utilities, and logistics centers running when
+            something breaks or a line goes down. The diploma program opens for enrollment now,
+            ahead of its August 2026 launch.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
             <Button href="/iot-diploma-program" variant="primary">IOT DIPLOMA PROGRAM</Button>
@@ -66,13 +66,11 @@ export default function Home() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">Training the next generation</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">
-            Beyond factories, the maintenance and automation skills taught at GTCIO transfer into
-            facilities management, utilities, and logistics — anywhere with equipment that has to
-            keep running. Students build a foundation in mechanical, electrical, hydraulic, and
-            pneumatic systems, then advance into robotics, PLCs, and smart automation — graduating
-            with a diploma and the option to earn globally recognized SACA certification alongside
-            it. Whether you&apos;re a student building a career or a business building a workforce,
-            there&apos;s a path here for you.
+            These skills carry well past the factory floor — into facilities management, utilities,
+            and logistics, anywhere equipment has to keep running. Students start with the
+            fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it&apos;s
+            robotics, PLCs, and smart automation, with the option to add a SACA credential to the
+            diploma along the way.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">

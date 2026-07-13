@@ -38,11 +38,10 @@ export default function FacilityPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">Overview</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">
-            GTCIO&apos;s facility serves both credit students and incumbent workers, with real
-            industrial equipment across maintenance, automation, and controls — giving students
-            hands-on experience with the same tools they&apos;ll use on the job. Beyond academic
-            programs, the space also functions as an instructional training and certification site
-            for instructors from across Georgia and the nation.
+            GTCIO&apos;s facility serves both credit students and incumbent workers, and it&apos;s
+            stocked with real industrial equipment — maintenance, automation, controls — so students
+            train on the same tools they&apos;ll use on the job. Beyond academic programs, the space
+            also trains and certifies instructors from across Georgia and the nation.
           </p>
         </div>
       </section>

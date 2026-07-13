@@ -17,7 +17,7 @@ const CURRICULUM_STAGES = [
   },
   {
     stage: "Credential",
-    detail: "Graduate with a diploma and the option to earn a globally recognized Smart Automation Certification Alliance (SACA) credential alongside it.",
+    detail: "Graduate with a diploma, plus the option to add a Smart Automation Certification Alliance (SACA) credential on top of it.",
   },
 ];
 
@@ -45,7 +45,7 @@ const PAY_RANGES = [
 const FAQS = [
   { q: "When does the program start?", a: "The Industrial Operations Technology diploma program launches in August 2026." },
   { q: "How much can I expect to earn after graduating?", a: "See the pay ranges below — most graduates start in entry-level/operator roles and grow from there." },
-  { q: "What credential do I earn?", a: "A college diploma, plus the option to earn a globally recognized SACA (Smart Automation Certification Alliance) credential alongside it." },
+  { q: "What credential do I earn?", a: "A college diploma, plus the option to add a SACA (Smart Automation Certification Alliance) credential — it's recognized industry-wide, not just in Georgia." },
   { q: "How much does the program cost?", a: "Placeholder — final tuition figure pending confirmation." },
   { q: "How long does it take to finish?", a: "Placeholder — final program length pending confirmation." },
 ];
@@ -70,10 +70,9 @@ export default function IotDiplomaProgramPage() {
             </p>
           </div>
           <p className="mt-6 max-w-3xl text-brand-silver">
-            Beyond factories, the maintenance and automation skills taught here transfer into
-            facilities management (office and apartment complexes, schools, hospitals), utilities,
-            and logistics and distribution centers — anywhere with equipment that has to keep
-            running.
+            These same skills apply well outside a factory. Facilities management — office
+            buildings, apartment complexes, schools, hospitals — needs people who can keep
+            equipment running, and so do utilities, warehouses, and distribution centers.
           </p>
         </div>
       </section>
