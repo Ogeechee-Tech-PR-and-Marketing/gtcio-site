@@ -35,6 +35,7 @@ const DIRECTORY = [
   { name: "Koyo Bearings", description: "Manufacturer of precision bearings for heavy industrial machinery." },
   { name: "Georgia Power", description: "Utility provider for energy infrastructure and maintenance." },
   { name: "Ajin Georgia", description: "Automotive parts manufacturer with a strong regional maintenance and automation footprint." },
+  { name: "Amazon", description: "Logistics and fulfillment operations with a growing footprint in the region." },
 ];
 
 export default function PartnersPage() {

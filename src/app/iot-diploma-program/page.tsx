@@ -35,12 +35,26 @@ const CAREERS = [
 ];
 
 const JOB_DUTIES = [
-  "Fixing what breaks. That means diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems.",
-  "Preventing things from breaking in the first place. Scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs.",
-  "Electrical and controls work: AC/DC circuit troubleshooting, industrial wiring, motor controls, and programming/troubleshooting PLCs, the \"brains\" behind automated equipment.",
-  "Reading blueprints and schematics to understand how a machine goes together or how a system is wired.",
-  "Precision measurement and adjustment: checking part dimensions with calipers and gauges, calibrating equipment, running metalworking machines to make replacement fittings.",
-  "Paperwork, too. Writing maintenance reports, logging downtime and repairs, tracking parts inventory.",
+  {
+    label: "Preventive maintenance",
+    detail: "Scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs.",
+  },
+  {
+    label: "Fixing what breaks",
+    detail: "Diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems.",
+  },
+  {
+    label: "Electrical and controls work",
+    detail: "AC/DC circuit troubleshooting, industrial wiring, motor controls, and programming/troubleshooting PLCs, the \"brains\" behind automated equipment.",
+  },
+  {
+    label: "Reading blueprints and schematics",
+    detail: "Understanding how a machine goes together or how a system is wired.",
+  },
+  {
+    label: "Precision measurement and adjustment",
+    detail: "Checking part dimensions with calipers and gauges, calibrating equipment, running metalworking machines to make replacement fittings.",
+  },
 ];
 
 const PAY_RANGES = [
@@ -64,7 +78,7 @@ export default function IotDiplomaProgramPage() {
       <PageHero
         eyebrow="IOT Diploma Program: Enrolling now for August 2026"
         title="What is Industrial Operations Technology?"
-        description="In plain English, it's the training behind keeping factories, utilities, and logistics centers running. Make things work. Keep them working."
+        description="It's the training behind keeping factories, utilities, and logistics centers running. Make things work. Keep them working."
         image="/images/hero-iot-program.jpg"
         imageAlt="Engineer inspecting an industrial engine"
       />
@@ -142,10 +156,11 @@ export default function IotDiplomaProgramPage() {
             operations manager roles.
           </p>
           <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">What the job looks like</h3>
-          <ul className="mt-6 flex flex-col gap-4">
+          <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
             {JOB_DUTIES.map((duty) => (
-              <li key={duty} className="border-l-4 border-brand-red pl-5 text-brand-black">
-                {duty}
+              <li key={duty.label} className="border-l-4 border-brand-red pl-5">
+                <p className="font-bold text-brand-black">{duty.label}</p>
+                <p className="mt-1 text-sm text-brand-silver">{duty.detail}</p>
               </li>
             ))}
           </ul>
