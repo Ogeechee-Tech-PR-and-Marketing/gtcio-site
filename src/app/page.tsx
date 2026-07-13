@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Button from "@/components/Button";
 import Link from "next/link";
 
@@ -25,8 +26,16 @@ const PATHWAYS = [
 export default function Home() {
   return (
     <>
-      <section className="bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
-        <div className="mx-auto max-w-5xl">
+      <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
+        <Image
+          src="/images/hero-robotic-arm.jpg"
+          alt="Industrial robotic arm on an automated assembly line"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-brand-black/70" />
+        <div className="relative mx-auto max-w-5xl">
           <p className="font-heading mb-4 text-sm font-bold tracking-widest text-brand-gold">
             GEORGIA TRAINING CENTER FOR INDUSTRIAL OPERATIONS
           </p>
