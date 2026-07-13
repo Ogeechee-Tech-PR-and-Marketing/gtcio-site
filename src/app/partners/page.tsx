@@ -18,7 +18,7 @@ const PATHWAYS = [
   },
   {
     title: "Sponsor a Robot",
-    description: "Put your company's name on a specific piece of automation equipment — a hands-on, high-visibility way to support the program.",
+    description: "Put your company's name on a specific piece of automation equipment. It's a hands-on, high-visibility way to support the program.",
   },
   {
     title: "Host a Facility Tour",
@@ -84,8 +84,8 @@ export default function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">Our Partners</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">
-            Confirmed and prospective partners — logos and additional quotes to be added as they're
-            provided.
+            Confirmed and prospective partners. Logos and additional quotes will be added as
+            they're provided.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {DIRECTORY.map((partner) => (
@@ -104,8 +104,8 @@ export default function PartnersPage() {
         <div className="mx-auto max-w-3xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">Become a Partner</h2>
           <p className="mt-3 text-brand-silver">
-            Tell us a bit about your organization and which pathway interests you — we'll follow up
-            to talk next steps.
+            Tell us a bit about your organization and which pathway interests you, and we'll
+            follow up to talk next steps.
           </p>
           <div className="mt-8">
             <InquiryForm

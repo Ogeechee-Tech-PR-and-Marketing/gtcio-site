@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "GTCIO | Georgia Training Center for Industrial Operations",
   description:
-    "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology — maintenance, automation, and controls. A division of Ogeechee Technical College.",
+    "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology: maintenance, automation, and controls. A division of Ogeechee Technical College.",
 };
 
 export default function RootLayout({

@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 const EMPLOYER_FAQS = [
   { q: "What are graduates trained in?", a: "Maintenance, electrical/controls, PLCs, precision measurement, and preventive maintenance on real industrial equipment." },
   { q: "What's the value proposition for my business?", a: "A pipeline of work-ready technicians, plus custom training for your existing staff, trained on equipment similar to what you run." },
-  { q: "How long does custom training take?", a: "It depends on what you need covered — placeholder, pricing and timelines get worked out per engagement." },
-  { q: "How much does it cost?", a: "Same answer as above — it's scoped per engagement, not a flat rate. Placeholder until we have real numbers to share." },
+  { q: "How long does custom training take?", a: "It depends on what you need covered. Placeholder for now, pricing and timelines get worked out per engagement." },
+  { q: "How much does it cost?", a: "Same answer as above: it's scoped per engagement, not a flat rate. Placeholder until we have real numbers to share." },
 ];
 
 export default function TrainingPage() {
@@ -18,7 +18,7 @@ export default function TrainingPage() {
     <>
       <PageHero
         eyebrow="Training"
-        title="Students on one side, employers on the other — same goal"
+        title="Students on one side, employers on the other: same goal"
         description="GTCIO trains individual students building a career, and works directly with employers who need to upskill the team they've already got."
       />
 
@@ -27,7 +27,7 @@ export default function TrainingPage() {
           <div className="border border-brand-silver/40 p-8">
             <h2 className="font-heading text-2xl font-bold text-brand-red">For Students</h2>
             <p className="mt-4 text-brand-silver">
-              A hands-on career path into Industrial Operations Technology — see the IOT Diploma
+              A hands-on career path into Industrial Operations Technology. See the IOT Diploma
               Program for jobs, pay, timeline, and cost.
             </p>
             <div className="mt-6">

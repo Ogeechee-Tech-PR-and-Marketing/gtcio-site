@@ -17,7 +17,7 @@ const PATHWAYS = [
   },
   {
     title: "Partners",
-    description: "Equipment sponsorships, facility tours, a seat on the advisory board — there's more than one way in.",
+    description: "Equipment sponsorships, facility tours, a seat on the advisory board: there's more than one way in.",
     href: "/partners",
     cta: "Become a Partner",
   },
@@ -45,10 +45,10 @@ export default function Home() {
             Keep them working.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-brand-silver">
-            GTCIO trains Georgia&apos;s workforce for careers in Industrial Operations Technology —
-            the people who keep factories, utilities, and logistics centers running when
-            something breaks or a line goes down. The diploma program opens for enrollment now,
-            ahead of its August 2026 launch.
+            GTCIO trains Georgia&apos;s workforce for careers in Industrial Operations Technology.
+            These are the people who keep factories, utilities, and logistics centers running
+            when something breaks or a line goes down. The diploma program opens for enrollment
+            now, ahead of its August 2026 launch.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
             <Button href="/iot-diploma-program" variant="primary">IOT DIPLOMA PROGRAM</Button>
@@ -66,7 +66,7 @@ export default function Home() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">Training the next generation</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">
-            These skills carry well past the factory floor — into facilities management, utilities,
+            These skills carry well past the factory floor, into facilities management, utilities,
             and logistics, anywhere equipment has to keep running. Students start with the
             fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it&apos;s
             robotics, PLCs, and smart automation, with the option to add a SACA credential to the

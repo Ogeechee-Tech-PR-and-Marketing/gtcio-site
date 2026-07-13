@@ -19,7 +19,7 @@ type InquiryFormProps = {
 export default function InquiryForm({
   fields,
   submitLabel = "Submit",
-  confirmationMessage = "Thanks — we've got your message and someone from GTCIO will follow up soon.",
+  confirmationMessage = "Thanks! We've got your message and someone from GTCIO will follow up soon.",
 }: InquiryFormProps) {
   const [submitted, setSubmitted] = useState(false);
 

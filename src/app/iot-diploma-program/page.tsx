@@ -23,9 +23,9 @@ const CURRICULUM_STAGES = [
 
 const PROGRAM_OPTIONS = [
   { name: "Industrial Operations Technology Diploma", code: "IS32", detail: "The full program." },
-  { name: "Certificate — Electrical/Mechanical", detail: "Focused on the electrical and mechanical side of the curriculum." },
-  { name: "Certificate — PLC", detail: "Focused on programmable logic controllers." },
-  { name: "Certificate — Robotics", detail: "Focused on robotics." },
+  { name: "Certificate: Electrical/Mechanical", detail: "Focused on the electrical and mechanical side of the curriculum." },
+  { name: "Certificate: PLC", detail: "Focused on programmable logic controllers." },
+  { name: "Certificate: Robotics", detail: "Focused on robotics." },
 ];
 
 const CAREERS = [
@@ -35,12 +35,12 @@ const CAREERS = [
 ];
 
 const JOB_DUTIES = [
-  "Fixing things that break — diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems.",
-  "Preventing things from breaking — scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs.",
-  "Electrical and controls work — AC/DC circuit troubleshooting, industrial wiring, motor controls, and programming/troubleshooting PLCs, the \"brains\" behind automated equipment.",
+  "Fixing what breaks. That means diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems.",
+  "Preventing things from breaking in the first place. Scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs.",
+  "Electrical and controls work: AC/DC circuit troubleshooting, industrial wiring, motor controls, and programming/troubleshooting PLCs, the \"brains\" behind automated equipment.",
   "Reading blueprints and schematics to understand how a machine goes together or how a system is wired.",
-  "Precision measurement and adjustment — checking part dimensions with calipers and gauges, calibrating equipment, running metalworking machines to make replacement fittings.",
-  "Paperwork — writing maintenance reports, logging downtime and repairs, tracking parts inventory.",
+  "Precision measurement and adjustment: checking part dimensions with calipers and gauges, calibrating equipment, running metalworking machines to make replacement fittings.",
+  "Paperwork, too. Writing maintenance reports, logging downtime and repairs, tracking parts inventory.",
 ];
 
 const PAY_RANGES = [
@@ -51,20 +51,20 @@ const PAY_RANGES = [
 
 const FAQS = [
   { q: "When does the program start?", a: "The Industrial Operations Technology diploma program launches in August 2026." },
-  { q: "How much can I expect to earn after graduating?", a: "See the pay ranges below — most graduates start in entry-level/operator roles and grow from there." },
-  { q: "What credential do I earn?", a: "A college diploma, plus the option to add a SACA (Smart Automation Certification Alliance) credential — it's recognized industry-wide, not just in Georgia." },
-  { q: "How much does the program cost?", a: "Placeholder — final tuition figure pending confirmation." },
-  { q: "How long does it take to finish?", a: "Placeholder — final program length pending confirmation." },
-  { q: "Is this an online program?", a: "No — it's in-person, day classes. This is hands-on work, so you need to be in the shop." },
+  { q: "How much can I expect to earn after graduating?", a: "See the pay ranges below. Most graduates start in entry-level/operator roles and grow from there." },
+  { q: "What credential do I earn?", a: "A college diploma, plus the option to add a SACA (Smart Automation Certification Alliance) credential. It's recognized industry-wide, not just in Georgia." },
+  { q: "How much does the program cost?", a: "Placeholder, final tuition figure pending confirmation." },
+  { q: "How long does it take to finish?", a: "Placeholder, final program length pending confirmation." },
+  { q: "Is this an online program?", a: "No. It's in-person, day classes. This is hands-on work, so you need to be in the shop." },
 ];
 
 export default function IotDiplomaProgramPage() {
   return (
     <>
       <PageHero
-        eyebrow="IOT Diploma Program — Enrolling now for August 2026"
+        eyebrow="IOT Diploma Program: Enrolling now for August 2026"
         title="What is Industrial Operations Technology?"
-        description="In plain English: it's the training behind keeping factories, utilities, and logistics centers running — make things work, keep them working."
+        description="In plain English, it's the training behind keeping factories, utilities, and logistics centers running. Make things work. Keep them working."
         image="/images/hero-iot-program.jpg"
         imageAlt="Engineer inspecting an industrial engine"
       />
@@ -80,8 +80,8 @@ export default function IotDiplomaProgramPage() {
             </p>
           </div>
           <p className="mt-6 max-w-3xl text-brand-silver">
-            These same skills apply well outside a factory. Facilities management — office
-            buildings, apartment complexes, schools, hospitals — needs people who can keep
+            These same skills apply well outside a factory. Facilities management (office
+            buildings, apartment complexes, schools, hospitals) needs people who can keep
             equipment running, and so do utilities, warehouses, and distribution centers.
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function IotDiplomaProgramPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">More than one way in</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">
             The diploma isn&apos;t the only option. OTC also breaks the same curriculum into three
-            standalone certificates, so you can start smaller — or focus on just the part of the job
+            standalone certificates, so you can start smaller, or focus on just the part of the job
             you&apos;re after.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -138,7 +138,7 @@ export default function IotDiplomaProgramPage() {
             ))}
           </div>
           <p className="mt-4 text-sm text-brand-silver">
-            Stick with it and there&apos;s room to move up — into production supervisor or
+            Stick with it and there&apos;s room to move up, into production supervisor or
             operations manager roles.
           </p>
           <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">What the job looks like</h3>
@@ -166,11 +166,11 @@ export default function IotDiplomaProgramPage() {
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="border border-brand-silver/40 p-6">
               <p className="font-heading font-bold text-brand-black">Time to complete</p>
-              <p className="mt-1 text-brand-silver">Placeholder — final program length pending confirmation.</p>
+              <p className="mt-1 text-brand-silver">Placeholder, final program length pending confirmation.</p>
             </div>
             <div className="border border-brand-silver/40 p-6">
               <p className="font-heading font-bold text-brand-black">Approximate cost</p>
-              <p className="mt-1 text-brand-silver">Placeholder — final tuition figure pending confirmation.</p>
+              <p className="mt-1 text-brand-silver">Placeholder, final tuition figure pending confirmation.</p>
             </div>
           </div>
         </div>

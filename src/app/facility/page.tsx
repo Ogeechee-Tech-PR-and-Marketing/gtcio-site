@@ -41,7 +41,7 @@ export default function FacilityPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">Overview</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">
             GTCIO&apos;s facility serves both credit students and incumbent workers, and it&apos;s
-            stocked with real industrial equipment — maintenance, automation, controls — so students
+            stocked with real industrial equipment (maintenance, automation, controls) so students
             train on the same tools they&apos;ll use on the job. Beyond academic programs, the space
             also trains and certifies instructors from across Georgia and the nation.
           </p>
@@ -71,7 +71,7 @@ export default function FacilityPage() {
           <h2 className="font-heading text-3xl font-bold text-brand-black">Book a Tour</h2>
           <p className="mt-3 text-brand-silver">
             Request a visit for your class, business, or organization. This is a request form, not
-            a live booking calendar — GTCIO staff will follow up to confirm a date.
+            a live booking calendar. GTCIO staff will follow up to confirm a date.
           </p>
           <div className="mt-8">
             <InquiryForm
@@ -85,7 +85,7 @@ export default function FacilityPage() {
                 { name: "message", label: "Message", type: "textarea", halfWidth: false },
               ]}
               submitLabel="REQUEST A TOUR"
-              confirmationMessage="Thanks — GTCIO staff will reach out to confirm a date for your tour."
+              confirmationMessage="Thanks! GTCIO staff will reach out to confirm a date for your tour."
             />
           </div>
         </div>
