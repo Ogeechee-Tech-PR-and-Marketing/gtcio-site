@@ -23,7 +23,15 @@ const NAV_ITEMS = [
   { label: "Contact", href: "/contact" },
 ];
 
-export default function Header() {
+type HeaderProps = {
+  bannerOrgText?: string;
+  bannerParentText?: string;
+};
+
+export default function Header({
+  bannerOrgText = "WELCOME TO THE GTCIO",
+  bannerParentText = "A DIVISION OF OGEECHEE TECHNICAL COLLEGE",
+}: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
 
@@ -31,7 +39,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-brand-white">
       <div className="bg-brand-black px-4 py-2 text-center">
         <p className="font-display text-xs font-bold tracking-widest text-brand-white sm:text-sm">
-          WELCOME TO THE GTCIO <span className="text-brand-red">|</span> A DIVISION OF OGEECHEE TECHNICAL COLLEGE
+          {bannerOrgText} <span className="text-brand-red">|</span> {bannerParentText}
         </p>
       </div>
 

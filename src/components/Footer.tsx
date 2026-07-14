@@ -23,7 +23,17 @@ const COLUMNS = [
   },
 ];
 
-export default function Footer() {
+type FooterProps = {
+  tagline?: string;
+  address?: string;
+  phone?: string;
+};
+
+export default function Footer({
+  tagline = "A Division of Ogeechee Technical College",
+  address = "1 Joe Kennedy Blvd., Statesboro, GA 30458",
+  phone = "(800) 646-1316",
+}: FooterProps) {
   return (
     <footer className="bg-brand-black text-brand-white">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 sm:px-10 lg:grid-cols-4">
@@ -35,7 +45,7 @@ export default function Footer() {
             height={80}
             className="h-12 w-auto brightness-0 invert"
           />
-          <p className="mt-4 text-sm text-brand-silver">A Division of Ogeechee Technical College</p>
+          <p className="mt-4 text-sm text-brand-silver">{tagline}</p>
         </div>
 
         {COLUMNS.map((col) => (
@@ -56,8 +66,8 @@ export default function Footer() {
         <div>
           <p className="font-display text-sm text-brand-gold">Contact</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm text-brand-silver">
-            <li>1 Joe Kennedy Blvd., Statesboro, GA 30458</li>
-            <li>Phone: (800) 646-1316</li>
+            <li>{address}</li>
+            <li>Phone: {phone}</li>
           </ul>
         </div>
       </div>
