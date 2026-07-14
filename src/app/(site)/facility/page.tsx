@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import InquiryForm from "@/components/InquiryForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { FACILITY_PAGE_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
+
+type GalleryPhoto = SanityImage & { caption?: string; alt?: string };
 
 export const metadata: Metadata = {
   title: "Facility | GTCIO",
@@ -30,10 +34,22 @@ const DEFAULTS = {
 
 export default async function FacilityPage() {
   const { data } = await sanityFetch({ query: FACILITY_PAGE_QUERY });
-  const typed = data as Partial<typeof DEFAULTS> | null;
+  const typed = data as (Partial<typeof DEFAULTS> & {
+    heroImage?: SanityImage;
+    heroImageAlt?: string;
+    gallery?: GalleryPhoto[];
+  }) | null;
   const page = { ...DEFAULTS, ...typed };
   const stats = typed?.stats?.length ? typed.stats : DEFAULTS.stats;
-  const galleryLabels = typed?.galleryLabels?.length ? typed.galleryLabels : DEFAULTS.galleryLabels;
+  const gallery = typed?.gallery ?? [];
+
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-facility.jpg",
+    fallbackAlt: "Technician repairing an automated robotic arm in a factory",
+    fallbackPosition: "66% 36%",
+  });
 
   return (
     <>
@@ -41,9 +57,9 @@ export default async function FacilityPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image="/images/hero-facility.jpg"
-        imageAlt="Technician repairing an automated robotic arm in a factory"
-        imagePosition="66% 36%"
+        image={hero.src}
+        imageAlt={hero.alt}
+        imagePosition={hero.position}
       />
 
       <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
@@ -68,16 +84,33 @@ export default async function FacilityPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.galleryTitle}</h2>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {galleryLabels.map((label: string) => (
-              <div
-                key={label}
-                className="font-heading flex aspect-square items-center justify-center border border-dashed border-brand-silver/60 text-center text-xs font-bold tracking-wide text-brand-silver"
-              >
-                {label}
-                <br />
-                PHOTO PLACEHOLDER
-              </div>
-            ))}
+            {gallery.length > 0
+              ? gallery.map((photo, i) => (
+                  <figure key={photo._key ?? i} className="relative aspect-square overflow-hidden">
+                    <Image
+                      src={urlForImage(photo).width(600).height(600).fit("crop").url()}
+                      alt={photo.alt ?? photo.caption ?? ""}
+                      fill
+                      sizes="(min-width: 640px) 25vw, 50vw"
+                      className="object-cover"
+                    />
+                    {photo.caption && (
+                      <figcaption className="font-heading absolute inset-x-0 bottom-0 bg-brand-black/70 px-2 py-1.5 text-center text-xs font-bold tracking-wide text-brand-white">
+                        {photo.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))
+              : DEFAULTS.galleryLabels.map((label) => (
+                  <div
+                    key={label}
+                    className="font-heading flex aspect-square items-center justify-center border border-dashed border-brand-silver/60 text-center text-xs font-bold tracking-wide text-brand-silver"
+                  >
+                    {label}
+                    <br />
+                    PHOTO PLACEHOLDER
+                  </div>
+                ))}
           </div>
         </div>
       </section>

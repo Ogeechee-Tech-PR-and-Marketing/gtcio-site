@@ -5,8 +5,8 @@ export default defineType({
   title: "Card",
   type: "object",
   fields: [
-    defineField({ name: "title", title: "Title", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "description", title: "Description", type: "text", rows: 3, validation: (r) => r.required() }),
+    defineField({ name: "title", title: "Card heading", type: "string", validation: (r) => r.required() }),
+    defineField({ name: "description", title: "Card text", type: "text", rows: 3, validation: (r) => r.required() }),
   ],
   preview: {
     select: { title: "title", subtitle: "description" },

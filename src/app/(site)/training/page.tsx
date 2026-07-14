@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
   title: "Training | GTCIO",
@@ -28,9 +29,20 @@ const DEFAULTS = {
 
 export default async function TrainingPage() {
   const { data } = await sanityFetch({ query: TRAINING_PAGE_QUERY });
-  const typed = data as Partial<typeof DEFAULTS> | null;
+  const typed = data as (Partial<typeof DEFAULTS> & {
+    heroImage?: SanityImage;
+    heroImageAlt?: string;
+  }) | null;
   const page = { ...DEFAULTS, ...typed };
   const employerFaqs = typed?.employerFaqs?.length ? typed.employerFaqs : DEFAULTS.employerFaqs;
+
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-training.jpg",
+    fallbackAlt: "Technician performing PLC maintenance on an electrical control panel",
+    fallbackPosition: "61% 31%",
+  });
 
   return (
     <>
@@ -38,9 +50,9 @@ export default async function TrainingPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image="/images/hero-training.jpg"
-        imageAlt="Technician performing PLC maintenance on an electrical control panel"
-        imagePosition="61% 31%"
+        image={hero.src}
+        imageAlt={hero.alt}
+        imagePosition={hero.position}
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">

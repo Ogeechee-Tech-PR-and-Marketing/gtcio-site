@@ -1,32 +1,101 @@
 import { defineField, defineType } from "sanity";
+import { heroFields } from "../heroFields";
 
 export default defineType({
   name: "aboutPage",
   title: "About Page",
   type: "document",
+  groups: [
+    { name: "hero", title: "Top of page", default: true },
+    { name: "mission", title: "Mission" },
+    { name: "bda", title: "Development Authority" },
+    { name: "history", title: "History of Partnership" },
+    { name: "faq", title: "FAQ" },
+  ],
   fields: [
-    defineField({ name: "heroEyebrow", title: "Hero eyebrow", type: "string" }),
-    defineField({ name: "heroTitle", title: "Hero headline", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "heroDescription", title: "Hero paragraph", type: "text", rows: 3 }),
+    ...heroFields("hero"),
 
-    defineField({ name: "missionBody", title: "Mission paragraph", type: "text", rows: 5 }),
-    defineField({ name: "missionNote", title: "Mission note (small italic disclaimer, if any)", type: "string" }),
-    defineField({ name: "missionQuote", title: "Mission quote", type: "text", rows: 3 }),
-    defineField({ name: "missionQuoteAttribution", title: "Mission quote attribution", type: "string" }),
+    defineField({
+      name: "missionBody",
+      title: "Mission paragraph",
+      type: "text",
+      rows: 5,
+      group: "mission",
+    }),
+    defineField({
+      name: "missionNote",
+      title: "Small note under the paragraph",
+      description:
+        "Currently the italic disclaimer about wording pending sign-off. Clear this field to remove it from the page.",
+      type: "string",
+      group: "mission",
+    }),
+    defineField({
+      name: "missionQuote",
+      title: "Quote",
+      description: "Type the quote without quotation marks — they're added automatically.",
+      type: "text",
+      rows: 3,
+      group: "mission",
+    }),
+    defineField({
+      name: "missionQuoteAttribution",
+      title: "Who said it",
+      description: 'Name and title, e.g. "Jan Moore — Vice President for Economic Development".',
+      type: "string",
+      group: "mission",
+    }),
 
-    defineField({ name: "bdaTitle", title: "\"Development Authority\" section heading", type: "string" }),
-    defineField({ name: "bdaBody", title: "\"Development Authority\" paragraph", type: "text", rows: 4 }),
-    defineField({ name: "bdaQuote", title: "\"Development Authority\" quote", type: "text", rows: 4 }),
-    defineField({ name: "bdaQuoteAttribution", title: "\"Development Authority\" quote attribution", type: "string" }),
+    defineField({
+      name: "bdaTitle",
+      title: "Section heading",
+      type: "string",
+      group: "bda",
+    }),
+    defineField({
+      name: "bdaBody",
+      title: "Paragraph",
+      type: "text",
+      rows: 4,
+      group: "bda",
+    }),
+    defineField({
+      name: "bdaQuote",
+      title: "Quote",
+      description: "Type the quote without quotation marks — they're added automatically.",
+      type: "text",
+      rows: 4,
+      group: "bda",
+    }),
+    defineField({
+      name: "bdaQuoteAttribution",
+      title: "Who said it",
+      type: "string",
+      group: "bda",
+    }),
 
-    defineField({ name: "historyBody", title: "History of Partnership paragraph", type: "text", rows: 5 }),
-    defineField({ name: "historyNote", title: "History note (small italic disclaimer, if any)", type: "string" }),
+    defineField({
+      name: "historyBody",
+      title: "Paragraph",
+      type: "text",
+      rows: 5,
+      group: "history",
+    }),
+    defineField({
+      name: "historyNote",
+      title: "Small note under the paragraph",
+      description: "Clear this field to remove the italic note from the page.",
+      type: "string",
+      group: "history",
+    }),
 
     defineField({
       name: "faqs",
-      title: "FAQ",
+      title: "Questions & answers",
+      description: "Drag to reorder. Use Add item to add a new question.",
       type: "array",
       of: [{ type: "faq" }],
+      group: "faq",
     }),
   ],
   preview: {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import { sanityFetch } from "@/sanity/lib/live";
 import { ABOUT_PAGE_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
   title: "About | GTCIO",
@@ -49,9 +50,20 @@ const DEFAULTS = {
 
 export default async function AboutPage() {
   const { data } = await sanityFetch({ query: ABOUT_PAGE_QUERY });
-  const typed = data as Partial<typeof DEFAULTS> | null;
+  const typed = data as (Partial<typeof DEFAULTS> & {
+    heroImage?: SanityImage;
+    heroImageAlt?: string;
+  }) | null;
   const page = { ...DEFAULTS, ...typed };
   const faqs = typed?.faqs?.length ? typed.faqs : DEFAULTS.faqs;
+
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-about.jpg",
+    fallbackAlt: "Engineer working with a robotic arm",
+    fallbackPosition: "61% 25%",
+  });
 
   return (
     <>
@@ -59,9 +71,9 @@ export default async function AboutPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image="/images/hero-about.jpg"
-        imageAlt="Engineer working with a robotic arm"
-        imagePosition="61% 25%"
+        image={hero.src}
+        imageAlt={hero.alt}
+        imagePosition={hero.position}
       />
 
       <section id="mission" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">

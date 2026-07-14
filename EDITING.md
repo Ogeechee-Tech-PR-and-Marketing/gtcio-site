@@ -1,56 +1,110 @@
-# Editing the GTCIO website
+# How to edit the GTCIO website
 
-You don't need to know how to code to update the text, images, and partner
-logos on this site. All of that lives in a separate editor called **Sanity
-Studio**, and changes you publish there show up on the live site within
-seconds.
+You don't need to know how to code. All the words, photos, and partner logos on
+the site are edited from a separate screen called the **Studio**. Nothing you do
+there can break the design of the site.
 
-## Logging in
+---
 
-1. Go to **[gtcio-site.vercel.app/studio](https://gtcio-site.vercel.app/studio)**.
-2. Sign in with the email/password (or Google/GitHub) account someone on the
-   team invited you with.
+## 1. Log in
 
-## Finding a page
+Go to **[gtcio-site.vercel.app/studio](https://gtcio-site.vercel.app/studio)**
+and sign in with the account you were invited with.
 
-The left-hand menu lists every page on the site by name: Home Page, About
-Page, Facility Page, Training Page, IOT Diploma Program Page, Partners Page,
-Contact Page, plus **Site Settings** (the banner, address, and phone numbers
-that show up on every page) and **Partners** (the logo directory).
+## 2. Find what you want to change
 
-Click a page's name to open it.
+The menu down the left side lists everything you can edit:
 
-## Editing text
+| Menu item | What's in it |
+| --- | --- |
+| **Site Settings** | The black bar at the top of every page, the address, phone numbers, and the contacts shown on the Contact page. |
+| **Home Page**, **About Page**, etc. | One entry per page of the website, in the same order as the site's own menu. |
+| **Partner logos & info** | The companies shown on the Partners page. |
 
-Click into any field and type. Fields are labeled in plain English (e.g.
-"Hero headline," "Mission paragraph"). There's nothing to break — you're only
-ever editing text and images, never layout or code.
+Click any of them to open it.
 
-## Editing images (partner logos)
+## 3. Make your change
 
-1. Open **Partners** in the left menu.
-2. Click a partner to edit their name, logo, or description — or click
-   **Create** to add a brand-new partner.
-3. To change who appears on the Partners page and in what order, open
-   **Partners Page** → **Partner directory**, then drag entries to reorder,
-   or use the **+** button to add an existing partner to the list.
+Each page is split into **tabs** across the top — "Top of page," "Mission,"
+"FAQ," and so on — so you only see one section at a time. Click into a box and
+type. Every box has a label in plain English and, where it's useful, a note
+explaining exactly where that text shows up on the page.
 
-## Publishing
+## 4. Publish
 
-Sanity autosaves as you type, but changes stay in **draft** until you click
-**Publish** (top right of the document). Nothing goes live on the real site
-until you hit Publish.
+Your typing saves automatically, but it stays private until you press the green
+**Publish** button in the bottom right. Nothing appears on the real website
+until you press Publish.
 
-## Previewing before you publish
+If Publish is greyed out, a required box has been left empty — look for the
+field marked in red.
 
-Click the **Presentation** icon in the top navigation (next to the pencil/
-document icon) to see a live preview of the actual page next to your edits —
-click any text or image in the preview to jump straight to that field in the
-editor.
+---
 
-## What not to touch
+## Common jobs
 
-Everything in Sanity Studio is safe to edit. The website's code, layout, and
-design live in a separate GitHub repository and aren't editable from here —
-if something needs a structural change (a new page, a new section, a layout
-tweak), that still requires a developer.
+### Add a new partner to the Partners page
+
+1. Click **Partner logos & info** in the left menu.
+2. Click the **+** (or "Create new") button.
+3. Fill in the organization's name, upload their logo, and write a one-line
+   description.
+4. Set **Display order** to control where they appear (1 shows first, 2 second,
+   and so on).
+5. Press **Publish**.
+
+That's it — they'll appear on the Partners page automatically. You don't need to
+touch the Partners Page entry at all.
+
+### Hide a partner without deleting them
+
+Open the partner and switch **Show on the website** to off, then Publish. They
+disappear from the site but you keep their details in case they come back.
+
+### Change a photo at the top of a page
+
+1. Open the page and stay on the **Top of page** tab.
+2. Under **Background photo**, upload your new image.
+3. Click **Edit hotspot** and drag the circle onto the most important part of
+   the photo — a face, a machine, whoever you want kept in frame. The site crops
+   photos differently on phones than on computers, and this tells it what it must
+   never crop out.
+4. Press **Publish**.
+
+Leave the photo box empty to keep the one that's there now.
+
+### Add real photos to the Facility gallery
+
+Open **Facility Page** → the **Photo gallery** tab and upload your photos. The
+grey "PHOTO PLACEHOLDER" boxes disappear as soon as you add at least one real
+photo.
+
+### Add a question to an FAQ
+
+Open the page, go to the **FAQ** tab, and click **Add item**. You can drag
+questions up and down to reorder them, and click the ⋮ menu on any question to
+remove it.
+
+---
+
+## Seeing your changes before they go live
+
+Click **Edit on page** in the top bar. This shows the real website next to your
+editing panel. Click any text directly on the page to jump straight to the box
+that controls it. It's the easiest way to work if you're not sure which box does
+what.
+
+---
+
+## Things that still need a developer
+
+These are deliberately not editable, so nobody can accidentally break the site's
+layout:
+
+- The website's design, colors, and fonts
+- The menu at the top and the links in the footer
+- The looping video on the Home page
+- The "What's Industrial Operations Technology?" video placeholder
+- Adding a brand-new page
+
+If you need one of these, or you get stuck, ask whoever set the site up.

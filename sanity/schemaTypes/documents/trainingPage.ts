@@ -1,23 +1,45 @@
 import { defineField, defineType } from "sanity";
+import { heroFields } from "../heroFields";
 
 export default defineType({
   name: "trainingPage",
   title: "Training Page",
   type: "document",
+  groups: [
+    { name: "hero", title: "Top of page", default: true },
+    { name: "cards", title: "Students & Employers" },
+    { name: "faq", title: "Employer FAQ" },
+  ],
   fields: [
-    defineField({ name: "heroEyebrow", title: "Hero eyebrow", type: "string" }),
-    defineField({ name: "heroTitle", title: "Hero headline", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "heroDescription", title: "Hero paragraph", type: "text", rows: 3 }),
+    ...heroFields("hero"),
 
-    defineField({ name: "studentsBody", title: "\"For Students\" card text", type: "text", rows: 3 }),
-    defineField({ name: "employersBody", title: "\"For Employers\" card text", type: "text", rows: 3 }),
+    defineField({
+      name: "studentsBody",
+      title: '"For Students" box',
+      type: "text",
+      rows: 3,
+      group: "cards",
+    }),
+    defineField({
+      name: "employersBody",
+      title: '"For Employers" box',
+      type: "text",
+      rows: 3,
+      group: "cards",
+    }),
 
-    defineField({ name: "faqTitle", title: "Employer FAQ heading", type: "string" }),
+    defineField({
+      name: "faqTitle",
+      title: "FAQ heading",
+      type: "string",
+      group: "faq",
+    }),
     defineField({
       name: "employerFaqs",
-      title: "Employer FAQ",
+      title: "Questions & answers",
       type: "array",
       of: [{ type: "faq" }],
+      group: "faq",
     }),
   ],
   preview: {

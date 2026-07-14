@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero";
 import InquiryForm from "@/components/InquiryForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { CONTACT_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
   title: "Contact | GTCIO",
@@ -18,7 +19,20 @@ export default async function ContactPage() {
     sanityFetch({ query: CONTACT_PAGE_QUERY }),
     sanityFetch({ query: SITE_SETTINGS_QUERY }),
   ]);
-  const page = { ...DEFAULTS, ...(data as Partial<typeof DEFAULTS & { heroDescription: string }> | null) };
+  const typed = data as (Partial<typeof DEFAULTS> & {
+    heroDescription?: string;
+    heroImage?: SanityImage;
+    heroImageAlt?: string;
+  }) | null;
+  const page = { ...DEFAULTS, ...typed };
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-contact.jpg",
+    fallbackAlt:
+      "Technician reviewing diagnostics on a tablet at an electrical control panel",
+    fallbackPosition: "19% 28%",
+  });
   const settings = settingsData as {
     footerTagline?: string;
     address?: string;
@@ -33,9 +47,9 @@ export default async function ContactPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image="/images/hero-contact.jpg"
-        imageAlt="Technician reviewing diagnostics on a tablet at an electrical control panel"
-        imagePosition="19% 28%"
+        image={hero.src}
+        imageAlt={hero.alt}
+        imagePosition={hero.position}
       />
 
       <section className="px-6 py-16 sm:px-10">

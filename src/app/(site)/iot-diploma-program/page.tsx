@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import { sanityFetch } from "@/sanity/lib/live";
 import { IOT_DIPLOMA_PROGRAM_PAGE_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
   title: "IOT Diploma Program | GTCIO",
@@ -64,7 +65,10 @@ const DEFAULTS = {
 
 export default async function IotDiplomaProgramPage() {
   const { data } = await sanityFetch({ query: IOT_DIPLOMA_PROGRAM_PAGE_QUERY });
-  const typed = data as Partial<typeof DEFAULTS> | null;
+  const typed = data as (Partial<typeof DEFAULTS> & {
+    heroImage?: SanityImage;
+    heroImageAlt?: string;
+  }) | null;
   const page = { ...DEFAULTS, ...typed };
   const curriculumStages = typed?.curriculumStages?.length ? typed.curriculumStages : DEFAULTS.curriculumStages;
   const programOptions = typed?.programOptions?.length ? typed.programOptions : DEFAULTS.programOptions;
@@ -73,15 +77,23 @@ export default async function IotDiplomaProgramPage() {
   const payRanges = typed?.payRanges?.length ? typed.payRanges : DEFAULTS.payRanges;
   const faqs = typed?.faqs?.length ? typed.faqs : DEFAULTS.faqs;
 
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-iot-program.jpg",
+    fallbackAlt: "Engineer inspecting an industrial engine",
+    fallbackPosition: "85% 32%",
+  });
+
   return (
     <>
       <PageHero
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image="/images/hero-iot-program.jpg"
-        imageAlt="Engineer inspecting an industrial engine"
-        imagePosition="85% 32%"
+        image={hero.src}
+        imageAlt={hero.alt}
+        imagePosition={hero.position}
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">

@@ -4,36 +4,63 @@ export default defineType({
   name: "siteSettings",
   title: "Site Settings",
   type: "document",
+  groups: [
+    { name: "banner", title: "Top banner", default: true },
+    { name: "contact", title: "Address & contacts" },
+  ],
   fields: [
     defineField({
       name: "bannerOrgText",
-      title: "Top banner text — left side",
-      description: 'The thin black banner at the very top of every page, before the red divider. E.g. "WELCOME TO THE GTCIO"',
+      title: "Top banner — left side",
+      description:
+        'The thin black strip at the very top of every page, before the red line. Currently "WELCOME TO THE GTCIO".',
       type: "string",
       validation: (r) => r.required(),
+      group: "banner",
     }),
     defineField({
       name: "bannerParentText",
-      title: "Top banner text — right side",
-      description: 'The part after the red divider. E.g. "A DIVISION OF OGEECHEE TECHNICAL COLLEGE"',
+      title: "Top banner — right side",
+      description:
+        'The part after the red line. Currently "A DIVISION OF OGEECHEE TECHNICAL COLLEGE".',
       type: "string",
       validation: (r) => r.required(),
+      group: "banner",
     }),
     defineField({
       name: "footerTagline",
-      title: "Footer tagline",
+      title: "Tagline under the logo",
+      description: "Shown in the black footer and on the Contact page.",
       type: "string",
       validation: (r) => r.required(),
+      group: "banner",
     }),
-    defineField({ name: "address", title: "Street address", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "phone", title: "Main phone number", type: "string", validation: (r) => r.required() }),
+
+    defineField({
+      name: "address",
+      title: "Street address",
+      description: "Shown in the footer of every page and on the Contact page.",
+      type: "string",
+      validation: (r) => r.required(),
+      group: "contact",
+    }),
+    defineField({
+      name: "phone",
+      title: "Main phone number",
+      type: "string",
+      validation: (r) => r.required(),
+      group: "contact",
+    }),
     defineField({
       name: "programContact",
       title: "Program Questions contact",
+      description: "Shown on the Contact page.",
       type: "object",
+      group: "contact",
+      options: { collapsible: true, collapsed: false },
       fields: [
-        defineField({ name: "name", title: "Name & title", type: "string" }),
-        defineField({ name: "office", title: "Office", type: "string" }),
+        defineField({ name: "name", title: "Name & job title", type: "string" }),
+        defineField({ name: "office", title: "Office / building", type: "string" }),
         defineField({ name: "phone", title: "Phone", type: "string" }),
         defineField({ name: "email", title: "Email", type: "string" }),
       ],
@@ -41,7 +68,10 @@ export default defineType({
     defineField({
       name: "mediaContact",
       title: "Media Inquiries contact",
+      description: "Shown on the Contact page.",
       type: "object",
+      group: "contact",
+      options: { collapsible: true, collapsed: false },
       fields: [
         defineField({ name: "name", title: "Name", type: "string" }),
         defineField({ name: "phone", title: "Phone", type: "string" }),
@@ -51,7 +81,10 @@ export default defineType({
   ],
   preview: {
     prepare() {
-      return { title: "Site Settings" };
+      return {
+        title: "Site Settings",
+        subtitle: "Banner, address, and contacts used across every page",
+      };
     },
   },
 });

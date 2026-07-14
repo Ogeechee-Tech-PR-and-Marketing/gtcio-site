@@ -1,5 +1,8 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+Non-technical content edits (text, images, the partner directory) are made
+through the embedded Sanity Studio at `/studio` — see [EDITING.md](./EDITING.md).
+
 ## Getting Started
 
 First, run the development server:

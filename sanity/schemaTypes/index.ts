@@ -31,6 +31,10 @@ export const schema: { types: SchemaTypeDefinition[] } = {
   ],
 };
 
+/**
+ * Pages that exist exactly once. These are pinned in the sidebar and cannot be
+ * created, duplicated, or deleted from the Studio.
+ */
 export const singletonTypes = new Set([
   "siteSettings",
   "homePage",

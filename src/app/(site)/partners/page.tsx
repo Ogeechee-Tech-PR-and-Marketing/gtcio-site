@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import InquiryForm from "@/components/InquiryForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { PARTNERS_PAGE_QUERY } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/image";
+import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
   title: "Partners | GTCIO",
@@ -36,11 +36,21 @@ const DEFAULTS = {
 export default async function PartnersPage() {
   const { data } = await sanityFetch({ query: PARTNERS_PAGE_QUERY });
   const typed = data as (Partial<typeof DEFAULTS> & {
-    directory?: Array<{ _id: string; name: string; description: string; logo?: unknown }>;
+    heroImage?: SanityImage;
+    heroImageAlt?: string;
+    partners?: Array<{ _id: string; name: string; description: string; logo?: SanityImage }>;
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const pathways = typed?.pathways?.length ? typed.pathways : DEFAULTS.pathways;
-  const directory = typed?.directory ?? [];
+  const partners = typed?.partners ?? [];
+
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-partners.jpg",
+    fallbackAlt: "Two technicians working together on robotic equipment",
+    fallbackPosition: "55% 17%",
+  });
 
   return (
     <>
@@ -48,9 +58,9 @@ export default async function PartnersPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image="/images/hero-partners.jpg"
-        imageAlt="Two technicians working together on robotic equipment"
-        imagePosition="55% 17%"
+        image={hero.src}
+        imageAlt={hero.alt}
+        imagePosition={hero.position}
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
@@ -89,14 +99,17 @@ export default async function PartnersPage() {
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.directoryTitle}</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">{page.directoryIntro}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {directory.map((partner) => (
+            {partners.map((partner) => (
               <div key={partner._id} className="border border-brand-silver/40 p-6">
                 <div className="relative flex h-16 items-center justify-center">
-                  {Boolean(partner.logo) && (
+                  {partner.logo && (
                     <Image
-                      src={urlForImage(partner.logo as never).width(320).height(128).fit("max").url()}
+                      // Width only: passing a height too makes Sanity crop the
+                      // logo to that aspect ratio and clip wordmarks.
+                      src={urlForImage(partner.logo).width(480).fit("max").url()}
                       alt={`${partner.name} logo`}
                       fill
+                      sizes="160px"
                       className="object-contain"
                     />
                   )}
