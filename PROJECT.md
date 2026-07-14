@@ -220,8 +220,19 @@ Other open items:
 - **Homepage hero video** (`public/videos/hero-construction.mp4`) is code-only,
   not CMS-editable.
 - **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`).
-- The admin assistant may not have been invited to Sanity yet — as of 2026-07-14
-  Jake said he'd do it himself via sanity.io/manage. Verify before assuming.
+- **Who edits the site:** access is via a *shared* departmental mailbox,
+  `prmarketing@ogeecheetech.edu`, so anyone in OTC marketing can make changes —
+  not a single named assistant. Consequences: (a) all edits are attributed to
+  that one account, so Sanity's per-user history can't tell you *which person*
+  changed something; (b) the credential must be rotated when someone leaves the
+  department. Dataset revision history is 90 days, so content mistakes are
+  recoverable.
+- That account should hold the **Editor** role, *not* Administrator. Administrator
+  can delete the dataset, revoke the `SANITY_API_READ_TOKEN` the live site depends
+  on, and change project settings — too much power to attach to a shared password.
+  The initial invite went out as Administrator (2026-07-14) and was flagged for
+  correction; **verify the current role** in sanity.io/manage before assuming it
+  was fixed. Note Editor may require the paid Growth plan (~$15/seat/mo).
 
 ---
 
