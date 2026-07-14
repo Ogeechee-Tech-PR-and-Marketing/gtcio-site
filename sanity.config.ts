@@ -17,8 +17,10 @@ export default defineConfig({
   dataset,
   schema,
   plugins: [
-    // Tool names are what an editor reads in the top bar, so avoid CMS jargon.
-    structureTool({ title: "Pages", structure }),
+    // Studio lands on whichever tool is listed first. "Edit on page" goes first
+    // so an editor arrives at the live site and can click the thing they want to
+    // change, rather than at a list of documents they'd have to decode.
+    // Tool names are what they read in the top bar, so avoid CMS jargon.
     presentationTool({
       title: "Edit on page",
       resolve,
@@ -28,6 +30,7 @@ export default defineConfig({
         },
       },
     }),
+    structureTool({ title: "Pages", structure }),
   ],
   document: {
     // Singletons can't be created or destroyed from the Studio — only edited.

@@ -11,33 +11,35 @@ there can break the design of the site.
 Go to **[gtcio-site.vercel.app/studio](https://gtcio-site.vercel.app/studio)**
 and sign in with the account you were invited with.
 
-## 2. Find what you want to change
+## 2. Click the thing you want to change
 
-The menu down the left side lists everything you can edit:
+You'll land on **Edit on page**: the real website on one side, an editing panel
+on the other. Browse to the page you want using the website itself, then **click
+the text or photo you want to change** — the editing panel jumps straight to the
+right box. You never have to guess which setting does what.
+
+## 3. Make your change
+
+Type into the box. Each one has a plain-English label and, where it helps, a note
+saying exactly where it shows up on the page. Your edits appear in the preview as
+you type, so you can see what you're doing before anyone else does.
+
+Some content isn't tied to one spot on a page — the address in the footer, or a
+partner's logo. For those, use the **Pages** tab at the top:
 
 | Menu item | What's in it |
 | --- | --- |
 | **Site Settings** | The black bar at the top of every page, the address, phone numbers, and the contacts shown on the Contact page. |
-| **Home Page**, **About Page**, etc. | One entry per page of the website, in the same order as the site's own menu. |
+| **Home Page**, **About Page**, etc. | One entry per page, in the same order as the website's own menu. Each is split into tabs ("Top of page," "FAQ," …) so you only see one section at a time. |
 | **Partner logos & info** | The companies shown on the Partners page. |
-
-Click any of them to open it.
-
-## 3. Make your change
-
-Each page is split into **tabs** across the top — "Top of page," "Mission,"
-"FAQ," and so on — so you only see one section at a time. Click into a box and
-type. Every box has a label in plain English and, where it's useful, a note
-explaining exactly where that text shows up on the page.
 
 ## 4. Publish
 
 Your typing saves automatically, but it stays private until you press the green
-**Publish** button in the bottom right. Nothing appears on the real website
-until you press Publish.
+**Publish** button. Nothing appears on the real website until you press Publish.
 
-If Publish is greyed out, a required box has been left empty — look for the
-field marked in red.
+If Publish is greyed out, a required box has been left empty — look for the box
+marked in red.
 
 ---
 
@@ -87,12 +89,11 @@ remove it.
 
 ---
 
-## Seeing your changes before they go live
+## Nothing you do is permanent until you Publish
 
-Click **Edit on page** in the top bar. This shows the real website next to your
-editing panel. Click any text directly on the page to jump straight to the box
-that controls it. It's the easiest way to work if you're not sure which box does
-what.
+Edits are saved as a private draft that only you can see. The live website keeps
+showing the old version until you press **Publish**. So it's safe to open things
+up, poke around, and change your mind.
 
 ---
 
