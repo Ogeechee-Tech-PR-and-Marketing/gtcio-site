@@ -14,6 +14,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      {/* Trade Gothic Next, per the OTC brand guide. Served from Adobe Fonts under
+          OTC's Creative Cloud licence — the files can't be self-hosted, so warm the
+          connection early to shorten the swap-in. React 19 hoists these into <head>;
+          wrapping them in a manual <head> element silently drops them. */}
+      <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
+      <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
+      <link
+        rel="stylesheet"
+        href="https://use.typekit.net/fgt0fkg.css"
+        precedence="default"
+      />
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

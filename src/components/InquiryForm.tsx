@@ -139,7 +139,7 @@ export default function InquiryForm({
         <button
           type="submit"
           disabled={status === "sending"}
-          className="font-display bg-brand-red px-8 py-3 text-sm text-brand-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
+          className="font-ui bg-brand-red px-8 py-3 text-sm text-brand-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
         >
           {status === "sending" ? "SENDING…" : submitLabel}
         </button>

@@ -38,7 +38,7 @@ export default function Header({
   return (
     <header className="sticky top-0 z-50 bg-brand-white">
       <div className="bg-brand-black px-4 py-2 text-center">
-        <p className="font-display text-xs font-bold tracking-widest text-brand-white sm:text-sm">
+        <p className="font-ui text-xs font-bold tracking-widest text-brand-white sm:text-sm">
           {bannerOrgText} <span className="text-brand-red">|</span> {bannerParentText}
         </p>
       </div>
@@ -67,7 +67,7 @@ export default function Header({
                 >
                   <Link
                     href={item.href}
-                    className="font-display text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
+                    className="font-ui text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
                   >
                     {item.label}
                   </Link>
@@ -77,7 +77,7 @@ export default function Header({
                         <Link
                           key={child.label}
                           href={child.href}
-                          className="font-display block px-4 py-3 text-xs font-bold tracking-wide text-brand-black hover:bg-brand-black hover:text-brand-white"
+                          className="font-ui block px-4 py-3 text-xs font-bold tracking-wide text-brand-black hover:bg-brand-black hover:text-brand-white"
                         >
                           {child.label}
                         </Link>
@@ -89,7 +89,7 @@ export default function Header({
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="font-display text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
+                  className="font-ui text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
                 >
                   {item.label}
                 </Link>
@@ -100,7 +100,7 @@ export default function Header({
           <div className="hidden lg:block">
             <Link
               href="/facility#book-a-tour"
-              className="font-display bg-brand-red px-6 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
+              className="font-ui bg-brand-red px-6 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
             >
               BOOK A TOUR
             </Link>
@@ -109,7 +109,7 @@ export default function Header({
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
-            className="font-display text-sm font-bold tracking-wide text-brand-black lg:hidden"
+            className="font-ui text-sm font-bold tracking-wide text-brand-black lg:hidden"
             aria-label="Toggle menu"
           >
             {mobileOpen ? "CLOSE" : "MENU"}
@@ -123,7 +123,7 @@ export default function Header({
                 <Link
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="font-display block py-2 text-sm font-bold tracking-wide text-brand-black"
+                  className="font-ui block py-2 text-sm font-bold tracking-wide text-brand-black"
                 >
                   {item.label}
                 </Link>
@@ -134,7 +134,7 @@ export default function Header({
                         key={child.label}
                         href={child.href}
                         onClick={() => setMobileOpen(false)}
-                        className="font-display py-1 text-xs font-bold tracking-wide text-brand-silver"
+                        className="font-ui py-1 text-xs font-bold tracking-wide text-brand-silver"
                       >
                         {child.label}
                       </Link>
@@ -146,7 +146,7 @@ export default function Header({
             <Link
               href="/facility#book-a-tour"
               onClick={() => setMobileOpen(false)}
-              className="font-display mt-2 bg-brand-red px-6 py-2.5 text-center text-xs font-bold tracking-widest text-brand-white"
+              className="font-ui mt-2 bg-brand-red px-6 py-2.5 text-center text-xs font-bold tracking-widest text-brand-white"
             >
               BOOK A TOUR
             </Link>
