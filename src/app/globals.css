@@ -16,7 +16,10 @@
   --color-brand-silver: var(--color-brand-silver);
   --color-brand-teal: var(--color-brand-teal);
   --color-brand-gold: var(--color-brand-gold);
-  --font-condensed: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", Arial, sans-serif;
+  /* Trade Gothic Next Condensed is the brand guide's primary face. Arial Narrow
+     is the guide's own approved substitute, so it leads the fallbacks. */
+  --font-condensed: "trade-gothic-next-condensed", "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", Arial, sans-serif;
+  --font-compressed: "trade-gothic-next-compressed", var(--font-condensed);
 }
 
 body {
@@ -25,11 +28,23 @@ body {
   font-family: var(--font-condensed);
 }
 
-/* OTC brand guide "Header" treatment: heavy weight, ALL CAPS — true headline/label elements only */
+/* OTC brand guide "Header" treatment: Trade Gothic Next Heavy Compressed,
+   ALL CAPS — true headline/label elements only */
 .font-display {
+  font-family: var(--font-compressed);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+/* Interactive chrome: nav links, buttons, the top banner. Condensed Bold rather
+   than Heavy Compressed — the guide reserves Compressed for large headers, and it
+   turns illegible at 12–14px. */
+.font-ui {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* OTC brand guide "Subheader" treatment: bold, sentence case */
