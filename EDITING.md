@@ -97,6 +97,17 @@ edit them, only read them.
 If a submission is flagged **⚠️ NOT EMAILED**, the notification never reached
 staff. Follow that one up by hand.
 
+> ### ⚠️ Right now, NO notification emails are being sent
+>
+> The email side isn't switched on yet (it's waiting on a setup key). Inquiries
+> are still being captured safely — nothing is lost — but **nobody gets an email
+> when someone fills in a form.** Until this is turned on, check the **Form
+> submissions (inbox)** regularly so nothing sits unanswered.
+>
+> Whoever set the site up can switch emails on; ask them. Once it's on, every
+> submission emails GTCIO with the person's chosen reason as the subject line,
+> and you can just hit Reply to answer them.
+
 ### Change the choices in the "reason for contacting" dropdown
 
 Open **Contact Page** → the **Contact form** tab. Whatever the person picks
@@ -111,9 +122,18 @@ rename a pathway card and the dropdown follows along on its own.
 
 ## Nothing you do is permanent until you Publish
 
-Edits are saved as a private draft that only you can see. The live website keeps
-showing the old version until you press **Publish**. So it's safe to open things
-up, poke around, and change your mind.
+Edits are saved as a draft. The live website keeps showing the old version until
+you press **Publish**, so it's safe to open things up, poke around, and change
+your mind.
+
+Two things worth knowing:
+
+- **Drafts are shared.** Because marketing signs in with one shared account,
+  anyone else in the department sees your unpublished drafts — and can publish
+  them. If you're mid-way through something you don't want going live, say so.
+- **Mistakes are undoable.** Sanity keeps a history of every change for 90 days,
+  so a bad edit can be rolled back. You are not going to permanently ruin
+  anything.
 
 ---
 

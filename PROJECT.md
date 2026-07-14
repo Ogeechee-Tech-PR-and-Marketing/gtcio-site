@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
-Everything a developer or AI agent needs to pick this project up cold. Written
-2026-07-14; check it against the code before trusting any specific claim.
+Everything a developer or AI agent needs to pick this project up cold. Last
+updated 2026-07-14. Check claims against the code before trusting them.
 
 ---
 
@@ -38,6 +38,7 @@ stray/abandoned Wix sites may still exist in the `jhallman32` Wix account.
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
 | CMS | Sanity v6 (`next-sanity` v13) |
+| Email | Web3Forms (see §5) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
 | Deploys | **Auto-deploy on push to `main`.** No manual deploy step. |
 
@@ -62,10 +63,21 @@ src/app/
     training/             /training
     partners/             /partners
     contact/              /contact
-  studio/[[...tool]]/     /studio  ← Sanity Studio, embedded
-  api/draft-mode/         enable + disable routes for preview
+  studio/[[...tool]]/     /studio      ← Sanity Studio, embedded
+  api/
+    draft-mode/           enable + disable, for the Studio's live preview
+    inquiry/              POST target for all three forms (§5)
 src/components/           Header, Footer, PageHero, Button, InquiryForm
-sanity/                   schema, queries, client, structure, presentation config
+sanity/
+  env.ts                  projectId / dataset / apiVersion
+  lib/client.ts           read client
+  lib/writeClient.ts      write client — server-only, form submissions
+  lib/live.ts             sanityFetch + SanityLive (draft/preview)
+  lib/queries.ts          all GROQ
+  lib/image.ts            urlForImage + resolveHeroImage (hotspot → focal point)
+  schemaTypes/            documents/ + objects/ + heroFields.ts
+  structure.ts            the Studio's left-hand menu
+  presentation.ts         maps documents ↔ page URLs for "Edit on page"
 sanity.config.ts          Studio config (root)
 sanity.cli.ts             CLI config (root)
 ```
@@ -83,8 +95,8 @@ Sanity project **`kjz4q8d4`**, dataset **`production`**. The Studio is embedded 
 page"** (Presentation) tool, so an editor sees the live site and clicks what they
 want to change.
 
-The whole point of the CMS is that **a non-technical admin assistant operates
-it.** Every decision below exists to protect that. Weigh it accordingly.
+The whole point of the CMS is that **non-technical marketing staff operate it.**
+Every decision below exists to protect that. Weigh it accordingly.
 
 ### Content model
 
@@ -94,12 +106,18 @@ it.** Every decision below exists to protect that. Weigh it accordingly.
   deleted from the Studio (see `document.actions` in `sanity.config.ts`).
 - **`siteSettings`** — top banner text, address, phone, program + media contacts.
   Used by Header, Footer, and the Contact page.
-- **`partner`** — a standalone document per partner company.
+- **`partner`** — one document per partner company (`logo`, `order`,
+  `showOnWebsite`).
+- **`formSubmission`** — a saved copy of every form inquiry (§5). Read-only;
+  written only by the server, never created by hand in the Studio.
 - **Objects:** `faq`, `statCard`, `pathwayCard`, plus per-page inline types
   (`curriculumStage`, `programOption`, `jobDuty`, `payRange`).
+- **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
+  Contact form's dropdown. The Become a Partner dropdown has no field of its own —
+  it is derived from `partnersPage.pathways` (§5).
 - Interior page heroes share `heroFields()` in `sanity/schemaTypes/heroFields.ts`.
 
-### 🔴 Four traps that will bite you
+### 🔴 Five traps that will bite you
 
 **1. Partners are queried directly. Never reintroduce a reference list.**
 The first version had `partnersPage.directory` as an array of references to
@@ -132,22 +150,75 @@ a crop offset eyeballed at one screen width, because the hero crops differently 
 every viewport. Each hero falls back to a hardcoded image + hand-tuned focal point
 when no CMS image is set.
 
+**5. `writeClient` is server-only.** `sanity/lib/writeClient.ts` carries a
+read+write token and imports `server-only` to guarantee it can't be pulled into a
+client bundle. Never import it from a `"use client"` component, and never pass the
+token to the browser.
+
 ### Verifying CMS work
 
-You cannot log into the Studio without Jake's password, so **do not "verify" CMS
-changes by looking at the rendered website** — a correct page can hide a broken
-editor (see trap 2). Use:
+You cannot log into the Studio (it needs Jake's password), so **do not "verify"
+CMS changes by looking at the rendered website** — a correct page can hide a
+broken editor (see trap 2). Use:
 
 ```bash
-npx sanity schema validate                       # schema is well-formed
+npx sanity schema validate                                 # schema is well-formed
 npx sanity documents validate --dataset production --yes   # every doc matches the schema
 ```
 
-Both should report 0 errors. The second one is what catches trap 2.
+Both should report 0 errors. The second is what catches trap 2.
 
 ---
 
-## 5. Environment & config
+## 5. How the forms work
+
+Three forms — **Book a Tour** (Facility), **Become a Partner** (Partners), and
+**Contact** — all render through `src/components/InquiryForm.tsx` and POST JSON to
+**`src/app/api/inquiry/route.ts`**. That route, in order:
+
+1. **Drops bots** via a `botcheck` honeypot field, returning a fake success so
+   they don't retry.
+2. Validates the form type and email address.
+3. **Saves the inquiry to Sanity first** as a `formSubmission` document. This
+   happens *before* any email is attempted, so a bounced or spam-filtered
+   notification never means a lost lead. **Do not flip this order.**
+4. **Then emails staff** via Web3Forms (`https://api.web3forms.com/submit`) with
+   `subject` built from the dropdown choice and `replyto` set to the submitter, so
+   staff can just hit Reply.
+5. **Flags `emailDelivered`** on the saved document. `false` means the email did
+   not go out — the Studio preview renders those as "⚠️ NOT EMAILED" so someone
+   can follow up by hand.
+
+Marketing reads these in the Studio under **"Form submissions (inbox)"**.
+
+### Dropdowns
+
+- **Become a Partner** — options are generated from `partnersPage.pathways`, i.e.
+  the same Partnership Pathway cards displayed above the form, plus a hardcoded
+  "Something else / not sure yet". This is deliberate: rename a pathway card and
+  the dropdown follows, so the form can never drift out of sync with the page.
+  There is no separate list to maintain — **don't add one.**
+- **Contact** — options come from `contactPage.contactReasons`, editable in the
+  Studio.
+
+Whichever option the visitor picks becomes the **email subject line**.
+
+### ⚠️ Web3Forms: the recipient is baked into the access key
+
+Web3Forms sends to whatever address the key was **created with**. There is *no*
+per-request "to" field (`ccemail` is a paid feature). Consequences:
+
+- To change who receives inquiries, you must generate a **new key** using that
+  address and update `WEB3FORMS_ACCESS_KEY`. You cannot do it in code.
+- Intended recipient: **`jmoore@ogeecheetech.edu`**.
+
+**If `WEB3FORMS_ACCESS_KEY` is unset, the site still works and still saves every
+submission — it just doesn't email.** That's deliberate graceful degradation, not
+a bug. See §8 for the current status.
+
+---
+
+## 6. Environment & config
 
 `.env.local` (gitignored) and Vercel env vars (all three environments):
 
@@ -157,14 +228,13 @@ NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2025-06-01
 SANITY_API_READ_TOKEN=<viewer-role token, secret>
 SANITY_API_WRITE_TOKEN=<editor-role token, secret — writes form submissions>
-WEB3FORMS_ACCESS_KEY=<see §7; unset = no email, but submissions still saved>
+WEB3FORMS_ACCESS_KEY=<see §5; unset = no email, submissions still saved>
 ```
 
 The read token is **viewer role**, used server-side for draft/preview reads only.
-The write token is **editor role** and is used *only* by `/api/inquiry` to record
-submissions — it's imported through `sanity/lib/writeClient.ts`, which is marked
-`server-only` so it can never leak into a client bundle. Editors authenticate to
-the Studio with their own Sanity login; neither token is involved in that.
+The write token is **editor role**, used *only* by `/api/inquiry`, via the
+server-only `writeClient`. Editors authenticate to the Studio with their own Sanity
+login; neither token is involved in that.
 
 **Sanity CORS origins** (`npx sanity cors list`) currently allow
 `http://localhost:3000` and `https://gtcio-site.vercel.app`.
@@ -177,7 +247,7 @@ image host must be added there or images 500.
 
 ---
 
-## 6. Brand
+## 7. Brand
 
 Real OTC brand assets are in use. Don't substitute a generic palette.
 
@@ -202,72 +272,64 @@ that company's logo.
 
 ---
 
-## 7. Known gaps / open work
+## 8. Open work
 
-**Forms are wired up** (was previously a stub that discarded everything). All
-three — Book a Tour, Become a Partner, Contact — POST to `src/app/api/inquiry/route.ts`,
-which:
+**🔴 No inquiry emails are being sent yet.** `WEB3FORMS_ACCESS_KEY` is not set, so
+form submissions are being saved to the Studio inbox but **nobody is being
+notified**. To finish: create a key at [web3forms.com](https://web3forms.com)
+*using the address that should receive the mail* (see §5 — the recipient is tied to
+the key), then set `WEB3FORMS_ACCESS_KEY` in Vercel and redeploy. Then submit the
+Contact form once and confirm the email actually arrives — **email delivery has
+never been tested end to end**, because it can't be without a real key.
 
-1. Drops bot submissions via a `botcheck` honeypot (returns a fake success).
-2. **Saves the inquiry to Sanity first** (`formSubmission` doc, visible in the
-   Studio under "Form submissions (inbox)"), so a bounced or spam-filtered email
-   never means a lost lead. Order matters — don't flip it.
-3. Then emails staff via **Web3Forms** (`https://api.web3forms.com/submit`), with
-   `subject` built from the dropdown reason and `replyto` set to the submitter.
-4. Flags `emailDelivered` on the saved doc. `false` = follow up manually; the
-   Studio preview shows "⚠️ NOT EMAILED".
+**Sanity role:** the shared marketing account (below) was invited as
+**Administrator**, which can delete the dataset and revoke the tokens the live site
+depends on. It should be **Editor**. Flagged 2026-07-14 — **verify the current role
+in sanity.io/manage before assuming it was fixed.** Editor may require the paid
+Growth plan (~$15/seat/mo).
 
-⚠️ **The email recipient is fixed to whatever address the Web3Forms access key was
-created with.** There is no per-request "to" field (`ccemail` is Pro-only). To
-change who receives inquiries you must create a *new key* with that address and
-update `WEB3FORMS_ACCESS_KEY`. Intended recipient: `jmoore@ogeecheetech.edu`.
+**Who edits the site:** a *shared* departmental mailbox,
+`prmarketing@ogeecheetech.edu`, so anyone in OTC marketing can make changes — not a
+single named person. Consequences: (a) all edits are attributed to that one
+account, so Sanity's per-user history can't tell you *which person* changed
+something; (b) the credential must be rotated when someone leaves. Dataset revision
+history is 90 days, so content mistakes are recoverable.
 
-If `WEB3FORMS_ACCESS_KEY` is unset the site still works and still saves every
-submission — it just doesn't email. That's the intended graceful degradation.
+Smaller items:
 
-**Dropdowns:** the Become a Partner dropdown is generated from the Partnership
-Pathway cards in the CMS (so it can't drift from the page), plus a hardcoded
-"Something else / not sure yet". The Contact dropdown comes from
-`contactPage.contactReasons`. The chosen value becomes the email subject line.
-
-Other open items:
-
-- **Content still pending from GTCIO:** final tuition figure, final program
-  length, formal mission-statement sign-off, fuller partnership-history timeline.
-  These render as visible "Placeholder…" text on the site today.
+- **Content still pending from GTCIO:** final tuition figure, final program length,
+  formal mission-statement sign-off, fuller partnership-history timeline. These
+  render as visible "Placeholder…" text on the site today.
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
-  are uploaded (the gallery *is* CMS-editable — see Facility Page → Photo gallery).
+  are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
   box on the IOT page. Not produced, not scoped.
-- **Homepage hero video** (`public/videos/hero-construction.mp4`) is code-only,
-  not CMS-editable.
+- **Homepage hero video** (`public/videos/hero-construction.mp4`) is code-only, not
+  CMS-editable.
 - **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`).
-- **Who edits the site:** access is via a *shared* departmental mailbox,
-  `prmarketing@ogeecheetech.edu`, so anyone in OTC marketing can make changes —
-  not a single named assistant. Consequences: (a) all edits are attributed to
-  that one account, so Sanity's per-user history can't tell you *which person*
-  changed something; (b) the credential must be rotated when someone leaves the
-  department. Dataset revision history is 90 days, so content mistakes are
-  recoverable.
-- That account should hold the **Editor** role, *not* Administrator. Administrator
-  can delete the dataset, revoke the `SANITY_API_READ_TOKEN` the live site depends
-  on, and change project settings — too much power to attach to a shared password.
-  The initial invite went out as Administrator (2026-07-14) and was flagged for
-  correction; **verify the current role** in sanity.io/manage before assuming it
-  was fixed. Note Editor may require the paid Growth plan (~$15/seat/mo).
+- **No rate limiting** on `/api/inquiry` beyond the honeypot. If spam becomes a
+  problem, add it.
 
 ---
 
-## 8. Commands
+## 9. Commands
 
 ```bash
 npm run dev                # dev server (localhost:3000; /studio for the CMS)
 npm run build              # production build
 npx tsc --noEmit           # typecheck
 npx eslint .               # lint
+
 npx sanity schema validate                                 # see §4
 npx sanity documents validate --dataset production --yes   # see §4
-npx sanity cors list       # check allowed Studio origins
+npx sanity cors list                                       # allowed Studio origins
+
+# Exercise the form endpoint without a browser:
+curl -s -X POST http://localhost:3000/api/inquiry \
+  -H "Content-Type: application/json" \
+  -d '{"formType":"contact","reason":"Media inquiry","firstName":"A","lastName":"B","email":"a@b.com","message":"hi"}'
+# → {"ok":true}, and a formSubmission doc appears in Sanity.
+# Clean up test docs by ID afterwards — don't leave them in the client's inbox.
 ```
 
 Push to `main` → Vercel deploys automatically. `npx vercel ls gtcio-site --yes`
@@ -275,7 +337,7 @@ shows deploy status.
 
 ---
 
-## 9. Working notes
+## 10. Working notes
 
 - **Site nav order** (locked with Jan): About (Mission / Bulloch Development
   Authority / History of Partnership / FAQ) · IOT Diploma Program · Facility (with
@@ -288,6 +350,6 @@ shows deploy status.
   ft facility, ~460,000 instructional hours/year capacity, SACA credential offered
   alongside the diploma, August 2026 launch. Media contact: Sean Payne,
   spayne@ogeecheetech.edu. Applications: www.ogeecheetech.edu/IOT.
-- `EDITING.md` in this repo is the **plain-English guide written for the admin
-  assistant**, not for developers. If you change how editing works, update it —
-  it is the thing a non-technical person actually reads.
+- `EDITING.md` in this repo is the **plain-English guide written for marketing
+  staff**, not for developers. If you change how editing works, update it — it is
+  the thing a non-technical person actually reads.
