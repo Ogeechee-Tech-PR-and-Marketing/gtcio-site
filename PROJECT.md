@@ -260,10 +260,41 @@ Real OTC brand assets are in use. Don't substitute a generic palette.
 | `brand-teal` | `#007586` (accent) |
 | `brand-gold` | `#F5BD16` (accent) |
 
-Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`). Type is condensed
-sans (Trade Gothic Condensed in the brand guide → Arial Narrow / Helvetica
-Condensed stack in code). `.font-display` = heavy, ALL CAPS (headlines/labels).
-`.font-heading` = bold, sentence case. Logo: `public/images/gtcio-logo.png`.
+Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`).
+Logo: `public/images/gtcio-logo.png`.
+
+### Type — real Trade Gothic Next, via Adobe Fonts
+
+The brand guide's actual faces are loaded from Adobe Fonts under OTC's Creative
+Cloud licence (kit `fgt0fkg`, linked in `src/app/layout.tsx`). Arial Narrow — the
+guide's own approved substitute — remains the fallback.
+
+| Class | Face | Used for |
+| --- | --- | --- |
+| `.font-display` | Trade Gothic Next **Heavy Compressed** (800) | Big headlines, gold eyebrow labels |
+| `.font-ui` | Trade Gothic Next **Condensed Bold** (700) | Nav links, buttons, top banner |
+| `.font-heading` | Condensed Bold, sentence case | Section subheads |
+| body | Trade Gothic Next **Condensed** (400) | Everything else |
+
+⚠️ **Two traps, both of which cost real time:**
+
+1. **Never wrap the Adobe `<link>` in a manual `<head>` element** in the root
+   layout — Next silently drops it. The page then renders in the Arial Narrow
+   fallback and *looks completely fine*, and `document.fonts.check()` still returns
+   `true` (it reports "available" for any family that falls back to a system font).
+   React 19 hoists the `<link>` on its own. Verify by grepping the **served HTML**
+   for `typekit`, or by measuring rendered glyph widths — never by screenshot.
+2. **`font-display` is set per font family in the Adobe web project, not per
+   project.** If a family is left on `auto` its text is *invisible* for up to ~3s
+   on slow connections. Both families must be set to **Swap**. Check with:
+   `curl -s https://use.typekit.net/fgt0fkg.css | grep font-display`
+
+Nav and buttons deliberately use Condensed Bold rather than Heavy Compressed: the
+guide reserves Compressed for 20pt headers, and it becomes illegible at 12–14px.
+
+Adobe's files **cannot be self-hosted**, so `next/font` optimisation isn't
+available here. If the site ever moves to a new domain, **add that domain to the
+Adobe Fonts web project** or the fonts will stop loading there.
 
 **Partner logos are third-party trademarks.** Jake confirmed all five current
 partnerships are real and authorized. Before adding any *new* company's logo,
