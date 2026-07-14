@@ -121,6 +121,7 @@ export default async function FacilityPage() {
           <p className="mt-3 text-brand-silver">{page.bookTourIntro}</p>
           <div className="mt-8">
             <InquiryForm
+              formType="tour"
               fields={[
                 { name: "firstName", label: "First Name", required: true },
                 { name: "lastName", label: "Last Name", required: true },

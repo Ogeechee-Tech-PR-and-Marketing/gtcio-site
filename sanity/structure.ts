@@ -52,4 +52,15 @@ export const structure: StructureResolver = (S) =>
               { field: "name", direction: "asc" },
             ])
         ),
+
+      S.divider(),
+
+      S.listItem()
+        .id("formSubmission")
+        .title("Form submissions (inbox)")
+        .child(
+          S.documentTypeList("formSubmission")
+            .title("Form submissions")
+            .defaultOrdering([{ field: "submittedAt", direction: "desc" }])
+        ),
     ]);

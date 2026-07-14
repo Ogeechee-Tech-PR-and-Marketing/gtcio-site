@@ -156,11 +156,15 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=kjz4q8d4
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2025-06-01
 SANITY_API_READ_TOKEN=<viewer-role token, secret>
+SANITY_API_WRITE_TOKEN=<editor-role token, secret — writes form submissions>
+WEB3FORMS_ACCESS_KEY=<see §7; unset = no email, but submissions still saved>
 ```
 
 The read token is **viewer role**, used server-side for draft/preview reads only.
-Editors authenticate to the Studio with their own Sanity login; the token isn't
-involved in that.
+The write token is **editor role** and is used *only* by `/api/inquiry` to record
+submissions — it's imported through `sanity/lib/writeClient.ts`, which is marked
+`server-only` so it can never leak into a client bundle. Editors authenticate to
+the Studio with their own Sanity login; neither token is involved in that.
 
 **Sanity CORS origins** (`npx sanity cors list`) currently allow
 `http://localhost:3000` and `https://gtcio-site.vercel.app`.
@@ -200,13 +204,31 @@ that company's logo.
 
 ## 7. Known gaps / open work
 
-**🔴 The forms don't do anything.** `src/components/InquiryForm.tsx` is a
-client-side stub: on submit it flips to a "Message received" message and
-**discards the data**. There is no backend, no email, no storage. This affects
-**Book a Tour**, **Become a Partner**, and **Contact** — all three. Anyone filling
-them out today is shouting into the void. This is probably the single most
-important outstanding item; it needs a form backend wired up (Resend, Formspree, a
-Sanity mutation, a route handler — undecided).
+**Forms are wired up** (was previously a stub that discarded everything). All
+three — Book a Tour, Become a Partner, Contact — POST to `src/app/api/inquiry/route.ts`,
+which:
+
+1. Drops bot submissions via a `botcheck` honeypot (returns a fake success).
+2. **Saves the inquiry to Sanity first** (`formSubmission` doc, visible in the
+   Studio under "Form submissions (inbox)"), so a bounced or spam-filtered email
+   never means a lost lead. Order matters — don't flip it.
+3. Then emails staff via **Web3Forms** (`https://api.web3forms.com/submit`), with
+   `subject` built from the dropdown reason and `replyto` set to the submitter.
+4. Flags `emailDelivered` on the saved doc. `false` = follow up manually; the
+   Studio preview shows "⚠️ NOT EMAILED".
+
+⚠️ **The email recipient is fixed to whatever address the Web3Forms access key was
+created with.** There is no per-request "to" field (`ccemail` is Pro-only). To
+change who receives inquiries you must create a *new key* with that address and
+update `WEB3FORMS_ACCESS_KEY`. Intended recipient: `jmoore@ogeecheetech.edu`.
+
+If `WEB3FORMS_ACCESS_KEY` is unset the site still works and still saves every
+submission — it just doesn't email. That's the intended graceful degradation.
+
+**Dropdowns:** the Become a Partner dropdown is generated from the Partnership
+Pathway cards in the CMS (so it can't drift from the page), plus a hardcoded
+"Something else / not sure yet". The Contact dropdown comes from
+`contactPage.contactReasons`. The chosen value becomes the email subject line.
 
 Other open items:
 

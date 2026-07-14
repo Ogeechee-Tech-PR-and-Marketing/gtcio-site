@@ -87,6 +87,26 @@ Open the page, go to the **FAQ** tab, and click **Add item**. You can drag
 questions up and down to reorder them, and click the ⋮ menu on any question to
 remove it.
 
+### Read the inquiries people send in
+
+Click **Form submissions (inbox)** in the left menu, under Pages. Every message
+sent through Book a Tour, Become a Partner, or Contact is saved here, newest
+first — even if the notification email goes astray. They're read-only; you can't
+edit them, only read them.
+
+If a submission is flagged **⚠️ NOT EMAILED**, the notification never reached
+staff. Follow that one up by hand.
+
+### Change the choices in the "reason for contacting" dropdown
+
+Open **Contact Page** → the **Contact form** tab. Whatever the person picks
+becomes the subject line of the email GTCIO receives, so keep the choices short
+and specific.
+
+The dropdown on the **Become a Partner** form is different: it's built
+automatically from the Partnership Pathway cards on the Partners page. Add or
+rename a pathway card and the dropdown follows along on its own.
+
 ---
 
 ## Nothing you do is permanent until you Publish

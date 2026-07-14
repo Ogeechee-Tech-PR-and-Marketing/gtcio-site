@@ -6,6 +6,7 @@ import pathwayCard from "./objects/pathwayCard";
 
 import siteSettings from "./documents/siteSettings";
 import partner from "./documents/partner";
+import formSubmission from "./documents/formSubmission";
 import homePage from "./documents/homePage";
 import aboutPage from "./documents/aboutPage";
 import facilityPage from "./documents/facilityPage";
@@ -21,6 +22,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pathwayCard,
     siteSettings,
     partner,
+    formSubmission,
     homePage,
     aboutPage,
     facilityPage,

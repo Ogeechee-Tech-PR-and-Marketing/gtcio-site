@@ -34,9 +34,14 @@ export default defineConfig({
   ],
   document: {
     // Singletons can't be created or destroyed from the Studio — only edited.
+    // Form submissions arrive from the website, so they can't be hand-created either.
     newDocumentOptions: (prev, { creationContext }) =>
       creationContext.type === "global"
-        ? prev.filter((option) => !singletonTypes.has(option.templateId))
+        ? prev.filter(
+            (option) =>
+              !singletonTypes.has(option.templateId) &&
+              option.templateId !== "formSubmission"
+          )
         : prev,
     actions: (prev, { schemaType }) =>
       singletonTypes.has(schemaType)

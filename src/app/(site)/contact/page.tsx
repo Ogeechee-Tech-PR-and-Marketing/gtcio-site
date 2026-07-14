@@ -12,6 +12,14 @@ export const metadata: Metadata = {
 const DEFAULTS = {
   heroEyebrow: "Contact",
   heroTitle: "Get in touch",
+  contactReasons: [
+    "Prospective student / program question",
+    "Employer training inquiry",
+    "Partnership inquiry",
+    "Schedule a facility tour",
+    "Media inquiry",
+    "Something else",
+  ],
 };
 
 export default async function ContactPage() {
@@ -25,6 +33,9 @@ export default async function ContactPage() {
     heroImageAlt?: string;
   }) | null;
   const page = { ...DEFAULTS, ...typed };
+  const contactReasons = typed?.contactReasons?.length
+    ? typed.contactReasons
+    : DEFAULTS.contactReasons;
   const hero = resolveHeroImage({
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
@@ -79,7 +90,17 @@ export default async function ContactPage() {
           </div>
           <div>
             <InquiryForm
+              formType="contact"
               fields={[
+                {
+                  name: "reason",
+                  label: "What's this about?",
+                  type: "select",
+                  required: true,
+                  halfWidth: false,
+                  options: contactReasons,
+                  placeholder: "Select a reason…",
+                },
                 { name: "firstName", label: "First Name", required: true },
                 { name: "lastName", label: "Last Name", required: true },
                 { name: "email", label: "Email Address", type: "email", required: true },

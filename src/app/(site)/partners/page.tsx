@@ -44,6 +44,13 @@ export default async function PartnersPage() {
   const pathways = typed?.pathways?.length ? typed.pathways : DEFAULTS.pathways;
   const partners = typed?.partners ?? [];
 
+  // The dropdown is generated from the pathway cards shown above it, so editing a
+  // card in the CMS keeps the form in step with the page automatically.
+  const pathwayOptions = [
+    ...pathways.map((p: { title: string }) => p.title),
+    "Something else / not sure yet",
+  ];
+
   const hero = resolveHeroImage({
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
@@ -128,10 +135,20 @@ export default async function PartnersPage() {
           <p className="mt-3 text-brand-silver">{page.becomePartnerIntro}</p>
           <div className="mt-8">
             <InquiryForm
+              formType="partner"
               fields={[
+                {
+                  name: "reason",
+                  label: "What are you interested in?",
+                  type: "select",
+                  required: true,
+                  halfWidth: false,
+                  options: pathwayOptions,
+                  placeholder: "Select a partnership pathway…",
+                },
                 { name: "firstName", label: "First Name", required: true },
                 { name: "lastName", label: "Last Name", required: true },
-                { name: "company", label: "Company Name", required: true, halfWidth: false },
+                { name: "organization", label: "Company Name", required: true, halfWidth: false },
                 { name: "email", label: "Email Address", type: "email", required: true },
                 { name: "phone", label: "Phone Number", type: "tel" },
                 { name: "message", label: "Message", type: "textarea", halfWidth: false },
