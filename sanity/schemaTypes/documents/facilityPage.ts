@@ -86,6 +86,15 @@ export default defineType({
       rows: 3,
       group: "tour",
     }),
+    defineField({
+      name: "tourNotice",
+      title: "Notice banner above the form",
+      description:
+        "Shown as a highlighted banner above the tour form. Use it for temporary messages like tour booking not being open yet. Clear this field to remove the banner once tours can be booked.",
+      type: "text",
+      rows: 2,
+      group: "tour",
+    }),
   ],
   preview: {
     prepare() {

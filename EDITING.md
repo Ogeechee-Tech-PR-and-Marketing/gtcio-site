@@ -32,6 +32,7 @@ partner's logo. For those, use the **Pages** tab at the top:
 | **Site Settings** | The black bar at the top of every page, the address, phone numbers, and the contacts shown on the Contact page. |
 | **Home Page**, **About Page**, etc. | One entry per page, in the same order as the website's own menu. Each is split into tabs ("Top of page," "FAQ," …) so you only see one section at a time. |
 | **Partner logos & info** | The companies shown on the Partners page. |
+| **News items (press & media)** | Each press release or media mention shown on the News page. |
 
 ## 4. Publish
 
@@ -62,6 +63,33 @@ touch the Partners Page entry at all.
 
 Open the partner and switch **Show on the website** to off, then Publish. They
 disappear from the site but you keep their details in case they come back.
+
+### Link a partner's block to their website
+
+Open the partner, fill in the **Website** box (for example
+`https://www.georgiapower.com`), and Publish. Their block on the Partners page
+becomes clickable and shows a "Visit website" link. Leave it blank and the block
+stays as a plain card.
+
+### Add a press release or news mention
+
+1. Click **News items (press & media)** in the left menu, then the **+** button.
+2. Choose the **Type**: *GTCIO / OTC press release* (our own) or *In the news*
+   (coverage in another outlet). The News page shows these in two separate lists.
+3. Fill in the **Headline** and **Date**, the **Source / outlet** (e.g. "Statesboro
+   Herald"), and the **Link** to the article or release. The **Short summary** is
+   optional.
+4. Press **Publish** — it appears on the News page automatically, newest first.
+
+Use **Show on the website** to hide an item without deleting it, the same way as
+partners. The News page shows a "coming soon" message until the first item is
+added.
+
+### Turn off the "tour booking opens…" banner
+
+The Facility page shows a yellow notice that tours can't be booked until a certain
+date. To remove it once tours are open, open **Facility Page** → the **Book a Tour
+form** tab, clear the **Notice banner above the form** box, and Publish.
 
 ### Change a photo at the top of a page
 
@@ -149,3 +177,11 @@ layout:
 - Adding a brand-new page
 
 If you need one of these, or you get stuck, ask whoever set the site up.
+
+> ### ⚠️ The newsletter signup on the Home page isn't connected yet
+>
+> The "News from the GTCIO" email signup on the Home page looks finished and
+> thanks people for signing up, but it is **not yet wired to Constant Contact** —
+> right now it does not actually store or send anyone's email. Don't rely on it to
+> collect subscribers until whoever set the site up connects it. Nothing is lost
+> that was never captured, but the box currently just shows the thank-you message.

@@ -1,16 +1,17 @@
 import Button from "@/components/Button";
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 
 const DEFAULTS = {
-  heroEyebrow: "Georgia Training Center for Industrial Operations",
-  heroTitle: "Make things work.\nKeep them working.",
+  heroEyebrow: "",
+  heroTitle: "Building a workforce ready for industry transformation.",
   heroDescription:
     "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology. These are the people who keep factories, utilities, and logistics centers running when something breaks or a line goes down. The diploma program opens for enrollment now, ahead of its August 2026 launch.",
   sectionTitle: "Training the next generation",
   sectionBody:
-    "These skills carry well past the factory floor, into facilities management, utilities, and logistics, anywhere equipment has to keep running. Students start with the fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it's robotics, PLCs, and smart automation, with the option to add a SACA credential to the diploma along the way.",
+    "These skills carry well past the factory floor, into facilities management, utilities, and logistics, anywhere equipment has to keep running. Students start with the fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it's robotics, PLCs, and smart automation. Every student who earns the diploma is credentialed through the Smart Automation Certification Alliance (SACA), an industry-recognized certification.",
   studentsCard: {
     title: "Students",
     description: "Earn a diploma built around hands-on work with real industrial equipment, not just theory.",
@@ -50,7 +51,7 @@ export default async function Home() {
         />
         <div className="absolute inset-0 bg-brand-black/70" />
         <div className="relative mx-auto max-w-5xl">
-          <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>
+          {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}
           <h1 className="font-display text-5xl leading-tight sm:text-6xl">
             {page.heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
               <span key={i}>
@@ -61,9 +62,9 @@ export default async function Home() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-brand-silver">{page.heroDescription}</p>
           <div className="mt-9 flex flex-wrap gap-4">
-            <Button href="/iot-diploma-program" variant="primary">IOT DIPLOMA PROGRAM</Button>
-            <Button href="/facility#book-a-tour" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
-              BOOK A TOUR
+            <Button href="/training" variant="primary">IOT TRAINING PROGRAMS</Button>
+            <Button href="/iot-diploma-program" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
+              IOT DIPLOMA PROGRAM
             </Button>
             <Button href="/partners#become-a-partner" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
               BECOME A PARTNER
@@ -95,6 +96,29 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <section className="border-y border-brand-silver/30 bg-brand-red px-6 py-16 text-brand-white sm:px-10">
+        <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="max-w-2xl">
+            <h2 className="font-heading text-3xl font-bold">Become a GTCIO Partner</h2>
+            <p className="mt-3 text-brand-white/90">
+              GTCIO is built alongside the employers who hire our graduates. Sponsor
+              equipment, host a tour, hire our technicians, or take a seat on the
+              advisory board. There&apos;s more than one way to get involved, and
+              we&apos;re actively growing our partner network.
+            </p>
+          </div>
+          <Button
+            href="/partners#become-a-partner"
+            variant="outline"
+            className="shrink-0 border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-red"
+          >
+            BECOME A PARTNER
+          </Button>
+        </div>
+      </section>
+
+      <NewsletterSignup />
     </>
   );
 }

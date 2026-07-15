@@ -8,8 +8,9 @@ export default defineType({
   groups: [
     { name: "hero", title: "Top of page", default: true },
     { name: "mission", title: "Mission" },
+    { name: "history", title: "History" },
+    { name: "advisory", title: "Advisory Board" },
     { name: "bda", title: "Development Authority" },
-    { name: "history", title: "History of Partnership" },
     { name: "faq", title: "FAQ" },
   ],
   fields: [
@@ -75,6 +76,12 @@ export default defineType({
     }),
 
     defineField({
+      name: "historyTitle",
+      title: "Section heading",
+      type: "string",
+      group: "history",
+    }),
+    defineField({
       name: "historyBody",
       title: "Paragraph",
       type: "text",
@@ -87,6 +94,27 @@ export default defineType({
       description: "Clear this field to remove the italic note from the page.",
       type: "string",
       group: "history",
+    }),
+
+    defineField({
+      name: "advisoryTitle",
+      title: "Section heading",
+      type: "string",
+      group: "advisory",
+    }),
+    defineField({
+      name: "advisoryBody",
+      title: "Paragraph",
+      type: "text",
+      rows: 4,
+      group: "advisory",
+    }),
+    defineField({
+      name: "advisoryNote",
+      title: "Small note under the paragraph",
+      description: "Clear this field to remove the italic note from the page.",
+      type: "string",
+      group: "advisory",
     }),
 
     defineField({

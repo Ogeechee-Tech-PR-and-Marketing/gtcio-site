@@ -11,15 +11,17 @@ const NAV_ITEMS = [
     href: "/about",
     children: [
       { label: "Mission", href: "/about#mission" },
-      { label: "Bulloch Development Authority", href: "/about#bulloch-development-authority" },
-      { label: "History of Partnership", href: "/about#history-of-partnership" },
+      { label: "History", href: "/about#history" },
+      { label: "Advisory Board", href: "/about#advisory-board" },
+      { label: "Development Authority of Bulloch County", href: "/about#bulloch-development-authority" },
       { label: "FAQ", href: "/about#faq" },
     ],
   },
+  { label: "IOT Training Programs", href: "/training" },
   { label: "IOT Diploma Program", href: "/iot-diploma-program" },
   { label: "Facility", href: "/facility" },
-  { label: "Training", href: "/training" },
   { label: "Partners", href: "/partners" },
+  { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -49,14 +51,14 @@ export default function Header({
             <Image
               src="/images/gtcio-logo.png"
               alt="GTCIO — Georgia Training Center for Industrial Operations"
-              width={220}
-              height={88}
-              className="h-16 w-auto sm:h-20"
+              width={320}
+              height={128}
+              className="h-20 w-auto sm:h-28"
               priority
             />
           </Link>
 
-          <nav className="hidden items-center gap-6 lg:flex">
+          <nav className="hidden items-center gap-4 xl:flex xl:gap-6">
             {NAV_ITEMS.map((item) =>
               item.children ? (
                 <div
@@ -72,7 +74,7 @@ export default function Header({
                     {item.label}
                   </Link>
                   {aboutOpen && (
-                    <div className="absolute left-0 top-full w-64 border-t-2 border-brand-red bg-brand-white shadow-lg">
+                    <div className="absolute left-0 top-full w-72 border-t-2 border-brand-red bg-brand-white shadow-lg">
                       {item.children.map((child) => (
                         <Link
                           key={child.label}
@@ -97,10 +99,10 @@ export default function Header({
             )}
           </nav>
 
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <Link
               href="/facility#book-a-tour"
-              className="font-ui bg-brand-red px-6 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
+              className="font-ui whitespace-nowrap bg-brand-red px-6 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
             >
               BOOK A TOUR
             </Link>
@@ -109,7 +111,7 @@ export default function Header({
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
-            className="font-ui text-sm font-bold tracking-wide text-brand-black lg:hidden"
+            className="font-ui text-sm font-bold tracking-wide text-brand-black xl:hidden"
             aria-label="Toggle menu"
           >
             {mobileOpen ? "CLOSE" : "MENU"}
@@ -117,7 +119,7 @@ export default function Header({
         </div>
 
         {mobileOpen && (
-          <nav className="flex flex-col gap-1 pb-4 lg:hidden">
+          <nav className="flex flex-col gap-1 pb-4 xl:hidden">
             {NAV_ITEMS.map((item) => (
               <div key={item.label}>
                 <Link

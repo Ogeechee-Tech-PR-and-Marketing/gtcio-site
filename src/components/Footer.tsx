@@ -6,10 +6,11 @@ const COLUMNS = [
     heading: "Explore",
     links: [
       { label: "About", href: "/about" },
+      { label: "IOT Training Programs", href: "/training" },
       { label: "IOT Diploma Program", href: "/iot-diploma-program" },
       { label: "Facility", href: "/facility" },
-      { label: "Training", href: "/training" },
       { label: "Partners", href: "/partners" },
+      { label: "News", href: "/news" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -31,7 +32,7 @@ type FooterProps = {
 
 export default function Footer({
   tagline = "A Division of Ogeechee Technical College",
-  address = "1 Joe Kennedy Blvd., Statesboro, GA 30458",
+  address = "66 AJ Riggs Road, Statesboro, GA 30458",
   phone = "(800) 646-1316",
 }: FooterProps) {
   return (

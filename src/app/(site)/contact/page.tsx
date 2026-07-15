@@ -69,7 +69,7 @@ export default async function ContactPage() {
             <h2 className="font-heading text-xl font-bold text-brand-black">GTCIO</h2>
             <p className="mt-1 text-brand-silver">{settings?.footerTagline ?? "A Division of Ogeechee Technical College"}</p>
             <div className="mt-6 flex flex-col gap-2 text-brand-black">
-              <p>{settings?.address ?? "1 Joe Kennedy Blvd., Statesboro, GA 30458"}</p>
+              <p>{settings?.address ?? "66 AJ Riggs Road, Statesboro, GA 30458"}</p>
               <p>Phone: {settings?.phone ?? "(800) 646-1316"}</p>
             </div>
 

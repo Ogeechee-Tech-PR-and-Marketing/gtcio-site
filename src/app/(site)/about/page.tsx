@@ -25,9 +25,14 @@ const DEFAULTS = {
   bdaQuote:
     "I cannot stress enough what an asset this will be for Bulloch County and the surrounding region. The training will range from foundational skills in industrial operations to that of an automation engineer. Finding that under one roof is almost unheard of. It will be life changing for many of our residents.",
   bdaQuoteAttribution: "Benjy Thompson — CEO, Development Authority of Bulloch County",
+  historyTitle: "History",
   historyBody:
     "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It serves credit students and incumbent workers alike. Tours run through the building without interrupting day-to-day training. That was a design decision from the start. Beyond academic programs, GTCIO also runs customized workforce development for regional employers, and trains and certifies instructors from across Georgia and the nation.",
   historyNote: "(Full partnership history and timeline to be added.)",
+  advisoryTitle: "Advisory Board",
+  advisoryBody:
+    "GTCIO's curriculum is shaped by an advisory board of regional employers and industry leaders, so what we teach stays aligned with the equipment and skills the workforce actually needs.",
+  advisoryNote: "(Advisory board members and full description to be added.)",
   faqs: [
     {
       question: "Who runs GTCIO?",
@@ -88,6 +93,22 @@ export default async function AboutPage() {
         </div>
       </section>
 
+      <section id="history" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
+          <p className="mt-4 text-brand-black">{page.historyBody}</p>
+          {page.historyNote && <p className="mt-4 text-sm text-brand-silver">{page.historyNote}</p>}
+        </div>
+      </section>
+
+      <section id="advisory-board" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-red">{page.advisoryTitle}</h2>
+          <p className="mt-4 text-brand-black">{page.advisoryBody}</p>
+          {page.advisoryNote && <p className="mt-4 text-sm text-brand-silver">{page.advisoryNote}</p>}
+        </div>
+      </section>
+
       <section id="bulloch-development-authority" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.bdaTitle}</h2>
@@ -96,14 +117,6 @@ export default async function AboutPage() {
             <p className="text-lg italic text-brand-black">&ldquo;{page.bdaQuote}&rdquo;</p>
             <p className="mt-3 text-sm text-brand-silver">{page.bdaQuoteAttribution}</p>
           </blockquote>
-        </div>
-      </section>
-
-      <section id="history-of-partnership" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-red">History of Partnership</h2>
-          <p className="mt-4 text-brand-black">{page.historyBody}</p>
-          {page.historyNote && <p className="mt-4 text-sm text-brand-silver">{page.historyNote}</p>}
         </div>
       </section>
 

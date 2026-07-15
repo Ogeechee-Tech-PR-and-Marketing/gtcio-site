@@ -17,6 +17,25 @@ export const IOT_DIPLOMA_PROGRAM_PAGE_QUERY = defineQuery(
 export const CONTACT_PAGE_QUERY = defineQuery(`*[_type == "contactPage"][0]`);
 
 /**
+ * Like the Partners page, news items are pulled straight from newsItem documents,
+ * so creating one in the Studio publishes it — no separate list to maintain.
+ */
+export const NEWS_PAGE_QUERY = defineQuery(`
+  *[_type == "newsPage"][0]{
+    ...,
+    "items": *[_type == "newsItem" && showOnWebsite != false] | order(date desc){
+      _id,
+      category,
+      title,
+      date,
+      source,
+      url,
+      excerpt
+    }
+  }
+`);
+
+/**
  * Partners are pulled straight from the partner documents rather than a
  * hand-maintained list on the page, so creating a partner in the Studio is all
  * it takes to get them onto the site.
@@ -28,7 +47,8 @@ export const PARTNERS_PAGE_QUERY = defineQuery(`
       _id,
       name,
       description,
-      logo
+      logo,
+      website
     }
   }
 `);

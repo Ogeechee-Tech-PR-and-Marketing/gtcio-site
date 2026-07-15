@@ -7,12 +7,14 @@ const PAGE_PATHS: Record<string, string> = {
   trainingPage: "/training",
   iotDiplomaProgramPage: "/iot-diploma-program",
   partnersPage: "/partners",
+  newsPage: "/news",
   contactPage: "/contact",
 };
 
 export const resolve: PresentationPluginOptions["resolve"] = {
   locations: {
     partner: { locations: [{ title: "Partners page", href: "/partners" }] },
+    newsItem: { locations: [{ title: "News page", href: "/news" }] },
     ...Object.fromEntries(
       Object.entries(PAGE_PATHS).map(([type, href]) => [
         type,

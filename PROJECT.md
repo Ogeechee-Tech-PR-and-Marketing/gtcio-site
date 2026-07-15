@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-14. Check claims against the code before trusting them.
+updated 2026-07-15. Check claims against the code before trusting them.
 
 ---
 
@@ -59,16 +59,18 @@ src/app/
     layout.tsx            Header + Footer + SanityLive + VisualEditing
     page.tsx              /            (home)
     about/                /about
+    training/             /training    ("IOT Training Programs" in the nav)
     iot-diploma-program/  /iot-diploma-program
     facility/             /facility
-    training/             /training
     partners/             /partners
+    news/                 /news
     contact/              /contact
   studio/[[...tool]]/     /studio      ← Sanity Studio, embedded
   api/
     draft-mode/           enable + disable, for the Studio's live preview
     inquiry/              POST target for all three forms (§5)
-src/components/           Header, Footer, PageHero, Button, InquiryForm
+src/components/           Header, Footer, PageHero, Button, InquiryForm,
+                          NewsletterSignup (home page, UI-only — see §8)
 sanity/
   env.ts                  projectId / dataset / apiVersion
   lib/client.ts           read client
@@ -102,13 +104,20 @@ Every decision below exists to protect that. Weigh it accordingly.
 ### Content model
 
 - **Singletons, one per page:** `homePage`, `aboutPage`, `facilityPage`,
-  `trainingPage`, `iotDiplomaProgramPage`, `partnersPage`, `contactPage`. Each has
-  a fixed `_id` equal to its type name. They can't be created, duplicated, or
-  deleted from the Studio (see `document.actions` in `sanity.config.ts`).
+  `trainingPage`, `iotDiplomaProgramPage`, `partnersPage`, `newsPage`,
+  `contactPage`. Each has a fixed `_id` equal to its type name. They can't be
+  created, duplicated, or deleted from the Studio (see `document.actions` in
+  `sanity.config.ts`). Any new singleton must be added to `singletonTypes` in
+  `sanity/schemaTypes/index.ts` AND to `structure.ts` + `presentation.ts`.
 - **`siteSettings`** — top banner text, address, phone, program + media contacts.
   Used by Header, Footer, and the Contact page.
 - **`partner`** — one document per partner company (`logo`, `order`,
-  `showOnWebsite`).
+  `showOnWebsite`, plus an optional `website` URL — when set, the partner's block
+  on the Partners page links out to it).
+- **`newsItem`** — one document per press release / media mention (`category`
+  = `press` | `media`, `title`, `date`, `source`, `url`, `excerpt`,
+  `showOnWebsite`). Queried directly like `partner` (see trap 1), split into two
+  groups on `/news` by `category`.
 - **`formSubmission`** — a saved copy of every form inquiry (§5). Read-only;
   written only by the server, never created by hand in the Studio.
 - **Objects:** `faq`, `statCard`, `pathwayCard`, plus per-page inline types
@@ -118,7 +127,7 @@ Every decision below exists to protect that. Weigh it accordingly.
   it is derived from `partnersPage.pathways` (§5).
 - Interior page heroes share `heroFields()` in `sanity/schemaTypes/heroFields.ts`.
 
-### 🔴 Five traps that will bite you
+### 🔴 Six traps that will bite you
 
 **1. Partners are queried directly. Never reintroduce a reference list.**
 The first version had `partnersPage.directory` as an array of references to
@@ -155,6 +164,21 @@ when no CMS image is set.
 read+write token and imports `server-only` to guarantee it can't be pulled into a
 client bundle. Never import it from a `"use client"` component, and never pass the
 token to the browser.
+
+**6. Sanity content overrides code `DEFAULTS`.** Every page component defines a
+`DEFAULTS` object and renders `{...DEFAULTS, ...(cmsData)}`. Once a field exists on
+the Sanity document, the CMS value wins and the code default is *never shown*. So
+editing only the code default (address, hero copy, a heading, a nav-adjacent
+label like the Training hero eyebrow, an FAQ answer) leaves the live site
+unchanged. **When changing existing copy, change both the code default and patch
+the Sanity doc.** Patch published docs with the write token from `.env.local` via
+`POST /v<ver>/data/mutate/<dataset>` — `{mutations:[{patch:{id, set:{…}}}]}`;
+array items patch by key, e.g. `set:{"faqs[_key==\"f3\"].answer": "…"}`. Brand-new
+fields (ones no doc has ever had) are safe to change in code alone — the default
+applies until an editor fills them. Local gotcha: Next's `.next/cache` fetch cache
+can serve a *stale* Sanity value across `npm run build`s — `rm -rf .next/cache`
+before rebuilding to verify a CMS change locally (Vercel builds fresh, so deploys
+are unaffected).
 
 ### Verifying CMS work
 
@@ -331,11 +355,32 @@ account, so Sanity's per-user history can't tell you *which person* changed
 something; (b) the credential must be rotated when someone leaves. Dataset revision
 history is 90 days, so content mistakes are recoverable.
 
+**🟡 Newsletter signup is UI-only.** `src/components/NewsletterSignup.tsx` on the
+home page validates an email and shows a confirmation but **sends nothing** — no
+address is stored or transmitted. GTCIO expects to use **Constant Contact**. To
+finish, either point the form's `<form action>` at a Constant Contact hosted
+sign-up URL, or replace the `handleSubmit` stub with a POST to a new API route
+that calls the Constant Contact API. The file header documents both paths.
+
 Smaller items:
 
 - **Content still pending from GTCIO:** final tuition figure, final program length,
   formal mission-statement sign-off, fuller partnership-history timeline. These
   render as visible "Placeholder…" text on the site today.
+- **Advisory Board section (About page)** ships with placeholder copy
+  (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
+  under About Page → Advisory Board.
+- **Partner website links:** the Partners blocks link out only once each partner's
+  `website` URL is set in the Studio. All five current partners currently have no
+  URL, so their blocks render as non-clickable cards.
+- **News page is empty.** `/news` shows a "coming soon" state until `newsItem`
+  documents are added (press releases + media mentions). Load the OTC IOT press
+  release as the first entry when ready.
+- **Tour booking opens 2026-10-26.** The Facility "Book a Tour" form stays live but
+  carries a gold notice banner (`facilityPage.tourNotice`) saying dates can't be
+  confirmed until then. Clear that field in the Studio on the 26th to drop the
+  banner. The header/hero still link to the tour form; the home hero buttons no
+  longer include "Book a Tour".
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
   are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
@@ -375,17 +420,35 @@ shows deploy status.
 
 ## 10. Working notes
 
-- **Site nav order** (locked with Jan): About (Mission / Bulloch Development
-  Authority / History of Partnership / FAQ) · IOT Diploma Program · Facility (with
-  BOOK A TOUR) · Training · Partners · Contact.
+- **Site nav order** (as of 2026-07-15): About (Mission / History / Advisory Board
+  / Development Authority of Bulloch County / FAQ) · IOT Training Programs · IOT
+  Diploma Program · Facility · Partners · News · Contact. "Training" is labelled
+  **IOT Training Programs** in the nav and sits *before* IOT Diploma Program. The
+  home hero buttons are IOT Training Programs · IOT Diploma Program · Become a
+  Partner (a red "Become a GTCIO Partner" band + a newsletter signup sit lower on
+  the home page). Nav/footer links are code-only (`Header.tsx`, `Footer.tsx`).
 - **Partners page is the priority page.** Jan called it out as needing to work
   "even before the website."
 - The five current partners: Development Authority of Bulloch County, Koyo
   Bearings, Georgia Power, Ajin Georgia, Amazon.
 - Useful confirmed facts (from OTC's 2026-07-09 press release): $27M / 40,000 sq
-  ft facility, ~460,000 instructional hours/year capacity, SACA credential offered
-  alongside the diploma, August 2026 launch. Media contact: Sean Payne,
-  spayne@ogeecheetech.edu. Applications: www.ogeecheetech.edu/IOT.
+  ft facility, ~460,000 instructional hours/year capacity, August 2026 launch.
+  Media contact: Sean Payne, spayne@ogeecheetech.edu. Applications:
+  www.ogeecheetech.edu/IOT. **Every diploma graduate is credentialed through SACA**
+  (Smart Automation Certification Alliance) — the site states this explicitly; it
+  is not framed as an optional add-on (changed 2026-07-15 per Jan).
+- **Employer-training facts** (from "OTC Industrial Systems Training Program.pdf",
+  used on the IOT Training Programs page): 242,000 industrial-systems training
+  hours delivered in 2024; the only authorized FANUC satellite training site in
+  Georgia; SACA Gold Certification Site + Regional Instructor Training Center;
+  Amatrol Certified Instructor Training Site; Mitsubishi Electric Automation
+  Training Provider; DOL-registered apprenticeships (18 mo, 576 training + 4,000
+  OJT hrs, up to 14 SACA credentials); short courses ~$450–$950, comprehensive
+  ~$4,750–$7,750. **Hal McCool no longer works there — do not re-add him** (he was
+  the brochure's contact; removed 2026-07-15).
+- **Office address is 66 AJ Riggs Road, Statesboro, GA 30458** (updated
+  2026-07-15, in `siteSettings.address` + code fallbacks in Footer/Contact). The
+  old "1 Joe Kennedy Blvd." is stale.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.

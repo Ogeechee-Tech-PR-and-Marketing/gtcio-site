@@ -3,10 +3,11 @@ import type { StructureResolver } from "sanity/structure";
 const PAGES: Array<{ id: string; title: string }> = [
   { id: "homePage", title: "Home Page" },
   { id: "aboutPage", title: "About Page" },
+  { id: "trainingPage", title: "IOT Training Programs Page" },
   { id: "iotDiplomaProgramPage", title: "IOT Diploma Program Page" },
   { id: "facilityPage", title: "Facility Page" },
-  { id: "trainingPage", title: "Training Page" },
   { id: "partnersPage", title: "Partners Page" },
+  { id: "newsPage", title: "News Page" },
   { id: "contactPage", title: "Contact Page" },
 ];
 
@@ -51,6 +52,15 @@ export const structure: StructureResolver = (S) =>
               { field: "order", direction: "asc" },
               { field: "name", direction: "asc" },
             ])
+        ),
+
+      S.listItem()
+        .id("newsItem")
+        .title("News items (press & media)")
+        .child(
+          S.documentTypeList("newsItem")
+            .title("News items")
+            .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 
       S.divider(),

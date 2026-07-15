@@ -28,6 +28,15 @@ export default defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "website",
+      title: "Website",
+      description:
+        "Optional. The organization's website, e.g. https://www.georgiapower.com. When set, the partner's block links out to it.",
+      type: "url",
+      validation: (r) =>
+        r.uri({ scheme: ["http", "https"], allowRelative: false }),
+    }),
+    defineField({
       name: "showOnWebsite",
       title: "Show on the website",
       description:

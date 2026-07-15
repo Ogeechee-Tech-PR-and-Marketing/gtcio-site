@@ -21,7 +21,7 @@ const DEFAULTS = {
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
     { stage: "Advanced", detail: "Robotics, programmable logic controllers (PLCs), automation controls, smart sensors, industrial wiring, and motor controls." },
-    { stage: "Credential", detail: "Graduate with a diploma, plus the option to add a Smart Automation Certification Alliance (SACA) credential on top of it." },
+    { stage: "Credential", detail: "Every graduate earns the diploma and is credentialed through the Smart Automation Certification Alliance (SACA) — an industry-recognized certification built into the program, not an optional add-on." },
   ],
   moreWaysTitle: "More than one way in",
   moreWaysBody:
@@ -55,7 +55,7 @@ const DEFAULTS = {
   faqs: [
     { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program launches in August 2026." },
     { question: "How much can I expect to earn after graduating?", answer: "See the pay ranges below. Most graduates start in entry-level/operator roles and grow from there." },
-    { question: "What credential do I earn?", answer: "A college diploma, plus the option to add a SACA (Smart Automation Certification Alliance) credential. It's recognized industry-wide, not just in Georgia." },
+    { question: "What credential do I earn?", answer: "Every student who completes the diploma is credentialed through SACA (the Smart Automation Certification Alliance). The SACA credential is built into the program for all graduates, and it's recognized industry-wide, not just in Georgia." },
     { question: "How much does the program cost?", answer: "Placeholder, final tuition figure pending confirmation." },
     { question: "How long does it take to finish?", answer: "Placeholder, final program length pending confirmation." },
     { question: "Is this an online program?", answer: "No. It's in-person, day classes. This is hands-on work, so you need to be in the shop." },

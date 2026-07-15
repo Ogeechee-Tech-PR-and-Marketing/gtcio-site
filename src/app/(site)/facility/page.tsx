@@ -25,6 +25,8 @@ const DEFAULTS = {
   bookTourTitle: "Book a Tour",
   bookTourIntro:
     "Request a visit for your class, business, or organization. This is a request form, not a live booking calendar. GTCIO staff will follow up to confirm a date.",
+  tourNotice:
+    "Tours can't be scheduled just yet — tour booking opens October 26, 2026. You're welcome to send a request now, but we won't be able to confirm a date until then.",
   stats: [
     { value: "40,000 sq ft", label: "Purpose-built training space" },
     { value: "$27M", label: "Facility investment" },
@@ -119,6 +121,14 @@ export default async function FacilityPage() {
         <div className="mx-auto max-w-3xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.bookTourTitle}</h2>
           <p className="mt-3 text-brand-silver">{page.bookTourIntro}</p>
+          {page.tourNotice && (
+            <div className="mt-6 border-l-4 border-brand-gold bg-brand-gold/10 px-5 py-4">
+              <p className="font-heading text-sm font-bold tracking-wide text-brand-black">
+                Tour booking opens October 26, 2026
+              </p>
+              <p className="mt-1 text-sm text-brand-black/80">{page.tourNotice}</p>
+            </div>
+          )}
           <div className="mt-8">
             <InquiryForm
               formType="tour"
