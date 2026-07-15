@@ -6,7 +6,8 @@ division of Ogeechee Technical College.
 - **Live:** https://gtcio-site.vercel.app
 - **Content editing:** https://gtcio-site.vercel.app/studio
 
-Next.js 16 (App Router) · React 19 · Tailwind v4 · Sanity CMS · deployed on Vercel.
+Next.js 16 (App Router) · React 19 · Tailwind v4 · Sanity CMS · Adobe Fonts
+(Trade Gothic Next) · deployed on Vercel.
 
 ## Documentation
 

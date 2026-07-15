@@ -39,6 +39,7 @@ stray/abandoned Wix sites may still exist in the `jhallman32` Wix account.
 | Language | TypeScript, strict |
 | CMS | Sanity v6 (`next-sanity` v13) |
 | Email | Web3Forms (see §5) |
+| Fonts | Adobe Fonts / Typekit — Trade Gothic Next (see §7) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
 | Deploys | **Auto-deploy on push to `main`.** No manual deploy step. |
 
@@ -285,9 +286,13 @@ guide's own approved substitute — remains the fallback.
    React 19 hoists the `<link>` on its own. Verify by grepping the **served HTML**
    for `typekit`, or by measuring rendered glyph widths — never by screenshot.
 2. **`font-display` is set per font family in the Adobe web project, not per
-   project.** If a family is left on `auto` its text is *invisible* for up to ~3s
-   on slow connections. Both families must be set to **Swap**. Check with:
-   `curl -s https://use.typekit.net/fgt0fkg.css | grep font-display`
+   project.** A family left on `auto` renders its text *invisible* for up to ~3s
+   on slow connections. Both families are currently on **Swap** (verified
+   2026-07-14) — but the setting lives in Adobe's dashboard, not in this repo, so
+   it can be changed out from under the code and won't show in a diff. If text
+   ever flashes invisible, check this first:
+   `curl -s https://use.typekit.net/fgt0fkg.css | grep -o 'font-display:[a-z]*' | sort | uniq -c`
+   (all faces should read `swap`).
 
 Nav and buttons deliberately use Condensed Bold rather than Heavy Compressed: the
 guide reserves Compressed for 20pt headers, and it becomes illegible at 12–14px.
