@@ -105,36 +105,45 @@ export default async function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.directoryTitle}</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">{page.directoryIntro}</p>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Wide cards stacked one per row: logo left, copy right, CTA bottom
+              right — the layout of the Georgia Cyber Center partners directory
+              this page is modelled on. */}
+          <div className="mt-8 flex flex-col gap-6">
             {partners.map((partner) => (
               <div
                 key={partner._id}
-                className="flex flex-col border border-brand-silver/20 bg-brand-white p-6 shadow-sm"
+                className="flex flex-col border border-brand-silver/20 bg-brand-white shadow-sm"
               >
-                <div className="relative flex h-28 items-center justify-center">
-                  {partner.logo && (
-                    <Image
-                      // Width only: passing a height too makes Sanity crop the
-                      // logo to that aspect ratio and clip wordmarks.
-                      src={urlForImage(partner.logo).width(480).fit("max").url()}
-                      alt={`${partner.name} logo`}
-                      fill
-                      sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
-                      className="object-contain"
-                    />
-                  )}
+                <div className="flex flex-col gap-6 p-8 sm:flex-row sm:items-start sm:gap-10">
+                  <div className="relative h-20 w-full shrink-0 sm:h-24 sm:w-44">
+                    {partner.logo && (
+                      <Image
+                        // Width only: passing a height too makes Sanity crop the
+                        // logo to that aspect ratio and clip wordmarks.
+                        src={urlForImage(partner.logo).width(480).fit("max").url()}
+                        alt={`${partner.name} logo`}
+                        fill
+                        sizes="176px"
+                        className="object-contain object-left"
+                      />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-heading text-xl font-bold text-brand-black">{partner.name}</h3>
+                    <p className="mt-2 text-brand-silver">{partner.description}</p>
+                  </div>
                 </div>
-                <h3 className="font-heading mt-6 text-xl font-bold text-brand-black">{partner.name}</h3>
-                <p className="mt-2 flex-1 text-sm text-brand-silver">{partner.description}</p>
                 {partner.website && (
-                  <a
-                    href={partner.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-ui mt-6 inline-block self-start bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
-                  >
-                    LEARN MORE
-                  </a>
+                  <div className="flex justify-end px-8 pb-8">
+                    <a
+                      href={partner.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-ui inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
+                    >
+                      LEARN MORE
+                    </a>
+                  </div>
                 )}
               </div>
             ))}

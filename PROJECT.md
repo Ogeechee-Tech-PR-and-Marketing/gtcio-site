@@ -421,13 +421,13 @@ Smaller items:
   (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
   under About Page → Advisory Board.
 - **Partner website links:** each partner block shows a red **LEARN MORE** button
-  only when that partner's `website` URL is set. Verified and set 2026-07-16:
-  Development Authority of Bulloch County → advantagebulloch.com, Ajin Georgia →
-  ajingeorgia.com, Georgia Power → georgiapower.com. **Still unset (ambiguous,
-  awaiting Jake):** *Koyo Bearings* (JTEKT rebranded the Koyo bearings brand to
-  JTEKT in 2022 — unclear whether to link koyo.jtekt.co.jp, jtekt-na.com, or the
-  local plant) and *Amazon* (corporate aboutamazon.com vs retail amazon.com).
-  Verify any partner URL against the real site before setting it.
+  only when that partner's `website` URL is set. All five are set and were each
+  verified against the live site (2026-07-16): Development Authority of Bulloch
+  County → advantagebulloch.com, Ajin Georgia → ajingeorgia.com, Georgia Power →
+  georgiapower.com, Koyo Bearings → jtekt-na.com/products/koyobearings/ (JTEKT
+  rebranded the Koyo bearings brand to JTEKT in 2022; Jake chose JTEKT North
+  America), Amazon → aboutamazon.com (corporate, Jake's choice over retail).
+  Verify any new partner URL against the real site before setting it.
 - **News page is empty.** `/news` shows a "coming soon" state until `newsItem`
   documents are added (press releases + media mentions). Load the OTC IOT press
   release as the first entry when ready.
