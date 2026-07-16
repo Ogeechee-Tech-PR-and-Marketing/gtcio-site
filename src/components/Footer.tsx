@@ -78,14 +78,21 @@ export default function Footer({
           <p>
             © {new Date().getFullYear()} Georgia Training Center for Industrial Operations. All rights reserved.
           </p>
-          <a
-            href="https://www.ogeecheetech.edu/about/equal-opportunity"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-brand-white"
-          >
-            Equal Opportunity Institution
-          </a>
+          {/* Red pipe separator matches the utility banner at the top of the page. */}
+          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center sm:justify-end sm:text-right">
+            <a
+              href="https://www.ogeecheetech.edu/about/equal-opportunity"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-brand-white"
+            >
+              Equal Opportunity Institution
+            </a>
+            <span aria-hidden className="text-brand-red">
+              |
+            </span>
+            <span>A unit of the Technical College System of Georgia</span>
+          </p>
         </div>
       </div>
     </footer>
