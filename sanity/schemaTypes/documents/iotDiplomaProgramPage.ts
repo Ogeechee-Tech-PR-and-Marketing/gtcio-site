@@ -74,6 +74,7 @@ export default defineType({
     { name: "careers", title: "Careers" },
     { name: "pay", title: "Jobs & pay" },
     { name: "faq", title: "FAQ" },
+    { name: "apply", title: "Apply band" },
   ],
   fields: [
     ...heroFields("hero"),
@@ -208,10 +209,17 @@ export default defineType({
     }),
     defineField({
       name: "applyHeading",
-      title: "Closing banner heading",
-      description: 'The black band at the very bottom, above the APPLY NOW button.',
+      title: "Heading",
+      description: "The black band at the very bottom of the page.",
       type: "string",
-      group: "faq",
+      group: "apply",
+    }),
+    defineField({
+      name: "applyButton",
+      title: "Button",
+      description: 'Points at Ogeechee Tech\'s application page by default.',
+      type: "ctaButton",
+      group: "apply",
     }),
   ],
   preview: {

@@ -131,6 +131,14 @@ Every decision below exists to protect that. Weigh it accordingly.
   Adding a destination means editing BOTH the options list in
   `objects/ctaButton.ts` and `DESTINATIONS`. A half-filled button (no label, or
   `external` with no URL) renders nothing rather than a dead link.
+- **Convention: Studio order mirrors page order.** A document's `groups` must be
+  listed top-to-bottom in the order those sections appear on the page, fields
+  within a group likewise, and `structure.ts`'s page list must match the site nav.
+  An editor should be able to read the tabs like they're scrolling the page. This
+  is why `applyHeading` got its own "Apply band" group (it had been filed under
+  FAQ, though the Apply band renders *after* the FAQ) and why `introText` moved out
+  of "Ways to partner" into its own "Intro & button" group. Keep the code `DEFAULTS`
+  objects in page order too — same reason.
 - **Convention: every page's copy is CMS-first, with the code `DEFAULTS` as a
   fallback.** As of 2026-07-16 the Home hero buttons, red partner band and
   newsletter; the Training stats, credentials, services, course areas and catalog

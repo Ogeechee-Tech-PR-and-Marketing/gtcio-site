@@ -7,6 +7,7 @@ export default defineType({
   type: "document",
   groups: [
     { name: "hero", title: "Top of page", default: true },
+    { name: "intro", title: "Intro & button" },
     { name: "pathways", title: "Ways to partner" },
     { name: "directory", title: "Partner logos" },
     { name: "form", title: "Become a Partner form" },
@@ -17,10 +18,17 @@ export default defineType({
     defineField({
       name: "introText",
       title: "Intro paragraph",
-      description: "The short paragraph next to the red HOW TO BECOME A PARTNER button.",
+      description: "The short paragraph directly under the banner.",
       type: "text",
       rows: 3,
-      group: "pathways",
+      group: "intro",
+    }),
+    defineField({
+      name: "introButton",
+      title: "Button",
+      description: "The red button beside the intro paragraph.",
+      type: "ctaButton",
+      group: "intro",
     }),
     defineField({
       name: "pathwaysTitle",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import PageHero from "@/components/PageHero";
-import Button from "@/components/Button";
+import CtaButton from "@/components/CtaButton";
 import InquiryForm from "@/components/InquiryForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { PARTNERS_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -18,6 +18,7 @@ const DEFAULTS = {
     "GTCIO's training only works when it's built alongside the employers who'll hire our graduates. Here's how to get involved.",
   introText:
     "Whether you want to hire our graduates, put your name on the equipment students train on, or help write the curriculum, there's a partnership pathway built for it.",
+  introButton: { label: "HOW TO BECOME A PARTNER", destination: "becomePartner" as const },
   pathwaysTitle: "Partnership Pathways",
   pathways: [
     { title: "Hire Our Graduates", description: "Access a pipeline of technicians trained in maintenance, automation, and industrial operations." },
@@ -73,9 +74,7 @@ export default async function PartnersPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <p className="max-w-2xl text-brand-black">{page.introText}</p>
-          <Button href="#become-a-partner" variant="primary" className="shrink-0">
-            HOW TO BECOME A PARTNER
-          </Button>
+          <CtaButton button={page.introButton} variant="primary" className="shrink-0" />
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
-import Button from "@/components/Button";
+import CtaButton from "@/components/CtaButton";
 import { sanityFetch } from "@/sanity/lib/live";
 import { IOT_DIPLOMA_PROGRAM_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
@@ -62,6 +62,7 @@ const DEFAULTS = {
     { question: "Is this an online program?", answer: "No. It's in-person, day classes. This is hands-on work, so you need to be in the shop." },
   ],
   applyHeading: "Sign up today, and we'll see you here!",
+  applyButton: { label: "APPLY NOW", destination: "apply" as const },
 };
 
 export default async function IotDiplomaProgramPage() {
@@ -211,7 +212,7 @@ export default async function IotDiplomaProgramPage() {
       <section id="apply" className="scroll-mt-24 bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
         <h2 className="font-heading text-3xl font-bold">{page.applyHeading}</h2>
         <div className="mt-8">
-          <Button href="https://www.ogeecheetech.edu/IOT" variant="primary">APPLY NOW</Button>
+          <CtaButton button={page.applyButton} variant="primary" />
         </div>
       </section>
     </>
