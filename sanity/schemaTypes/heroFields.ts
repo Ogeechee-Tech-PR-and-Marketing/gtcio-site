@@ -1,10 +1,16 @@
 import { defineField } from "sanity";
 
+const DEFAULT_IMAGE_DESCRIPTION =
+  "The photo behind the headline. After uploading, click Edit hotspot and drag the circle onto the part of the photo that should stay visible — the image is cropped differently on phones and computers. Leave blank to keep the current photo.";
+
 /**
  * The dark banner at the top of every interior page: small gold label,
  * big headline, intro paragraph, and a background photo.
+ *
+ * `imageDescription` overrides the help text on the photo field — used by the
+ * About page, whose banner plays a video unless a photo is uploaded.
  */
-export function heroFields(group: string) {
+export function heroFields(group: string, opts?: { imageDescription?: string }) {
   return [
     defineField({
       name: "heroEyebrow",
@@ -32,8 +38,7 @@ export function heroFields(group: string) {
     defineField({
       name: "heroImage",
       title: "Background photo",
-      description:
-        "The photo behind the headline. After uploading, click Edit hotspot and drag the circle onto the part of the photo that should stay visible — the image is cropped differently on phones and computers. Leave blank to keep the current photo.",
+      description: opts?.imageDescription ?? DEFAULT_IMAGE_DESCRIPTION,
       type: "image",
       options: { hotspot: true },
       group,

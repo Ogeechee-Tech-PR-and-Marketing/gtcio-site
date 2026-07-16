@@ -14,7 +14,10 @@ export default defineType({
     { name: "faq", title: "FAQ" },
   ],
   fields: [
-    ...heroFields("hero"),
+    ...heroFields("hero", {
+      imageDescription:
+        "The About banner plays a video of the robotics lab, so this is normally left empty. Upload a photo here only if you want a still photo INSTEAD of the video — the video stops being used as soon as a photo is set. Remove the photo to get the video back.",
+    }),
 
     defineField({
       name: "missionStatement",

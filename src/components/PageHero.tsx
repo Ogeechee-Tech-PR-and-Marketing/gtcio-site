@@ -7,23 +7,60 @@ type PageHeroProps = {
   image?: string;
   imageAlt?: string;
   imagePosition?: string;
+  /** Background video (muted, looping). Takes the place of `image` when set. */
+  video?: string;
+  /** Still shown while the video loads. Use a frame FROM the video so it doesn't jump. */
+  videoPoster?: string;
 };
 
-export default function PageHero({ eyebrow, title, description, image, imageAlt, imagePosition }: PageHeroProps) {
+export default function PageHero({
+  eyebrow,
+  title,
+  description,
+  image,
+  imageAlt,
+  imagePosition,
+  video,
+  videoPoster,
+}: PageHeroProps) {
   return (
     <section className="relative overflow-hidden bg-brand-black px-6 py-16 text-brand-white sm:px-10 sm:py-24">
-      {image && (
+      {video ? (
         <>
-          <Image
-            src={image}
-            alt={imageAlt ?? ""}
-            fill
-            priority
-            className="object-cover"
+          <video
+            src={video}
+            poster={videoPoster}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
             style={imagePosition ? { objectPosition: imagePosition } : undefined}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/70 to-brand-black/40" />
+          {/*
+            Flat 70% black, not the photo gradient below. The gradient is only 40%
+            black at the top, which is where the headline sits — fine over the
+            dim stock photos, unreadable over bright footage (the ITB robot clip
+            is a light beige wall). This matches the home page's video overlay.
+          */}
+          <div className="absolute inset-0 bg-brand-black/70" />
         </>
+      ) : (
+        image && (
+          <>
+            <Image
+              src={image}
+              alt={imageAlt ?? ""}
+              fill
+              priority
+              className="object-cover"
+              style={imagePosition ? { objectPosition: imagePosition } : undefined}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/70 to-brand-black/40" />
+          </>
+        )
       )}
       <div className="relative mx-auto max-w-5xl">
         {eyebrow && (

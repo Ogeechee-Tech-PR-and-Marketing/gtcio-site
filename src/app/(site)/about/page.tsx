@@ -139,6 +139,13 @@ export default async function AboutPage() {
     fallbackPosition: "61% 25%",
   });
 
+  // The banner plays GTCIO's own footage of the robotics lab. An editor can
+  // override it by uploading a Background photo in the Studio — otherwise that
+  // field would silently do nothing, which the schema description promises it
+  // won't. The fallback position above is tuned for the stock photo, so it is
+  // deliberately not applied to the video (centred is right for the robot).
+  const useVideo = !typed?.heroImage;
+
   return (
     <>
       <PageHero
@@ -147,7 +154,9 @@ export default async function AboutPage() {
         description={page.heroDescription}
         image={hero.src}
         imageAlt={hero.alt}
-        imagePosition={hero.position}
+        imagePosition={useVideo ? undefined : hero.position}
+        video={useVideo ? "/videos/hero-about.mp4" : undefined}
+        videoPoster={useVideo ? "/images/hero-about-poster.jpg" : undefined}
       />
 
       <section id="mission" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
