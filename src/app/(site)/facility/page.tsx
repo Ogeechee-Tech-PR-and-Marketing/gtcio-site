@@ -25,8 +25,12 @@ const DEFAULTS = {
   bookTourTitle: "Book a Tour",
   bookTourIntro:
     "Request a visit for your class, business, or organization. This is a request form, not a live booking calendar. GTCIO staff will follow up to confirm a date.",
+  tourNoticeHeading: "Tour booking opens October 26, 2026",
   tourNotice:
     "Tours can't be scheduled just yet — tour booking opens October 26, 2026. You're welcome to send a request now, but we won't be able to confirm a date until then.",
+  focusAreasTitle: "What the center is built around",
+  focusAreasIntro:
+    "The center was planned around four areas of advanced manufacturing, the skills southeast Georgia's employers are hiring for.",
   stats: [
     { value: "40,000 sq ft", label: "Purpose-built training space" },
     { value: "$27M", label: "Facility investment" },
@@ -34,9 +38,8 @@ const DEFAULTS = {
   ],
 };
 
-// The four areas the center was planned around, from Ogeechee Tech's capital
-// outlay project profile for the training center. Code, not CMS: these are the
-// project's defining scope, not routine copy.
+// Fallback only — the live copy lives in the CMS (Facility Page → What it's
+// built around). Sourced from Ogeechee Tech's capital outlay project profile.
 const FOCUS_AREAS = [
   {
     title: "Industrial Systems Maintenance",
@@ -66,10 +69,12 @@ export default async function FacilityPage() {
     heroImage?: SanityImage;
     heroImageAlt?: string;
     gallery?: GalleryPhoto[];
+    focusAreas?: Array<{ _key?: string; title: string; detail: string }>;
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const stats = typed?.stats?.length ? typed.stats : DEFAULTS.stats;
   const gallery = typed?.gallery ?? [];
+  const focusAreas = typed?.focusAreas?.length ? typed.focusAreas : FOCUS_AREAS;
 
   const hero = resolveHeroImage({
     image: typed?.heroImage,
@@ -110,13 +115,12 @@ export default async function FacilityPage() {
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">What the center is built around</h2>
-          <p className="mt-3 max-w-3xl text-brand-silver">
-            The center was planned around four areas of advanced manufacturing, the
-            skills southeast Georgia&apos;s employers are hiring for.
-          </p>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.focusAreasTitle}</h2>
+          {page.focusAreasIntro && (
+            <p className="mt-3 max-w-3xl text-brand-silver">{page.focusAreasIntro}</p>
+          )}
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {FOCUS_AREAS.map((area) => (
+            {focusAreas.map((area) => (
               <div key={area.title} className="border-l-4 border-brand-red pl-5">
                 <h3 className="font-heading text-lg font-bold text-brand-black">{area.title}</h3>
                 <p className="mt-1 text-sm text-brand-silver">{area.detail}</p>
@@ -165,12 +169,16 @@ export default async function FacilityPage() {
         <div className="mx-auto max-w-3xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.bookTourTitle}</h2>
           <p className="mt-3 text-brand-silver">{page.bookTourIntro}</p>
-          {page.tourNotice && (
+          {(page.tourNoticeHeading || page.tourNotice) && (
             <div className="mt-6 border-l-4 border-brand-gold bg-brand-gold/10 px-5 py-4">
-              <p className="font-heading text-sm font-bold tracking-wide text-brand-black">
-                Tour booking opens October 26, 2026
-              </p>
-              <p className="mt-1 text-sm text-brand-black/80">{page.tourNotice}</p>
+              {page.tourNoticeHeading && (
+                <p className="font-heading text-sm font-bold tracking-wide text-brand-black">
+                  {page.tourNoticeHeading}
+                </p>
+              )}
+              {page.tourNotice && (
+                <p className="mt-1 text-sm text-brand-black/80">{page.tourNotice}</p>
+              )}
             </div>
           )}
           <div className="mt-8">

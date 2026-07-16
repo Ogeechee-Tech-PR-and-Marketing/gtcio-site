@@ -1,8 +1,9 @@
-import Button from "@/components/Button";
 import Link from "next/link";
+import CtaButton from "@/components/CtaButton";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
+import type { CtaButton as CtaButtonData } from "@/sanity/lib/links";
 
 const DEFAULTS = {
   heroEyebrow: "",
@@ -24,11 +25,28 @@ const DEFAULTS = {
     title: "Partners",
     description: "Equipment sponsorships, facility tours, a seat on the advisory board: there's more than one way in.",
   },
+  heroButtons: [
+    { label: "IOT TRAINING PROGRAMS", destination: "training" },
+    { label: "IOT DIPLOMA PROGRAM", destination: "iot" },
+    { label: "BECOME A PARTNER", destination: "becomePartner" },
+  ] as CtaButtonData[],
+  partnerBandTitle: "Become a GTCIO Partner",
+  partnerBandBody:
+    "GTCIO is built alongside the employers who hire our graduates. Sponsor equipment, host a tour, hire our technicians, or take a seat on the advisory board. There's more than one way to get involved, and we're actively growing our partner network.",
+  partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } as CtaButtonData,
+  newsletterEyebrow: "Stay in the loop",
+  newsletterTitle: "News from the GTCIO",
+  newsletterBody:
+    "Program updates, facility milestones, partnership news, and enrollment dates, sent straight to your inbox. No spam.",
+  newsletterButtonLabel: "SIGN UP",
+  newsletterConfirmation:
+    "Thanks for signing up. We'll be in touch with news from the GTCIO.",
 };
 
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_PAGE_QUERY });
   const page = { ...DEFAULTS, ...(data as Partial<typeof DEFAULTS>) };
+  const heroButtons = page.heroButtons?.length ? page.heroButtons : DEFAULTS.heroButtons;
 
   const pathways = [
     { ...DEFAULTS.studentsCard, ...page.studentsCard, href: "/iot-diploma-program", cta: "Explore the IOT Diploma Program" },
@@ -50,9 +68,17 @@ export default async function Home() {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-brand-black/70" />
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative mx-auto max-w-7xl">
           {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}
-          <h1 className="font-display text-5xl leading-tight sm:text-6xl">
+          {/* Jan wants the headline on one line on desktop; it may wrap on small
+              screens. The sizes below are measured, not guessed: this headline
+              renders ~21.7px wide per 1px of font-size in Trade Gothic Next Heavy
+              Compressed, so 52px needs ~1128px and 56px needs ~1215px, inside a
+              1200–1280px container from xl up. Deliberately NOT whitespace-nowrap
+              — this section is overflow-hidden, so a longer headline (or the wider
+              Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
+              than wrapped. Keep the headline short and it stays on one line. */}
+          <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
             {page.heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
               <span key={i}>
                 {line}
@@ -62,13 +88,19 @@ export default async function Home() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-brand-silver">{page.heroDescription}</p>
           <div className="mt-9 flex flex-wrap gap-4">
-            <Button href="/training" variant="primary">IOT TRAINING PROGRAMS</Button>
-            <Button href="/iot-diploma-program" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
-              IOT DIPLOMA PROGRAM
-            </Button>
-            <Button href="/partners#become-a-partner" variant="outline" className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black">
-              BECOME A PARTNER
-            </Button>
+            {heroButtons.map((button, i) => (
+              <CtaButton
+                key={button._key ?? i}
+                button={button}
+                // First button is the primary red one; the rest are outlined.
+                variant={i === 0 ? "primary" : "outline"}
+                className={
+                  i === 0
+                    ? undefined
+                    : "border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black"
+                }
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -100,25 +132,26 @@ export default async function Home() {
       <section className="border-y border-brand-silver/30 bg-brand-red px-6 py-16 text-brand-white sm:px-10">
         <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="max-w-2xl">
-            <h2 className="font-heading text-3xl font-bold">Become a GTCIO Partner</h2>
-            <p className="mt-3 text-brand-white/90">
-              GTCIO is built alongside the employers who hire our graduates. Sponsor
-              equipment, host a tour, hire our technicians, or take a seat on the
-              advisory board. There&apos;s more than one way to get involved, and
-              we&apos;re actively growing our partner network.
-            </p>
+            <h2 className="font-heading text-3xl font-bold">{page.partnerBandTitle}</h2>
+            {page.partnerBandBody && (
+              <p className="mt-3 text-brand-white/90">{page.partnerBandBody}</p>
+            )}
           </div>
-          <Button
-            href="/partners#become-a-partner"
+          <CtaButton
+            button={page.partnerBandButton}
             variant="outline"
             className="shrink-0 border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-red"
-          >
-            BECOME A PARTNER
-          </Button>
+          />
         </div>
       </section>
 
-      <NewsletterSignup />
+      <NewsletterSignup
+        eyebrow={page.newsletterEyebrow}
+        title={page.newsletterTitle}
+        body={page.newsletterBody}
+        buttonLabel={page.newsletterButtonLabel}
+        confirmation={page.newsletterConfirmation}
+      />
     </>
   );
 }

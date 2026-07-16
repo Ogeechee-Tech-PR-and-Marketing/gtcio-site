@@ -4,6 +4,9 @@ import faq from "./objects/faq";
 import statCard from "./objects/statCard";
 import pathwayCard from "./objects/pathwayCard";
 import timelineEvent from "./objects/timelineEvent";
+import infoCard from "./objects/infoCard";
+import courseArea from "./objects/courseArea";
+import ctaButton from "./objects/ctaButton";
 
 import siteSettings from "./documents/siteSettings";
 import partner from "./documents/partner";
@@ -24,6 +27,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     statCard,
     pathwayCard,
     timelineEvent,
+    infoCard,
+    courseArea,
+    ctaButton,
     siteSettings,
     partner,
     newsItem,

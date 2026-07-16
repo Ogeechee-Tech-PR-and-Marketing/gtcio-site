@@ -120,8 +120,23 @@ Every decision below exists to protect that. Weigh it accordingly.
   groups on `/news` by `category`.
 - **`formSubmission`** — a saved copy of every form inquiry (§5). Read-only;
   written only by the server, never created by hand in the Studio.
-- **Objects:** `faq`, `statCard`, `pathwayCard`, plus per-page inline types
-  (`curriculumStage`, `programOption`, `jobDuty`, `payRange`).
+- **Objects:** `faq`, `statCard`, `pathwayCard`, `timelineEvent`, `infoCard`,
+  `courseArea`, `ctaButton`, plus per-page inline types (`curriculumStage`,
+  `programOption`, `jobDuty`, `payRange`).
+- **`ctaButton` — how links stay unbreakable.** Editors pick a `destination` from
+  a dropdown of real pages, never a raw href; `sanity/lib/links.ts` maps those
+  keys to actual URLs and `<CtaButton>` renders them (adding `target="_blank"`
+  automatically for external ones). **If a route ever moves, change
+  `DESTINATIONS` in `links.ts` and every CMS button follows** — no editor action.
+  Adding a destination means editing BOTH the options list in
+  `objects/ctaButton.ts` and `DESTINATIONS`. A half-filled button (no label, or
+  `external` with no URL) renders nothing rather than a dead link.
+- **Convention: every page's copy is CMS-first, with the code `DEFAULTS` as a
+  fallback.** As of 2026-07-16 the Home hero buttons, red partner band and
+  newsletter; the Training stats, credentials, services, course areas and catalog
+  band; and the Facility focus areas + tour-notice heading are all editable, and
+  the CMS is **seeded** with that copy so editors see real text, not empty boxes.
+  If you add a section, add fields + seed them — don't leave content code-only.
 - **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
   Contact form's dropdown. The Become a Partner dropdown has no field of its own —
   it is derived from `partnersPage.pathways` (§5).
@@ -457,7 +472,18 @@ Smaller items:
   box on the IOT page. Not produced, not scoped.
 - **Homepage hero video** (`public/videos/hero-construction.mp4`) is code-only, not
   CMS-editable.
-- **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`).
+- **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`) — deliberate,
+  since a typo'd href there breaks navigation site-wide. Everything else on the
+  page is CMS-editable; see the `ctaButton` note in §4 for how in-page buttons stay
+  safe. The logo and the home hero video are also code-only.
+- **Home hero headline is sized to fit one line** (Jan, 2026-07-16). The sizes in
+  `(site)/page.tsx` are measured, not guessed: the headline renders ~21.7px wide
+  per 1px of font-size in Trade Gothic Next Heavy Compressed, so 52px ≈ 1128px and
+  56px ≈ 1215px inside a 1200–1280px container from `xl` up. It is deliberately
+  **not** `whitespace-nowrap` — the hero is `overflow-hidden`, so a longer headline
+  (or the wider Arial Narrow fallback if Adobe Fonts fails) would be *clipped*
+  rather than wrapped. A longer headline just wraps to two lines. Re-measure if
+  the headline changes materially.
 - **No rate limiting** on `/api/inquiry` beyond the honeypot. If spam becomes a
   problem, add it.
 

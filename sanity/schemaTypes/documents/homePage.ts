@@ -8,12 +8,15 @@ export default defineType({
     { name: "hero", title: "Top of page", default: true },
     { name: "intro", title: "Intro section" },
     { name: "cards", title: "Three cards" },
+    { name: "partnerBand", title: "Red partner band" },
+    { name: "newsletter", title: "Newsletter signup" },
   ],
   fields: [
     defineField({
       name: "heroEyebrow",
       title: "Small label above the headline",
-      description: "The little gold text over the video.",
+      description:
+        "The little gold text over the video. Leave this empty to hide it — it is empty on purpose right now.",
       type: "string",
       group: "hero",
     }),
@@ -21,7 +24,7 @@ export default defineType({
       name: "heroTitle",
       title: "Headline",
       description:
-        "The huge text over the video. Press Enter to split it onto a second line — right now it breaks after \"Make things work.\"",
+        "The huge text over the video. Keep it short — it is sized to sit on ONE line on a computer screen, and a longer headline will wrap onto two.",
       type: "text",
       rows: 2,
       validation: (r) => r.required(),
@@ -34,11 +37,20 @@ export default defineType({
       rows: 4,
       group: "hero",
     }),
+    defineField({
+      name: "heroButtons",
+      title: "Buttons",
+      description:
+        "The buttons under the intro paragraph. The first one is red, the rest are outlined. Drag to reorder.",
+      type: "array",
+      of: [{ type: "ctaButton" }],
+      validation: (r) => r.max(4),
+      group: "hero",
+    }),
 
     defineField({
       name: "sectionTitle",
       title: "Section heading",
-      description: 'Currently "Training the next generation".',
       type: "string",
       group: "intro",
     }),
@@ -46,7 +58,7 @@ export default defineType({
       name: "sectionBody",
       title: "Section paragraph",
       type: "text",
-      rows: 4,
+      rows: 5,
       group: "intro",
     }),
 
@@ -60,7 +72,7 @@ export default defineType({
     defineField({
       name: "employersCard",
       title: "Employers card",
-      description: "Links to the Training page.",
+      description: "Links to the IOT Training Programs page.",
       type: "pathwayCard",
       group: "cards",
     }),
@@ -70,6 +82,60 @@ export default defineType({
       description: "Links to the Partners page.",
       type: "pathwayCard",
       group: "cards",
+    }),
+
+    defineField({
+      name: "partnerBandTitle",
+      title: "Heading",
+      type: "string",
+      group: "partnerBand",
+    }),
+    defineField({
+      name: "partnerBandBody",
+      title: "Paragraph",
+      type: "text",
+      rows: 4,
+      group: "partnerBand",
+    }),
+    defineField({
+      name: "partnerBandButton",
+      title: "Button",
+      type: "ctaButton",
+      group: "partnerBand",
+    }),
+
+    defineField({
+      name: "newsletterEyebrow",
+      title: "Small gold label",
+      type: "string",
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterTitle",
+      title: "Heading",
+      type: "string",
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterBody",
+      title: "Paragraph",
+      type: "text",
+      rows: 3,
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterButtonLabel",
+      title: "Button text",
+      type: "string",
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterConfirmation",
+      title: "Thank-you message",
+      description: "Shown in place of the form after someone signs up.",
+      type: "text",
+      rows: 2,
+      group: "newsletter",
     }),
   ],
   preview: {

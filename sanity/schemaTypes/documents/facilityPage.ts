@@ -28,6 +28,7 @@ export default defineType({
   groups: [
     { name: "hero", title: "Top of page", default: true },
     { name: "stats", title: "Stats & overview" },
+    { name: "focus", title: "What it's built around" },
     { name: "gallery", title: "Photo gallery" },
     { name: "tour", title: "Book a Tour form" },
   ],
@@ -54,6 +55,29 @@ export default defineType({
       type: "text",
       rows: 4,
       group: "stats",
+    }),
+
+    defineField({
+      name: "focusAreasTitle",
+      title: "Section heading",
+      type: "string",
+      group: "focus",
+    }),
+    defineField({
+      name: "focusAreasIntro",
+      title: "Intro paragraph",
+      type: "text",
+      rows: 3,
+      group: "focus",
+    }),
+    defineField({
+      name: "focusAreas",
+      title: "The areas",
+      description:
+        "The areas of advanced manufacturing the center was planned around. Drag to reorder, or use Add item to add one.",
+      type: "array",
+      of: [{ type: "infoCard" }],
+      group: "focus",
     }),
 
     defineField({
@@ -87,12 +111,20 @@ export default defineType({
       group: "tour",
     }),
     defineField({
-      name: "tourNotice",
-      title: "Notice banner above the form",
+      name: "tourNoticeHeading",
+      title: "Notice banner heading",
       description:
-        "Shown as a highlighted banner above the tour form. Use it for temporary messages like tour booking not being open yet. Clear this field to remove the banner once tours can be booked.",
+        'The bold line of the yellow banner, e.g. "Tour booking opens October 26, 2026".',
+      type: "string",
+      group: "tour",
+    }),
+    defineField({
+      name: "tourNotice",
+      title: "Notice banner text",
+      description:
+        "The yellow banner above the tour form. Use it for temporary messages like tour booking not being open yet. Clear BOTH this and the heading above to remove the banner once tours can be booked.",
       type: "text",
-      rows: 2,
+      rows: 3,
       group: "tour",
     }),
   ],

@@ -44,6 +44,28 @@ marked in red.
 
 ---
 
+## The three things almost every page is made of
+
+Once you recognise these, you can edit any page on the site.
+
+**Boxes.** The grids of little headings-with-text — the credentials on IOT
+Training Programs, what we offer employers, what the Facility is built around.
+Each one is a **Box** with a *Heading* and some *Text*. Use **Add item** to add
+one, drag the ⠿ handle to reorder, or the ⋮ menu to remove one.
+
+**Stat boxes.** The big figures with a caption under them (`~460,000` / "Hours of
+instruction GTCIO can deliver each year"). A *Value* and a *Label*.
+
+**Buttons.** Instead of typing a web address, you pick **Where it goes** from a
+list of the site's real pages — so a button can never point at a page that
+doesn't exist. Only choose *"Somewhere else"* if you're linking off our site,
+which reveals a box for the address. Change *Button text* to change the wording.
+
+> If you half-finish a button (no text, or "Somewhere else" with no address), the
+> button simply doesn't appear on the site rather than showing up broken.
+
+---
+
 ## Common jobs
 
 ### Add a new partner to the Partners page
@@ -89,7 +111,32 @@ added.
 
 The Facility page shows a yellow notice that tours can't be booked until a certain
 date. To remove it once tours are open, open **Facility Page** → the **Book a Tour
-form** tab, clear the **Notice banner above the form** box, and Publish.
+form** tab, clear **both** the *Notice banner heading* and the *Notice banner
+text*, and Publish. (Changing the date? Edit those same two boxes — the date isn't
+hiding anywhere else.)
+
+### Change the buttons on the Home page
+
+Open **Home Page** → **Top of page** → **Buttons**. The first button in the list
+is the red one; the rest are outlined. Drag to reorder, change *Button text* to
+reword one, or pick a different page under *Where it goes*.
+
+The red band lower down has its own tab (**Red partner band**), and the email
+signup has one too (**Newsletter signup**).
+
+### Change the training page's credentials, services, or course lists
+
+Open **IOT Training Programs Page**. Each block has its own tab:
+
+| Tab | What it edits |
+| --- | --- |
+| **Stat boxes** | The three big figures under the banner. |
+| **Training for employers** | The heading, the two paragraphs, and the button. |
+| **Catalog band** | The black band and its link to the training catalog. |
+| **Credentials & affiliations** | The FANUC / SACA / Amatrol boxes. |
+| **What we offer** | The grid of services. |
+| **Course areas** | Each area and the courses listed under it. |
+| **Employer FAQ** | The questions and answers. |
 
 ### Change a photo at the top of a page
 
@@ -174,7 +221,11 @@ layout:
 - The menu at the top and the links in the footer
 - The looping video on the Home page
 - The "What's Industrial Operations Technology?" video placeholder
+- The GTCIO logo
 - Adding a brand-new page
+
+Nearly everything else — every heading, paragraph, box, stat, button, FAQ, photo,
+partner, news item, and the project timeline — you can change yourself.
 
 If you need one of these, or you get stuck, ask whoever set the site up.
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
-import Button from "@/components/Button";
+import CtaButton from "@/components/CtaButton";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
@@ -17,6 +17,24 @@ const DEFAULTS = {
   heroTitle: "Students on one side, employers on the other: same goal",
   heroDescription:
     "GTCIO trains individual students building a career, and works directly with employers who need to upskill the team they've already got.",
+  employersTitle: "Training for employers",
+  employersBody2:
+    "Training happens on the same industrial equipment your team works on every day, and courses are built to stack: an employee can start with a single short course and keep going, all the way to a registered apprenticeship.",
+  employersButton: { label: "TALK TO US ABOUT TRAINING", destination: "contact" as const },
+  catalogEyebrow: "Full catalog",
+  catalogTitle: "Industrial Systems Training Program",
+  catalogBody:
+    "Every course description, the training team, apprenticeship details, and full pricing — in Ogeechee Tech's complete training catalog.",
+  catalogButton: {
+    label: "VIEW THE CATALOG",
+    destination: "external" as const,
+    externalUrl: CATALOG_URL,
+  },
+  affiliationsTitle: "Credentials & affiliations",
+  servicesTitle: "What we offer employers",
+  courseAreasTitle: "Course areas",
+  courseAreasIntro:
+    "Short courses run 16–40 hours each and can be taken on their own or combined. Full descriptions, hours, and pricing are in the training catalog.",
   employersBody:
     "Custom, hands-on training for your current workforce, built around your own equipment and processes — less downtime, more maintenance capability in-house. Ogeechee Tech's industrial systems training team runs everything from single 16-hour short courses to DOL-registered apprenticeships, and trains and certifies instructors from across Georgia and the nation.",
   faqTitle: "Employer FAQ",
@@ -30,10 +48,10 @@ const DEFAULTS = {
   ],
 };
 
-// Everything below is drawn from OTC's "Industrial Systems Training Program"
+// Fallbacks only — the live copy for all of these lives in the CMS (IOT Training
+// Programs Page). Drawn from OTC's "Industrial Systems Training Program"
 // brochure (see CATALOG_URL) except the 460,000-hour figure, which is GTCIO's
-// own facility capacity. Rendered from code rather than the CMS because these
-// are standing facts, not routine copy edits.
+// own facility capacity.
 const STATS = [
   { value: "~460,000", label: "Hours of instruction GTCIO can deliver each year" },
   { value: "120+ years", label: "Combined in-field industrial systems experience on the training team" },
@@ -41,11 +59,11 @@ const STATS = [
 ];
 
 const AFFILIATIONS = [
-  { label: "FANUC", detail: "The only authorized FANUC satellite training site in the state of Georgia." },
-  { label: "SACA Gold", detail: "A Smart Automation Certification Alliance Gold Certification Site, and a SACA Regional Instructor Training Center — the first in Georgia." },
-  { label: "Amatrol", detail: "An Amatrol Certified Instructor Training Site, hosting Amatrol Technical Training Institute (ATTI) courses." },
-  { label: "Mitsubishi Electric", detail: "A Mitsubishi Electric Automation Training Provider." },
-  { label: "Advanced Manufacturing Academy", detail: "An Advanced Manufacturing Academy Training Center." },
+  { title: "FANUC", detail: "The only authorized FANUC satellite training site in the state of Georgia." },
+  { title: "SACA Gold", detail: "A Smart Automation Certification Alliance Gold Certification Site, and a SACA Regional Instructor Training Center — the first in Georgia." },
+  { title: "Amatrol", detail: "An Amatrol Certified Instructor Training Site, hosting Amatrol Technical Training Institute (ATTI) courses." },
+  { title: "Mitsubishi Electric", detail: "A Mitsubishi Electric Automation Training Provider." },
+  { title: "Advanced Manufacturing Academy", detail: "An Advanced Manufacturing Academy Training Center." },
 ];
 
 const SERVICES = [
@@ -66,14 +84,27 @@ const COURSE_AREAS = [
   { area: "SCADA Systems", courses: ["Visual Communications (Industry 4.0)"] },
 ];
 
+type InfoCard = { _key?: string; title: string; detail: string };
+type CourseAreaItem = { _key?: string; area: string; courses: string[] };
+
 export default async function TrainingPage() {
   const { data } = await sanityFetch({ query: TRAINING_PAGE_QUERY });
   const typed = data as (Partial<typeof DEFAULTS> & {
     heroImage?: SanityImage;
     heroImageAlt?: string;
+    stats?: Array<{ _key?: string; value: string; label: string }>;
+    affiliations?: InfoCard[];
+    services?: InfoCard[];
+    courseAreas?: CourseAreaItem[];
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const employerFaqs = typed?.employerFaqs?.length ? typed.employerFaqs : DEFAULTS.employerFaqs;
+  const stats = typed?.stats?.length ? typed.stats : STATS;
+  const affiliations = typed?.affiliations?.length ? typed.affiliations : AFFILIATIONS;
+  const services = typed?.services?.length ? typed.services : SERVICES;
+  const courseAreas: CourseAreaItem[] = typed?.courseAreas?.length
+    ? typed.courseAreas
+    : COURSE_AREAS;
 
   const hero = resolveHeroImage({
     image: typed?.heroImage,
@@ -96,7 +127,7 @@ export default async function TrainingPage() {
 
       <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="border-l-4 border-brand-red pl-5">
               <p className="font-heading text-3xl font-bold text-brand-black">{stat.value}</p>
               <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
@@ -107,15 +138,13 @@ export default async function TrainingPage() {
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">Training for employers</h2>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.employersTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">{page.employersBody}</p>
-          <p className="mt-4 max-w-3xl text-brand-silver">
-            Training happens on the same industrial equipment your team works on every
-            day, and courses are built to stack: an employee can start with a single
-            short course and keep going, all the way to a registered apprenticeship.
-          </p>
+          {page.employersBody2 && (
+            <p className="mt-4 max-w-3xl text-brand-silver">{page.employersBody2}</p>
+          )}
           <div className="mt-8">
-            <Button href="/contact" variant="primary">TALK TO US ABOUT TRAINING</Button>
+            <CtaButton button={page.employersButton} variant="primary" />
           </div>
         </div>
       </section>
@@ -123,34 +152,23 @@ export default async function TrainingPage() {
       <section className="border-b border-brand-silver/30 bg-brand-black px-6 py-16 text-brand-white sm:px-10">
         <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="max-w-2xl">
-            <p className="font-display text-sm text-brand-gold">Full catalog</p>
-            <h2 className="font-heading mt-2 text-3xl font-bold">
-              Industrial Systems Training Program
-            </h2>
-            <p className="mt-3 text-brand-silver">
-              Every course description, the training team, apprenticeship details, and
-              full pricing — in Ogeechee Tech&apos;s complete training catalog.
-            </p>
+            {page.catalogEyebrow && (
+              <p className="font-display text-sm text-brand-gold">{page.catalogEyebrow}</p>
+            )}
+            <h2 className="font-heading mt-2 text-3xl font-bold">{page.catalogTitle}</h2>
+            {page.catalogBody && <p className="mt-3 text-brand-silver">{page.catalogBody}</p>}
           </div>
-          <Button
-            href={CATALOG_URL}
-            variant="primary"
-            className="shrink-0"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            VIEW THE CATALOG
-          </Button>
+          <CtaButton button={page.catalogButton} variant="primary" className="shrink-0" />
         </div>
       </section>
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">Credentials &amp; affiliations</h2>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.affiliationsTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {AFFILIATIONS.map((a) => (
-              <div key={a.label} className="border border-brand-silver/40 p-6">
-                <p className="font-heading text-lg font-bold text-brand-red">{a.label}</p>
+            {affiliations.map((a) => (
+              <div key={a.title} className="border border-brand-silver/40 p-6">
+                <p className="font-heading text-lg font-bold text-brand-red">{a.title}</p>
                 <p className="mt-2 text-sm text-brand-silver">{a.detail}</p>
               </div>
             ))}
@@ -160,9 +178,9 @@ export default async function TrainingPage() {
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">What we offer employers</h2>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.servicesTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.map((s) => (
+            {services.map((s) => (
               <div key={s.title} className="border border-brand-silver/40 p-6">
                 <h3 className="font-heading text-lg font-bold text-brand-red">{s.title}</h3>
                 <p className="mt-2 text-sm text-brand-silver">{s.detail}</p>
@@ -174,14 +192,12 @@ export default async function TrainingPage() {
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">Course areas</h2>
-          <p className="mt-3 max-w-3xl text-brand-silver">
-            Short courses run 16–40 hours each and can be taken on their own or
-            combined. Full descriptions, hours, and pricing are in the training
-            catalog.
-          </p>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.courseAreasTitle}</h2>
+          {page.courseAreasIntro && (
+            <p className="mt-3 max-w-3xl text-brand-silver">{page.courseAreasIntro}</p>
+          )}
           <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {COURSE_AREAS.map((c) => (
+            {courseAreas.map((c) => (
               <div key={c.area} className="border-t-2 border-brand-red pt-4">
                 <h3 className="font-heading text-lg font-bold text-brand-black">{c.area}</h3>
                 <ul className="mt-3 flex flex-col gap-2">

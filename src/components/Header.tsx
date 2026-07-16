@@ -51,9 +51,9 @@ export default function Header({
             <Image
               src="/images/gtcio-logo.png"
               alt="GTCIO — Georgia Training Center for Industrial Operations"
-              width={320}
-              height={128}
-              className="h-20 w-auto sm:h-28"
+              width={750}
+              height={300}
+              className="h-24 w-auto sm:h-36"
               priority
             />
           </Link>
