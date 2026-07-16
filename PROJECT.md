@@ -180,6 +180,30 @@ can serve a *stale* Sanity value across `npm run build`s — `rm -rf .next/cache
 before rebuilding to verify a CMS change locally (Vercel builds fresh, so deploys
 are unaffected).
 
+**⚠️ Patching a published doc leaves any DRAFT of it stale — and the draft wins
+later.** A `patch` on `homePage` does *not* touch `drafts.homePage`. If a draft
+exists (an editor opened the page in the Studio at some point, even without
+saving anything meaningful), then: the public site still shows your published
+change, but the **Studio preview shows the stale draft**, and the moment anyone
+presses **Publish** the draft silently **reverts your change**. This actually
+happened — a 2026-07-14 `drafts.homePage` sat on the old hero copy *and* the old
+"optional SACA" wording for two days after both were changed, primed to undo them.
+**After patching a published doc, always check for a draft and patch it to match:**
+
+```bash
+# list every draft in the dataset (perspective=raw is required to see them)
+*[_id in path("drafts.**")]{_id,_updatedAt,_type}
+# then diff drafts.<id> against <id> and patch the draft with the same values
+```
+
+Prefer patching the draft over deleting it. Note `sanity.previewUrlSecret` drafts
+are system docs for the Presentation tool — leave those alone.
+
+Related: if someone reports the live site showing old copy that you know you
+changed, suspect **draft mode** before cache. Clicking through the Studio's "Edit
+on page" sets a draft-mode cookie, so *their browser* renders drafts on the real
+site. `https://gtcio-site.vercel.app/api/draft-mode/disable` clears it.
+
 ### Verifying CMS work
 
 You cannot log into the Studio (it needs Jake's password), so **do not "verify"
