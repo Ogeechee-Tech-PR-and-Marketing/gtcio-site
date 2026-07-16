@@ -120,6 +120,30 @@ export default async function TrainingPage() {
         </div>
       </section>
 
+      <section className="border-b border-brand-silver/30 bg-brand-black px-6 py-16 text-brand-white sm:px-10">
+        <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="font-display text-sm text-brand-gold">Full catalog</p>
+            <h2 className="font-heading mt-2 text-3xl font-bold">
+              Industrial Systems Training Program
+            </h2>
+            <p className="mt-3 text-brand-silver">
+              Every course description, the training team, apprenticeship details, and
+              full pricing — in Ogeechee Tech&apos;s complete training catalog.
+            </p>
+          </div>
+          <Button
+            href={CATALOG_URL}
+            variant="primary"
+            className="shrink-0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            VIEW THE CATALOG
+          </Button>
+        </div>
+      </section>
+
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">Credentials &amp; affiliations</h2>
@@ -170,30 +194,6 @@ export default async function TrainingPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="border-b border-brand-silver/30 bg-brand-black px-6 py-16 text-brand-white sm:px-10">
-        <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="max-w-2xl">
-            <p className="font-display text-sm text-brand-gold">Full catalog</p>
-            <h2 className="font-heading mt-2 text-3xl font-bold">
-              Industrial Systems Training Program
-            </h2>
-            <p className="mt-3 text-brand-silver">
-              Every course description, the training team, apprenticeship details, and
-              full pricing — in Ogeechee Tech&apos;s complete training catalog.
-            </p>
-          </div>
-          <Button
-            href={CATALOG_URL}
-            variant="primary"
-            className="shrink-0"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            VIEW THE CATALOG
-          </Button>
         </div>
       </section>
 
