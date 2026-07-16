@@ -405,6 +405,21 @@ rejected: `cacheComponents` is off, so pages use the fetch cache, and
 its own cached response — the same staleness `rm -rf .next/cache` fixes locally.
 A full rebuild is the guaranteed-correct option and publishes are infrequent.
 
+**⚠️ A build can bake in stale Sanity data, and you cannot config your way out.**
+`defineLive` **forces** `useCdn: true` on your client —
+`_client.withConfig({allowReconfigure: false, useCdn: true, perspective: 'published'})`
+— so the `useCdn` in `sanity/lib/live.ts` is ignored. Worse, per fetch it does
+`cacheMode = useCdn !== false && !isBuildPhase ? 'noStale' : undefined`: at runtime
+it asks the CDN for fresh data, but **during `next build` it deliberately does
+not**, so a build started seconds after a publish can prerender pre-publish
+content. Observed 2026-07-16: a CMS array edit was verified present via both
+`apicdn` and `api`, yet `.next/server/app/<page>.html` was generated without it;
+rebuilding a minute later fixed it. Practical impact on the webhook flow is small
+(Vercel spends ~60–90s installing/compiling before it prerenders, by which point
+the CDN has purged — it purges in seconds), **but if a page looks stale right
+after a publish, redeploy before debugging anything else.** When verifying a CMS
+change locally, `rm -rf .next/cache` is not enough — give the CDN a few seconds.
+
 **🟡 Newsletter signup is UI-only.** `src/components/NewsletterSignup.tsx` on the
 home page validates an email and shows a confirmation but **sends nothing** — no
 address is stored or transmitted. GTCIO expects to use **Constant Contact**. To
@@ -545,12 +560,16 @@ shows deploy status.
   their own site doesn't, so the site doesn't claim it) · 9/23 design starts ·
   6/25 construction starts · 9/26 construction targeted for completion ·
   **ribbon cutting 10/15/26**.
-  - ⚠️ **Date tension worth resolving:** the IOT diploma program launches **August
-    2026**, but construction completes **September 2026** and the ribbon cutting is
-    **October 15, 2026** — i.e. classes start before the building opens. Both facts
-    are now on the site (Home/IOT pages vs About → History). Probably fine (classes
-    may begin in existing OTC space) but nobody has confirmed it. Tour booking
-    opening 10/26 is consistent with the 10/15 ribbon cutting.
+  - **Why Aug 2026 classes precede the Oct 2026 opening (resolved by Jan,
+    2026-07-16):** classes begin in the **Industrial Technology Building on OTC's
+    main campus** — the college's existing robotics facility (16 Joe Kennedy Blvd;
+    houses the robotics and industrial maintenance labs, Electrical Systems
+    Technology and Logistics; built 2018) — and move into the new GTCIO building on
+    AJ Riggs Road once it opens. OTC's own release notes the industrial systems
+    program was projected to hit capacity in that building, which is *why* the new
+    center exists. This is on the site as an About timeline milestone and an IOT
+    Diploma Program FAQ ("Where will classes be held?"). Tour booking opening 10/26
+    is consistent with the 10/15 ribbon cutting.
   - Jan's source note said "9/26 HOPEFULLY finished" — the site says "targeted for
     completion"/"scheduled" instead. Don't publish the hedge verbatim.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing

@@ -64,6 +64,12 @@ const DEFAULTS = {
       detail: "Ground is broken on the 40,000-square-foot facility.",
     },
     {
+      date: "August 2026",
+      title: "First classes begin",
+      detail:
+        "The Industrial Operations Technology diploma program launches in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, while the new building is finished.",
+    },
+    {
       date: "September 2026",
       title: "Construction targeted for completion",
       detail: "The building is scheduled to be finished and handed over.",

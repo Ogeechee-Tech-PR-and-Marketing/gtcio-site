@@ -54,6 +54,7 @@ const DEFAULTS = {
   studentFaqTitle: "Student FAQ",
   faqs: [
     { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program launches in August 2026." },
+    { question: "Where will classes be held?", answer: "Classes begin in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, and move into GTCIO's new building once it opens. The ribbon cutting is scheduled for October 15, 2026." },
     { question: "How much can I expect to earn after graduating?", answer: "See the pay ranges below. Most graduates start in entry-level/operator roles and grow from there." },
     { question: "What credential do I earn?", answer: "Every student who completes the diploma is credentialed through SACA (the Smart Automation Certification Alliance). The SACA credential is built into the program for all graduates, and it's recognized industry-wide, not just in Georgia." },
     { question: "How much does the program cost?", answer: "Placeholder, final tuition figure pending confirmation." },
