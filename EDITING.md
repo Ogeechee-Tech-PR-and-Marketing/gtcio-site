@@ -74,9 +74,10 @@ which reveals a box for the address. Change *Button text* to change the wording.
 2. Click the **+** (or "Create new") button.
 3. Fill in the organization's name, upload their logo, and write a one-line
    description.
-4. Set **Display order** to control where they appear (1 shows first, 2 second,
+4. Add their **Website** so their block gets a LEARN MORE button (optional).
+5. Set **Display order** to control where they appear (1 shows first, 2 second,
    and so on).
-5. Press **Publish**.
+6. Press **Publish**.
 
 That's it — they'll appear on the Partners page automatically. You don't need to
 touch the Partners Page entry at all.
@@ -89,9 +90,9 @@ disappear from the site but you keep their details in case they come back.
 ### Link a partner's block to their website
 
 Open the partner, fill in the **Website** box (for example
-`https://www.georgiapower.com`), and Publish. Their block on the Partners page
-becomes clickable and shows a "Visit website" link. Leave it blank and the block
-stays as a plain card.
+`https://www.georgiapower.com`), and Publish. A red **LEARN MORE** button appears
+in the bottom-right of their block and opens their site in a new tab. Leave the
+box blank and the block simply has no button.
 
 ### Add a press release or news mention
 
@@ -137,6 +138,19 @@ Open **IOT Training Programs Page**. Each block has its own tab:
 | **What we offer** | The grid of services. |
 | **Course areas** | Each area and the courses listed under it. |
 | **Employer FAQ** | The questions and answers. |
+
+### Add or change a milestone on the project timeline
+
+Open **About Page** → the **History** tab → **Project timeline**. Each milestone
+has a *When* ("July 2022" — type it however you want it to read), a *What
+happened* headline, and optional *More detail*. **Keep them oldest-first** — they
+appear on the page in the order they're listed here, top to bottom.
+
+### Fill in the Advisory Board
+
+Open **About Page** → the **Advisory Board** tab. It currently holds placeholder
+wording plus a small grey note saying members are still to come. Replace the
+paragraph, then **clear the note box** so the "to be added" line disappears.
 
 ### Change a photo at the top of a page
 

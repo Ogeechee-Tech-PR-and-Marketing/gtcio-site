@@ -13,8 +13,8 @@ Next.js 16 (App Router) · React 19 · Tailwind v4 · Sanity CMS · Adobe Fonts
 
 | File | Who it's for |
 | --- | --- |
-| **[PROJECT.md](./PROJECT.md)** | **Developers and AI agents. Start here.** Architecture, the CMS content model, how the forms work, environment variables, and the non-obvious traps that will bite you. |
-| [EDITING.md](./EDITING.md) | Marketing staff. Plain-English guide to changing text, photos, and partner logos — no code. |
+| **[PROJECT.md](./PROJECT.md)** | **Developers and AI agents. Start here.** Architecture, the CMS content model, how the forms work, environment variables, the confirmed facts behind the copy, and the non-obvious traps that will bite you. |
+| [EDITING.md](./EDITING.md) | Marketing staff. Plain-English guide to changing anything on the site — copy, photos, buttons, partners, news, the timeline — no code. |
 | [AGENTS.md](./AGENTS.md) | Warning that this is Next.js 16, not the version in your training data. |
 
 ## Getting started
@@ -45,3 +45,10 @@ explains why.
 ## Deploying
 
 Push to `main`. Vercel deploys automatically.
+
+⚠️ **Publishing in the Studio does *not* update the live site yet.** No Sanity
+webhook exists, and pages are statically prerendered, so content published by
+marketing only appears on the next deploy. This is the top open item — see
+[PROJECT.md §8](./PROJECT.md#8-open-work) for the two-step fix, alongside the
+other known gaps (no inquiry notification emails yet; the newsletter signup isn't
+wired to Constant Contact).

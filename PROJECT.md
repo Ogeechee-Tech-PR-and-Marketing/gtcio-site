@@ -69,8 +69,10 @@ src/app/
   api/
     draft-mode/           enable + disable, for the Studio's live preview
     inquiry/              POST target for all three forms (§5)
-src/components/           Header, Footer, PageHero, Button, InquiryForm,
-                          NewsletterSignup (home page, UI-only — see §8)
+src/components/           Header, Footer, PageHero, InquiryForm
+  Button.tsx              the raw styled link (variant, target/rel)
+  CtaButton.tsx           renders a CMS-configured button via links.ts (§4)
+  NewsletterSignup.tsx    home page, UI-only — see §8
 sanity/
   env.ts                  projectId / dataset / apiVersion
   lib/client.ts           read client
@@ -78,6 +80,7 @@ sanity/
   lib/live.ts             sanityFetch + SanityLive (draft/preview)
   lib/queries.ts          all GROQ
   lib/image.ts            urlForImage + resolveHeroImage (hotspot → focal point)
+  lib/links.ts            DESTINATIONS: ctaButton destination keys → real hrefs
   schemaTypes/            documents/ + objects/ + heroFields.ts
   structure.ts            the Studio's left-hand menu
   presentation.ts         maps documents ↔ page URLs for "Edit on page"
@@ -140,11 +143,15 @@ Every decision below exists to protect that. Weigh it accordingly.
   of "Ways to partner" into its own "Intro & button" group. Keep the code `DEFAULTS`
   objects in page order too — same reason.
 - **Convention: every page's copy is CMS-first, with the code `DEFAULTS` as a
-  fallback.** As of 2026-07-16 the Home hero buttons, red partner band and
-  newsletter; the Training stats, credentials, services, course areas and catalog
-  band; and the Facility focus areas + tour-notice heading are all editable, and
-  the CMS is **seeded** with that copy so editors see real text, not empty boxes.
-  If you add a section, add fields + seed them — don't leave content code-only.
+  fallback.** As of 2026-07-16 the only things NOT editable are the top nav, the
+  footer links, the logo, and the home hero video (all deliberate — see §8).
+  Everything else is: the Home hero buttons / red partner band / newsletter; the
+  Training stats, employer copy, catalog band, credentials, services and course
+  areas; the Facility focus areas and tour-notice banner; the Partners intro button;
+  the IOT Apply band + button; the About mission statement and project timeline.
+  The CMS is **seeded** with all of that copy so editors see real text, not empty
+  boxes falling back to code. If you add a section, add fields AND seed them —
+  don't leave content code-only.
 - **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
   Contact form's dropdown. The Become a Partner dropdown has no field of its own —
   it is derived from `partnersPage.pathways` (§5).
@@ -471,10 +478,11 @@ Smaller items:
   documents are added (press releases + media mentions). Load the OTC IOT press
   release as the first entry when ready.
 - **Tour booking opens 2026-10-26.** The Facility "Book a Tour" form stays live but
-  carries a gold notice banner (`facilityPage.tourNotice`) saying dates can't be
-  confirmed until then. Clear that field in the Studio on the 26th to drop the
-  banner. The header/hero still link to the tour form; the home hero buttons no
-  longer include "Book a Tour".
+  carries a gold notice banner saying dates can't be confirmed until then. It's two
+  fields — `facilityPage.tourNoticeHeading` (which carries the date) and
+  `facilityPage.tourNotice` — and the banner disappears only when **both** are
+  cleared (Facility Page → Book a Tour form). The header still links to the tour
+  form; the home hero buttons no longer include "Book a Tour".
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
   are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
@@ -544,11 +552,13 @@ shows deploy status.
 - **IOT Training Programs page is employer-facing.** The old "For Students" box
   was removed 2026-07-16 (students are served by the IOT Diploma Program page), and
   `trainingPage.studentsBody` was dropped from the schema and unset in the dataset.
-  Only the opening paragraph and the FAQ are CMS-editable; the stats, credentials,
-  services, and course lists are code constants in the page (they're standing facts
-  from the brochure, not routine copy). The section directly under any PageHero
-  should stay **light** — a dark band there makes the hero photo read as fading to
-  black early and opens a large empty gap. That was a real complaint.
+  The whole page — stats, employer copy, catalog band, credentials, services,
+  course areas, FAQ — is CMS-editable; the code constants are fallbacks only.
+- **The section directly under any PageHero must stay light.** A dark band there
+  makes the hero photo read as fading to black early and opens a large empty gap
+  between the hero copy and the next section. That was a real complaint from Jan
+  about the Training page, fixed by turning the stat band white (it now matches the
+  Facility page's hero → white-stats pattern).
 - **Footer** carries an "Equal Opportunity Institution" link to
   <https://www.ogeecheetech.edu/about/equal-opportunity>, matching OTC's own
   footer convention. Keep it — it's an institutional compliance link.
