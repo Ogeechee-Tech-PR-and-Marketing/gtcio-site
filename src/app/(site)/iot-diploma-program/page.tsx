@@ -83,8 +83,16 @@ export default async function IotDiplomaProgramPage() {
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
     fallbackSrc: "/images/hero-iot-program.jpg",
-    fallbackAlt: "Engineer inspecting an industrial engine",
-    fallbackPosition: "85% 32%",
+    fallbackAlt:
+      "Students gathered around automation equipment as an instructor explains it",
+    // Measured, not eyeballed. The hero is a wide band — at 1920 only ~27% of the
+    // photo's height is visible — and the seven faces span roughly 12%–33% of it.
+    // Centring on the faces (~22%) clips the front student's hairline; 12% clips
+    // the student in glasses. 18% is the one value that keeps every face in frame
+    // from 1280 through 1920, and mobile crops almost nothing (the box is ~1.47:1
+    // against the photo's 1.5:1). Re-check this if the hero copy length changes,
+    // since that changes the band height.
+    fallbackPosition: "50% 18%",
   });
 
   return (
