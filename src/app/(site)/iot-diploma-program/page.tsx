@@ -49,17 +49,27 @@ const DEFAULTS = {
     { value: "$55k – $70k", label: "Working Technician (a few years in)" },
     { value: "$80k – $100k+", label: "Specialists & Supervisors" },
   ],
-  timeToComplete: "Placeholder, final program length pending confirmation.",
-  approximateCost: "Placeholder, final tuition figure pending confirmation.",
+  // Student-facing wording for figures GTCIO hasn't confirmed yet. Deliberately
+  // not the word "Placeholder" — that's an internal note, and it was rendering
+  // to prospective students. The Studio field descriptions still flag both as
+  // needing replacement, and PROJECT.md §8 tracks them.
+  timeToComplete: "Still being confirmed ahead of the August 2026 launch.",
+  approximateCost: "Still being confirmed ahead of the August 2026 launch.",
   studentFaqTitle: "Student FAQ",
+  // Ordered the way a prospective student actually asks: when → am I eligible →
+  // how do I apply → where/when → how long → how much → what do I get → what
+  // will I earn.
   faqs: [
-    { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program launches in August 2026." },
+    { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program launches in August 2026, and it's open for enrollment now." },
+    { question: "Do I need any experience to start?", answer: "No. The program is built for people coming into the field, whatever their background. You start with the fundamentals — mechanical, electrical, hydraulic, and pneumatic systems — and move on to robotics, PLCs, and automation controls from there." },
+    { question: "How do I apply?", answer: "Applications go through Ogeechee Technical College — the Apply button at the bottom of this page takes you straight there. Admissions will walk you through what's needed. If you'd rather talk to a person first, Jan Moore is the program contact: jmoore@ogeecheetech.edu, 912-688-6026." },
     { question: "Where will classes be held?", answer: "Classes begin in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, and move into GTCIO's new building once it opens. The ribbon cutting is scheduled for October 15, 2026." },
-    { question: "How much can I expect to earn after graduating?", answer: "See the pay ranges below. Most graduates start in entry-level/operator roles and grow from there." },
+    { question: "Is this an online program?", answer: "No. It's in person, in day classes. This is hands-on work on real industrial equipment, so you need to be in the shop. Ogeechee Tech's admissions team has the current class times." },
+    { question: "How long does it take to finish?", answer: "The final program length is still being confirmed ahead of the August 2026 launch. Ogeechee Tech's admissions team can tell you where it lands." },
+    { question: "How much does the program cost?", answer: "The final tuition figure is still being confirmed ahead of the August 2026 launch. Ogeechee Tech's admissions team can give you the current cost." },
     { question: "What credential do I earn?", answer: "Every student who completes the diploma is credentialed through SACA (the Smart Automation Certification Alliance). The SACA credential is built into the program for all graduates, and it's recognized industry-wide, not just in Georgia." },
-    { question: "How much does the program cost?", answer: "Placeholder, final tuition figure pending confirmation." },
-    { question: "How long does it take to finish?", answer: "Placeholder, final program length pending confirmation." },
-    { question: "Is this an online program?", answer: "No. It's in-person, day classes. This is hands-on work, so you need to be in the shop." },
+    { question: "Should I do the diploma or one of the certificates?", answer: "The diploma is the full program, and every diploma graduate is credentialed through SACA. The three certificates — Electrical/Mechanical, PLC, and Robotics — break the same curriculum into smaller pieces, so you can start smaller or focus on just the part of the job you're after. All four options are listed under \"More than one way in\" above." },
+    { question: "How much can I expect to earn after graduating?", answer: "Most graduates start in entry-level or operator roles and grow from there. The pay ranges are listed above: mid-$30ks to low-$40ks starting out, $55k–$70k for a working technician a few years in, and $80k–$100k+ for specialists and supervisors." },
   ],
   applyHeading: "Sign up today, and we'll see you here!",
   applyButton: { label: "APPLY NOW", destination: "apply" as const },

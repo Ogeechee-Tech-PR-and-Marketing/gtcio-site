@@ -460,9 +460,26 @@ that calls the Constant Contact API. The file header documents both paths.
 Smaller items:
 
 - **Content still pending from GTCIO:** final tuition figure and final program
-  length. Both render as visible "Placeholder…" text on the site today (IOT
-  Diploma Program page + its FAQ). The mission statement and the partnership
-  timeline were both outstanding here and are now done.
+  length. They appear in **four** places on the IOT Diploma Program page — the
+  "Time to complete" and "Approximate cost" boxes (`timeToComplete`,
+  `approximateCost`) and the matching FAQ answers (`faqs[_key=="f5"]` and
+  `[_key=="f4"]`) — so replace all four together. They no longer say the word
+  "Placeholder": that was an internal note rendering to prospective students, and
+  now reads "Still being confirmed ahead of the August 2026 launch." The Studio
+  field descriptions still flag them as needing replacement. The mission statement
+  and the partnership timeline were both outstanding here and are now done.
+- **🟡 Financial aid is not mentioned anywhere on the site, deliberately.** It is
+  probably the biggest unanswered question for a prospective student, because the
+  **HOPE Career Grant covers ALL tuition** for eligible programs. OTC's own list
+  (<https://www.ogeecheetech.edu/financial-aid/hope-career-grant>) includes
+  *"Electrical & Industrial Systems Technology"* but **not** Industrial Operations
+  Technology — IS32 is brand new, and the eligible-program list is set annually by
+  the Governor and General Assembly, effective each Fall. **Do not claim IOT is
+  HOPE Career Grant eligible without confirming it with GTCIO** — a student could
+  choose the program believing tuition is free. Jake didn't know as of 2026-07-16;
+  confirm, then add an FAQ. For reference, OTC tuition is ~$107/credit hour
+  in-state, but IS32's credit-hour count isn't published anywhere findable, so the
+  total can't be derived.
 - **Advisory Board section (About page)** ships with placeholder copy
   (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
   under About Page → Advisory Board.
@@ -540,6 +557,16 @@ shows deploy status.
   home hero buttons are IOT Training Programs · IOT Diploma Program · Become a
   Partner (a red "Become a GTCIO Partner" band + a newsletter signup sit lower on
   the home page). Nav/footer links are code-only (`Header.tsx`, `Footer.tsx`).
+- **The IOT Diploma Program FAQ is ordered as a student funnel** (rewritten
+  2026-07-16): when it starts → do I need experience → how do I apply → where →
+  online? → how long → how much → what credential → diploma vs certificates →
+  what I'll earn. Keep new questions in that flow rather than appending. Two facts
+  worth not re-breaking: the "what will I earn" answer says the pay ranges are
+  **above** it (Jobs & pay is section 5, the FAQ is section 6 — it used to say
+  "below", which sent students the wrong way), and the apply answer names **Jan
+  Moore** as the program contact because OTC's own IOT page does. Ogeechee Tech's
+  published admission requirements couldn't be found, so the apply answer routes
+  to Admissions rather than inventing prerequisites.
 - **The mission statement is signed off** (Jan, 2026-07-16): **"Building a
   workforce ready for industry transformation."** It is deliberately the same
   sentence as the Home hero headline — the hero states the mission verbatim, so
