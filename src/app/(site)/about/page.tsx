@@ -89,15 +89,18 @@ const DEFAULTS = {
   faqs: [
     {
       question: "Who runs GTCIO?",
-      answer: "GTCIO is a division of Ogeechee Technical College, part of the Technical College System of Georgia.",
+      answer:
+        "GTCIO is a division of Ogeechee Technical College, part of the Technical College System of Georgia. Ogeechee Tech already delivers the system's most comprehensive noncredit industrial systems and robotics training, and it runs the center as a regional resource rather than a single college's building: it partnered with Southeastern Technical College so manufacturers across both service areas can use it instead of duplicating facilities.",
     },
     {
       question: "Is GTCIO only for students?",
-      answer: "No. We train individual students pursuing a diploma and we partner directly with employers to train and upskill their existing workforce.",
+      answer:
+        "No. Three groups use it. Students earn the Industrial Operations Technology diploma. Employers send the staff they already have for short courses, customized contract training, and DOL-registered apprenticeships. And instructors come from across Georgia and the nation to be trained and certified — Ogeechee Tech is a SACA Regional Instructor Training Center and an Amatrol certified instructor training site.",
     },
     {
       question: "When does the Industrial Operations Technology program start?",
-      answer: "The diploma program launches in August 2026.",
+      answer:
+        "The diploma program launches in August 2026 and is open for enrollment now. The IOT Diploma Program page has the curriculum, the jobs it leads to, the pay to expect, and how to apply.",
     },
     {
       question: "Where is GTCIO located?",
