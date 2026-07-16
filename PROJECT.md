@@ -578,8 +578,14 @@ shows deploy status.
   - The **242,000 hours in 2024** figure (OTC-delivered) was replaced on the page
     2026-07-16 with GTCIO's own **~460,000 hrs/yr instructional capacity**, per Jan.
 - **Office address is 66 AJ Riggs Road, Statesboro, GA 30458** (updated
-  2026-07-15, in `siteSettings.address` + code fallbacks in Footer/Contact). The
-  old "1 Joe Kennedy Blvd." is stale.
+  2026-07-15). The old "1 Joe Kennedy Blvd." is stale — that's OTC's *main
+  campus*, not GTCIO. ⚠️ **The address is duplicated in five places; change all of
+  them together:** `siteSettings.address` (drives Footer + Contact), the code
+  fallbacks in `Footer.tsx` and `(site)/contact/page.tsx`, and the "Where is GTCIO
+  located?" answer in **both** `aboutPage.faqs[_key=="a4"].answer` and the
+  `DEFAULTS.faqs` copy of it in `(site)/about/page.tsx`. The FAQ hardcodes it
+  rather than reading `siteSettings` because the FAQ is plain editor-authored text
+  — a `{address}` placeholder would just confuse whoever edits it.
 - **Project timeline** (from Jan, 2026-07-16; rendered as the vertical timeline in
   About → History, editable at About Page → History → Project timeline): 7/22 push
   for funding begins incl. land acquisition from DABC · 9/22 initial funding
