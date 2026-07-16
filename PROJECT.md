@@ -518,6 +518,36 @@ shows deploy status.
   www.ogeecheetech.edu/IOT. **Every diploma graduate is credentialed through SACA**
   (Smart Automation Certification Alliance) — the site states this explicitly; it
   is not framed as an optional add-on (changed 2026-07-15 per Jan).
+- **🔴 The project-planning PDFs are from 2022 and their specs are SUPERSEDED.**
+  In the parent folder: *OGE FY24-844-1 Project Profile.pdf* (the TCSG capital
+  outlay project profile, 8/19/22 — the richest source), *GISIRTC 1-pager.pdf*,
+  *Georgia Industrial Systems and Industrial Robotics Campus v2.pdf*, and *Capital
+  Outlay FY24 Approved Projects 220901.pdf* (State Board approved list, 9/1/22 —
+  corroborates the 9/22 "initial funding approved" milestone). They call the
+  project **GISIRTC** and quote **37,307 GSF / $22.8–23.5M / 400–480k hours**.
+  **Do not put those numbers on the site** — the 2026 press release figures
+  already there (**40,000 sq ft / $27M / ~460,000 hrs**) are current. Use these
+  PDFs for the *why*, not the specs. (The docs also disagree with each other on
+  FY22 hours: 94,500 in the profile vs 104,000 in the 1-pager.)
+  - Good, usable context from them (now on the site): the college sits **32 miles
+    from the Bryan County mega site**, where the **Hyundai EV plant was projected
+    to bring ~8,100 jobs** and nearby **suppliers ~3,000 more**; demand for
+    industrial systems/robotics technicians already exceeded supply in Georgia;
+    the center was designed to **triple** OTC's training capacity, **anchor the
+    region** (Bulloch/Evans/Screven DAs + the Savannah Harbor–I-16 Corridor JDA:
+    Bryan, Bulloch, Chatham, Effingham), serve as a **training ground for
+    instructors statewide and a replicable TCSG model**, and pair with a
+    **partnership with Southeastern Technical College** so facilities aren't
+    duplicated regionally. Also: ~1,950 students served; DABC owned the parcel.
+  - The **four focus areas** the center was planned around (now the "What the
+    center is built around" section on Facility): Industrial Systems Maintenance ·
+    Industrial Robotics Programming & Fault Diagnostics · IoT Infrastructure &
+    Troubleshooting · CNC within Advanced Manufacturing.
+- **Don't reintroduce the "tours don't interrupt training" framing.** It used to
+  open the Facility hero and sat in About → History and the design milestone. Jan
+  called it a minor facet (2026-07-16); it was removed everywhere and replaced with
+  the demand/Hyundai/regional-anchor story above. Booking a tour is still a real
+  feature — it just isn't the building's reason for existing.
 - **Employer-training facts** come from "OTC Industrial Systems Training
   Program.pdf" (in the parent folder; also published as a flipbook at
   <https://online.fliphtml5.com/exygb/kvbr/#p=1>, which the IOT Training Programs

@@ -16,10 +16,10 @@ const DEFAULTS = {
   heroEyebrow: "Facility",
   heroTitle: "Built for hands-on training",
   heroDescription:
-    "GTCIO's 40,000-square-foot, $27 million facility was designed so campus tours never interrupt day-to-day training and operations.",
+    "A $27 million, 40,000-square-foot center built to train the industrial systems and robotics workforce southeast Georgia's manufacturers are short on.",
   overviewTitle: "Overview",
   overviewBody:
-    "GTCIO's facility serves both credit students and incumbent workers, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. Beyond academic programs, the space also trains and certifies instructors from across Georgia and the nation.",
+    "GTCIO's facility serves both credit students and incumbent workers, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. It was planned as a regional center rather than a single college's building: Ogeechee Tech partnered with Southeastern Technical College to train manufacturers across their service areas once the center came online, which avoids duplicating facilities across the region. The space also trains and certifies instructors from across Georgia and the nation.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
   bookTourTitle: "Book a Tour",
@@ -33,6 +33,32 @@ const DEFAULTS = {
     { value: "~460,000 hrs", label: "Instructional capacity per year" },
   ],
 };
+
+// The four areas the center was planned around, from Ogeechee Tech's capital
+// outlay project profile for the training center. Code, not CMS: these are the
+// project's defining scope, not routine copy.
+const FOCUS_AREAS = [
+  {
+    title: "Industrial Systems Maintenance",
+    detail:
+      "Keeping production equipment running: electrical and mechanical systems, fluid power, motor controls, and the troubleshooting that ties them together.",
+  },
+  {
+    title: "Industrial Robotics Programming & Fault Diagnostics",
+    detail:
+      "Programming industrial robots, and diagnosing them when a line goes down and the robot is the reason.",
+  },
+  {
+    title: "IoT Infrastructure & Troubleshooting",
+    detail:
+      "The connected sensors, networks, and data behind a smart factory, and what to do when that layer misbehaves.",
+  },
+  {
+    title: "CNC in Advanced Manufacturing",
+    detail:
+      "Computer-controlled machining, the precision side of modern manufacturing.",
+  },
+];
 
 export default async function FacilityPage() {
   const { data } = await sanityFetch({ query: FACILITY_PAGE_QUERY });
@@ -79,6 +105,24 @@ export default async function FacilityPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.overviewTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">{page.overviewBody}</p>
+        </div>
+      </section>
+
+      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-black">What the center is built around</h2>
+          <p className="mt-3 max-w-3xl text-brand-silver">
+            The center was planned around four areas of advanced manufacturing, the
+            skills southeast Georgia&apos;s employers are hiring for.
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {FOCUS_AREAS.map((area) => (
+              <div key={area.title} className="border-l-4 border-brand-red pl-5">
+                <h3 className="font-heading text-lg font-bold text-brand-black">{area.title}</h3>
+                <p className="mt-1 text-sm text-brand-silver">{area.detail}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

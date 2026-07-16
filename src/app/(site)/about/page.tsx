@@ -27,7 +27,7 @@ const DEFAULTS = {
   bdaQuoteAttribution: "Benjy Thompson — CEO, Development Authority of Bulloch County",
   historyTitle: "History",
   historyBody:
-    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It serves credit students and incumbent workers alike. Tours run through the building without interrupting day-to-day training. That was a design decision from the start. Beyond academic programs, GTCIO also runs customized workforce development for regional employers, and trains and certifies instructors from across Georgia and the nation.",
+    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outran the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply than Georgia industry could hire. The center was planned as a regional answer to that, serving credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
   historyTimeline: [
     {
       date: "July 2022",
@@ -38,7 +38,8 @@ const DEFAULTS = {
     {
       date: "September 2022",
       title: "Initial funding approved",
-      detail: "The project clears its first funding hurdle and moves from idea to plan.",
+      detail:
+        "The Technical College System of Georgia's state board approves the project on its FY24 capital outlay list, clearing the way from idea to plan.",
     },
     {
       date: "July 2023",
@@ -56,7 +57,7 @@ const DEFAULTS = {
       date: "September 2023",
       title: "Design begins",
       detail:
-        "Design work starts on a building meant to host tours without interrupting training, a requirement from day one.",
+        "Design work starts on a building meant to triple Ogeechee Tech's industrial systems and robotics training capacity, anchor training for the wider region, and serve as a model other technical colleges in Georgia can replicate.",
     },
     {
       date: "June 2025",
