@@ -7,24 +7,19 @@ export default defineType({
   type: "document",
   groups: [
     { name: "hero", title: "Top of page", default: true },
-    { name: "cards", title: "Students & Employers" },
+    { name: "cards", title: "Training for employers" },
     { name: "faq", title: "Employer FAQ" },
   ],
   fields: [
     ...heroFields("hero"),
 
     defineField({
-      name: "studentsBody",
-      title: '"For Students" box',
-      type: "text",
-      rows: 3,
-      group: "cards",
-    }),
-    defineField({
       name: "employersBody",
-      title: '"For Employers" box',
+      title: '"Training for employers" opening paragraph',
+      description:
+        "The first paragraph under the Training for employers heading. The credentials, services, and course lists further down the page are fixed and not editable here.",
       type: "text",
-      rows: 3,
+      rows: 5,
       group: "cards",
     }),
 

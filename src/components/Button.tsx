@@ -5,6 +5,9 @@ type ButtonProps = {
   children: React.ReactNode;
   variant?: "primary" | "outline" | "dark";
   className?: string;
+  /** Set to "_blank" for links off this site; pair with rel="noopener noreferrer". */
+  target?: string;
+  rel?: string;
 };
 
 const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
@@ -13,10 +16,12 @@ const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
   dark: "bg-brand-black text-brand-white hover:bg-brand-red",
 };
 
-export default function Button({ href, children, variant = "primary", className = "" }: ButtonProps) {
+export default function Button({ href, children, variant = "primary", className = "", target, rel }: ButtonProps) {
   return (
     <Link
       href={href}
+      target={target}
+      rel={rel}
       className={`font-ui inline-block px-7 py-3 text-sm transition-colors ${variants[variant]} ${className}`}
     >
       {children}

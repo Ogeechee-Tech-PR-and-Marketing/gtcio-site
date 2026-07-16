@@ -42,9 +42,9 @@ export default function Footer({
           <Image
             src="/images/gtcio-logo.png"
             alt="GTCIO — Georgia Training Center for Industrial Operations"
-            width={200}
-            height={80}
-            className="h-12 w-auto brightness-0 invert"
+            width={320}
+            height={128}
+            className="h-20 w-auto brightness-0 invert sm:h-24"
           />
           <p className="mt-4 text-sm text-brand-silver">{tagline}</p>
         </div>
@@ -73,8 +73,20 @@ export default function Footer({
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-6 py-5 text-center text-xs text-brand-silver sm:px-10">
-        © {new Date().getFullYear()} Georgia Training Center for Industrial Operations. All rights reserved.
+      <div className="border-t border-white/10 px-6 py-5 sm:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 text-xs text-brand-silver sm:flex-row sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} Georgia Training Center for Industrial Operations. All rights reserved.
+          </p>
+          <a
+            href="https://www.ogeecheetech.edu/about/equal-opportunity"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-brand-white"
+          >
+            Equal Opportunity Institution
+          </a>
+        </div>
       </div>
     </footer>
   );

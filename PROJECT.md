@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-15. Check claims against the code before trusting them.
+updated 2026-07-16. Check claims against the code before trusting them.
 
 ---
 
@@ -429,6 +429,17 @@ shows deploy status.
   the home page). Nav/footer links are code-only (`Header.tsx`, `Footer.tsx`).
 - **Partners page is the priority page.** Jan called it out as needing to work
   "even before the website."
+- **IOT Training Programs page is employer-facing.** The old "For Students" box
+  was removed 2026-07-16 (students are served by the IOT Diploma Program page), and
+  `trainingPage.studentsBody` was dropped from the schema and unset in the dataset.
+  Only the opening paragraph and the FAQ are CMS-editable; the stats, credentials,
+  services, and course lists are code constants in the page (they're standing facts
+  from the brochure, not routine copy). The section directly under any PageHero
+  should stay **light** — a dark band there makes the hero photo read as fading to
+  black early and opens a large empty gap. That was a real complaint.
+- **Footer** carries an "Equal Opportunity Institution" link to
+  <https://www.ogeecheetech.edu/about/equal-opportunity>, matching OTC's own
+  footer convention. Keep it — it's an institutional compliance link.
 - The five current partners: Development Authority of Bulloch County, Koyo
   Bearings, Georgia Power, Ajin Georgia, Amazon.
 - Useful confirmed facts (from OTC's 2026-07-09 press release): $27M / 40,000 sq
@@ -437,15 +448,35 @@ shows deploy status.
   www.ogeecheetech.edu/IOT. **Every diploma graduate is credentialed through SACA**
   (Smart Automation Certification Alliance) — the site states this explicitly; it
   is not framed as an optional add-on (changed 2026-07-15 per Jan).
-- **Employer-training facts** (from "OTC Industrial Systems Training Program.pdf",
-  used on the IOT Training Programs page): 242,000 industrial-systems training
-  hours delivered in 2024; the only authorized FANUC satellite training site in
-  Georgia; SACA Gold Certification Site + Regional Instructor Training Center;
-  Amatrol Certified Instructor Training Site; Mitsubishi Electric Automation
-  Training Provider; DOL-registered apprenticeships (18 mo, 576 training + 4,000
-  OJT hrs, up to 14 SACA credentials); short courses ~$450–$950, comprehensive
-  ~$4,750–$7,750. **Hal McCool no longer works there — do not re-add him** (he was
-  the brochure's contact; removed 2026-07-15).
+- **Employer-training facts** come from "OTC Industrial Systems Training
+  Program.pdf" (in the parent folder; also published as a flipbook at
+  <https://online.fliphtml5.com/exygb/kvbr/#p=1>, which the IOT Training Programs
+  page links to as "VIEW THE CATALOG"). Read the PDF with
+  `/usr/bin/python3 -m pip install --user pypdf` → `pypdf.PdfReader(...)`;
+  poppler is not installed and builds from source too slowly to bother.
+  Facts used on the page: the only authorized FANUC satellite training site in
+  Georgia; SACA Gold Certification Site + Regional Instructor Training Center
+  (first in Georgia); Amatrol Certified Instructor Training Site; Mitsubishi
+  Electric Automation Training Provider; Advanced Manufacturing Academy Training
+  Center; training team has 120+ yrs combined in-field and 80 yrs training
+  experience; entry-level Fast Track 256 hrs / 16 weeks / $4,750; apprenticeships
+  384 hrs / $7,750 + 4,000 OJT hrs; short courses $450–$950, FANUC robotics/CNC
+  $750–$1,936; approved SACA testing site (Silver and Gold).
+  - ⚠️ **The brochure contradicts itself on apprenticeship length** — p16 says a
+    12-month span (one 8-hr day/week, which matches the 384 hrs in the pricing
+    table), p17 says "18-month program: 576 training hours", p18 says 11 months.
+    The site deliberately states only the self-consistent figures (384 hrs, ~one
+    8-hr day/week, 4,000 OJT) and avoids naming a total duration. **Confirm with
+    GTCIO before publishing a month count.**
+  - ⚠️ The brochure's "AT A GLANCE" also names a *Georgia Industrial Systems and
+    Robotics Training Center, Coming FALL 2026* — a different name from GTCIO.
+    Unclear whether it's the same facility rebranded. Don't conflate them.
+  - Credentials require passing the SACA exam; completing a course alone does not
+    award one (brochure p18). The site says so explicitly.
+  - **Hal McCool no longer works there — do not re-add him** (he was the
+    brochure's contact; removed 2026-07-16). Training enquiries point to Jan Moore.
+  - The **242,000 hours in 2024** figure (OTC-delivered) was replaced on the page
+    2026-07-16 with GTCIO's own **~460,000 hrs/yr instructional capacity**, per Jan.
 - **Office address is 66 AJ Riggs Road, Statesboro, GA 30458** (updated
   2026-07-15, in `siteSettings.address` + code fallbacks in Footer/Contact). The
   old "1 Joe Kennedy Blvd." is stale.
