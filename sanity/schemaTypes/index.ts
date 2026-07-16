@@ -3,6 +3,7 @@ import type { SchemaTypeDefinition } from "sanity";
 import faq from "./objects/faq";
 import statCard from "./objects/statCard";
 import pathwayCard from "./objects/pathwayCard";
+import timelineEvent from "./objects/timelineEvent";
 
 import siteSettings from "./documents/siteSettings";
 import partner from "./documents/partner";
@@ -22,6 +23,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faq,
     statCard,
     pathwayCard,
+    timelineEvent,
     siteSettings,
     partner,
     newsItem,

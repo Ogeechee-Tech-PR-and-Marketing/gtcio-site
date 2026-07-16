@@ -535,6 +535,24 @@ shows deploy status.
 - **Office address is 66 AJ Riggs Road, Statesboro, GA 30458** (updated
   2026-07-15, in `siteSettings.address` + code fallbacks in Footer/Contact). The
   old "1 Joe Kennedy Blvd." is stale.
+- **Project timeline** (from Jan, 2026-07-16; rendered as the vertical timeline in
+  About → History, editable at About Page → History → Project timeline): 7/22 push
+  for funding begins incl. land acquisition from DABC · 9/22 initial funding
+  approved · 7/23 design team selected, **PRAXIS3** (Atlanta architecture/design
+  firm, praxis3.com — verified) · 8/23 construction team selected, **ICB
+  Construction Group** (Macon general contractor, icbconstructiongroup.com —
+  verified; a directory lists the legal name "International City Builders" but
+  their own site doesn't, so the site doesn't claim it) · 9/23 design starts ·
+  6/25 construction starts · 9/26 construction targeted for completion ·
+  **ribbon cutting 10/15/26**.
+  - ⚠️ **Date tension worth resolving:** the IOT diploma program launches **August
+    2026**, but construction completes **September 2026** and the ribbon cutting is
+    **October 15, 2026** — i.e. classes start before the building opens. Both facts
+    are now on the site (Home/IOT pages vs About → History). Probably fine (classes
+    may begin in existing OTC space) but nobody has confirmed it. Tour booking
+    opening 10/26 is consistent with the 10/15 ribbon cutting.
+  - Jan's source note said "9/26 HOPEFULLY finished" — the site says "targeted for
+    completion"/"scheduled" instead. Don't publish the hedge verbatim.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.

@@ -89,8 +89,17 @@ export default defineType({
       group: "history",
     }),
     defineField({
+      name: "historyTimeline",
+      title: "Project timeline",
+      description:
+        "The milestones shown as a vertical timeline. Drag to reorder — they display in the order listed here, so keep them oldest-first.",
+      type: "array",
+      of: [{ type: "timelineEvent" }],
+      group: "history",
+    }),
+    defineField({
       name: "historyNote",
-      title: "Small note under the paragraph",
+      title: "Small note under the timeline",
       description: "Clear this field to remove the italic note from the page.",
       type: "string",
       group: "history",

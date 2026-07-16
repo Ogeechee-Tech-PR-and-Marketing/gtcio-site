@@ -28,7 +28,53 @@ const DEFAULTS = {
   historyTitle: "History",
   historyBody:
     "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It serves credit students and incumbent workers alike. Tours run through the building without interrupting day-to-day training. That was a design decision from the start. Beyond academic programs, GTCIO also runs customized workforce development for regional employers, and trains and certifies instructors from across Georgia and the nation.",
-  historyNote: "(Full partnership history and timeline to be added.)",
+  historyTimeline: [
+    {
+      date: "July 2022",
+      title: "The push for funding begins",
+      detail:
+        "Work kicks off to fund the project, including acquiring the land from the Development Authority of Bulloch County.",
+    },
+    {
+      date: "September 2022",
+      title: "Initial funding approved",
+      detail: "The project clears its first funding hurdle and moves from idea to plan.",
+    },
+    {
+      date: "July 2023",
+      title: "Design team selected",
+      detail:
+        "PRAXIS3, an Atlanta-based architecture and design firm, is chosen to design the facility.",
+    },
+    {
+      date: "August 2023",
+      title: "Construction team selected",
+      detail:
+        "ICB Construction Group, a general contractor based in Macon, is brought on to build it.",
+    },
+    {
+      date: "September 2023",
+      title: "Design begins",
+      detail:
+        "Design work starts on a building meant to host tours without interrupting training, a requirement from day one.",
+    },
+    {
+      date: "June 2025",
+      title: "Construction begins",
+      detail: "Ground is broken on the 40,000-square-foot facility.",
+    },
+    {
+      date: "September 2026",
+      title: "Construction targeted for completion",
+      detail: "The building is scheduled to be finished and handed over.",
+    },
+    {
+      date: "October 15, 2026",
+      title: "Ribbon cutting",
+      detail: "GTCIO officially opens its doors.",
+    },
+  ],
+  historyNote: "",
   advisoryTitle: "Advisory Board",
   advisoryBody:
     "GTCIO's curriculum is shaped by an advisory board of regional employers and industry leaders, so what we teach stays aligned with the equipment and skills the workforce actually needs.",
@@ -53,14 +99,25 @@ const DEFAULTS = {
   ],
 };
 
+type TimelineEvent = {
+  _key?: string;
+  date: string;
+  title: string;
+  detail?: string;
+};
+
 export default async function AboutPage() {
   const { data } = await sanityFetch({ query: ABOUT_PAGE_QUERY });
   const typed = data as (Partial<typeof DEFAULTS> & {
     heroImage?: SanityImage;
     heroImageAlt?: string;
+    historyTimeline?: TimelineEvent[];
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const faqs = typed?.faqs?.length ? typed.faqs : DEFAULTS.faqs;
+  const timeline: TimelineEvent[] = typed?.historyTimeline?.length
+    ? typed.historyTimeline
+    : DEFAULTS.historyTimeline;
 
   const hero = resolveHeroImage({
     image: typed?.heroImage,
@@ -97,7 +154,32 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
           <p className="mt-4 text-brand-black">{page.historyBody}</p>
-          {page.historyNote && <p className="mt-4 text-sm text-brand-silver">{page.historyNote}</p>}
+
+          {timeline.length > 0 && (
+            <ol className="mt-12 border-l-2 border-brand-silver/30 pl-8 sm:pl-10">
+              {timeline.map((item: TimelineEvent, i: number) => (
+                <li
+                  key={item._key ?? `${item.date}-${i}`}
+                  className="relative pb-10 last:pb-0"
+                >
+                  {/* Sits on the 2px rule: half the dot (8px) + half the border (1px). */}
+                  <span
+                    aria-hidden
+                    className="absolute -left-[41px] top-1.5 h-4 w-4 rounded-full border-[3px] border-brand-white bg-brand-red sm:-left-[49px]"
+                  />
+                  <p className="font-display text-sm text-brand-red">{item.date}</p>
+                  <h3 className="font-heading mt-1 text-lg font-bold text-brand-black">
+                    {item.title}
+                  </h3>
+                  {item.detail && (
+                    <p className="mt-1 max-w-2xl text-brand-silver">{item.detail}</p>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
+
+          {page.historyNote && <p className="mt-8 text-sm text-brand-silver">{page.historyNote}</p>}
         </div>
       </section>
 
