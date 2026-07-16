@@ -17,8 +17,18 @@ export default defineType({
     ...heroFields("hero"),
 
     defineField({
+      name: "missionStatement",
+      title: "Mission statement",
+      description:
+        "The formal mission statement, shown large at the top of the Mission section. Keep it to one sentence.",
+      type: "text",
+      rows: 2,
+      group: "mission",
+    }),
+    defineField({
       name: "missionBody",
       title: "Mission paragraph",
+      description: "The supporting paragraph under the mission statement.",
       type: "text",
       rows: 5,
       group: "mission",

@@ -13,9 +13,10 @@ const DEFAULTS = {
   heroTitle: "Building Georgia's industrial workforce, together",
   heroDescription:
     "GTCIO exists to close the gap between the skills employers need and the training available to fill those roles.",
+  missionStatement: "Building a workforce ready for industry transformation.",
   missionBody:
     "GTCIO trains people for jobs in industrial automation, the kind of work Georgia employers are actively short on candidates for. These jobs pay well, and the demand isn't slowing down. GTCIO exists to meet that demand: training new workers coming up, and helping employers upskill the ones they already have.",
-  missionNote: "(Formal mission-statement wording pending final sign-off from GTCIO leadership.)",
+  missionNote: "",
   missionQuote:
     "We are surrounded by industries that are looking for employees with these skill sets. The jobs pay well, offer excellent career growth opportunities, and the demand continues to increase.",
   missionQuoteAttribution: "Jan Moore — Vice President for Economic Development, Ogeechee Technical College",
@@ -152,7 +153,12 @@ export default async function AboutPage() {
       <section id="mission" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">Mission</h2>
-          <p className="mt-4 text-brand-black">{page.missionBody}</p>
+          {page.missionStatement && (
+            <p className="font-display mt-4 text-3xl leading-tight text-brand-black sm:text-4xl">
+              {page.missionStatement}
+            </p>
+          )}
+          <p className="mt-6 text-brand-black">{page.missionBody}</p>
           {page.missionNote && <p className="mt-4 text-sm text-brand-silver">{page.missionNote}</p>}
           <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
             <p className="text-lg italic text-brand-black">&ldquo;{page.missionQuote}&rdquo;</p>

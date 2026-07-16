@@ -444,9 +444,10 @@ that calls the Constant Contact API. The file header documents both paths.
 
 Smaller items:
 
-- **Content still pending from GTCIO:** final tuition figure, final program length,
-  formal mission-statement sign-off, fuller partnership-history timeline. These
-  render as visible "Placeholder…" text on the site today.
+- **Content still pending from GTCIO:** final tuition figure and final program
+  length. Both render as visible "Placeholder…" text on the site today (IOT
+  Diploma Program page + its FAQ). The mission statement and the partnership
+  timeline were both outstanding here and are now done.
 - **Advisory Board section (About page)** ships with placeholder copy
   (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
   under About Page → Advisory Board.
@@ -523,6 +524,13 @@ shows deploy status.
   home hero buttons are IOT Training Programs · IOT Diploma Program · Become a
   Partner (a red "Become a GTCIO Partner" band + a newsletter signup sit lower on
   the home page). Nav/footer links are code-only (`Header.tsx`, `Footer.tsx`).
+- **The mission statement is signed off** (Jan, 2026-07-16): **"Building a
+  workforce ready for industry transformation."** It is deliberately the same
+  sentence as the Home hero headline — the hero states the mission verbatim, so
+  **if one changes, change both** (`aboutPage.missionStatement` and
+  `homePage.heroTitle`, plus the code `DEFAULTS` for each). The old "(Formal
+  mission-statement wording pending final sign-off…)" note is gone; don't
+  reintroduce it.
 - **Partners page is the priority page.** Jan called it out as needing to work
   "even before the website."
 - **IOT Training Programs page is employer-facing.** The old "For Students" box
