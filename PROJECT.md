@@ -379,6 +379,32 @@ account, so Sanity's per-user history can't tell you *which person* changed
 something; (b) the credential must be rotated when someone leaves. Dataset revision
 history is 90 days, so content mistakes are recoverable.
 
+**🔴 Publishing in the Studio does not update the live site.** There are **no
+Sanity webhooks** configured (`npx sanity hook list` → empty, verified
+2026-07-16), and every page is statically prerendered at build time. `SanityLive`
+is supposed to cover this, but it revalidates via a **client-side** server action
+(`revalidateTag(tag, 'max')` in `next-sanity/dist/live/server-actions`) that only
+fires *if someone has the affected page open in a browser at the moment of
+publish*. If marketing publishes and nobody is on the site, the static page keeps
+serving stale content until the next deploy. **This defeats the point of the CMS**
+— fix before handing the site to Jan's team. Two manual steps (neither can be
+scripted: Vercel deploy-hook creation needs a dashboard token, and
+`sanity hooks create` is interactive-only):
+
+1. Vercel → project **gtcio-site** → Settings → Git → **Deploy Hooks** → create
+   one named `sanity-publish` on branch `main`; copy the URL.
+2. <https://www.sanity.io/manage/project/kjz4q8d4> → API → **Webhooks** → create
+   one pointing at that URL: dataset `production`, trigger on
+   Create/Update/Delete, filter `_type != "formSubmission"` (form submissions are
+   written by the site itself — without this filter every inquiry triggers a
+   rebuild).
+
+A `revalidatePath` API route was considered instead (faster, no rebuild) but
+rejected: `cacheComponents` is off, so pages use the fetch cache, and
+`revalidatePath` would re-render the page while `sanityFetch` could still return
+its own cached response — the same staleness `rm -rf .next/cache` fixes locally.
+A full rebuild is the guaranteed-correct option and publishes are infrequent.
+
 **🟡 Newsletter signup is UI-only.** `src/components/NewsletterSignup.tsx` on the
 home page validates an email and shows a confirmation but **sends nothing** — no
 address is stored or transmitted. GTCIO expects to use **Constant Contact**. To
@@ -394,9 +420,14 @@ Smaller items:
 - **Advisory Board section (About page)** ships with placeholder copy
   (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
   under About Page → Advisory Board.
-- **Partner website links:** the Partners blocks link out only once each partner's
-  `website` URL is set in the Studio. All five current partners currently have no
-  URL, so their blocks render as non-clickable cards.
+- **Partner website links:** each partner block shows a red **LEARN MORE** button
+  only when that partner's `website` URL is set. Verified and set 2026-07-16:
+  Development Authority of Bulloch County → advantagebulloch.com, Ajin Georgia →
+  ajingeorgia.com, Georgia Power → georgiapower.com. **Still unset (ambiguous,
+  awaiting Jake):** *Koyo Bearings* (JTEKT rebranded the Koyo bearings brand to
+  JTEKT in 2022 — unclear whether to link koyo.jtekt.co.jp, jtekt-na.com, or the
+  local plant) and *Amazon* (corporate aboutamazon.com vs retail amazon.com).
+  Verify any partner URL against the real site before setting it.
 - **News page is empty.** `/news` shows a "coming soon" state until `newsItem`
   documents are added (press releases + media mentions). Load the OTC IOT press
   release as the first entry when ready.

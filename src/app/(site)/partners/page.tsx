@@ -101,54 +101,43 @@ export default async function PartnersPage() {
         </div>
       </section>
 
-      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section className="border-b border-brand-silver/30 bg-brand-silver/10 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.directoryTitle}</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">{page.directoryIntro}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {partners.map((partner) => {
-              const block = (
-                <>
-                  <div className="relative flex h-24 items-center justify-center border-b border-brand-silver/30 pb-6">
-                    {partner.logo && (
-                      <Image
-                        // Width only: passing a height too makes Sanity crop the
-                        // logo to that aspect ratio and clip wordmarks.
-                        src={urlForImage(partner.logo).width(480).fit("max").url()}
-                        alt={`${partner.name} logo`}
-                        fill
-                        sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
-                        className="object-contain p-2"
-                      />
-                    )}
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <p className="font-heading text-lg font-bold text-brand-black">{partner.name}</p>
-                    <p className="mt-2 flex-1 text-sm text-brand-silver">{partner.description}</p>
-                    {partner.website && (
-                      <span className="font-heading mt-4 inline-block text-sm font-bold tracking-wide text-brand-red group-hover:text-brand-black">
-                        Visit website →
-                      </span>
-                    )}
-                  </div>
-                </>
-              );
-              return partner.website ? (
-                <a
-                  key={partner._id}
-                  href={partner.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col border border-brand-silver/40 transition-colors hover:border-brand-red"
-                >
-                  {block}
-                </a>
-              ) : (
-                <div key={partner._id} className="flex flex-col border border-brand-silver/40">
-                  {block}
+            {partners.map((partner) => (
+              <div
+                key={partner._id}
+                className="flex flex-col border border-brand-silver/20 bg-brand-white p-6 shadow-sm"
+              >
+                <div className="relative flex h-28 items-center justify-center">
+                  {partner.logo && (
+                    <Image
+                      // Width only: passing a height too makes Sanity crop the
+                      // logo to that aspect ratio and clip wordmarks.
+                      src={urlForImage(partner.logo).width(480).fit("max").url()}
+                      alt={`${partner.name} logo`}
+                      fill
+                      sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
+                      className="object-contain"
+                    />
+                  )}
                 </div>
-              );
-            })}
+                <h3 className="font-heading mt-6 text-xl font-bold text-brand-black">{partner.name}</h3>
+                <p className="mt-2 flex-1 text-sm text-brand-silver">{partner.description}</p>
+                {partner.website && (
+                  <a
+                    href={partner.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-ui mt-6 inline-block self-start bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
+                  >
+                    LEARN MORE
+                  </a>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
