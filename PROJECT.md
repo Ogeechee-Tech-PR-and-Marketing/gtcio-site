@@ -699,9 +699,16 @@ shows deploy status.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.
-- **`SITEMAP.html` is the stakeholder-facing sitemap** — a single self-contained
-  page (no external assets, opens offline in any browser) that Jake sends to Jan
-  for sign-off. It lists every route, each page's sections, the linkable `#anchors`,
+- **`public/SITEMAP.html` is the stakeholder-facing sitemap** — a single
+  self-contained page (no external assets, opens offline in any browser) that Jake
+  distributes for sign-off. It lives in `public/` so it serves at
+  <https://gtcio-site.vercel.app/SITEMAP.html> for sharing by link. It carries
+  `<meta name="robots" content="noindex, nofollow">`. **Do not also add a
+  robots.txt `Disallow` for it** — a Disallow stops crawlers fetching the page,
+  so they never see the noindex, and the bare URL can still be indexed. The meta
+  tag is the stronger signal on its own. ⚠️ Being in `public/` makes it
+  **publicly reachable by anyone with the URL** — it is unlisted, not private, so
+  keep anything genuinely sensitive off it. It lists every route, each page's sections, the linkable `#anchors`,
   which pages carry forms, and a teal/gold status dot per section marking *built &
   populated* vs *built, awaiting content*. **Keep it in sync — it is a deliverable
   that goes to the VP, so a stale one misrepresents the project.** Update it
