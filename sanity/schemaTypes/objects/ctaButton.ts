@@ -30,6 +30,8 @@ export default defineType({
           { title: "About page", value: "about" },
           { title: "IOT Training Programs page", value: "training" },
           { title: "IOT Diploma Program page", value: "iot" },
+          { title: "IOT Diploma Program — Courses & credit hours", value: "curriculum" },
+          { title: "IOT Diploma Program — SACA certifications", value: "certifications" },
           { title: "Facility page", value: "facility" },
           // "tour" removed 2026-07-20 — tour booking is off the site until
           // 2026-10-26. Restore this option (value must stay "tour" to match
@@ -39,6 +41,8 @@ export default defineType({
           { title: "News page", value: "news" },
           { title: "Contact page", value: "contact" },
           { title: "Apply at Ogeechee Tech (ogeecheetech.edu/admissions/next-steps)", value: "apply" },
+          { title: "Read the IOT program brochure online (flipbook)", value: "iotProgramFlipbook" },
+          { title: "Download the IOT program brochure (PDF)", value: "iotProgramPdf" },
           { title: "Somewhere else (type a web address)", value: "external" },
         ],
       },

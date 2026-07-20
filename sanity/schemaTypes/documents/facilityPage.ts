@@ -28,6 +28,7 @@ export default defineType({
   groups: [
     { name: "hero", title: "Top of page", default: true },
     { name: "stats", title: "Stats & overview" },
+    { name: "rendering", title: "Building rendering" },
     { name: "focus", title: "What it's built around" },
     { name: "gallery", title: "Photo gallery" },
   ],
@@ -54,6 +55,26 @@ export default defineType({
       type: "text",
       rows: 4,
       group: "stats",
+    }),
+
+    // The rendering image itself is in the code (public/images), not uploadable
+    // here — it is the architect's drawing of a building under construction,
+    // not a photo that changes. Swap it for real photography once the building
+    // opens, via the Photo gallery below.
+    defineField({
+      name: "renderingTitle",
+      title: "Section heading",
+      type: "string",
+      group: "rendering",
+    }),
+    defineField({
+      name: "renderingCaption",
+      title: "Caption under the image",
+      description:
+        "Keep the word \"rendering\" in here. The building is still under construction, and an uncaptioned drawing reads as a photo of a finished facility.",
+      type: "text",
+      rows: 3,
+      group: "rendering",
     }),
 
     defineField({

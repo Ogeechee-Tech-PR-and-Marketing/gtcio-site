@@ -25,12 +25,19 @@ const DEFAULTS = {
     { label: "Women's Manufacturing Network", url: "https://www.wmnorg.com" },
     { label: "WIM Georgia", url: "https://www.womeninmanufacturing.org/georgia" },
   ],
+  viewProgramButton: { label: "VIEW IOT PROGRAM", destination: "iotProgramFlipbook" as const },
+  downloadProgramButton: { label: "DOWNLOAD IOT PROGRAM", destination: "iotProgramPdf" as const },
   curriculumTitle: "Curriculum & credentials",
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
     { stage: "Advanced", detail: "Robotics, programmable logic controllers (PLCs), automation controls, smart sensors, industrial wiring, and motor controls." },
     { stage: "Credential", detail: "Every graduate earns the diploma and is credentialed through the Smart Automation Certification Alliance (SACA) — an industry-recognized certification built into the program, not an optional add-on." },
   ],
+  courseDetailHeading: "Every course, in detail",
+  courseDetailBody:
+    "The diploma is 12 courses and 45 credit hours. See exactly what each course covers and which industry certification it prepares you for.",
+  curriculumButton: { label: "COURSES & CREDIT HOURS", destination: "curriculum" as const },
+  certificationsButton: { label: "SACA CERTIFICATIONS", destination: "certifications" as const },
   moreWaysTitle: "More than one way in",
   moreWaysBody:
     "The diploma isn't the only option. OTC also breaks the same curriculum into three standalone certificates, so you can start smaller, or focus on just the part of the job you're after.",
@@ -125,7 +132,16 @@ export default async function IotDiplomaProgramPage() {
         image={hero.src}
         imageAlt={hero.alt}
         imagePosition={hero.position}
-        cta={<CtaButton button={page.applyButton} variant="primary" />}
+        cta={
+          // Three buttons: apply, read the brochure, save the brochure. They
+          // wrap rather than shrink — at 375px each takes its own row, which
+          // keeps the long "DOWNLOAD IOT PROGRAM" label on one line.
+          <div className="flex flex-wrap gap-3">
+            <CtaButton button={page.applyButton} variant="primary" />
+            <CtaButton button={page.viewProgramButton} variant="heroOutline" />
+            <CtaButton button={page.downloadProgramButton} variant="heroOutline" />
+          </div>
+        }
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
@@ -178,6 +194,19 @@ export default async function IotDiplomaProgramPage() {
                 <p className="mt-2 text-sm text-brand-silver">{stage.detail}</p>
               </div>
             ))}
+          </div>
+
+          {/* Gateway to the two detail pages. Kept out of the top nav (Jake,
+              2026-07-20) — a prospective student reaches them from here. */}
+          <div className="mt-10 border-l-4 border-brand-teal bg-brand-black/[0.03] p-6 sm:p-8">
+            <h3 className="font-heading text-xl font-bold text-brand-black">
+              {page.courseDetailHeading}
+            </h3>
+            <p className="mt-3 max-w-2xl text-brand-silver">{page.courseDetailBody}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <CtaButton button={page.curriculumButton} variant="primary" />
+              <CtaButton button={page.certificationsButton} variant="outline" />
+            </div>
           </div>
         </div>
       </section>

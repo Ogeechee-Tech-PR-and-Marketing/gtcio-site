@@ -1,9 +1,14 @@
 import Button from "@/components/Button";
-import { resolveHref, isExternal, type CtaButton as CtaButtonData } from "@/sanity/lib/links";
+import {
+  resolveHref,
+  isExternal,
+  DOWNLOAD_DESTINATIONS,
+  type CtaButton as CtaButtonData,
+} from "@/sanity/lib/links";
 
 type Props = {
   button?: CtaButtonData | null;
-  variant?: "primary" | "outline" | "dark";
+  variant?: "primary" | "outline" | "heroOutline" | "dark";
   className?: string;
 };
 
@@ -17,6 +22,9 @@ export default function CtaButton({ button, variant = "primary", className }: Pr
   if (!href || !button?.label) return null;
 
   const external = isExternal(href);
+  // A file destination saves rather than navigates, so it is never "external"
+  // in the new-tab sense — the two branches are mutually exclusive.
+  const isDownload = !!button.destination && DOWNLOAD_DESTINATIONS.has(button.destination);
   return (
     <Button
       href={href}
@@ -24,6 +32,7 @@ export default function CtaButton({ button, variant = "primary", className }: Pr
       className={className}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
+      download={isDownload || undefined}
     >
       {button.label}
     </Button>

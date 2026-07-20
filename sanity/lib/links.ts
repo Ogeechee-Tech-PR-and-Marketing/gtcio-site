@@ -13,6 +13,8 @@ export const DESTINATIONS = {
   about: "/about",
   training: "/training",
   iot: "/iot-diploma-program",
+  curriculum: "/iot-diploma-program/curriculum",
+  certifications: "/iot-diploma-program/certifications",
   facility: "/facility",
   // "tour" removed 2026-07-20 — tour booking is off the site until
   // 2026-10-26. Restore as `tour: "/facility#book-a-tour"` once the Book a
@@ -22,7 +24,19 @@ export const DESTINATIONS = {
   news: "/news",
   contact: "/contact",
   apply: "https://www.ogeecheetech.edu/admissions/next-steps",
+  // The "Industrial Operations Program" brochure, in the two forms the site
+  // offers it — the same pairing the Training page uses for the employer
+  // catalog. The flipbook lives in the same fliphtml5 account (`exygb`).
+  iotProgramFlipbook: "https://online.fliphtml5.com/exygb/xhzf/#p=1",
+  iotProgramPdf: "/documents/industrial-operations-program.pdf",
 } as const;
+
+/**
+ * Destinations that are a file rather than a page. `CtaButton` adds a
+ * `download` attribute for these so the browser saves the PDF instead of
+ * navigating away from the site.
+ */
+export const DOWNLOAD_DESTINATIONS = new Set<string>(["iotProgramPdf"]);
 
 export type Destination = keyof typeof DESTINATIONS | "external";
 

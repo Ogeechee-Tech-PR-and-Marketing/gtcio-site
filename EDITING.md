@@ -260,6 +260,7 @@ layout:
 - The "What's Industrial Operations Technology?" video placeholder
 - The GTCIO logo
 - Adding a brand-new page
+- **The course lists on the two IOT course pages** (see the box below)
 
 Nearly everything else — every heading, paragraph, box, stat, button, FAQ, photo,
 partner, news item, and the project timeline — you can change yourself.
@@ -273,3 +274,22 @@ If you need one of these, or you get stuck, ask whoever set the site up.
 > right now it does not actually store or send anyone's email. Don't rely on it to
 > collect subscribers until whoever set the site up connects it. Nothing is lost
 > that was never captured, but the box currently just shows the thank-you message.
+
+> ### The two IOT course pages are a special case
+>
+> The IOT Diploma Program page links out to two more pages — **Courses & Credit
+> Hours** and **SACA Certifications**. You won't find them in the Studio's page
+> list, and that's on purpose.
+>
+> Everything on them (the course table, the credit hours, the certification
+> descriptions) is copied word-for-word from Ogeechee Tech's official
+> Industrial Operations Program brochure. Because that's the accredited course
+> catalog, a typo there would misstate the program to a student thinking about
+> enrolling — so those lists are locked and only a developer can change them.
+>
+> **If the college publishes an updated brochure, send it to whoever set the site
+> up** and they'll update both pages from it.
+>
+> The parts you *can* edit are the wording that introduces them: open **IOT
+> Diploma Program Page** → the **Curriculum** tab, and look for the "Course
+> detail band" heading, paragraph, and two buttons.

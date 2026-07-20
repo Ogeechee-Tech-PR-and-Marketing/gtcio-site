@@ -61,6 +61,8 @@ src/app/
     about/                /about
     training/             /training    ("IOT Training Programs" in the nav)
     iot-diploma-program/  /iot-diploma-program
+      curriculum/         /iot-diploma-program/curriculum      ← not in the nav
+      certifications/     /iot-diploma-program/certifications  ← not in the nav
     facility/             /facility
     partners/             /partners
     news/                 /news
@@ -69,6 +71,11 @@ src/app/
   api/
     draft-mode/           enable + disable, for the Studio's live preview
     inquiry/              POST target for all three forms (§5)
+src/lib/
+  site.ts                 SITE_URL — the canonical origin (§6)
+  iot-curriculum.ts       the IS32 course table + SACA credential glossary.
+                          The ONE deliberate exception to CMS-first copy — read
+                          its header comment before touching it (§4).
 src/components/           Header, Footer, PageHero, InquiryForm
   Button.tsx              the raw styled link (variant, target/rel)
   CtaButton.tsx           renders a CMS-configured button via links.ts (§4)
@@ -154,6 +161,18 @@ Every decision below exists to protect that. Weigh it accordingly.
   The CMS is **seeded** with all of that copy so editors see real text, not empty
   boxes falling back to code. If you add a section, add fields AND seed them —
   don't leave content code-only.
+- **The one deliberate exception: `src/lib/iot-curriculum.ts`** (added
+  2026-07-20). The IS32 course table (12 courses, 45 credit hours) and the SACA
+  credential glossary (22 entries) that drive `/iot-diploma-program/curriculum`
+  and `/iot-diploma-program/certifications` are **code, not CMS content**. They
+  are a faithful transcription of an *accredited* course catalog — codes, credit
+  hours, and credential mappings are matters of record, not marketing copy, and
+  a wrong edit misstates the program to prospective students. A ~200-bullet
+  editing surface would also be hostile to the non-technical editors the CMS
+  exists for. When the curriculum changes it arrives as a new brochure and a
+  developer updates the file. The *framing* around it (headings, intro copy, the
+  buttons on the IOT page) IS CMS-editable, and is seeded. `public/SITEMAP.html`
+  labels both pages "Course data code-managed" so the stakeholder view matches.
 - **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
   Contact form's dropdown. The Become a Partner dropdown has no field of its own —
   it is derived from `partnersPage.pathways` (§5).
@@ -558,8 +577,86 @@ that calls the Constant Contact API. The file header documents both paths.
 
 Smaller items:
 
+- **✅ C-301 is resolved** (researched 2026-07-20). The brochure left it untitled
+  and printed an *Ethernet communications* description under it, on the
+  Mechanical Systems course. SACA's own registry settles it: **C-301 is
+  "Mechanical Power Systems 2"** — the level-2 companion to C-210 Mechanical
+  Power Systems 1, which is exactly why the brochure attaches both to ISAT 1110.
+  The code and placement were right; only the pasted prose was wrong. Corrected
+  in `iot-curriculum.ts` from SACA (the credentialing authority, so this required
+  no guess about OTC's curriculum); sources were saca.org's micro-credential
+  list, `portal.saca.org` certificate records, and the Tech-Labs mirror. The
+  orphaned Ethernet description belongs to a higher-level networking credential
+  that isn't part of this program, and was deleted rather than re-homed.
+  - Same pass: **C-209, C-210 and C-216 were re-styled to SACA's arabic
+    numbering** ("Mechanical Power Systems 1", not "…I"). The brochure uses roman
+    numerals for those three; left alone, C-210 would have rendered as
+    "Mechanical Power Systems I" directly beside the newly-correct "Mechanical
+    Power Systems 2" and read as a bug.
+  - Two title variants were **left as the brochure has them**, since each has a
+    matching description and neither is visibly inconsistent: C-208
+    "Programmable Controller Troubleshooting 1" (some SACA mirrors abbreviate to
+    "PLC Troubleshooting 1") and C-255 "Hydraulic Maintenance 1" (one mirror says
+    "Hydraulic Systems 1", but the brochure's description is maintenance work —
+    replacing seals, hoses, filters — so the brochure looks right). Worth a
+    one-line confirmation with GTCIO if anyone is asking them about the above.
+- **🔴 The brochure and Ogeechee Tech's own course catalog disagree — Jan needs
+  to settle which governs the August 2026 launch.** Found 2026-07-20 while
+  chasing the objectives defect; it turned out to be systematic, not one stray
+  list. Per the **2025-2026** catalog (`ogeecheetech.smartcatalogiq.com`, prefix
+  "ISAT — Industrial Operations Technology"):
+
+  | Catalog | Brochure |
+  | --- | --- |
+  | ISAT **1103** Programmable Logic Control I | ISAT 1104 |
+  | ISAT **1104** Programmable Logic Control II | ISAT 1105 |
+  | ISAT **1105** Motor Control Systems & Troubleshooting | ISAT 1103 |
+  | ISAT 1130 Sensors in Industrial **Smart** Automation | drops "Smart" |
+  | ISAT **2030** Operations Technology I | ISAT 3100 |
+  | ISAT 1102 → C-201 + **C-206** | → C-201 + C-205 |
+  | ISAT 1130 → **C-205** + C-213 | → C-206 + C-203 + C-213 |
+
+  That last pair **explains the misplaced objective bullets**: the brochure
+  prints *electrical panel installation* objectives (C-206 work) under 1130
+  "Sensors", and *sensor connect-and-test* objectives (C-205 work) under its
+  1103 "Motor Controls" — the two blocks are swapped relative to the catalog.
+  - **The site deliberately still publishes the brochure's version.** The
+    catalog is the 2025-2026 edition; this program starts August 2026, in a
+    **2026-2027 catalog that doesn't exist yet**, and the brochure may reflect an
+    approved revision that lands in it — it also carries CIST 1601 and an
+    Operations Technology II the catalog has no entry for (10 ISAT courses listed
+    vs the brochure's 12-course, 45-credit program). Two official OTC sources
+    disagree and nothing outside the college can say which one governs.
+    **Don't renumber these courses off the catalog alone.**
+  - Interim safeguard on `/iot-diploma-program/curriculum`: a line under the
+    table reads "Course numbers and sequence are being finalised ahead of the
+    August 2026 launch. Ogeechee Tech's admissions team has the current course
+    list." Remove it once the numbering is confirmed.
+  - `objectives` stays omitted for the Motor Controls course — its bullets are
+    wrong under *either* reading. Its two credential descriptions carry the
+    detail, so the page reads complete. Restore once GTCIO confirms.
+  - **Ask Jan specifically:** which course numbers apply for Aug 2026; whether
+    C-205/C-206 sit on 1102 or 1130; and whether Operations Technology II and
+    CIST 1601 are in the final 45-credit program.
+  - Not defects, just noted: the brochure's matrix runs 1105 → 1130 → 1110 (the
+    college's sequence, preserved); OSHA 10 is listed as a mapping, not a SACA
+    credential, so it renders unlinked; and p4 carries a stray Amatrol paragraph
+    that clearly bled in from another document — **not published**.
+- **⚠️ The brochure says "OPENING SEPTEMBER 2026"** (pp2, 14, 15), which
+  disagrees with the ribbon-cutting date the site uses. Jake decided 2026-07-20
+  to **keep the site's dates** (construction completes 9/26, ribbon cutting
+  10/15/26, tours from 10/26) — those came from Jan directly and are more
+  specific. Don't publish "opening September 2026" anywhere.
+- **The brochure's back cover gives 1 Joe Kennedy Blvd** — that is OTC's main
+  campus, the stale address (§10). GTCIO is 66 AJ Riggs Road. Don't harvest it.
 - **Content still pending from GTCIO:** final tuition figure and final program
-  length. They appear in **four** places on the IOT Diploma Program page — the
+  length. **Credit hours are now known and published: 45, across 12 courses**
+  (from the brochure, 2026-07-20) — but that is deliberately *not* used to derive
+  either figure. 45 hours doesn't tell a student how many semesters, and a
+  tuition estimate (~$4,800 at OTC's ~$107/credit-hour in-state rate) would
+  exclude fees, books, and lab costs GTCIO hasn't supplied. Jake's call
+  2026-07-20: publish the credit hours, leave both boxes reading "still being
+  confirmed." They appear in **four** places on the IOT Diploma Program page — the
   "Time to complete" and "Approximate cost" boxes (`timeToComplete`,
   `approximateCost`) and the matching FAQ answers (`faqs[_key=="f5"]` and
   `[_key=="f4"]`) — so replace all four together. They no longer say the word
@@ -646,6 +743,17 @@ Smaller items:
   "On every page" cards, and the two form/deep-link tallies at the top).
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
   are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
+  A new **"What it will look like"** band above it (added 2026-07-20) now carries
+  the architect's exterior rendering, extracted from the Industrial Operations
+  Program brochure to `public/images/facility-rendering.jpg` (2400×1350, 720 KB).
+  It is its own 16:9 band rather than a gallery slot — the gallery crops square
+  and a square crop loses the building. The image is code-side; its heading and
+  caption are CMS fields (`renderingTitle`, `renderingCaption`). **Keep the word
+  "rendering" in the caption** — the building is under construction until autumn
+  2026 and an uncaptioned drawing reads as a photo of a finished facility.
+  ⚠️ The brochure's other usable image is a **lab photo with identifiable
+  students' faces**. Jake declined to publish it 2026-07-20 pending confirmation
+  that photo releases exist — don't add it without asking.
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
   box on the IOT page. Not produced, not scoped.
 - **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`) — deliberate,
@@ -723,6 +831,30 @@ shows deploy status.
   label to womeninhvacr.org, an unrelated org; don't copy that), Women's
   Manufacturing Network (wmnorg.com), WIM Georgia
   (womeninmanufacturing.org/georgia). All three verified reachable 2026-07-20.
+- **The IOT Diploma Program hero now carries three buttons** (2026-07-20): Apply
+  Now (red) plus **VIEW IOT PROGRAM** and **DOWNLOAD IOT PROGRAM** in a new
+  white-outline `heroOutline` Button variant — `outline` is black-on-black over a
+  dark hero and effectively invisible, so don't reach for it there. All three are
+  CMS-managed `ctaButton` fields. Two new `DESTINATIONS` keys back them:
+  `iotProgramFlipbook` (<https://online.fliphtml5.com/exygb/xhzf/#p=1>, verified
+  200, same `exygb` account as the employer catalog flipbook) and
+  `iotProgramPdf` (`/documents/industrial-operations-program.pdf`). This mirrors
+  the Training page's existing `CATALOG_URL` / `CATALOG_PDF_URL` pairing.
+  - **File destinations download rather than navigate.** `DOWNLOAD_DESTINATIONS`
+    in `sanity/lib/links.ts` lists which keys are files; `CtaButton` adds the
+    `download` attribute for those. A file destination is never "external" in the
+    new-tab sense, so the two branches are mutually exclusive. **Adding another
+    downloadable PDF means adding its key to that set too**, or the button will
+    navigate away from the site instead of saving.
+- **Two sub-pages hang off the IOT Diploma Program page** (added 2026-07-20,
+  from the brochure): `/iot-diploma-program/curriculum` (course table + per-course
+  detail) and `/iot-diploma-program/certifications` (SACA explainer + the
+  22-credential glossary). They are **deliberately not in the top nav** (Jake) —
+  students reach them from the "Every course, in detail" band in the Curriculum
+  section. The two pages cross-link in both directions by anchor: courses use
+  `#isat-1102`-style ids, credentials use `#c-201`-style ids. Both are in
+  `sitemap.ts`, `SITEMAP.html`, and `ctaButton.ts` + `DESTINATIONS`. Content
+  comes from `src/lib/iot-curriculum.ts` — see §4 and §8 before editing.
 - **The `apply` CTA destination changed 2026-07-20**: `DESTINATIONS.apply` in
   `sanity/lib/links.ts` now points to
   `https://www.ogeecheetech.edu/admissions/next-steps` (was `/IOT`, which no

@@ -95,6 +95,26 @@ export default defineType({
   fields: [
     ...heroFields("hero"),
 
+    // The hero carries three buttons. "Apply now" is the shared `applyButton`
+    // field down in the Apply band group (the same button is reused in three
+    // places on this page); these two sit beside it.
+    defineField({
+      name: "viewProgramButton",
+      title: "Hero button — read the brochure",
+      description:
+        'Second button in the hero. Points at the program brochure flipbook by default.',
+      type: "ctaButton",
+      group: "hero",
+    }),
+    defineField({
+      name: "downloadProgramButton",
+      title: "Hero button — download the brochure",
+      description:
+        "Third button in the hero. Points at the program brochure PDF by default, which saves to the visitor's device rather than opening a new page.",
+      type: "ctaButton",
+      group: "hero",
+    }),
+
     defineField({
       name: "whatIsTitle",
       title: "Section heading",
@@ -147,6 +167,36 @@ export default defineType({
       of: [curriculumStage],
       group: "curriculum",
     }),
+    // Links out to the two detail pages. Their course tables and credential
+    // descriptions are transcribed from the accredited program brochure and
+    // live in code (src/lib/iot-curriculum.ts) rather than here — see the note
+    // at the top of that file. This band is the editable part.
+    defineField({
+      name: "courseDetailHeading",
+      title: "Course detail band — heading",
+      type: "string",
+      group: "curriculum",
+    }),
+    defineField({
+      name: "courseDetailBody",
+      title: "Course detail band — paragraph",
+      type: "text",
+      rows: 3,
+      group: "curriculum",
+    }),
+    defineField({
+      name: "curriculumButton",
+      title: "Course detail band — courses button",
+      type: "ctaButton",
+      group: "curriculum",
+    }),
+    defineField({
+      name: "certificationsButton",
+      title: "Course detail band — certifications button",
+      type: "ctaButton",
+      group: "curriculum",
+    }),
+
     defineField({
       name: "moreWaysTitle",
       title: '"More than one way in" heading',
