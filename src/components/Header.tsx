@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   },
   { label: "IOT Training Programs", href: "/training" },
   { label: "IOT Diploma Program", href: "/iot-diploma-program" },
+  { label: "Credentials", href: "/credentials" },
   { label: "Facility", href: "/facility" },
   { label: "Partners", href: "/partners" },
   { label: "News", href: "/news" },

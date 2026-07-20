@@ -5,6 +5,7 @@ const PAGE_PATHS: Record<string, string> = {
   aboutPage: "/about",
   facilityPage: "/facility",
   trainingPage: "/training",
+  credentialsPage: "/credentials",
   iotDiplomaProgramPage: "/iot-diploma-program",
   partnersPage: "/partners",
   newsPage: "/news",

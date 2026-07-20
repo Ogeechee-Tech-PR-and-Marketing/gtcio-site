@@ -5,6 +5,7 @@ import CtaButton from "@/components/CtaButton";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
+import { AFFILIATIONS } from "@/lib/credentials";
 
 export const metadata: Metadata = {
   title: "IOT Training Programs | GTCIO",
@@ -59,13 +60,10 @@ const STATS = [
   { value: "80 years", label: "Combined industrial systems training experience" },
 ];
 
-const AFFILIATIONS = [
-  { title: "FANUC", detail: "The only authorized FANUC satellite training site in the state of Georgia." },
-  { title: "SACA Gold", detail: "A Smart Automation Certification Alliance Gold Certification Site, and a SACA Regional Instructor Training Center — the first in Georgia." },
-  { title: "Amatrol", detail: "An Amatrol Certified Instructor Training Site, hosting Amatrol Technical Training Institute (ATTI) courses." },
-  { title: "Mitsubishi Electric", detail: "A Mitsubishi Electric Automation Training Provider." },
-  { title: "Advanced Manufacturing Academy", detail: "An Advanced Manufacturing Academy Training Center." },
-];
+// Moved to src/lib/credentials.ts 2026-07-20 so this page and /credentials
+// render the same five accreditations from one place. The CMS override still
+// lives on THIS page's document (trainingPage.affiliations) — /credentials
+// reads that same field, so editors update it once.
 
 const SERVICES = [
   { title: "Standardized training", detail: "Short and comprehensive courses developed when several industries need the same training. Content is industry-wide, not specific to one company, and runs at basic, intermediate, and advanced levels." },

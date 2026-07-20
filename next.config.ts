@@ -10,6 +10,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        // The SACA glossary lived here for a few hours on 2026-07-20 before
+        // Credentials became a top-level page and absorbed it. Permanent so
+        // search engines transfer rather than index both; the old URL is in
+        // the deployed sitemap.xml, so it will be re-crawled.
+        source: "/iot-diploma-program/certifications",
+        destination: "/credentials",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

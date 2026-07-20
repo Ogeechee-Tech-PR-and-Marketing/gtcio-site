@@ -31,7 +31,8 @@ export default defineType({
           { title: "IOT Training Programs page", value: "training" },
           { title: "IOT Diploma Program page", value: "iot" },
           { title: "IOT Diploma Program — Courses & credit hours", value: "curriculum" },
-          { title: "IOT Diploma Program — SACA certifications", value: "certifications" },
+          // Value stays "certifications" — see the note in sanity/lib/links.ts.
+          { title: "Credentials page", value: "certifications" },
           { title: "Facility page", value: "facility" },
           // "tour" removed 2026-07-20 — tour booking is off the site until
           // 2026-10-26. Restore this option (value must stay "tour" to match

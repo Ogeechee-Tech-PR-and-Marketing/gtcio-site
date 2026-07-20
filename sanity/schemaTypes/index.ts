@@ -17,6 +17,7 @@ import aboutPage from "./documents/aboutPage";
 import facilityPage from "./documents/facilityPage";
 import trainingPage from "./documents/trainingPage";
 import iotDiplomaProgramPage from "./documents/iotDiplomaProgramPage";
+import credentialsPage from "./documents/credentialsPage";
 import partnersPage from "./documents/partnersPage";
 import newsPage from "./documents/newsPage";
 import contactPage from "./documents/contactPage";
@@ -39,6 +40,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     facilityPage,
     trainingPage,
     iotDiplomaProgramPage,
+    credentialsPage,
     partnersPage,
     newsPage,
     contactPage,
@@ -56,6 +58,7 @@ export const singletonTypes = new Set([
   "facilityPage",
   "trainingPage",
   "iotDiplomaProgramPage",
+  "credentialsPage",
   "partnersPage",
   "newsPage",
   "contactPage",

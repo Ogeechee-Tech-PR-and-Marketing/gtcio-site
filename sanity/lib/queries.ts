@@ -26,6 +26,19 @@ export const IOT_DIPLOMA_PROGRAM_PAGE_QUERY = defineQuery(
   `*[_type == "iotDiplomaProgramPage"][0]`
 );
 
+/**
+ * The Credentials page pulls its own framing copy, plus the five accreditations
+ * that are authored on the Training page's document. One field, two pages — an
+ * editor updates an accreditation once and both follow. See
+ * sanity/schemaTypes/documents/credentialsPage.ts.
+ */
+export const CREDENTIALS_PAGE_QUERY = defineQuery(
+  `*[_type == "credentialsPage"][0]{
+    ...,
+    "affiliations": *[_type == "trainingPage"][0].affiliations
+  }`
+);
+
 export const CONTACT_PAGE_QUERY = defineQuery(`*[_type == "contactPage"][0]`);
 
 /**

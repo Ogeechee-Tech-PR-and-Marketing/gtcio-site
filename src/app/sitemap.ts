@@ -8,10 +8,11 @@ const ROUTES = [
   "/about",
   "/training",
   "/iot-diploma-program",
-  // Detail pages under the diploma program. Deliberately not in the nav
-  // (PROJECT.md §10), but they are public and should be indexed.
+  // Course detail page. Deliberately not in the nav (PROJECT.md §10), but it is
+  // public and should be indexed. Its sibling certifications page became the
+  // top-level /credentials route below and 308-redirects there.
   "/iot-diploma-program/curriculum",
-  "/iot-diploma-program/certifications",
+  "/credentials",
   "/facility",
   "/partners",
   "/news",

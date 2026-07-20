@@ -5,6 +5,7 @@ const PAGES: Array<{ id: string; title: string }> = [
   { id: "aboutPage", title: "About Page" },
   { id: "trainingPage", title: "IOT Training Programs Page" },
   { id: "iotDiplomaProgramPage", title: "IOT Diploma Program Page" },
+  { id: "credentialsPage", title: "Credentials Page" },
   { id: "facilityPage", title: "Facility Page" },
   { id: "partnersPage", title: "Partners Page" },
   { id: "newsPage", title: "News Page" },

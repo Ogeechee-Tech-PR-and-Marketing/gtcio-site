@@ -275,21 +275,27 @@ If you need one of these, or you get stuck, ask whoever set the site up.
 > collect subscribers until whoever set the site up connects it. Nothing is lost
 > that was never captured, but the box currently just shows the thank-you message.
 
-> ### The two IOT course pages are a special case
+> ### The Credentials page and the course page are a special case
 >
-> The IOT Diploma Program page links out to two more pages — **Courses & Credit
-> Hours** and **SACA Certifications**. You won't find them in the Studio's page
-> list, and that's on purpose.
+> Two pages carry official certification information copied word-for-word from
+> Ogeechee Tech's brochures: the **Credentials** page (in the top menu) and
+> **Courses & Credit Hours** (linked from the IOT Diploma Program page, not in
+> the menu on purpose).
 >
-> Everything on them (the course table, the credit hours, the certification
-> descriptions) is copied word-for-word from Ogeechee Tech's official
-> Industrial Operations Program brochure. Because that's the accredited course
-> catalog, a typo there would misstate the program to a student thinking about
-> enrolling — so those lists are locked and only a developer can change them.
+> The course table, credit hours, SACA credential descriptions, and the list of
+> accreditations (FANUC, SACA Gold, Amatrol, and so on) are locked — because a
+> typo there would misstate the program to a student thinking about enrolling,
+> only a developer can change them. **If the college publishes an updated
+> brochure, send it to whoever set the site up.**
 >
-> **If the college publishes an updated brochure, send it to whoever set the site
-> up** and they'll update both pages from it.
+> You *can* still edit the wording that introduces each section. On the
+> **Credentials Page** you'll find editable headings and intro paragraphs for
+> every section, plus the Apply button.
 >
-> The parts you *can* edit are the wording that introduces them: open **IOT
-> Diploma Program Page** → the **Curriculum** tab, and look for the "Course
-> detail band" heading, paragraph, and two buttons.
+> **One thing to know:** the five accreditations near the bottom of the
+> Credentials page are edited in just one place — **IOT Training Programs Page →
+> Credentials & affiliations** — because they appear on both pages. Change them
+> there and both update together.
+>
+> For the course page, the editable intro lives on **IOT Diploma Program Page →
+> Curriculum tab** — the "Course detail band" heading, paragraph, and buttons.

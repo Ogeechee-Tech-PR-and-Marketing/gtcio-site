@@ -14,7 +14,12 @@ export const DESTINATIONS = {
   training: "/training",
   iot: "/iot-diploma-program",
   curriculum: "/iot-diploma-program/curriculum",
-  certifications: "/iot-diploma-program/certifications",
+  // Key kept as `certifications` on purpose. The page moved to a top-level
+  // /credentials route on 2026-07-20, and this is exactly what DESTINATIONS is
+  // for — the URL changed here and every CMS button followed, with no editor
+  // action and no dataset patch. Renaming the key would have orphaned the
+  // already-seeded `certificationsButton` on the IOT page.
+  certifications: "/credentials",
   facility: "/facility",
   // "tour" removed 2026-07-20 — tour booking is off the site until
   // 2026-10-26. Restore as `tour: "/facility#book-a-tour"` once the Book a

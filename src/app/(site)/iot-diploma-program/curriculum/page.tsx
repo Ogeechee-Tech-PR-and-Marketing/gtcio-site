@@ -35,7 +35,7 @@ export default function CurriculumPage() {
               APPLY NOW
             </Button>
             <Button href={DESTINATIONS.certifications} variant="heroOutline">
-              SACA CERTIFICATIONS
+              CREDENTIALS
             </Button>
           </div>
         }

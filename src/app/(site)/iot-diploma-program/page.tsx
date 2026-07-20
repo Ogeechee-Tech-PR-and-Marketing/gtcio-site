@@ -37,7 +37,7 @@ const DEFAULTS = {
   courseDetailBody:
     "The diploma is 12 courses and 45 credit hours. See exactly what each course covers and which industry certification it prepares you for.",
   curriculumButton: { label: "COURSES & CREDIT HOURS", destination: "curriculum" as const },
-  certificationsButton: { label: "SACA CERTIFICATIONS", destination: "certifications" as const },
+  certificationsButton: { label: "VIEW CREDENTIALS", destination: "certifications" as const },
   moreWaysTitle: "More than one way in",
   moreWaysBody:
     "The diploma isn't the only option. OTC also breaks the same curriculum into three standalone certificates, so you can start smaller, or focus on just the part of the job you're after.",

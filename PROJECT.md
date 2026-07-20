@@ -62,7 +62,7 @@ src/app/
     training/             /training    ("IOT Training Programs" in the nav)
     iot-diploma-program/  /iot-diploma-program
       curriculum/         /iot-diploma-program/curriculum      ← not in the nav
-      certifications/     /iot-diploma-program/certifications  ← not in the nav
+    credentials/          /credentials                          ← nav item
     facility/             /facility
     partners/             /partners
     news/                 /news
@@ -74,8 +74,11 @@ src/app/
 src/lib/
   site.ts                 SITE_URL — the canonical origin (§6)
   iot-curriculum.ts       the IS32 course table + SACA credential glossary.
-                          The ONE deliberate exception to CMS-first copy — read
+                          A deliberate exception to CMS-first copy — read
                           its header comment before touching it (§4).
+  credentials.ts          SACA's tier ladder + the five accreditations OTC holds.
+                          Same code-not-CMS reasoning (§4). The accreditations
+                          are the shared fallback for /credentials AND /training.
 src/components/           Header, Footer, PageHero, InquiryForm
   Button.tsx              the raw styled link (variant, target/rel)
   CtaButton.tsx           renders a CMS-configured button via links.ts (§4)
@@ -114,8 +117,8 @@ Every decision below exists to protect that. Weigh it accordingly.
 ### Content model
 
 - **Singletons, one per page:** `homePage`, `aboutPage`, `facilityPage`,
-  `trainingPage`, `iotDiplomaProgramPage`, `partnersPage`, `newsPage`,
-  `contactPage`. Each has a fixed `_id` equal to its type name. They can't be
+  `trainingPage`, `iotDiplomaProgramPage`, `credentialsPage`, `partnersPage`,
+  `newsPage`, `contactPage`. Each has a fixed `_id` equal to its type name. They can't be
   created, duplicated, or deleted from the Studio (see `document.actions` in
   `sanity.config.ts`). Any new singleton must be added to `singletonTypes` in
   `sanity/schemaTypes/index.ts` AND to `structure.ts` + `presentation.ts`.
@@ -172,7 +175,14 @@ Every decision below exists to protect that. Weigh it accordingly.
   exists for. When the curriculum changes it arrives as a new brochure and a
   developer updates the file. The *framing* around it (headings, intro copy, the
   buttons on the IOT page) IS CMS-editable, and is seeded. `public/SITEMAP.html`
-  labels both pages "Course data code-managed" so the stakeholder view matches.
+  labels these pages "…data code-managed" so the stakeholder view matches.
+  `src/lib/credentials.ts` (the SACA tier ladder and OTC's accreditations, both
+  on `/credentials`) is code for the same reason. **One cross-page wrinkle:** the
+  five accreditations shown on `/credentials` are *authored on the Training
+  page's document* (`trainingPage.affiliations`) — `CREDENTIALS_PAGE_QUERY`
+  reads that field with a sub-query, so an editor updates them once and both
+  pages follow. There is deliberately no `affiliations` field on
+  `credentialsPage`. If Training's field is ever removed, add the fallback path.
 - **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
   Contact form's dropdown. The Become a Partner dropdown has no field of its own —
   it is derived from `partnersPage.pathways` (§5).
@@ -638,6 +648,20 @@ Smaller items:
   - **Ask Jan specifically:** which course numbers apply for Aug 2026; whether
     C-205/C-206 sit on 1102 or 1130; and whether Operations Technology II and
     CIST 1601 are in the final 45-credit program.
+- **🟡 Possible unstated selling point: graduates may earn a full SACA Specialist
+  certification, not just micro-credentials** (noticed 2026-07-20 while building
+  `/credentials`). Mapping the program's 22 credentials against SACA's published
+  Specialist core requirements (techedproducts.com/saca-specialist-certs),
+  **Electrical Systems Specialist** looks fully covered — its core set is C-101,
+  C-201, C-202, C-204, C-206, all in the program — and several other Specialist
+  tracks sit one credential short (often C-211, which the program doesn't
+  include). The `/credentials` page ladder says the credentials "stack toward
+  several Specialist tracks" but **deliberately does NOT claim a graduate
+  finishes one** — the mapping is from a third-party mirror, SACA only grants a
+  Specialist once the exams are passed, and GTCIO has never claimed it. If GTCIO
+  confirms it, "graduate a certified SACA Specialist" is a strong recruiting
+  line worth stating outright (see `SACA_TIERS` comment in
+  `src/lib/credentials.ts`).
   - Not defects, just noted: the brochure's matrix runs 1105 → 1130 → 1110 (the
     college's sequence, preserved); OSHA 10 is listed as a mapping, not a SACA
     credential, so it renders unlinked; and p4 carries a stray Amatrol paragraph
@@ -802,10 +826,12 @@ shows deploy status.
 
 ## 10. Working notes
 
-- **Site nav order** (as of 2026-07-15): About (Mission / History / Advisory Board
+- **Site nav order** (as of 2026-07-20): About (Mission / History / Advisory Board
   / Development Authority of Bulloch County / FAQ) · IOT Training Programs · IOT
-  Diploma Program · Facility · Partners · News · Contact. "Training" is labelled
-  **IOT Training Programs** in the nav and sits *before* IOT Diploma Program. The
+  Diploma Program · **Credentials** · Facility · Partners · News · Contact.
+  "Training" is labelled **IOT Training Programs** in the nav and sits *before*
+  IOT Diploma Program; Credentials was added between IOT Diploma Program and
+  Facility 2026-07-20. The
   home hero buttons are IOT Training Programs · IOT Diploma Program · Become a
   Partner (a red "Become a GTCIO Partner" band + a newsletter signup sit lower on
   the home page). Nav/footer links are code-only (`Header.tsx`, `Footer.tsx`).
@@ -846,15 +872,36 @@ shows deploy status.
     new-tab sense, so the two branches are mutually exclusive. **Adding another
     downloadable PDF means adding its key to that set too**, or the button will
     navigate away from the site instead of saving.
-- **Two sub-pages hang off the IOT Diploma Program page** (added 2026-07-20,
-  from the brochure): `/iot-diploma-program/curriculum` (course table + per-course
-  detail) and `/iot-diploma-program/certifications` (SACA explainer + the
-  22-credential glossary). They are **deliberately not in the top nav** (Jake) —
-  students reach them from the "Every course, in detail" band in the Curriculum
-  section. The two pages cross-link in both directions by anchor: courses use
-  `#isat-1102`-style ids, credentials use `#c-201`-style ids. Both are in
-  `sitemap.ts`, `SITEMAP.html`, and `ctaButton.ts` + `DESTINATIONS`. Content
-  comes from `src/lib/iot-curriculum.ts` — see §4 and §8 before editing.
+- **`/iot-diploma-program/curriculum`** (added 2026-07-20, from the brochure) is
+  the course table + per-course detail. **Deliberately not in the top nav**
+  (Jake) — students reach it from the "Every course, in detail" band in the
+  Curriculum section. It cross-links with `/credentials` by anchor in both
+  directions: courses use `#isat-1102`-style ids, credentials use `#c-201`-style
+  ids. In `sitemap.ts`, `SITEMAP.html`, and `ctaButton.ts` + `DESTINATIONS`.
+  Content comes from `src/lib/iot-curriculum.ts` — see §4 and §8 before editing.
+- **`/credentials` is a top-level nav item** (added 2026-07-20, between IOT
+  Diploma Program and Facility, at Jake's request). It combines what had been
+  the SACA glossary at `/iot-diploma-program/certifications` (which existed for a
+  few hours the same day) with the FANUC/OSHA credentials and the five OTC
+  accreditations that had only been on the Training page. Sections: what you
+  leave with · what SACA is · the Associate/Specialist/Professional ladder · the
+  22-credential glossary · why it counts (accreditations) · apply band.
+  - **The old certifications URL 308-redirects to `/credentials`**
+    (`next.config.ts` `redirects()`), permanent, so the URL already published in
+    `sitemap.xml` transfers rather than double-indexes.
+  - **The `certifications` key in `DESTINATIONS` was kept and now points at
+    `/credentials`** — the entire point of the destination indirection (§4). The
+    already-seeded `certificationsButton` on the IOT page followed with no
+    dataset patch; its label was changed to "VIEW CREDENTIALS". Renaming the key
+    would have orphaned that button. The Studio dropdown label is now
+    "Credentials page".
+  - Framing copy is the `credentialsPage` singleton (seeded); reference data is
+    `src/lib/iot-curriculum.ts` + `src/lib/credentials.ts`.
+  - ⚠️ **The nav is now 9 top-level items.** Verified 2026-07-20 to fit without
+    overflow at the `xl` (1280px) breakpoint where the desktop nav appears —
+    21px clear of the logo, 47px of the right edge. A tenth item, or materially
+    longer labels, will need re-checking; the desktop nav has no wrap/overflow
+    handling, it just gets tighter.
 - **The `apply` CTA destination changed 2026-07-20**: `DESTINATIONS.apply` in
   `sanity/lib/links.ts` now points to
   `https://www.ogeecheetech.edu/admissions/next-steps` (was `/IOT`, which no
