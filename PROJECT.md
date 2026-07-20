@@ -208,7 +208,14 @@ fields (ones no doc has ever had) are safe to change in code alone — the defau
 applies until an editor fills them. Local gotcha: Next's `.next/cache` fetch cache
 can serve a *stale* Sanity value across `npm run build`s — `rm -rf .next/cache`
 before rebuilding to verify a CMS change locally (Vercel builds fresh, so deploys
-are unaffected).
+are unaffected). ⚠️ **`rm -rf .next/cache` alone was NOT enough** when verifying
+the news items on 2026-07-20: a dev server started with the cache cleared still
+served a one-item page for several restarts, and only `rm -rf .next` (the whole
+directory) picked up all six. If local output disagrees with what the API
+returns, wipe all of `.next` before you start debugging the query. Also confirm
+you killed every dev server first — `pkill -f "next dev"` missed a live
+`next-server` process that kept answering on port 3000 with its own stale cache,
+which looks exactly like a caching bug in the code. `lsof -ti:3000` to be sure.
 
 **⚠️ Patching a published doc leaves any DRAFT of it stale — and the draft wins
 later.** A `patch` on `homePage` does *not* touch `drafts.homePage`. If a draft
@@ -522,9 +529,26 @@ Smaller items:
   rebranded the Koyo bearings brand to JTEKT in 2022; Jake chose JTEKT North
   America), Amazon → aboutamazon.com (corporate, Jake's choice over retail).
   Verify any new partner URL against the real site before setting it.
-- **News page is empty.** `/news` shows a "coming soon" state until `newsItem`
-  documents are added (press releases + media mentions). Load the OTC IOT press
-  release as the first entry when ready.
+- **News page is populated** (2026-07-20) with six `newsItem` docs — two press,
+  four media:
+  - *press* — OTC IOT program launch (2026-07-08, no URL: the release is a Word
+    doc in the parent folder and does not appear on OTC's news site; the headline
+    renders unlinked, which is handled); beam signing (2025-12-10,
+    ogeecheetech.edu).
+  - *media* — Statesboro Magazine (2026-07-01), WSAV-TV (2026-03-24), Statesboro
+    Herald (2025-12-17), Grice Connect (2025-12-10).
+  - ⚠️ **The Grice Connect date is inferred, not verified.** The site sits behind
+    a Cloudflare bot challenge, so the page could not be read; 2025-12-10 was
+    chosen to match OTC's own post of the same ceremony, which Grice appears to
+    have republished. Correct it if the real date surfaces.
+  - ⚠️ **The older articles quote superseded specs** — WSAV says 38,000 sq ft /
+    $26M / 400,000 hrs, the Herald says 37,000 sq ft. The excerpts deliberately
+    avoid all of those numbers. Don't harvest figures out of these pieces; the
+    current ones are 40,000 sq ft / $27M / ~460,000 hrs.
+  - The Statesboro Magazine piece carries no byline and closes with OTC's own
+    name, phone, and URL, so it may be a sponsored placement rather than
+    independent reporting; it is filed as media because it ran in an outside
+    outlet.
 - **Tour booking opens 2026-10-26.** The Facility "Book a Tour" form stays live but
   carries a gold notice banner saying dates can't be confirmed until then. It's two
   fields — `facilityPage.tourNoticeHeading` (which carries the date) and

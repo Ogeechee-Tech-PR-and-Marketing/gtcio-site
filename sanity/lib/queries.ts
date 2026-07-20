@@ -19,10 +19,19 @@ export const CONTACT_PAGE_QUERY = defineQuery(`*[_type == "contactPage"][0]`);
 /**
  * Like the Partners page, news items are pulled straight from newsItem documents,
  * so creating one in the Studio publishes it — no separate list to maintain.
+ *
+ * `items` is deliberately a sibling of `page`, not nested inside it. When it was
+ * nested (`*[_type == "newsPage"][0]{..., "items": ...}`) the whole result was
+ * null until the newsPage singleton existed — and it did not exist for months,
+ * because News is the one page with no seeded copy for anyone to open and save.
+ * News items were therefore invisible on the site no matter how many an editor
+ * created: the same silent no-op the Partners reference list used to cause.
+ * A root-level object projection always returns an object, so the list renders
+ * even if the singleton is missing and only the page's own headings fall back.
  */
 export const NEWS_PAGE_QUERY = defineQuery(`
-  *[_type == "newsPage"][0]{
-    ...,
+  {
+    "page": *[_type == "newsPage"][0],
     "items": *[_type == "newsItem" && showOnWebsite != false] | order(date desc){
       _id,
       category,

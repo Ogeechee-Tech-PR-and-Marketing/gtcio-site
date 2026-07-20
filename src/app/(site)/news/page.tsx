@@ -91,19 +91,24 @@ function NewsList({ items }: { items: NewsItem[] }) {
 
 export default async function NewsPage() {
   const { data } = await sanityFetch({ query: NEWS_PAGE_QUERY });
-  const typed = data as (Partial<typeof DEFAULTS> & {
-    heroImage?: SanityImage;
-    heroImageAlt?: string;
+  const typed = data as {
+    page?: (Partial<typeof DEFAULTS> & {
+      heroImage?: SanityImage;
+      heroImageAlt?: string;
+    }) | null;
     items?: NewsItem[];
-  }) | null;
-  const page = { ...DEFAULTS, ...typed };
+  } | null;
+  // `items` is queried independently of the newsPage singleton — see the note on
+  // NEWS_PAGE_QUERY. News renders even if that document was never created.
+  const cms = typed?.page ?? undefined;
+  const page = { ...DEFAULTS, ...cms };
   const items = typed?.items ?? [];
   const press = items.filter((i) => i.category !== "media");
   const media = items.filter((i) => i.category === "media");
 
   const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
+    image: cms?.heroImage,
+    alt: cms?.heroImageAlt,
     fallbackSrc: "/images/hero-about.jpg",
     fallbackAlt: "Engineer working with a robotic arm",
     fallbackPosition: "61% 25%",
