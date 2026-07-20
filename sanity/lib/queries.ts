@@ -2,9 +2,21 @@ import { defineQuery } from "next-sanity";
 
 export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]`);
 
-export const HOME_PAGE_QUERY = defineQuery(`*[_type == "homePage"][0]`);
+// heroVideo is a file field: unlike images, a file asset reference has no
+// self-contained URL, so it must be dereferenced (asset->) to get one.
+export const HOME_PAGE_QUERY = defineQuery(`
+  *[_type == "homePage"][0]{
+    ...,
+    heroVideo{..., asset->}
+  }
+`);
 
-export const ABOUT_PAGE_QUERY = defineQuery(`*[_type == "aboutPage"][0]`);
+export const ABOUT_PAGE_QUERY = defineQuery(`
+  *[_type == "aboutPage"][0]{
+    ...,
+    heroVideo{..., asset->}
+  }
+`);
 
 export const FACILITY_PAGE_QUERY = defineQuery(`*[_type == "facilityPage"][0]`);
 

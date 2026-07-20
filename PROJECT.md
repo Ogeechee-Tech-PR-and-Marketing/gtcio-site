@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-16. Check claims against the code before trusting them.
+updated 2026-07-20. Check claims against the code before trusting them.
 
 ---
 
@@ -143,9 +143,9 @@ Every decision below exists to protect that. Weigh it accordingly.
   of "Ways to partner" into its own "Intro & button" group. Keep the code `DEFAULTS`
   objects in page order too — same reason.
 - **Convention: every page's copy is CMS-first, with the code `DEFAULTS` as a
-  fallback.** As of 2026-07-16 the only things NOT editable are the top nav, the
-  footer links, the logo, and the home hero video (all deliberate — see §8).
-  Everything else is: the Home hero buttons / red partner band / newsletter; the
+  fallback.** As of 2026-07-20 the only things NOT editable are the top nav, the
+  footer links, and the logo (all deliberate — see §8). Everything else is: the
+  Home hero buttons / red partner band / newsletter; the
   Training stats, employer copy, catalog band, credentials, services and course
   areas; the Facility focus areas and tour-notice banner; the Partners intro button;
   the IOT Apply band + button; the About mission statement and project timeline.
@@ -155,7 +155,18 @@ Every decision below exists to protect that. Weigh it accordingly.
 - **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
   Contact form's dropdown. The Become a Partner dropdown has no field of its own —
   it is derived from `partnersPage.pathways` (§5).
-- Interior page heroes share `heroFields()` in `sanity/schemaTypes/heroFields.ts`.
+- Interior page heroes share `heroFields()` in `sanity/schemaTypes/heroFields.ts`,
+  which wraps `heroMediaFields()` — the photo (+ optional video) part, reused
+  directly by `homePage` since its headline fields don't match the interior-page
+  shape (see next point). Every hero's Background photo overrides any video —
+  home and About are the only two with a hero video, uploading a photo replaces
+  it. Absent a photo, an uploaded Background video (`heroVideo`, a `file` field
+  with `accept: "video/*"`) replaces the default footage; `heroVideoPoster`
+  supplies its loading frame. A `file` asset's URL isn't self-contained the way
+  an image asset's is — `HOME_PAGE_QUERY`/`ABOUT_PAGE_QUERY` dereference it with
+  `heroVideo{..., asset->}`, and `resolveHeroVideo()` in `sanity/lib/image.ts`
+  picks between it and the fallback the same way `resolveHeroImage()` does for
+  photos.
 
 ### 🔴 Six traps that will bite you
 
@@ -559,12 +570,11 @@ Smaller items:
   are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
   box on the IOT page. Not produced, not scoped.
-- **Homepage hero video** (`public/videos/hero-construction.mp4`) is code-only, not
-  CMS-editable.
 - **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`) — deliberate,
   since a typo'd href there breaks navigation site-wide. Everything else on the
   page is CMS-editable; see the `ctaButton` note in §4 for how in-page buttons stay
-  safe. The logo and the home hero video are also code-only.
+  safe. The logo is also code-only. The Home and About hero videos are now
+  CMS-editable — see §4's `heroMediaFields()` note (closed 2026-07-20).
 - **Home hero headline is sized to fit one line** (Jan, 2026-07-16). The sizes in
   `(site)/page.tsx` are measured, not guessed: the headline renders ~21.7px wide
   per 1px of font-size in Trade Gothic Next Heavy Compressed, so 52px ≈ 1128px and

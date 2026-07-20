@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { heroMediaFields } from "../heroFields";
 
 export default defineType({
   name: "homePage",
@@ -46,6 +47,13 @@ export default defineType({
       of: [{ type: "ctaButton" }],
       validation: (r) => r.max(4),
       group: "hero",
+    }),
+    ...heroMediaFields("hero", {
+      imageDescription:
+        "The Home banner plays a looping construction video by default, so this is normally left empty. Upload a photo here only if you want a still photo INSTEAD of the video — the video stops being used as soon as a photo is set. Remove the photo to get the video back.",
+      includeVideo: true,
+      videoDescription:
+        "Replace the looping construction video that plays by default. Leave blank to keep the current video. Uploading a Background photo above always wins over any video.",
     }),
 
     defineField({
@@ -140,10 +148,7 @@ export default defineType({
   ],
   preview: {
     prepare() {
-      return {
-        title: "Home Page",
-        subtitle: "The background video needs a developer to change",
-      };
+      return { title: "Home Page" };
     },
   },
 });

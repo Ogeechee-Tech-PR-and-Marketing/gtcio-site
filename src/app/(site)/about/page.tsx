@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import { sanityFetch } from "@/sanity/lib/live";
 import { ABOUT_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
+import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
   title: "About | GTCIO",
@@ -123,6 +123,8 @@ export default async function AboutPage() {
   const typed = data as (Partial<typeof DEFAULTS> & {
     heroImage?: SanityImage;
     heroImageAlt?: string;
+    heroVideo?: { asset?: { url?: string } | null };
+    heroVideoPoster?: SanityImage;
     historyTimeline?: TimelineEvent[];
   }) | null;
   const page = { ...DEFAULTS, ...typed };
@@ -144,7 +146,14 @@ export default async function AboutPage() {
   // field would silently do nothing, which the schema description promises it
   // won't. The fallback position above is tuned for the stock photo, so it is
   // deliberately not applied to the video (centred is right for the robot).
+  // Absent a photo, an uploaded Background video replaces the default footage.
   const useVideo = !typed?.heroImage;
+  const heroVideo = resolveHeroVideo({
+    video: typed?.heroVideo,
+    poster: typed?.heroVideoPoster,
+    fallbackSrc: "/videos/hero-about.mp4",
+    fallbackPoster: "/images/hero-about-poster.jpg",
+  });
 
   return (
     <>
@@ -155,8 +164,8 @@ export default async function AboutPage() {
         image={hero.src}
         imageAlt={hero.alt}
         imagePosition={useVideo ? undefined : hero.position}
-        video={useVideo ? "/videos/hero-about.mp4" : undefined}
-        videoPoster={useVideo ? "/images/hero-about-poster.jpg" : undefined}
+        video={useVideo ? heroVideo.src : undefined}
+        videoPoster={useVideo ? heroVideo.poster : undefined}
       />
 
       <section id="mission" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">

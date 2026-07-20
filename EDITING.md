@@ -125,6 +125,25 @@ reword one, or pick a different page under *Where it goes*.
 The red band lower down has its own tab (**Red partner band**), and the email
 signup has one too (**Newsletter signup**).
 
+### Change the photo or video behind a page's banner
+
+Every page's banner (the dark section with the headline) has a **Background
+photo** box under its **Top of page** tab. Upload a photo there and it replaces
+whatever is currently showing — including the looping videos on the Home and
+About pages. Remove the photo later and the original goes back to showing.
+
+The Home and About pages also have a **Background video** box in that same tab,
+for swapping in a *different* video without replacing it with a still photo.
+A few things to know:
+
+- A **Background photo**, if set, always wins — clear it first if you want a
+  video (old or new) to show again.
+- Upload a **Video preview image** alongside a new video — it's the frame shown
+  for a moment while the video loads.
+- Click **Edit hotspot** on any photo and drag the circle onto the part of the
+  image that should stay visible; the photo is cropped differently on phones
+  and computers, and the hotspot keeps the right part on screen either way.
+
 ### Change the training page's credentials, services, or course lists
 
 Open **IOT Training Programs Page**. Each block has its own tab:
@@ -238,7 +257,6 @@ layout:
 
 - The website's design, colors, and fonts
 - The menu at the top and the links in the footer
-- The looping video on the Home page
 - The "What's Industrial Operations Technology?" video placeholder
 - The GTCIO logo
 - Adding a brand-new page

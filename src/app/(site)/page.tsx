@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import CtaButton from "@/components/CtaButton";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
 import type { CtaButton as CtaButtonData } from "@/sanity/lib/links";
 
 const DEFAULTS = {
@@ -45,7 +47,15 @@ const DEFAULTS = {
 
 export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_PAGE_QUERY });
-  const page = { ...DEFAULTS, ...(data as Partial<typeof DEFAULTS>) };
+  const typed = data as
+    | (Partial<typeof DEFAULTS> & {
+        heroImage?: SanityImage;
+        heroImageAlt?: string;
+        heroVideo?: { asset?: { url?: string } | null };
+        heroVideoPoster?: SanityImage;
+      })
+    | null;
+  const page = { ...DEFAULTS, ...typed };
   const heroButtons = page.heroButtons?.length ? page.heroButtons : DEFAULTS.heroButtons;
   // An unfinished draft can carry heroTitle: null, which would override the
   // spread default and crash the .split() below — fall back explicitly.
@@ -57,20 +67,50 @@ export default async function Home() {
     { ...DEFAULTS.partnersCard, ...page.partnersCard, href: "/partners", cta: "Become a Partner" },
   ];
 
+  // The banner plays a looping construction video by default. An editor can
+  // override it by uploading a Background photo in the Studio, which always
+  // takes priority — otherwise the field would silently do nothing. Absent a
+  // photo, an uploaded Background video replaces the default footage.
+  const useVideo = !typed?.heroImage;
+  const hero = resolveHeroImage({
+    image: typed?.heroImage,
+    alt: typed?.heroImageAlt,
+    fallbackSrc: "/images/hero-construction-poster.jpg",
+    fallbackAlt: "Construction of the GTCIO facility",
+    fallbackPosition: "50% 50%",
+  });
+  const heroVideo = resolveHeroVideo({
+    video: typed?.heroVideo,
+    poster: typed?.heroVideoPoster,
+    fallbackSrc: "/videos/hero-construction.mp4",
+    fallbackPoster: "/images/hero-construction-poster.jpg",
+  });
+
   return (
     <>
       <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
-        <video
-          src="/videos/hero-construction.mp4"
-          poster="/images/hero-construction-poster.jpg"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        {useVideo ? (
+          <video
+            src={heroVideo.src}
+            poster={heroVideo.poster}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <Image
+            src={hero.src}
+            alt={hero.alt}
+            fill
+            priority
+            className="object-cover"
+            style={{ objectPosition: hero.position }}
+          />
+        )}
         <div className="absolute inset-0 bg-brand-black/70" />
         <div className="relative mx-auto max-w-7xl">
           {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}

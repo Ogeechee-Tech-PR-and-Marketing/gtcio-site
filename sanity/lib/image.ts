@@ -47,3 +47,23 @@ export function resolveHeroImage({
       : "50% 50%",
   };
 }
+
+type HeroVideoInput = {
+  video?: { asset?: { url?: string } | null } | null;
+  poster?: SanityImage | null;
+  fallbackSrc: string;
+  fallbackPoster: string;
+};
+
+/**
+ * Resolves a page hero's background video. The video field's asset must be
+ * dereferenced in the GROQ query (`heroVideo{..., asset->}`) — unlike images,
+ * a file asset reference has no self-contained URL to build from. Falls back
+ * to the video committed in the repo when no CMS video is uploaded.
+ */
+export function resolveHeroVideo({ video, poster, fallbackSrc, fallbackPoster }: HeroVideoInput) {
+  return {
+    src: video?.asset?.url || fallbackSrc,
+    poster: poster?.asset ? urlForImage(poster).width(1600).quality(70).url() : fallbackPoster,
+  };
+}
