@@ -34,7 +34,7 @@ export default function CurriculumPage() {
             <Button href={DESTINATIONS.apply} variant="primary" target="_blank" rel="noopener noreferrer">
               APPLY NOW
             </Button>
-            <Button href={DESTINATIONS.certifications} variant="heroOutline">
+            <Button href={DESTINATIONS.certifications} variant="primary">
               CREDENTIALS
             </Button>
           </div>
@@ -221,7 +221,7 @@ export default function CurriculumPage() {
           <Button href={DESTINATIONS.apply} variant="primary" target="_blank" rel="noopener noreferrer">
             APPLY NOW
           </Button>
-          <Button href={DESTINATIONS.iot} variant="heroOutline">
+          <Button href={DESTINATIONS.iot} variant="primary">
             BACK TO THE PROGRAM
           </Button>
         </div>

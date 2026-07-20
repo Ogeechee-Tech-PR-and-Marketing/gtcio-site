@@ -8,7 +8,7 @@ import {
 
 type Props = {
   button?: CtaButtonData | null;
-  variant?: "primary" | "outline" | "heroOutline" | "dark";
+  variant?: "primary" | "dark";
   className?: string;
 };
 

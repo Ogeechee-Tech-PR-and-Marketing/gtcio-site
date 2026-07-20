@@ -138,8 +138,8 @@ export default async function IotDiplomaProgramPage() {
           // keeps the long "DOWNLOAD IOT PROGRAM" label on one line.
           <div className="flex flex-wrap gap-3">
             <CtaButton button={page.applyButton} variant="primary" />
-            <CtaButton button={page.viewProgramButton} variant="heroOutline" />
-            <CtaButton button={page.downloadProgramButton} variant="heroOutline" />
+            <CtaButton button={page.viewProgramButton} variant="primary" />
+            <CtaButton button={page.downloadProgramButton} variant="primary" />
           </div>
         }
       />
@@ -205,7 +205,7 @@ export default async function IotDiplomaProgramPage() {
             <p className="mt-3 max-w-2xl text-brand-silver">{page.courseDetailBody}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <CtaButton button={page.curriculumButton} variant="primary" />
-              <CtaButton button={page.certificationsButton} variant="outline" />
+              <CtaButton button={page.certificationsButton} variant="primary" />
             </div>
           </div>
         </div>

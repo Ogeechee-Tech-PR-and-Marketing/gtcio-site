@@ -3,7 +3,7 @@ import Link from "next/link";
 type ButtonProps = {
   href: string;
   children: React.ReactNode;
-  variant?: "primary" | "outline" | "heroOutline" | "dark";
+  variant?: "primary" | "dark";
   className?: string;
   /** Set to "_blank" for links off this site; pair with rel="noopener noreferrer". */
   target?: string;
@@ -14,11 +14,6 @@ type ButtonProps = {
 
 const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary: "bg-brand-red text-brand-white hover:bg-black",
-  outline: "border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-brand-white",
-  // For dark backgrounds (hero bands). `outline` is black-on-black there and
-  // effectively invisible. Secondary to the red primary, not competing with it.
-  heroOutline:
-    "border-2 border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black",
   dark: "bg-brand-black text-brand-white hover:bg-brand-red",
 };
 

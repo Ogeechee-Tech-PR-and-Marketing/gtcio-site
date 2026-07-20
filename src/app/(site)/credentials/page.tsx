@@ -102,7 +102,7 @@ export default async function CredentialsPage() {
         cta={
           <div className="flex flex-wrap gap-3">
             <CtaButton button={page.applyButton} variant="primary" />
-            <Button href={DESTINATIONS.curriculum} variant="heroOutline">
+            <Button href={DESTINATIONS.curriculum} variant="primary">
               COURSES &amp; CREDIT HOURS
             </Button>
           </div>
@@ -268,7 +268,7 @@ export default async function CredentialsPage() {
         <p className="mx-auto mt-4 max-w-2xl text-brand-silver">{page.ctaBody}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <CtaButton button={page.applyButton} variant="primary" />
-          <Button href={DESTINATIONS.iot} variant="heroOutline">
+          <Button href={DESTINATIONS.iot} variant="primary">
             THE DIPLOMA PROGRAM
           </Button>
         </div>
