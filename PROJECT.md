@@ -656,6 +656,15 @@ shows deploy status.
     brochure's contact; removed 2026-07-16). Training enquiries point to Jan Moore.
   - The **242,000 hours in 2024** figure (OTC-delivered) was replaced on the page
     2026-07-16 with GTCIO's own **~460,000 hrs/yr instructional capacity**, per Jan.
+  - **The brochure names no partner companies — it is not a source for the Partners
+    page.** None of the five partners appear in it. The only organizations it names
+    are the p2 "AFFILIATIONS" — FANUC, SACA, Amatrol, Mitsubishi Electric, Advanced
+    Manufacturing Academy — which are equipment vendors and certification bodies OTC
+    is accredited *by*, not employers who hire graduates or sponsor equipment. Jake
+    decided 2026-07-16 to **leave them off the Partners page**: they already render
+    as text credentials on the IOT Training Programs page (`CREDENTIALS` in
+    `(site)/training/page.tsx`), and listing them as partners would both misstate the
+    relationship and publish five trademarks nobody has cleared. Don't "fix" this.
 - **Office address is 66 AJ Riggs Road, Statesboro, GA 30458** (updated
   2026-07-15). The old "1 Joe Kennedy Blvd." is stale — that's OTC's *main
   campus*, not GTCIO. ⚠️ **The address is duplicated in five places; change all of
@@ -690,3 +699,22 @@ shows deploy status.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.
+- **`SITEMAP.html` is the stakeholder-facing sitemap** — a single self-contained
+  page (no external assets, opens offline in any browser) that Jake sends to Jan
+  for sign-off. It lists every route, each page's sections, the linkable `#anchors`,
+  which pages carry forms, and a teal/gold status dot per section marking *built &
+  populated* vs *built, awaiting content*. **Keep it in sync — it is a deliverable
+  that goes to the VP, so a stale one misrepresents the project.** Update it
+  whenever you: add/remove/rename a route or nav item, add or remove a section
+  anchor, change what a page is for, or **close out an item in §8 Open work**
+  (flip that section's dot from gold to teal). The status dots and the §8 list are
+  two views of the same facts — when they disagree, §8 is right. Also refresh the
+  date in `.colophon` on any edit.
+  ⚠️ **Not to be confused with `src/app/sitemap.ts`**, which generates the
+  machine-readable `sitemap.xml` for search engines. Different audience, same
+  route list — a new or renamed route has to be added to **both**, plus
+  `Header.tsx` and `sanity/lib/links.ts`. Regenerate the tallies (pages / nav items /
+  forms / deep links) if the counts move. The page's palette and condensed type
+  are deliberate §7 brand choices; the display font stack degrades to Arial
+  Narrow (the guide's own approved substitute) on machines without Adobe Fonts,
+  which is expected, not a bug.
