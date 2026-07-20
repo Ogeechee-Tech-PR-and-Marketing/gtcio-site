@@ -36,7 +36,7 @@ export default defineType({
           { title: "Partners page — Become a Partner form", value: "becomePartner" },
           { title: "News page", value: "news" },
           { title: "Contact page", value: "contact" },
-          { title: "Apply at Ogeechee Tech (ogeecheetech.edu/IOT)", value: "apply" },
+          { title: "Apply at Ogeechee Tech (ogeecheetech.edu/admissions/next-steps)", value: "apply" },
           { title: "Somewhere else (type a web address)", value: "external" },
         ],
       },

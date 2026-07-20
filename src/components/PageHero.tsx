@@ -11,6 +11,8 @@ type PageHeroProps = {
   video?: string;
   /** Still shown while the video loads. Use a frame FROM the video so it doesn't jump. */
   videoPoster?: string;
+  /** Optional CTA (e.g. a Button) rendered under the description. */
+  cta?: React.ReactNode;
 };
 
 export default function PageHero({
@@ -22,6 +24,7 @@ export default function PageHero({
   imagePosition,
   video,
   videoPoster,
+  cta,
 }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden bg-brand-black px-6 py-16 text-brand-white sm:px-10 sm:py-24">
@@ -70,6 +73,7 @@ export default function PageHero({
         {description && (
           <p className="mt-5 max-w-2xl text-lg text-brand-silver">{description}</p>
         )}
+        {cta && <div className="mt-8">{cta}</div>}
       </div>
     </section>
   );

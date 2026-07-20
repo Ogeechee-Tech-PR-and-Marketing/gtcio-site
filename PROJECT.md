@@ -633,6 +633,28 @@ shows deploy status.
   Moore** as the program contact because OTC's own IOT page does. Ogeechee Tech's
   published admission requirements couldn't be found, so the apply answer routes
   to Admissions rather than inventing prerequisites.
+- **The IOT Diploma Program page has a "non-traditional program" note** (added
+  2026-07-20), sitting right after the "What is Industrial Operations Technology?"
+  intro paragraph — `nonTraditionalHeading` / `nonTraditionalBody` /
+  `nonTraditionalResources` on `iotDiplomaProgramPage`, all CMS-editable (What is
+  IOT? group). Mirrors OTC's own program page, which flags IOT as non-traditional
+  (a program where one gender is under 25% of the field's workforce, currently
+  women) and links out to support resources. `nonTraditionalResources` is a plain
+  array of `{label, url}` — three seeded: Women in Manufacturing
+  (womeninmanufacturing.org/about/who-we-are — OTC's own site mislinks half this
+  label to womeninhvacr.org, an unrelated org; don't copy that), Women's
+  Manufacturing Network (wmnorg.com), WIM Georgia
+  (womeninmanufacturing.org/georgia). All three verified reachable 2026-07-20.
+- **The `apply` CTA destination changed 2026-07-20**: `DESTINATIONS.apply` in
+  `sanity/lib/links.ts` now points to
+  `https://www.ogeecheetech.edu/admissions/next-steps` (was `/IOT`, which no
+  longer resolved to an application path). The IOT Diploma Program page also
+  gained two more Apply Now buttons — one in the hero, one after "More than one
+  way in" — beyond the original bottom Apply band, all sharing the same
+  CMS-managed `applyButton` field. The footer's "Apply to the Program" link
+  (code-only, `Footer.tsx`) now points straight at `DESTINATIONS.apply` instead of
+  the in-page `#apply` anchor, and opens in a new tab like the site's other
+  external footer links.
 - **The mission statement is signed off** (Jan, 2026-07-16): **"Building a
   workforce ready for industry transformation."** It is deliberately the same
   sentence as the Home hero headline — the hero states the mission verbatim, so
@@ -660,7 +682,9 @@ shows deploy status.
 - Useful confirmed facts (from OTC's 2026-07-09 press release): $27M / 40,000 sq
   ft facility, ~460,000 instructional hours/year capacity, August 2026 launch.
   Media contact: Sean Payne, spayne@ogeecheetech.edu. Applications:
-  www.ogeecheetech.edu/IOT. **Every diploma graduate is credentialed through SACA**
+  www.ogeecheetech.edu/admissions/next-steps (the `apply` destination in
+  `sanity/lib/links.ts` — changed 2026-07-20 from the old `/IOT` URL, which no
+  longer resolved to an application path). **Every diploma graduate is credentialed through SACA**
   (Smart Automation Certification Alliance) — the site states this explicitly; it
   is not framed as an optional add-on (changed 2026-07-15 per Jan).
 - **🔴 The project-planning PDFs are from 2022 and their specs are SUPERSEDED.**

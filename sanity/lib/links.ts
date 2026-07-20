@@ -19,7 +19,7 @@ export const DESTINATIONS = {
   becomePartner: "/partners#become-a-partner",
   news: "/news",
   contact: "/contact",
-  apply: "https://www.ogeecheetech.edu/IOT",
+  apply: "https://www.ogeecheetech.edu/admissions/next-steps",
 } as const;
 
 export type Destination = keyof typeof DESTINATIONS | "external";

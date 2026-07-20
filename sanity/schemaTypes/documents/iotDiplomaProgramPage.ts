@@ -1,6 +1,22 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { heroFields } from "../heroFields";
 
+const resourceLink = defineArrayMember({
+  name: "resourceLink",
+  title: "Resource",
+  type: "object",
+  fields: [
+    defineField({ name: "label", title: "Link text", type: "string", validation: (r) => r.required() }),
+    defineField({
+      name: "url",
+      title: "Web address",
+      type: "url",
+      validation: (r) => r.required().uri({ scheme: ["http", "https"], allowRelative: false }),
+    }),
+  ],
+  preview: { select: { title: "label", subtitle: "url" } },
+});
+
 const curriculumStage = defineArrayMember({
   name: "curriculumStage",
   title: "Stage",
@@ -91,6 +107,29 @@ export default defineType({
       description: "The video itself is still a placeholder and needs a developer to add.",
       type: "text",
       rows: 4,
+      group: "whatIs",
+    }),
+
+    defineField({
+      name: "nonTraditionalHeading",
+      title: "Non-traditional program note heading",
+      description:
+        "OTC's own program page flags this as a non-traditional program (one gender under 25% of the field's workforce) and links to support resources. Mirrored here.",
+      type: "string",
+      group: "whatIs",
+    }),
+    defineField({
+      name: "nonTraditionalBody",
+      title: "Non-traditional program note body",
+      type: "text",
+      rows: 3,
+      group: "whatIs",
+    }),
+    defineField({
+      name: "nonTraditionalResources",
+      title: "Support resource links",
+      type: "array",
+      of: [resourceLink],
       group: "whatIs",
     }),
 

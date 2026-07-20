@@ -17,6 +17,14 @@ const DEFAULTS = {
   whatIsTitle: "What is Industrial Operations Technology?",
   whatIsBody:
     "These same skills apply well outside a factory. Facilities management (office buildings, apartment complexes, schools, hospitals) needs people who can keep equipment running, and so do utilities, warehouses, and distribution centers.",
+  nonTraditionalHeading: "This is a non-traditional program",
+  nonTraditionalBody:
+    "OTC classifies Industrial Operations Technology as a non-traditional program — one where a single gender makes up less than 25% of the field's workforce, which today mostly means women. OTC supports students pursuing careers in under-represented fields; here are a few places to start:",
+  nonTraditionalResources: [
+    { label: "Women in Manufacturing", url: "https://www.womeninmanufacturing.org/about/who-we-are" },
+    { label: "Women's Manufacturing Network", url: "https://www.wmnorg.com" },
+    { label: "WIM Georgia", url: "https://www.womeninmanufacturing.org/georgia" },
+  ],
   curriculumTitle: "Curriculum & credentials",
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
@@ -62,7 +70,7 @@ const DEFAULTS = {
   faqs: [
     { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program launches in August 2026, and it's open for enrollment now." },
     { question: "Do I need any experience to start?", answer: "No. The program is built for people coming into the field, whatever their background. You start with the fundamentals — mechanical, electrical, hydraulic, and pneumatic systems — and move on to robotics, PLCs, and automation controls from there." },
-    { question: "How do I apply?", answer: "Applications go through Ogeechee Technical College — the Apply button at the bottom of this page takes you straight there. Admissions will walk you through what's needed. If you'd rather talk to a person first, Jan Moore is the program contact: jmoore@ogeecheetech.edu, 912-688-6026." },
+    { question: "How do I apply?", answer: "Applications go through Ogeechee Technical College — any of the Apply Now buttons on this page take you straight there. Admissions will walk you through what's needed. If you'd rather talk to a person first, Jan Moore is the program contact: jmoore@ogeecheetech.edu, 912-688-6026." },
     { question: "Where will classes be held?", answer: "Classes begin in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, and move into GTCIO's new building once it opens. The ribbon cutting is scheduled for October 15, 2026." },
     { question: "Is this an online program?", answer: "No. It's in person, in day classes. This is hands-on work on real industrial equipment, so you need to be in the shop. Ogeechee Tech's admissions team has the current class times." },
     { question: "How long does it take to finish?", answer: "The final program length is still being confirmed ahead of the August 2026 launch. Ogeechee Tech's admissions team can tell you where it lands." },
@@ -82,6 +90,9 @@ export default async function IotDiplomaProgramPage() {
     heroImageAlt?: string;
   }) | null;
   const page = { ...DEFAULTS, ...typed };
+  const nonTraditionalResources = typed?.nonTraditionalResources?.length
+    ? typed.nonTraditionalResources
+    : DEFAULTS.nonTraditionalResources;
   const curriculumStages = typed?.curriculumStages?.length ? typed.curriculumStages : DEFAULTS.curriculumStages;
   const programOptions = typed?.programOptions?.length ? typed.programOptions : DEFAULTS.programOptions;
   const careers = typed?.careers?.length ? typed.careers : DEFAULTS.careers;
@@ -114,6 +125,7 @@ export default async function IotDiplomaProgramPage() {
         image={hero.src}
         imageAlt={hero.alt}
         imagePosition={hero.position}
+        cta={<CtaButton button={page.applyButton} variant="primary" />}
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
@@ -127,6 +139,31 @@ export default async function IotDiplomaProgramPage() {
             </p>
           </div>
           <p className="mt-6 max-w-3xl text-brand-silver">{page.whatIsBody}</p>
+
+          {page.nonTraditionalHeading && (
+            <div className="mt-8 max-w-3xl border border-brand-silver/40 p-6">
+              <p className="font-heading font-bold text-brand-black">{page.nonTraditionalHeading}</p>
+              {page.nonTraditionalBody && (
+                <p className="mt-2 text-sm text-brand-silver">{page.nonTraditionalBody}</p>
+              )}
+              {nonTraditionalResources.length > 0 && (
+                <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                  {nonTraditionalResources.map((resource: { label: string; url: string }, i: number) => (
+                    <li key={i}>
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-bold text-brand-red underline hover:text-brand-black"
+                      >
+                        {resource.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -159,6 +196,9 @@ export default async function IotDiplomaProgramPage() {
                 <p className="mt-1 text-sm text-brand-silver">{option.detail}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-10 text-center">
+            <CtaButton button={page.applyButton} variant="primary" />
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DESTINATIONS } from "@/sanity/lib/links";
 
 const COLUMNS = [
   {
@@ -19,7 +20,7 @@ const COLUMNS = [
     links: [
       { label: "Book a Tour", href: "/facility#book-a-tour" },
       { label: "Become a Partner", href: "/partners#become-a-partner" },
-      { label: "Apply to the Program", href: "/iot-diploma-program#apply" },
+      { label: "Apply to the Program", href: DESTINATIONS.apply },
     ],
   },
 ];
@@ -53,13 +54,21 @@ export default function Footer({
           <div key={col.heading}>
             <p className="font-display text-sm text-brand-gold">{col.heading}</p>
             <ul className="mt-4 flex flex-col gap-2">
-              {col.links.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-sm text-brand-silver hover:text-brand-white">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {col.links.map((link) => {
+                const external = link.href.startsWith("http");
+                return (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      target={external ? "_blank" : undefined}
+                      rel={external ? "noopener noreferrer" : undefined}
+                      className="text-sm text-brand-silver hover:text-brand-white"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
