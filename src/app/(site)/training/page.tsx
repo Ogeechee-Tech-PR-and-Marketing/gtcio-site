@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
+import Button from "@/components/Button";
 import CtaButton from "@/components/CtaButton";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
 
 // The public flipbook of "OTC Industrial Systems Training Program".
 const CATALOG_URL = "https://online.fliphtml5.com/exygb/kvbr/#p=1";
+// The same catalog, as a downloadable PDF.
+const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program.pdf";
 
 const DEFAULTS = {
   heroEyebrow: "IOT Training Programs",
   heroTitle: "Students on one side, employers on the other: same goal",
-  heroDescription:
-    "GTCIO trains individual students building a career, and works directly with employers who need to upskill the team they've already got.",
   employersTitle: "Training for employers",
   employersBody2:
     "Training happens on the same industrial equipment your team works on every day, and courses are built to stack: an employee can start with a single short course and keep going, all the way to a registered apprenticeship.",
@@ -119,22 +120,20 @@ export default async function TrainingPage() {
       <PageHero
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
-        description={page.heroDescription}
         image={hero.src}
         imageAlt={hero.alt}
         imagePosition={hero.position}
+        extra={
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {stats.map((stat, i) => (
+              <div key={i} className="border-l-4 border-brand-red pl-5">
+                <p className="font-heading text-3xl font-bold text-brand-white">{stat.value}</p>
+                <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        }
       />
-
-      <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
-          {stats.map((stat, i) => (
-            <div key={i} className="border-l-4 border-brand-red pl-5">
-              <p className="font-heading text-3xl font-bold text-brand-black">{stat.value}</p>
-              <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
@@ -143,8 +142,12 @@ export default async function TrainingPage() {
           {page.employersBody2 && (
             <p className="mt-4 max-w-3xl text-brand-silver">{page.employersBody2}</p>
           )}
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-4">
             <CtaButton button={page.employersButton} variant="primary" />
+            <CtaButton button={page.catalogButton} variant="primary" />
+            <Button href={CATALOG_PDF_URL} download variant="primary">
+              DOWNLOAD THE CATALOG
+            </Button>
           </div>
         </div>
       </section>
@@ -158,7 +161,12 @@ export default async function TrainingPage() {
             <h2 className="font-heading mt-2 text-3xl font-bold">{page.catalogTitle}</h2>
             {page.catalogBody && <p className="mt-3 text-brand-silver">{page.catalogBody}</p>}
           </div>
-          <CtaButton button={page.catalogButton} variant="primary" className="shrink-0" />
+          <div className="flex shrink-0 flex-wrap gap-4">
+            <CtaButton button={page.catalogButton} variant="primary" />
+            <Button href={CATALOG_PDF_URL} download variant="primary">
+              DOWNLOAD THE CATALOG
+            </Button>
+          </div>
         </div>
       </section>
 

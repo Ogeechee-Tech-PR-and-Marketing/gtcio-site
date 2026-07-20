@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import PageHero from "@/components/PageHero";
-import InquiryForm from "@/components/InquiryForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { FACILITY_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
@@ -22,12 +21,6 @@ const DEFAULTS = {
     "GTCIO's facility serves both credit students and incumbent workers, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. It was planned as a regional center rather than a single college's building: Ogeechee Tech partnered with Southeastern Technical College to train manufacturers across their service areas once the center came online, which avoids duplicating facilities across the region. The space also trains and certifies instructors from across Georgia and the nation.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
-  bookTourTitle: "Book a Tour",
-  bookTourIntro:
-    "Request a visit for your class, business, or organization. This is a request form, not a live booking calendar. GTCIO staff will follow up to confirm a date.",
-  tourNoticeHeading: "Tour booking opens October 26, 2026",
-  tourNotice:
-    "Tours can't be scheduled just yet — tour booking opens October 26, 2026. You're welcome to send a request now, but we won't be able to confirm a date until then.",
   focusAreasTitle: "What the center is built around",
   focusAreasIntro:
     "The center was planned around four areas of advanced manufacturing, the skills southeast Georgia's employers are hiring for.",
@@ -161,41 +154,6 @@ export default async function FacilityPage() {
                     PHOTO PLACEHOLDER
                   </div>
                 ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="book-a-tour" className="scroll-mt-24 px-6 py-16 sm:px-10">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="font-heading text-3xl font-bold text-brand-black">{page.bookTourTitle}</h2>
-          <p className="mt-3 text-brand-silver">{page.bookTourIntro}</p>
-          {(page.tourNoticeHeading || page.tourNotice) && (
-            <div className="mt-6 border-l-4 border-brand-gold bg-brand-gold/10 px-5 py-4">
-              {page.tourNoticeHeading && (
-                <p className="font-heading text-sm font-bold tracking-wide text-brand-black">
-                  {page.tourNoticeHeading}
-                </p>
-              )}
-              {page.tourNotice && (
-                <p className="mt-1 text-sm text-brand-black/80">{page.tourNotice}</p>
-              )}
-            </div>
-          )}
-          <div className="mt-8">
-            <InquiryForm
-              formType="tour"
-              fields={[
-                { name: "firstName", label: "First Name", required: true },
-                { name: "lastName", label: "Last Name", required: true },
-                { name: "email", label: "Email Address", type: "email", required: true },
-                { name: "phone", label: "Phone Number", type: "tel" },
-                { name: "organization", label: "Organization", halfWidth: false },
-                { name: "preferredDate", label: "Preferred Date", type: "date" },
-                { name: "message", label: "Message", type: "textarea", halfWidth: false },
-              ]}
-              submitLabel="REQUEST A TOUR"
-              confirmationMessage="Thanks! GTCIO staff will reach out to confirm a date for your tour."
-            />
           </div>
         </div>
       </section>

@@ -14,7 +14,9 @@ export const DESTINATIONS = {
   training: "/training",
   iot: "/iot-diploma-program",
   facility: "/facility",
-  tour: "/facility#book-a-tour",
+  // "tour" removed 2026-07-20 — tour booking is off the site until
+  // 2026-10-26. Restore as `tour: "/facility#book-a-tour"` once the Book a
+  // Tour section is back in facility/page.tsx, along with its ctaButton.ts option.
   partners: "/partners",
   becomePartner: "/partners#become-a-partner",
   news: "/news",

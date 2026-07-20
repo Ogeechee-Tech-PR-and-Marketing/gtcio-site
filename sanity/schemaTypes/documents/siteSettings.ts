@@ -68,12 +68,13 @@ export default defineType({
     defineField({
       name: "mediaContact",
       title: "Media Inquiries contact",
-      description: "Shown on the Contact page.",
+      description: "Shown on the Contact page, formatted the same as the Program Questions contact above.",
       type: "object",
       group: "contact",
       options: { collapsible: true, collapsed: false },
       fields: [
-        defineField({ name: "name", title: "Name", type: "string" }),
+        defineField({ name: "name", title: "Name & job title", type: "string" }),
+        defineField({ name: "office", title: "Office / building", type: "string", description: "Leave blank to hide." }),
         defineField({ name: "phone", title: "Phone", type: "string" }),
         defineField({ name: "email", title: "Email", type: "string" }),
       ],

@@ -31,7 +31,9 @@ export default defineType({
           { title: "IOT Training Programs page", value: "training" },
           { title: "IOT Diploma Program page", value: "iot" },
           { title: "Facility page", value: "facility" },
-          { title: "Facility page — Book a Tour form", value: "tour" },
+          // "tour" removed 2026-07-20 — tour booking is off the site until
+          // 2026-10-26. Restore this option (value must stay "tour" to match
+          // DESTINATIONS in sanity/lib/links.ts) once it's back.
           { title: "Partners page", value: "partners" },
           { title: "Partners page — Become a Partner form", value: "becomePartner" },
           { title: "News page", value: "news" },

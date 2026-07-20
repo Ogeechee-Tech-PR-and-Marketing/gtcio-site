@@ -13,6 +13,8 @@ type PageHeroProps = {
   videoPoster?: string;
   /** Optional CTA (e.g. a Button) rendered under the description. */
   cta?: React.ReactNode;
+  /** Optional content (e.g. a stat row) rendered under the description/cta. */
+  extra?: React.ReactNode;
 };
 
 export default function PageHero({
@@ -25,6 +27,7 @@ export default function PageHero({
   video,
   videoPoster,
   cta,
+  extra,
 }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden bg-brand-black px-6 py-16 text-brand-white sm:px-10 sm:py-24">
@@ -74,6 +77,7 @@ export default function PageHero({
           <p className="mt-5 max-w-2xl text-lg text-brand-silver">{description}</p>
         )}
         {cta && <div className="mt-8">{cta}</div>}
+        {extra && <div className="mt-10">{extra}</div>}
       </div>
     </section>
   );

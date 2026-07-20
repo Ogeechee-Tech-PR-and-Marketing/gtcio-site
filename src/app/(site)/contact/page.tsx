@@ -49,7 +49,7 @@ export default async function ContactPage() {
     address?: string;
     phone?: string;
     programContact?: { name?: string; office?: string; phone?: string; email?: string };
-    mediaContact?: { name?: string; email?: string; phone?: string };
+    mediaContact?: { name?: string; office?: string; phone?: string; email?: string };
   } | null;
 
   return (
@@ -83,9 +83,10 @@ export default async function ContactPage() {
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Media Inquiries</h2>
             <div className="mt-3 flex flex-col gap-2 text-brand-black">
-              <p>{settings?.mediaContact?.name ?? "Sean Payne"}</p>
+              <p>{settings?.mediaContact?.name ?? "Sean Payne, Executive Director for Public Relations & Marketing"}</p>
+              {settings?.mediaContact?.office && <p>{settings.mediaContact.office}</p>}
+              <p>{settings?.mediaContact?.phone ?? "912-871-8559"}</p>
               <p>{settings?.mediaContact?.email ?? "spayne@ogeecheetech.edu"}</p>
-              <p>{settings?.mediaContact?.phone ?? "(O) 912-871-8559"}</p>
             </div>
           </div>
           <div>

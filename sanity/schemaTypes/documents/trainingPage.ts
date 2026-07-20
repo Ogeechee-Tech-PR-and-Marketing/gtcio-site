@@ -16,7 +16,9 @@ export default defineType({
     { name: "faq", title: "Employer FAQ" },
   ],
   fields: [
-    ...heroFields("hero"),
+    // No "Intro paragraph" — the hero shows the stat boxes below instead
+    // (see the "stats" group), so heroDescription is dropped here.
+    ...heroFields("hero").filter((f) => f.name !== "heroDescription"),
 
     defineField({
       name: "stats",

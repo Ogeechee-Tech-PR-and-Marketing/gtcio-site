@@ -133,17 +133,7 @@ export default async function Home() {
           <p className="mt-6 max-w-2xl text-lg text-brand-silver">{page.heroDescription}</p>
           <div className="mt-9 flex flex-wrap gap-4">
             {heroButtons.map((button, i) => (
-              <CtaButton
-                key={button._key ?? i}
-                button={button}
-                // First button is the primary red one; the rest are outlined.
-                variant={i === 0 ? "primary" : "outline"}
-                className={
-                  i === 0
-                    ? undefined
-                    : "border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black"
-                }
-              />
+              <CtaButton key={button._key ?? i} button={button} variant="primary" />
             ))}
           </div>
         </div>
@@ -181,11 +171,7 @@ export default async function Home() {
               <p className="mt-3 text-brand-white/90">{page.partnerBandBody}</p>
             )}
           </div>
-          <CtaButton
-            button={page.partnerBandButton}
-            variant="outline"
-            className="shrink-0 border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-red"
-          />
+          <CtaButton button={page.partnerBandButton} variant="dark" className="shrink-0" />
         </div>
       </section>
 

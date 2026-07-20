@@ -30,7 +30,6 @@ export default defineType({
     { name: "stats", title: "Stats & overview" },
     { name: "focus", title: "What it's built around" },
     { name: "gallery", title: "Photo gallery" },
-    { name: "tour", title: "Book a Tour form" },
   ],
   fields: [
     ...heroFields("hero"),
@@ -97,36 +96,13 @@ export default defineType({
       group: "gallery",
     }),
 
-    defineField({
-      name: "bookTourTitle",
-      title: "Form heading",
-      type: "string",
-      group: "tour",
-    }),
-    defineField({
-      name: "bookTourIntro",
-      title: "Form intro paragraph",
-      type: "text",
-      rows: 3,
-      group: "tour",
-    }),
-    defineField({
-      name: "tourNoticeHeading",
-      title: "Notice banner heading",
-      description:
-        'The bold line of the yellow banner, e.g. "Tour booking opens October 26, 2026".',
-      type: "string",
-      group: "tour",
-    }),
-    defineField({
-      name: "tourNotice",
-      title: "Notice banner text",
-      description:
-        "The yellow banner above the tour form. Use it for temporary messages like tour booking not being open yet. Clear BOTH this and the heading above to remove the banner once tours can be booked.",
-      type: "text",
-      rows: 3,
-      group: "tour",
-    }),
+    // The "Book a Tour form" fields (bookTourTitle, bookTourIntro,
+    // tourNoticeHeading, tourNotice) are deliberately removed here — tour
+    // booking is off the site entirely until it launches 2026-10-26 (Jake,
+    // 2026-07-20). The section is also removed from facility/page.tsx. Values
+    // already in the dataset are left alone (just unreachable from the
+    // Studio); re-add these four fields with the "tour" group verbatim to
+    // restore editing, and the old copy will still be there.
   ],
   preview: {
     prepare() {

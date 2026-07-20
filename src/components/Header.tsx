@@ -99,15 +99,6 @@ export default function Header({
             )}
           </nav>
 
-          <div className="hidden xl:block">
-            <Link
-              href="/facility#book-a-tour"
-              className="font-ui whitespace-nowrap bg-brand-red px-6 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
-            >
-              BOOK A TOUR
-            </Link>
-          </div>
-
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
@@ -145,13 +136,6 @@ export default function Header({
                 )}
               </div>
             ))}
-            <Link
-              href="/facility#book-a-tour"
-              onClick={() => setMobileOpen(false)}
-              className="font-ui mt-2 bg-brand-red px-6 py-2.5 text-center text-xs font-bold tracking-widest text-brand-white"
-            >
-              BOOK A TOUR
-            </Link>
           </nav>
         )}
       </div>

@@ -5,7 +5,8 @@ import { useState } from "react";
 export type InquiryField = {
   name: string;
   label: string;
-  type?: "text" | "email" | "tel" | "date" | "textarea" | "select";
+  /** "checkboxes" renders a group where more than one option can be picked at once. */
+  type?: "text" | "email" | "tel" | "date" | "textarea" | "select" | "checkboxes";
   required?: boolean;
   halfWidth?: boolean;
   options?: string[];
@@ -33,10 +34,28 @@ export default function InquiryForm({
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("sending");
     setError(null);
 
-    const payload = Object.fromEntries(new FormData(event.currentTarget));
+    const formData = new FormData(event.currentTarget);
+    const payload: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
+    for (const field of fields) {
+      payload[field.name] =
+        field.type === "checkboxes" ? formData.getAll(field.name) : formData.get(field.name) ?? "";
+    }
+    payload.botcheck = formData.get("botcheck") ?? "";
+
+    const missingRequiredCheckboxes = fields.find(
+      (field) =>
+        field.type === "checkboxes" &&
+        field.required &&
+        (payload[field.name] as FormDataEntryValue[]).length === 0
+    );
+    if (missingRequiredCheckboxes) {
+      setError(`Please select at least one option for "${missingRequiredCheckboxes.label}".`);
+      return;
+    }
+
+    setStatus("sending");
 
     try {
       const response = await fetch("/api/inquiry", {
@@ -84,47 +103,66 @@ export default function InquiryForm({
 
       {fields.map((field) => (
         <div key={field.name} className={field.halfWidth === false ? "sm:col-span-2" : ""}>
-          <label
-            htmlFor={field.name}
-            className="font-heading mb-1 block text-xs font-bold tracking-wide text-brand-black"
-          >
-            {field.label}
-            {field.required && <span className="text-brand-red"> *</span>}
-          </label>
-
-          {field.type === "select" ? (
-            <select
-              id={field.name}
-              name={field.name}
-              required={field.required}
-              defaultValue=""
-              className={FIELD_CLASSES}
-            >
-              <option value="" disabled>
-                {field.placeholder ?? "Select one…"}
-              </option>
-              {field.options?.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          ) : field.type === "textarea" ? (
-            <textarea
-              id={field.name}
-              name={field.name}
-              required={field.required}
-              rows={4}
-              className={FIELD_CLASSES}
-            />
+          {field.type === "checkboxes" ? (
+            <fieldset>
+              <legend className="font-heading mb-1 block text-xs font-bold tracking-wide text-brand-black">
+                {field.label}
+                {field.required && <span className="text-brand-red"> *</span>}
+              </legend>
+              <div className="flex flex-col gap-2 border border-brand-silver bg-brand-white px-3 py-3">
+                {field.options?.map((option) => (
+                  <label key={option} className="flex items-center gap-2 text-sm text-brand-black">
+                    <input type="checkbox" name={field.name} value={option} className="accent-brand-red" />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           ) : (
-            <input
-              id={field.name}
-              name={field.name}
-              type={field.type ?? "text"}
-              required={field.required}
-              className={FIELD_CLASSES}
-            />
+            <>
+              <label
+                htmlFor={field.name}
+                className="font-heading mb-1 block text-xs font-bold tracking-wide text-brand-black"
+              >
+                {field.label}
+                {field.required && <span className="text-brand-red"> *</span>}
+              </label>
+
+              {field.type === "select" ? (
+                <select
+                  id={field.name}
+                  name={field.name}
+                  required={field.required}
+                  defaultValue=""
+                  className={FIELD_CLASSES}
+                >
+                  <option value="" disabled>
+                    {field.placeholder ?? "Select one…"}
+                  </option>
+                  {field.options?.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : field.type === "textarea" ? (
+                <textarea
+                  id={field.name}
+                  name={field.name}
+                  required={field.required}
+                  rows={4}
+                  className={FIELD_CLASSES}
+                />
+              ) : (
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type={field.type ?? "text"}
+                  required={field.required}
+                  className={FIELD_CLASSES}
+                />
+              )}
+            </>
           )}
         </div>
       ))}

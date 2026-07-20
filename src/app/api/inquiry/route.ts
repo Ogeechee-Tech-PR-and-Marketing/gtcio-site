@@ -6,7 +6,9 @@ type FormType = (typeof FORM_TYPES)[number];
 
 type Payload = {
   formType?: string;
-  reason?: string;
+  // The Contact form's reason checkboxes submit an array (one or more can be
+  // checked); the Partner form's reason dropdown submits a single string.
+  reason?: string | string[];
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -25,6 +27,14 @@ const MAX_SHORT = 200; // names, phone, organization, reason, date
 const MAX_EMAIL = 254; // RFC 5321 upper bound
 const MAX_MESSAGE = 5000;
 const MAX_BODY_BYTES = 20_000;
+const MAX_REASONS = 20; // the real checkbox list only has a handful; this just bounds a direct POST
+
+/**
+ * The exact label of the Contact form checkbox (contactPage.contactReasons in
+ * the Studio) that routes the notification to Sean Payne instead of Jan Moore.
+ * Renaming that checkbox in the Studio silently breaks this — update it here too.
+ */
+const MEDIA_REASON = "media inquiry";
 
 function isFormType(v: unknown): v is FormType {
   return typeof v === "string" && (FORM_TYPES as readonly string[]).includes(v);
@@ -40,6 +50,14 @@ function clean(value: string | undefined, max: number): string {
     .replace(/[\u0000-\u001f\u007f]+/g, " ")
     .trim()
     .slice(0, max);
+}
+
+function cleanReasons(value: string | string[] | undefined): string[] {
+  const values = Array.isArray(value) ? value : value ? [value] : [];
+  return values
+    .slice(0, MAX_REASONS)
+    .map((v) => clean(v, MAX_SHORT))
+    .filter(Boolean);
 }
 
 function buildSubject(formType: FormType, reason: string, who: string) {
@@ -88,11 +106,26 @@ export async function POST(request: Request) {
     .filter(Boolean)
     .join(" ");
   const organization = clean(body.organization, MAX_SHORT);
-  const reason = clean(body.reason, MAX_SHORT);
+  const reasons = cleanReasons(body.reason);
+  const reasonText = reasons.join(", ");
   const phone = clean(body.phone, MAX_SHORT);
   const preferredDate = clean(body.preferredDate, MAX_SHORT);
   const message = (body.message ?? "").trim().slice(0, MAX_MESSAGE);
-  const subject = buildSubject(formType, reason, organization || name);
+  const subject = buildSubject(formType, reasonText, organization || name);
+
+  // "Media inquiry" routes to Sean Payne; everything else (and a submission with
+  // no reason at all, e.g. the Partner/Tour forms which don't use this concept)
+  // routes to Jan Moore. Both fire when a Contact submission checks "Media
+  // inquiry" alongside another reason, since each covers a different audience.
+  const includesMedia = reasons.some((r) => r.toLowerCase() === MEDIA_REASON);
+  const includesOther = reasons.length === 0 || reasons.some((r) => r.toLowerCase() !== MEDIA_REASON);
+  const recipients: { accessKey: string | undefined; audience: string }[] = [];
+  if (includesOther) {
+    recipients.push({ accessKey: process.env.WEB3FORMS_ACCESS_KEY, audience: "general (Jan Moore)" });
+  }
+  if (includesMedia) {
+    recipients.push({ accessKey: process.env.WEB3FORMS_ACCESS_KEY_MEDIA, audience: "media (Sean Payne)" });
+  }
 
   const submission = {
     // The dataset is publicly readable (the website reads it without a token), so
@@ -104,7 +137,7 @@ export async function POST(request: Request) {
     _id: `drafts.${crypto.randomUUID()}`,
     _type: "formSubmission",
     formType,
-    reason: reason || undefined,
+    reason: reasonText || undefined,
     name: name || undefined,
     email,
     phone: phone || undefined,
@@ -124,20 +157,32 @@ export async function POST(request: Request) {
     console.error("[inquiry] failed to save submission to Sanity", error);
   }
 
-  let emailDelivered = false;
-  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+  // Each recipient needs its own Web3Forms key (the key bakes in who receives
+  // it — there's no per-request "to" field), so a submission that needs to
+  // reach both Jan and Sean sends two separate notifications.
+  let anyRecipientConfigured = false;
+  let allDelivered = true;
 
-  if (accessKey) {
+  for (const recipient of recipients) {
+    if (!recipient.accessKey) {
+      console.warn(
+        `[inquiry] no Web3Forms access key configured for ${recipient.audience} — no email sent to that recipient.`
+      );
+      allDelivered = false;
+      continue;
+    }
+    anyRecipientConfigured = true;
+
     try {
       const response = await fetch(WEB3FORMS_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          access_key: accessKey,
+          access_key: recipient.accessKey,
           subject,
           from_name: "GTCIO Website",
           replyto: email, // so staff can just hit Reply
-          "Reason for inquiry": reason || "(not specified)",
+          "Reason for inquiry": reasonText || "(not specified)",
           Name: name || "(not given)",
           Email: email,
           Phone: phone || "(not given)",
@@ -150,19 +195,21 @@ export async function POST(request: Request) {
       });
 
       const result = await response.json().catch(() => ({}));
-      emailDelivered = response.ok && result?.success !== false;
+      const delivered = response.ok && result?.success !== false;
 
-      if (!emailDelivered) {
-        console.error("[inquiry] Web3Forms rejected the submission", result);
+      if (!delivered) {
+        allDelivered = false;
+        console.error(`[inquiry] Web3Forms rejected the submission for ${recipient.audience}`, result);
       }
     } catch (error) {
-      console.error("[inquiry] email delivery threw", error);
+      allDelivered = false;
+      console.error(`[inquiry] email delivery to ${recipient.audience} threw`, error);
     }
-  } else {
-    console.warn(
-      "[inquiry] WEB3FORMS_ACCESS_KEY is not set — submission saved to Sanity only, no email sent."
-    );
   }
+
+  // "Delivered" means every intended recipient got it — a partial send (e.g.
+  // Jan notified but Sean's key isn't configured yet) still needs manual follow-up.
+  const emailDelivered = anyRecipientConfigured && allDelivered;
 
   if (submissionId && emailDelivered) {
     try {

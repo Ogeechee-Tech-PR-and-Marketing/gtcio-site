@@ -147,8 +147,10 @@ Every decision below exists to protect that. Weigh it accordingly.
   footer links, and the logo (all deliberate — see §8). Everything else is: the
   Home hero buttons / red partner band / newsletter; the
   Training stats, employer copy, catalog band, credentials, services and course
-  areas; the Facility focus areas and tour-notice banner; the Partners intro button;
-  the IOT Apply band + button; the About mission statement and project timeline.
+  areas; the Facility focus areas; the Partners intro button; the IOT Apply band
+  + button; the About mission statement and project timeline. (The Facility
+  tour-notice banner was CMS-editable too, until Book a Tour was pulled off the
+  site entirely 2026-07-20 — see §8.)
   The CMS is **seeded** with all of that copy so editors see real text, not empty
   boxes falling back to code. If you add a section, add fields AND seed them —
   don't leave content code-only.
@@ -269,9 +271,12 @@ Both should report 0 errors. The second is what catches trap 2.
 
 ## 5. How the forms work
 
-Three forms — **Book a Tour** (Facility), **Become a Partner** (Partners), and
-**Contact** — all render through `src/components/InquiryForm.tsx` and POST JSON to
-**`src/app/api/inquiry/route.ts`**. That route, in order:
+Two forms are currently live — **Become a Partner** (Partners) and **Contact** —
+rendering through `src/components/InquiryForm.tsx` and POSTing JSON to
+**`src/app/api/inquiry/route.ts`**. A third, **Book a Tour** (Facility), is
+temporarily removed site-wide (Jake, 2026-07-20) — see the §8 note — but the
+route and `InquiryForm` still support a `formType: "tour"` value so restoring it
+in October is just re-adding UI, no backend change. That route, in order:
 
 1. **Rejects oversized payloads** (>20 KB) and **drops bots** via a `botcheck`
    honeypot field, returning a fake success so they don't retry.
@@ -314,24 +319,47 @@ with an "unpublished" dot). Two guardrails keep it that way:
   the same Partnership Pathway cards displayed above the form, plus a hardcoded
   "Something else / not sure yet". This is deliberate: rename a pathway card and
   the dropdown follows, so the form can never drift out of sync with the page.
-  There is no separate list to maintain — **don't add one.**
+  There is no separate list to maintain — **don't add one.** **Checkboxes, not a
+  dropdown** (changed 2026-07-20) — a prospective partner can be interested in
+  more than one pathway at once.
 - **Contact** — options come from `contactPage.contactReasons`, editable in the
-  Studio.
+  Studio. **Single-select dropdown** — a visitor picks exactly one reason (tried
+  as checkboxes on 2026-07-20, reverted the same day: Contact stays one-at-a-time,
+  only Become a Partner allows multiple).
 
-Whichever option the visitor picks becomes the **email subject line**.
+Whichever option(s) the visitor picks become the **email subject line**.
 
-### ⚠️ Web3Forms: the recipient is baked into the access key
+### ⚠️ Web3Forms: the recipient is baked into the access key, so two keys exist
 
 Web3Forms sends to whatever address the key was **created with**. There is *no*
-per-request "to" field (`ccemail` is a paid feature). Consequences:
+per-request "to" field (`ccemail` is a paid feature) — to change who receives a
+given notification you must generate a **new key** using that address, you
+cannot do it in code.
 
-- To change who receives inquiries, you must generate a **new key** using that
-  address and update `WEB3FORMS_ACCESS_KEY`. You cannot do it in code.
-- Intended recipient: **`jmoore@ogeecheetech.edu`**.
+Because of that, `/api/inquiry` now holds **two** keys and picks between them
+per submission (added 2026-07-20, see `MEDIA_REASON` and the `recipients` array
+in `src/app/api/inquiry/route.ts`). The route accepts `reason` as either a single
+string or an array so it works for both forms' field types without special-casing
+which form submitted:
 
-**If `WEB3FORMS_ACCESS_KEY` is unset, the site still works and still saves every
-submission — it just doesn't email.** That's deliberate graceful degradation, not
-a bug. See §8 for the current status.
+- `WEB3FORMS_ACCESS_KEY` → **`jmoore@ogeecheetech.edu`** — every submission
+  except a Contact-form one where *only* "Media inquiry" is checked.
+- `WEB3FORMS_ACCESS_KEY_MEDIA` → **`spayne@ogeecheetech.edu`** — fires whenever
+  "Media inquiry" is checked. Since Contact is single-select this is currently
+  either/or in practice, but the code doesn't assume that — if a Contact-reason
+  array ever *did* include "Media inquiry" alongside another reason, **both**
+  keys would fire (two separate Web3Forms calls), since each reason serves a
+  different audience.
+- Renaming the "Media inquiry" checkbox label in the Studio breaks this
+  matching silently — `MEDIA_REASON` in the route file has to change with it.
+
+**If a key is unset, the site still works and still saves every submission —
+it just doesn't email that recipient.** `emailDelivered` on the saved
+`formSubmission` is only `true` when *every* recipient that submission needed
+was successfully notified, so a partial send (e.g. Jan's key configured but
+Sean's isn't) still shows the Studio's "⚠️ NOT EMAILED" flag as a prompt to
+follow up by hand. That's deliberate graceful degradation, not a bug. See §8
+for the current status.
 
 ---
 
@@ -346,6 +374,7 @@ NEXT_PUBLIC_SANITY_API_VERSION=2025-06-01
 SANITY_API_READ_TOKEN=<viewer-role token, secret>
 SANITY_API_WRITE_TOKEN=<editor-role token, secret — writes form submissions>
 WEB3FORMS_ACCESS_KEY=<see §5; unset = no email, submissions still saved>
+WEB3FORMS_ACCESS_KEY_MEDIA=<see §5; separate key so "Media inquiry" routes to Sean Payne>
 ```
 
 The read token is **viewer role**, used server-side for draft/preview reads only.
@@ -437,13 +466,17 @@ that company's logo.
 
 ## 8. Open work
 
-**🔴 No inquiry emails are being sent yet.** `WEB3FORMS_ACCESS_KEY` is not set, so
-form submissions are being saved to the Studio inbox but **nobody is being
-notified**. To finish: create a key at [web3forms.com](https://web3forms.com)
-*using the address that should receive the mail* (see §5 — the recipient is tied to
-the key), then set `WEB3FORMS_ACCESS_KEY` in Vercel and redeploy. Then submit the
-Contact form once and confirm the email actually arrives — **email delivery has
-never been tested end to end**, because it can't be without a real key.
+**🔴 No inquiry emails are being sent yet.** Neither `WEB3FORMS_ACCESS_KEY` nor
+`WEB3FORMS_ACCESS_KEY_MEDIA` is set, so form submissions are being saved to the
+Studio inbox but **nobody is being notified**. To finish: create **two** keys at
+[web3forms.com](https://web3forms.com), one signed up with
+`jmoore@ogeecheetech.edu` and one with `spayne@ogeecheetech.edu` (see §5 — the
+recipient is tied to the key, and the two now route different Contact-form
+submissions), set both `WEB3FORMS_ACCESS_KEY` and `WEB3FORMS_ACCESS_KEY_MEDIA`
+in Vercel, and redeploy. Then submit the Contact form twice — once with only
+"Media inquiry" checked, once with anything else — and confirm each lands with
+the right person. **Email delivery has never been tested end to end**, because
+it can't be without real keys.
 
 **Sanity role:** the shared marketing account (below) was invited as
 **Administrator**, which can delete the dataset and revoke the tokens the live site
@@ -590,12 +623,27 @@ Smaller items:
     name, phone, and URL, so it may be a sponsored placement rather than
     independent reporting; it is filed as media because it ran in an outside
     outlet.
-- **Tour booking opens 2026-10-26.** The Facility "Book a Tour" form stays live but
-  carries a gold notice banner saying dates can't be confirmed until then. It's two
-  fields — `facilityPage.tourNoticeHeading` (which carries the date) and
-  `facilityPage.tourNotice` — and the banner disappears only when **both** are
-  cleared (Facility Page → Book a Tour form). The header still links to the tour
-  form; the home hero buttons no longer include "Book a Tour".
+- **🔴 Book a Tour is off the site entirely until 2026-10-26** (Jake, 2026-07-20
+  — reversed the earlier plan of keeping the form live with a gold "not open
+  yet" notice banner). Removed: the red header button (desktop nav and mobile
+  menu), the Footer's "Book a Tour" link, and the whole `#book-a-tour` section
+  on the Facility page (heading, notice banner, and the request form itself).
+  Also pulled from the Studio for now so editors don't see dead fields for a
+  form that isn't on the site: the `tour` group and its four fields
+  (`bookTourTitle`, `bookTourIntro`, `tourNoticeHeading`, `tourNotice`) are
+  commented out of `facilityPage.ts` rather than deleted, and the `tour`
+  `ctaButton` destination is commented out in both `ctaButton.ts` and
+  `DESTINATIONS` (`sanity/lib/links.ts`) — see the code comments at each
+  spot. Existing field *values* in the dataset were left untouched (not
+  unset), so restoring is: uncomment those four schema fields + the two
+  destination entries, and re-add the `<section id="book-a-tour">` block to
+  `facility/page.tsx` (removed 2026-07-20 — check git history for the exact
+  JSX) plus the two Header links and the Footer link. The old copy, including
+  the October 26 date, will still be sitting in the document once the fields
+  are back. `src/app/api/inquiry/route.ts` and `InquiryForm.tsx` were left
+  alone — `formType: "tour"` still works, nothing to restore there. Keep
+  `public/SITEMAP.html` in sync when it comes back (Facility card, Header/Footer
+  "On every page" cards, and the two form/deep-link tallies at the top).
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
   are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
@@ -707,8 +755,9 @@ shows deploy status.
 - **Footer** carries an "Equal Opportunity Institution" link to
   <https://www.ogeecheetech.edu/about/equal-opportunity>, matching OTC's own
   footer convention. Keep it — it's an institutional compliance link.
-- The five current partners: Development Authority of Bulloch County, Koyo
-  Bearings, Georgia Power, Ajin Georgia, Amazon.
+- The five current partners, shown alphabetically by `order` (set 2026-07-20):
+  Ajin Georgia, Amazon, Development Authority of Bulloch County, Georgia Power,
+  Koyo Bearings.
 - Useful confirmed facts (from OTC's 2026-07-09 press release): $27M / 40,000 sq
   ft facility, ~460,000 instructional hours/year capacity, August 2026 launch.
   Media contact: Sean Payne, spayne@ogeecheetech.edu. Applications:
@@ -745,8 +794,9 @@ shows deploy status.
 - **Don't reintroduce the "tours don't interrupt training" framing.** It used to
   open the Facility hero and sat in About → History and the design milestone. Jan
   called it a minor facet (2026-07-16); it was removed everywhere and replaced with
-  the demand/Hyundai/regional-anchor story above. Booking a tour is still a real
-  feature — it just isn't the building's reason for existing.
+  the demand/Hyundai/regional-anchor story above. Booking a tour is a real
+  feature (temporarily off the site until 2026-10-26, see §8) — it just isn't
+  the building's reason for existing.
 - **Employer-training facts** come from "OTC Industrial Systems Training
   Program.pdf" (in the parent folder; also published as a flipbook at
   <https://online.fliphtml5.com/exygb/kvbr/#p=1>, which the IOT Training Programs

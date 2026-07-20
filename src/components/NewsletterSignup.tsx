@@ -78,7 +78,7 @@ export default function NewsletterSignup({
               />
               <button
                 type="submit"
-                className="font-ui shrink-0 bg-brand-red px-6 py-3 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-white hover:text-brand-black"
+                className="font-ui shrink-0 bg-brand-red px-6 py-3 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-black"
               >
                 {buttonLabel}
               </button>

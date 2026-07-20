@@ -18,7 +18,6 @@ const COLUMNS = [
   {
     heading: "Get Involved",
     links: [
-      { label: "Book a Tour", href: "/facility#book-a-tour" },
       { label: "Become a Partner", href: "/partners#become-a-partner" },
       { label: "Apply to the Program", href: DESTINATIONS.apply },
     ],
