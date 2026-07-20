@@ -540,22 +540,35 @@ Smaller items:
   rebranded the Koyo bearings brand to JTEKT in 2022; Jake chose JTEKT North
   America), Amazon → aboutamazon.com (corporate, Jake's choice over retail).
   Verify any new partner URL against the real site before setting it.
-- **News page is populated** (2026-07-20) with six `newsItem` docs — two press,
-  four media:
-  - *press* — OTC IOT program launch (2026-07-08, no URL: the release is a Word
-    doc in the parent folder and does not appear on OTC's news site; the headline
-    renders unlinked, which is handled); beam signing (2025-12-10,
-    ogeecheetech.edu).
-  - *media* — Statesboro Magazine (2026-07-01), WSAV-TV (2026-03-24), Statesboro
-    Herald (2025-12-17), Grice Connect (2025-12-10).
-  - ⚠️ **The Grice Connect date is inferred, not verified.** The site sits behind
-    a Cloudflare bot challenge, so the page could not be read; 2025-12-10 was
-    chosen to match OTC's own post of the same ceremony, which Grice appears to
-    have republished. Correct it if the real date surfaces.
-  - ⚠️ **The older articles quote superseded specs** — WSAV says 38,000 sq ft /
-    $26M / 400,000 hrs, the Herald says 37,000 sq ft. The excerpts deliberately
-    avoid all of those numbers. Don't harvest figures out of these pieces; the
-    current ones are 40,000 sq ft / $27M / ~460,000 hrs.
+- **News page is populated** (2026-07-20) with 14 `newsItem` docs — 7 press
+  (OTC's own posts) and 7 media, spanning 2021 to 2026. All 13 outbound URLs were
+  checked and return 200; the 2026-07-08 IOT program launch release has **no
+  URL** — it is a Word doc in the parent folder and is not on OTC's news site, so
+  its headline renders unlinked (handled by the component).
+  - ⚠️ **Four dates are inferred, not read off the page.** Grice Connect sits
+    behind a Cloudflare bot challenge. Its article IDs do **not** track dates
+    (ID 6504521 is a Spring 2022 story — the site backfilled content), so IDs are
+    useless for dating. Each Grice item is dated to match the OTC original it
+    mirrors: beam signing 2025-12-10, funding announcement 2023-06-05, Amatrol
+    2023-04-27, Amazon MRA 2021-05-24. Correct any that surface.
+  - ⚠️ **Several headlines carry superseded specs** — "37,000 Sq ft", "36,000
+    square-foot", the old GISIRTC name, and WSAV's 38,000 sq ft / $26M / 400,000
+    hrs. Jake decided 2026-07-20 to **leave these as published** rather than
+    annotate other outlets' headlines; the visible dates supply the context. The
+    excerpts still deliberately avoid restating those numbers. **Do not harvest
+    figures out of these pieces** — current is 40,000 sq ft / $27M / ~460,000 hrs
+    (see the PDF note in §10, same trap).
+  - ⚠️ **Four items are not about GTCIO** and were included deliberately (Jake,
+    2026-07-20): ACE Electric's gift (2025-10-08) does not mention GTCIO at all,
+    Goodman's Diamond Award (2023-02-16) is a staff award, and the Amatrol
+    (2023-04-27) and Amazon MRA (2021-05-24) items are OTC training capability.
+    If the page later needs to read as strictly GTCIO, these are the four to cut.
+  - The funding announcement is listed **twice** — OTC's own post under press and
+    Grice's coverage of it under media — by choice, to show outside pickup.
+  - OTC also has first-party versions of the Amatrol and Amazon MRA stories
+    (`/about/news/post/ogeechee-tech-now-an-amatrol-regional-training-center`,
+    `/about/news/post/ogeechee-technical-college-now-a-training-provider-for-amazon-s-mra-program`)
+    if the Grice versions should ever be swapped for dated first-party sources.
   - The Statesboro Magazine piece carries no byline and closes with OTC's own
     name, phone, and URL, so it may be a sponsored placement rather than
     independent reporting; it is filed as media because it ran in an outside
