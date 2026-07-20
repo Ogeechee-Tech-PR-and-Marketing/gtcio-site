@@ -458,25 +458,42 @@ account, so Sanity's per-user history can't tell you *which person* changed
 something; (b) the credential must be rotated when someone leaves. Dataset revision
 history is 90 days, so content mistakes are recoverable.
 
-**🔴 Publishing in the Studio does not update the live site.** There are **no
-Sanity webhooks** configured (`npx sanity hook list` → empty, verified
-2026-07-16), and every page is statically prerendered at build time. `SanityLive`
-is supposed to cover this, but it revalidates via a **client-side** server action
-(`revalidateTag(tag, 'max')` in `next-sanity/dist/live/server-actions`) that only
-fires *if someone has the affected page open in a browser at the moment of
-publish*. If marketing publishes and nobody is on the site, the static page keeps
-serving stale content until the next deploy. **This defeats the point of the CMS**
-— fix before handing the site to Jan's team. Two manual steps (neither can be
-scripted: Vercel deploy-hook creation needs a dashboard token, and
-`sanity hooks create` is interactive-only):
+**✅ Publishing in the Studio now redeploys the site** (set up and verified
+2026-07-20). Every page is statically prerendered at build time, and `SanityLive`
+does *not* cover this on its own: it revalidates via a **client-side** server
+action (`revalidateTag(tag, 'max')` in `next-sanity/dist/live/server-actions`)
+that only fires *if someone has the affected page open in a browser at the moment
+of publish*. Without a webhook, a publish with nobody on the site left the static
+page stale until the next deploy. The chain now in place:
 
-1. Vercel → project **gtcio-site** → Settings → Git → **Deploy Hooks** → create
-   one named `sanity-publish` on branch `main`; copy the URL.
-2. <https://www.sanity.io/manage/project/kjz4q8d4> → API → **Webhooks** → create
-   one pointing at that URL: dataset `production`, trigger on
-   Create/Update/Delete, filter `_type != "formSubmission"` (form submissions are
-   written by the site itself — without this filter every inquiry triggers a
-   rebuild).
+1. **Vercel deploy hook** `sanity-publish` on branch `main` (id `8r7ONDtCoE`).
+   Vercel → **gtcio-site** → Settings → Git → Deploy Hooks.
+2. **Sanity webhook** `sanity-publish` (id `cu422aiH3auTR0Au`), dataset
+   `production`, on create/update/delete, filter `_type != "formSubmission"`,
+   POST, GROQ API v2021-03-25, drafts off, pointed at that deploy hook.
+
+Verified end to end: patching a published doc logged a webhook attempt with
+**201** and produced a production deployment; creating *and* deleting a
+`formSubmission` produced **no** attempt, so inquiries never trigger rebuilds
+(both the filter and `includeDrafts: false` block them — submissions are drafts).
+
+⚠️ **Correcting an earlier note in this file:** the Sanity webhook *is*
+API-creatable — the trick is that `on` and `filter` nest under a **`rule`**
+object, not at the top level. Top-level `filter` returns `"filter" is not
+allowed`, and passing `type: "document"` with a string filter returns `"filter"
+must be of type object`, which is what made it look impossible. The endpoint is
+`POST https://api.sanity.io/v2025-08-04/hooks/projects/kjz4q8d4` with a
+**user** token (`~/.config/sanity/config.json`) — the editor-role
+`SANITY_API_WRITE_TOKEN` lacks the `sanity.project.webhooks` grant. Note
+`sanity hooks create` itself only opens the manage UI in a browser; it calls no
+API. The **Vercel** deploy hook is also API-creatable:
+`POST https://api.vercel.com/v1/projects/<projectId>/deploy-hooks?teamId=<orgId>`
+with `{"name","ref"}`, using the CLI token in
+`~/Library/Application Support/com.vercel.cli/auth.json`.
+
+⚠️ Do **not** recreate these by hand without deleting the old ones first — two
+webhooks pointed at the same deploy hook means two rebuilds per publish. List
+them with `npx sanity hooks list`.
 
 A `revalidatePath` API route was considered instead (faster, no rebuild) but
 rejected: `cacheComponents` is off, so pages use the fetch cache, and
