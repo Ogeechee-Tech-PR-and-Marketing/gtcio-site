@@ -255,9 +255,12 @@ Three forms — **Book a Tour** (Facility), **Become a Partner** (Partners), and
 **Contact** — all render through `src/components/InquiryForm.tsx` and POST JSON to
 **`src/app/api/inquiry/route.ts`**. That route, in order:
 
-1. **Drops bots** via a `botcheck` honeypot field, returning a fake success so
-   they don't retry.
-2. Validates the form type and email address.
+1. **Rejects oversized payloads** (>20 KB) and **drops bots** via a `botcheck`
+   honeypot field, returning a fake success so they don't retry.
+2. Validates the form type and email address, **caps every field's length**
+   (200 chars for short fields, 5 000 for the message), and strips control
+   characters from the fields that end up in the email subject line, so a
+   submission can never smuggle CR/LF toward anything that builds email headers.
 3. **Saves the inquiry to Sanity first** as a `formSubmission` document. This
    happens *before* any email is attempted, so a bounced or spam-filtered
    notification never means a lost lead. **Do not flip this order.**
@@ -269,6 +272,23 @@ Three forms — **Book a Tour** (Facility), **Become a Partner** (Partners), and
    can follow up by hand.
 
 Marketing reads these in the Studio under **"Form submissions (inbox)"**.
+
+### 🔴 Submissions are saved as DRAFTS on purpose — privacy depends on it
+
+The `production` dataset is **publicly readable** (that's how the website reads
+content without a token, and how `cdn.sanity.io` serves images). A regular
+published `formSubmission` document would therefore expose the visitor's name,
+email, phone, and message to anyone on the internet via a one-line GROQ query.
+Draft documents (`_id` under `drafts.`) are the exception: they require
+authentication to read. So `/api/inquiry` writes every submission with
+`_id: "drafts.<uuid>"` (verified 2026-07-20: unauthenticated queries — including
+`perspective=raw` — return nothing; the Studio inbox lists them normally, just
+with an "unpublished" dot). Two guardrails keep it that way:
+
+- `sanity.config.ts` strips every document action except **Delete** for
+  `formSubmission`, so an editor can't Publish one (which would make it public).
+- **Never "fix" the inbox by publishing submissions**, and if the dataset is ever
+  made private or submissions move elsewhere, revisit this whole section.
 
 ### Dropdowns
 
@@ -323,6 +343,17 @@ add that origin** or the Studio's "Edit on page" preview will silently fail:
 
 `next.config.ts` allow-lists `cdn.sanity.io` for `next/image`. Any new remote
 image host must be added there or images 500.
+
+`next.config.ts` also sets security headers on every route (added 2026-07-20):
+`X-Frame-Options: SAMEORIGIN` (deliberately not DENY — the Studio's "Edit on
+page" tool iframes the site from `/studio` on the same origin),
+`X-Content-Type-Options: nosniff`, `Referrer-Policy`, and a restrictive
+`Permissions-Policy`.
+
+**The canonical site origin lives in `src/lib/site.ts`** (`SITE_URL`). It feeds
+`metadataBase` (root layout), `src/app/robots.ts` (which disallows `/studio` and
+`/api/`), and `src/app/sitemap.ts`. On a domain move, change it there — plus the
+Sanity CORS origin (§6 above) and the Adobe Fonts project (§7).
 
 ---
 
@@ -518,8 +549,9 @@ Smaller items:
   (or the wider Arial Narrow fallback if Adobe Fonts fails) would be *clipped*
   rather than wrapped. A longer headline just wraps to two lines. Re-measure if
   the headline changes materially.
-- **No rate limiting** on `/api/inquiry` beyond the honeypot. If spam becomes a
-  problem, add it.
+- **No rate limiting** on `/api/inquiry`. The honeypot, the 20 KB payload cap,
+  and the per-field length caps (§5) blunt casual abuse, but nothing stops a
+  determined flood. If spam becomes a problem, add real rate limiting.
 
 ---
 

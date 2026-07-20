@@ -183,6 +183,11 @@ sent through Book a Tour, Become a Partner, or Contact is saved here, newest
 first — even if the notification email goes astray. They're read-only; you can't
 edit them, only read them.
 
+Each one shows a small "unpublished draft" dot in the list. That's deliberate,
+not a mistake: keeping them as drafts is what keeps the sender's name, email,
+and phone number private to signed-in staff. There's nothing for you to publish
+— just read them (and you can delete one once it's dealt with, if you like).
+
 If a submission is flagged **⚠️ NOT EMAILED**, the notification never reached
 staff. Follow that one up by hand.
 

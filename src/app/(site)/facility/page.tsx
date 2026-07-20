@@ -97,8 +97,8 @@ export default async function FacilityPage() {
 
       <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
-          {stats.map((stat: { value: string; label: string }) => (
-            <div key={stat.label} className="border-l-4 border-brand-red pl-5">
+          {stats.map((stat: { value: string; label: string }, i: number) => (
+            <div key={i} className="border-l-4 border-brand-red pl-5">
               <p className="font-heading text-3xl font-bold text-brand-black">{stat.value}</p>
               <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
             </div>
@@ -120,8 +120,8 @@ export default async function FacilityPage() {
             <p className="mt-3 max-w-3xl text-brand-silver">{page.focusAreasIntro}</p>
           )}
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {focusAreas.map((area) => (
-              <div key={area.title} className="border-l-4 border-brand-red pl-5">
+            {focusAreas.map((area, i) => (
+              <div key={i} className="border-l-4 border-brand-red pl-5">
                 <h3 className="font-heading text-lg font-bold text-brand-black">{area.title}</h3>
                 <p className="mt-1 text-sm text-brand-silver">{area.detail}</p>
               </div>

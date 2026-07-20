@@ -135,7 +135,7 @@ export default async function IotDiplomaProgramPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.curriculumTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {curriculumStages.map((stage: { stage: string; detail: string }, i: number) => (
-              <div key={stage.stage} className="border border-brand-silver/40 p-6">
+              <div key={i} className="border border-brand-silver/40 p-6">
                 <p className="font-display text-sm text-brand-gold">Stage {i + 1}</p>
                 <h3 className="font-heading mt-2 text-lg font-bold text-brand-black">{stage.stage}</h3>
                 <p className="mt-2 text-sm text-brand-silver">{stage.detail}</p>
@@ -150,8 +150,8 @@ export default async function IotDiplomaProgramPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.moreWaysTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">{page.moreWaysBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {programOptions.map((option: { name: string; code?: string; detail: string }) => (
-              <div key={option.name} className="border border-brand-silver/40 p-5">
+            {programOptions.map((option: { name: string; code?: string; detail: string }, i: number) => (
+              <div key={i} className="border border-brand-silver/40 p-5">
                 <p className="font-bold text-brand-black">
                   {option.name}
                   {option.code && <span className="text-brand-silver"> ({option.code})</span>}
@@ -167,9 +167,9 @@ export default async function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.careersTitle}</h2>
           <div className="mt-6 flex flex-wrap gap-3">
-            {careers.map((career: string) => (
+            {careers.map((career: string, i: number) => (
               <span
-                key={career}
+                key={i}
                 className="font-heading border-2 border-brand-red px-4 py-2 text-sm font-bold tracking-wide text-brand-red"
               >
                 {career}
@@ -179,8 +179,8 @@ export default async function IotDiplomaProgramPage() {
           <p className="mt-4 text-sm text-brand-silver">{page.careersNote}</p>
           <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">{page.jobDutiesTitle}</h3>
           <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {jobDuties.map((duty: { label: string; detail: string }) => (
-              <li key={duty.label} className="border-l-4 border-brand-red pl-5">
+            {jobDuties.map((duty: { label: string; detail: string }, i: number) => (
+              <li key={i} className="border-l-4 border-brand-red pl-5">
                 <p className="font-bold text-brand-black">{duty.label}</p>
                 <p className="mt-1 text-sm text-brand-silver">{duty.detail}</p>
               </li>
@@ -193,8 +193,8 @@ export default async function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.payTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {payRanges.map((tier: { value: string; label: string }) => (
-              <div key={tier.label} className="border border-brand-silver/40 p-6">
+            {payRanges.map((tier: { value: string; label: string }, i: number) => (
+              <div key={i} className="border border-brand-silver/40 p-6">
                 <p className="font-heading text-2xl font-bold text-brand-red">{tier.value}</p>
                 <p className="mt-2 text-sm text-brand-silver">{tier.label}</p>
               </div>
@@ -217,8 +217,8 @@ export default async function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.studentFaqTitle}</h2>
           <div className="mt-6 flex flex-col gap-6">
-            {faqs.map((item: { question: string; answer: string }) => (
-              <div key={item.question} className="border-l-4 border-brand-black pl-5">
+            {faqs.map((item: { question: string; answer: string }, i: number) => (
+              <div key={i} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
                 <p className="mt-1 text-brand-silver">{item.answer}</p>
               </div>

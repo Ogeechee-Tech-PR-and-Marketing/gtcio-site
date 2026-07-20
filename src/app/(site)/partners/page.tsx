@@ -6,6 +6,7 @@ import InquiryForm from "@/components/InquiryForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { PARTNERS_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
+import { safeHref } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
   title: "Partners | GTCIO",
@@ -82,8 +83,8 @@ export default async function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.pathwaysTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pathways.map((p: { title: string; description: string }) => (
-              <div key={p.title} className="flex flex-col justify-between border border-brand-silver/40 p-6">
+            {pathways.map((p: { title: string; description: string }, i: number) => (
+              <div key={i} className="flex flex-col justify-between border border-brand-silver/40 p-6">
                 <div>
                   <h3 className="font-heading text-lg font-bold text-brand-red">{p.title}</h3>
                   <p className="mt-2 text-sm text-brand-silver">{p.description}</p>
@@ -108,7 +109,9 @@ export default async function PartnersPage() {
               right — the layout of the Georgia Cyber Center partners directory
               this page is modelled on. */}
           <div className="mt-8 flex flex-col gap-6">
-            {partners.map((partner) => (
+            {partners.map((partner) => {
+              const website = safeHref(partner.website);
+              return (
               <div
                 key={partner._id}
                 className="flex flex-col border border-brand-silver/20 bg-brand-white shadow-sm"
@@ -132,10 +135,10 @@ export default async function PartnersPage() {
                     <p className="mt-2 text-brand-silver">{partner.description}</p>
                   </div>
                 </div>
-                {partner.website && (
+                {website && (
                   <div className="flex justify-end px-8 pb-8">
                     <a
-                      href={partner.website}
+                      href={website}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-ui inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
@@ -145,7 +148,8 @@ export default async function PartnersPage() {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -19,8 +19,27 @@ type Payload = {
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
+// Field length caps. Generous for real people, tight enough that nobody can
+// stuff megabytes into the dataset or the notification email.
+const MAX_SHORT = 200; // names, phone, organization, reason, date
+const MAX_EMAIL = 254; // RFC 5321 upper bound
+const MAX_MESSAGE = 5000;
+const MAX_BODY_BYTES = 20_000;
+
 function isFormType(v: unknown): v is FormType {
   return typeof v === "string" && (FORM_TYPES as readonly string[]).includes(v);
+}
+
+/**
+ * Trim, cap length, and collapse newlines/control characters. Several of these
+ * values end up in the notification email's subject line — never let a
+ * submitted value smuggle CR/LF toward anything that builds email headers.
+ */
+function clean(value: string | undefined, max: number): string {
+  return (value ?? "")
+    .replace(/[\u0000-\u001f\u007f]+/g, " ")
+    .trim()
+    .slice(0, max);
 }
 
 function buildSubject(formType: FormType, reason: string, who: string) {
@@ -34,6 +53,12 @@ function buildSubject(formType: FormType, reason: string, who: string) {
 }
 
 export async function POST(request: Request) {
+  // Reject oversized payloads before parsing them.
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Request too large." }, { status: 413 });
+  }
+
   let body: Payload;
   try {
     body = await request.json();
@@ -51,7 +76,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unknown form." }, { status: 400 });
   }
 
-  const email = body.email?.trim() ?? "";
+  const email = clean(body.email, MAX_EMAIL);
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json(
       { error: "Please enter a valid email address." },
@@ -59,24 +84,33 @@ export async function POST(request: Request) {
     );
   }
 
-  const name = [body.firstName, body.lastName]
-    .map((part) => part?.trim())
+  const name = [clean(body.firstName, MAX_SHORT), clean(body.lastName, MAX_SHORT)]
     .filter(Boolean)
     .join(" ");
-  const organization = body.organization?.trim() ?? "";
-  const reason = body.reason?.trim() ?? "";
+  const organization = clean(body.organization, MAX_SHORT);
+  const reason = clean(body.reason, MAX_SHORT);
+  const phone = clean(body.phone, MAX_SHORT);
+  const preferredDate = clean(body.preferredDate, MAX_SHORT);
+  const message = (body.message ?? "").trim().slice(0, MAX_MESSAGE);
   const subject = buildSubject(formType, reason, organization || name);
 
   const submission = {
+    // The dataset is publicly readable (the website reads it without a token), so
+    // a plain published document here would expose the visitor's name, email, and
+    // phone to anyone on the internet. Draft documents (ids under "drafts.") are
+    // only readable with authentication, and the Studio inbox lists them just the
+    // same — so every submission is written as a draft. sanity.config.ts removes
+    // the Publish action for this type so one can't be made public by accident.
+    _id: `drafts.${crypto.randomUUID()}`,
     _type: "formSubmission",
     formType,
     reason: reason || undefined,
     name: name || undefined,
     email,
-    phone: body.phone?.trim() || undefined,
+    phone: phone || undefined,
     organization: organization || undefined,
-    preferredDate: body.preferredDate?.trim() || undefined,
-    message: body.message?.trim() || undefined,
+    preferredDate: preferredDate || undefined,
+    message: message || undefined,
     submittedAt: new Date().toISOString(),
   };
 
@@ -106,12 +140,12 @@ export async function POST(request: Request) {
           "Reason for inquiry": reason || "(not specified)",
           Name: name || "(not given)",
           Email: email,
-          Phone: body.phone?.trim() || "(not given)",
+          Phone: phone || "(not given)",
           "Company / organization": organization || "(not given)",
           ...(formType === "tour"
-            ? { "Preferred date": body.preferredDate?.trim() || "(not given)" }
+            ? { "Preferred date": preferredDate || "(not given)" }
             : {}),
-          Message: body.message?.trim() || "(no message)",
+          Message: message || "(no message)",
         }),
       });
 

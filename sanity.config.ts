@@ -43,11 +43,20 @@ export default defineConfig({
               option.templateId !== "formSubmission"
           )
         : prev,
-    actions: (prev, { schemaType }) =>
-      singletonTypes.has(schemaType)
-        ? prev.filter(
-            ({ action }) => action !== "duplicate" && action !== "delete"
-          )
-        : prev,
+    actions: (prev, { schemaType }) => {
+      if (singletonTypes.has(schemaType)) {
+        return prev.filter(
+          ({ action }) => action !== "duplicate" && action !== "delete"
+        );
+      }
+      // Form submissions are written as DRAFTS on purpose: the dataset is
+      // publicly readable, and drafts are the only documents that require auth
+      // to read. Publishing one would put the visitor's contact details on the
+      // open internet — so the only action an editor gets is Delete.
+      if (schemaType === "formSubmission") {
+        return prev.filter(({ action }) => action === "delete");
+      }
+      return prev;
+    },
   },
 });

@@ -232,8 +232,8 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">FAQ</h2>
           <div className="mt-6 flex flex-col gap-6">
-            {faqs.map((item: { question: string; answer: string }) => (
-              <div key={item.question} className="border-l-4 border-brand-black pl-5">
+            {faqs.map((item: { question: string; answer: string }, i: number) => (
+              <div key={i} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
                 <p className="mt-1 text-brand-silver">{item.answer}</p>
               </div>

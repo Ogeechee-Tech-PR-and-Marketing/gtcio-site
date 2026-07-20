@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero";
 import { sanityFetch } from "@/sanity/lib/live";
 import { NEWS_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
+import { safeHref } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
   title: "News | GTCIO",
@@ -48,6 +49,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
     <ul className="mt-8 flex flex-col divide-y divide-brand-silver/30 border-y border-brand-silver/30">
       {items.map((item) => {
         const meta = [formatDate(item.date), item.source].filter(Boolean).join("  ·  ");
+        const url = safeHref(item.url);
         return (
           <li key={item._id} className="py-6">
             {meta && (
@@ -56,9 +58,9 @@ function NewsList({ items }: { items: NewsItem[] }) {
               </p>
             )}
             <h3 className="font-heading mt-2 text-xl font-bold text-brand-black">
-              {item.url ? (
+              {url ? (
                 <a
-                  href={item.url}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-brand-red"
@@ -70,9 +72,9 @@ function NewsList({ items }: { items: NewsItem[] }) {
               )}
             </h3>
             {item.excerpt && <p className="mt-2 max-w-3xl text-brand-silver">{item.excerpt}</p>}
-            {item.url && (
+            {url && (
               <a
-                href={item.url}
+                href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"

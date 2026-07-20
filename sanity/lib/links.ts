@@ -31,10 +31,22 @@ export type CtaButton = {
   externalUrl?: string;
 };
 
+/**
+ * Accepts only site-relative or http(s) URLs; anything else (javascript:,
+ * data:, vbscript:…) comes back null and simply doesn't render. The Studio
+ * already validates schemes at authoring time — this is the render-time
+ * backstop for values that reached the dataset some other way.
+ */
+export function safeHref(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.startsWith("/") || /^https?:\/\//i.test(url)) return url;
+  return null;
+}
+
 /** Resolves a CMS button to an href, or null if it isn't usable yet. */
 export function resolveHref(button?: CtaButton | null): string | null {
   if (!button?.destination) return null;
-  if (button.destination === "external") return button.externalUrl || null;
+  if (button.destination === "external") return safeHref(button.externalUrl);
   return DESTINATIONS[button.destination] ?? null;
 }
 

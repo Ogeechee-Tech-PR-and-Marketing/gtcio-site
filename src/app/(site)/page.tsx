@@ -47,6 +47,9 @@ export default async function Home() {
   const { data } = await sanityFetch({ query: HOME_PAGE_QUERY });
   const page = { ...DEFAULTS, ...(data as Partial<typeof DEFAULTS>) };
   const heroButtons = page.heroButtons?.length ? page.heroButtons : DEFAULTS.heroButtons;
+  // An unfinished draft can carry heroTitle: null, which would override the
+  // spread default and crash the .split() below — fall back explicitly.
+  const heroTitle = page.heroTitle || DEFAULTS.heroTitle;
 
   const pathways = [
     { ...DEFAULTS.studentsCard, ...page.studentsCard, href: "/iot-diploma-program", cta: "Explore the IOT Diploma Program" },
@@ -65,6 +68,7 @@ export default async function Home() {
           muted
           playsInline
           preload="auto"
+          aria-hidden
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-brand-black/70" />
@@ -79,7 +83,7 @@ export default async function Home() {
               Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
               than wrapped. Keep the headline short and it stays on one line. */}
           <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
-            {page.heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
+            {heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
               <span key={i}>
                 {line}
                 {i < arr.length - 1 && <br />}
@@ -111,8 +115,8 @@ export default async function Home() {
           <p className="mt-4 max-w-3xl text-brand-silver">{page.sectionBody}</p>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {pathways.map((p) => (
-              <div key={p.title} className="flex flex-col justify-between border border-brand-silver/40 p-6">
+            {pathways.map((p, i) => (
+              <div key={i} className="flex flex-col justify-between border border-brand-silver/40 p-6">
                 <div>
                   <h3 className="font-heading text-xl font-bold text-brand-black">{p.title}</h3>
                   <p className="mt-2 text-sm text-brand-silver">{p.description}</p>
