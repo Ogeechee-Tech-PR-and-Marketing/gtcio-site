@@ -10,7 +10,6 @@ export default defineType({
     { name: "intro", title: "Intro section" },
     { name: "cards", title: "Three cards" },
     { name: "partnerBand", title: "Red partner band" },
-    { name: "newsletter", title: "Newsletter signup" },
   ],
   fields: [
     defineField({
@@ -110,40 +109,6 @@ export default defineType({
       title: "Button",
       type: "ctaButton",
       group: "partnerBand",
-    }),
-
-    defineField({
-      name: "newsletterEyebrow",
-      title: "Small gold label",
-      type: "string",
-      group: "newsletter",
-    }),
-    defineField({
-      name: "newsletterTitle",
-      title: "Heading",
-      type: "string",
-      group: "newsletter",
-    }),
-    defineField({
-      name: "newsletterBody",
-      title: "Paragraph",
-      type: "text",
-      rows: 3,
-      group: "newsletter",
-    }),
-    defineField({
-      name: "newsletterButtonLabel",
-      title: "Button text",
-      type: "string",
-      group: "newsletter",
-    }),
-    defineField({
-      name: "newsletterConfirmation",
-      title: "Thank-you message",
-      description: "Shown in place of the form after someone signs up.",
-      type: "text",
-      rows: 2,
-      group: "newsletter",
     }),
   ],
   preview: {

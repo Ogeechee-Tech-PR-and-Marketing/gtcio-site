@@ -7,6 +7,7 @@ export default defineType({
   groups: [
     { name: "banner", title: "Top banner", default: true },
     { name: "contact", title: "Address & contacts" },
+    { name: "newsletter", title: "Newsletter signup (footer)" },
   ],
   fields: [
     defineField({
@@ -78,6 +79,41 @@ export default defineType({
         defineField({ name: "phone", title: "Phone", type: "string" }),
         defineField({ name: "email", title: "Email", type: "string" }),
       ],
+    }),
+
+    defineField({
+      name: "newsletterEyebrow",
+      title: "Small gold label",
+      description: "Shown in the footer's newsletter signup, on every page.",
+      type: "string",
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterTitle",
+      title: "Heading",
+      type: "string",
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterBody",
+      title: "Paragraph",
+      type: "text",
+      rows: 3,
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterButtonLabel",
+      title: "Button text",
+      type: "string",
+      group: "newsletter",
+    }),
+    defineField({
+      name: "newsletterConfirmation",
+      title: "Thank-you message",
+      description: "Shown in place of the form after someone signs up.",
+      type: "text",
+      rows: 2,
+      group: "newsletter",
     }),
   ],
   preview: {

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DESTINATIONS } from "@/sanity/lib/links";
+import NewsletterSignup from "./NewsletterSignup";
 
 const COLUMNS = [
   {
@@ -28,15 +29,35 @@ type FooterProps = {
   tagline?: string;
   address?: string;
   phone?: string;
+  newsletterEyebrow?: string;
+  newsletterTitle?: string;
+  newsletterBody?: string;
+  newsletterButtonLabel?: string;
+  newsletterConfirmation?: string;
 };
 
 export default function Footer({
   tagline = "A Division of Ogeechee Technical College",
   address = "66 AJ Riggs Road, Statesboro, GA 30458",
   phone = "(800) 646-1316",
+  newsletterEyebrow,
+  newsletterTitle,
+  newsletterBody,
+  newsletterButtonLabel,
+  newsletterConfirmation,
 }: FooterProps) {
   return (
     <footer className="bg-brand-black text-brand-white">
+      <div className="border-b border-white/10">
+        <NewsletterSignup
+          eyebrow={newsletterEyebrow}
+          title={newsletterTitle}
+          body={newsletterBody}
+          buttonLabel={newsletterButtonLabel}
+          confirmation={newsletterConfirmation}
+        />
+      </div>
+
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 sm:px-10 lg:grid-cols-4">
         <div>
           <Image

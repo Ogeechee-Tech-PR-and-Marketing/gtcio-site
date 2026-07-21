@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-20. Check claims against the code before trusting them.
+updated 2026-07-21. Check claims against the code before trusting them.
 
 ---
 
@@ -82,7 +82,7 @@ src/lib/
 src/components/           Header, Footer, PageHero, InquiryForm
   Button.tsx              the raw styled link (variant, target/rel)
   CtaButton.tsx           renders a CMS-configured button via links.ts (§4)
-  NewsletterSignup.tsx    home page, UI-only — see §8
+  NewsletterSignup.tsx    rendered inside Footer, sitewide, UI-only — see §8
 sanity/
   env.ts                  projectId / dataset / apiVersion
   lib/client.ts           read client
@@ -122,8 +122,11 @@ Every decision below exists to protect that. Weigh it accordingly.
   created, duplicated, or deleted from the Studio (see `document.actions` in
   `sanity.config.ts`). Any new singleton must be added to `singletonTypes` in
   `sanity/schemaTypes/index.ts` AND to `structure.ts` + `presentation.ts`.
-- **`siteSettings`** — top banner text, address, phone, program + media contacts.
-  Used by Header, Footer, and the Contact page.
+- **`siteSettings`** — top banner text, address, phone, program + media contacts,
+  and the footer newsletter signup copy (moved here from `homePage` 2026-07-21 —
+  the signup itself now renders inside `Footer.tsx` on every page, not just
+  Home, so its copy lives on the sitewide settings doc rather than a single
+  page). Used by Header, Footer, and the Contact page.
 - **`partner`** — one document per partner company (`logo`, `order`,
   `showOnWebsite`, plus an optional `website` URL — when set, the partner's block
   on the Partners page links out to it).
@@ -153,9 +156,10 @@ Every decision below exists to protect that. Weigh it accordingly.
   of "Ways to partner" into its own "Intro & button" group. Keep the code `DEFAULTS`
   objects in page order too — same reason.
 - **Convention: every page's copy is CMS-first, with the code `DEFAULTS` as a
-  fallback.** As of 2026-07-20 the only things NOT editable are the top nav, the
-  footer links, and the logo (all deliberate — see §8). Everything else is: the
-  Home hero buttons / red partner band / newsletter; the
+  fallback.** As of 2026-07-21 the only things NOT editable are the top nav, the
+  footer's link columns, and the logo (all deliberate — see §8). Everything
+  else is: the Home hero buttons / red partner band; the footer's newsletter
+  signup (on `siteSettings`, not `homePage` — see §8); the
   Training stats, employer copy, catalog band, credentials, services and course
   areas; the Facility focus areas; the Partners intro button; the IOT Apply band
   + button; the About mission statement and project timeline. (The Facility
@@ -578,12 +582,18 @@ the CDN has purged — it purges in seconds), **but if a page looks stale right
 after a publish, redeploy before debugging anything else.** When verifying a CMS
 change locally, `rm -rf .next/cache` is not enough — give the CDN a few seconds.
 
-**🟡 Newsletter signup is UI-only.** `src/components/NewsletterSignup.tsx` on the
-home page validates an email and shows a confirmation but **sends nothing** — no
-address is stored or transmitted. GTCIO expects to use **Constant Contact**. To
-finish, either point the form's `<form action>` at a Constant Contact hosted
-sign-up URL, or replace the `handleSubmit` stub with a POST to a new API route
-that calls the Constant Contact API. The file header documents both paths.
+**🟡 Newsletter signup is UI-only.** `src/components/NewsletterSignup.tsx`,
+rendered inside `Footer.tsx` on **every page** (moved out of the home page
+2026-07-21, per Jake — it used to render only in `(site)/page.tsx`), validates
+an email and shows a confirmation but **sends nothing** — no address is stored
+or transmitted. GTCIO expects to use **Constant Contact**. To finish, either
+point the form's `<form action>` at a Constant Contact hosted sign-up URL, or
+replace the `handleSubmit` stub with a POST to a new API route that calls the
+Constant Contact API. The file header documents both paths. Its copy
+(`newsletterEyebrow`/`Title`/`Body`/`ButtonLabel`/`Confirmation`) now lives on
+the `siteSettings` singleton, not `homePage` — it moved with the component so
+one edit covers every page. `(site)/layout.tsx` passes those fields to
+`Footer`, which renders `<NewsletterSignup>` at the top of the `<footer>`.
 
 Smaller items:
 
@@ -780,11 +790,14 @@ Smaller items:
   that photo releases exist — don't add it without asking.
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
   box on the IOT page. Not produced, not scoped.
-- **Nav and footer links** are code-only (`Header.tsx`, `Footer.tsx`) — deliberate,
-  since a typo'd href there breaks navigation site-wide. Everything else on the
-  page is CMS-editable; see the `ctaButton` note in §4 for how in-page buttons stay
-  safe. The logo is also code-only. The Home and About hero videos are now
-  CMS-editable — see §4's `heroMediaFields()` note (closed 2026-07-20).
+- **Nav and footer link columns** are code-only (`Header.tsx`, `Footer.tsx`) —
+  deliberate, since a typo'd href there breaks navigation site-wide. Everything
+  else on the page is CMS-editable; see the `ctaButton` note in §4 for how
+  in-page buttons stay safe. The logo is also code-only. The footer's newsletter
+  signup is the one part of `Footer.tsx` that IS CMS-editable, via
+  `siteSettings` (moved off `homePage` 2026-07-21 — see §8). The Home and About
+  hero videos are now CMS-editable — see §4's `heroMediaFields()` note (closed
+  2026-07-20).
 - **Home hero headline is sized to fit one line** (Jan, 2026-07-16). The sizes in
   `(site)/page.tsx` are measured, not guessed: the headline renders ~21.7px wide
   per 1px of font-size in Trade Gothic Next Heavy Compressed, so 52px ≈ 1128px and
@@ -833,8 +846,10 @@ shows deploy status.
   IOT Diploma Program; Credentials was added between IOT Diploma Program and
   Facility 2026-07-20. The
   home hero buttons are IOT Training Programs · IOT Diploma Program · Become a
-  Partner (a red "Become a GTCIO Partner" band + a newsletter signup sit lower on
-  the home page). Nav/footer links are code-only (`Header.tsx`, `Footer.tsx`).
+  Partner (a red "Become a GTCIO Partner" band sits lower on the home page).
+  Nav/footer link columns are code-only (`Header.tsx`, `Footer.tsx`); the
+  footer's newsletter signup is CMS-editable via `siteSettings` and renders on
+  every page, not just Home (moved 2026-07-21 — see §8).
 - **The IOT Diploma Program FAQ is ordered as a student funnel** (rewritten
   2026-07-16): when it starts → do I need experience → how do I apply → where →
   online? → how long → how much → what credential → diploma vs certificates →

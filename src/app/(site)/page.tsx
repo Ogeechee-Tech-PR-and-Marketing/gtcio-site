@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import CtaButton from "@/components/CtaButton";
-import NewsletterSignup from "@/components/NewsletterSignup";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
@@ -36,13 +35,6 @@ const DEFAULTS = {
   partnerBandBody:
     "GTCIO is built alongside the employers who hire our graduates. Sponsor equipment, host a tour, hire our technicians, or take a seat on the advisory board. There's more than one way to get involved, and we're actively growing our partner network.",
   partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } as CtaButtonData,
-  newsletterEyebrow: "Stay in the loop",
-  newsletterTitle: "News from the GTCIO",
-  newsletterBody:
-    "Program updates, facility milestones, partnership news, and enrollment dates, sent straight to your inbox. No spam.",
-  newsletterButtonLabel: "SIGN UP",
-  newsletterConfirmation:
-    "Thanks for signing up. We'll be in touch with news from the GTCIO.",
 };
 
 export default async function Home() {
@@ -174,14 +166,6 @@ export default async function Home() {
           <CtaButton button={page.partnerBandButton} variant="dark" className="shrink-0" />
         </div>
       </section>
-
-      <NewsletterSignup
-        eyebrow={page.newsletterEyebrow}
-        title={page.newsletterTitle}
-        body={page.newsletterBody}
-        buttonLabel={page.newsletterButtonLabel}
-        confirmation={page.newsletterConfirmation}
-      />
     </>
   );
 }

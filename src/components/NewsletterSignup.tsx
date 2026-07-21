@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 /**
- * Newsletter sign-up form for the landing page.
+ * Newsletter sign-up form, rendered inside the Footer on every page.
  *
  * This is intentionally NOT wired to a mailing provider yet. GTCIO expects to use
  * Constant Contact — when that's ready, either:

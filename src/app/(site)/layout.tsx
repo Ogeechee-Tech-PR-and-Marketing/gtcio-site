@@ -17,6 +17,11 @@ export default async function SiteLayout({
     footerTagline?: string;
     address?: string;
     phone?: string;
+    newsletterEyebrow?: string;
+    newsletterTitle?: string;
+    newsletterBody?: string;
+    newsletterButtonLabel?: string;
+    newsletterConfirmation?: string;
   } | null;
   const { isEnabled: isDraftMode } = await draftMode();
 
@@ -31,6 +36,11 @@ export default async function SiteLayout({
         tagline={settings?.footerTagline}
         address={settings?.address}
         phone={settings?.phone}
+        newsletterEyebrow={settings?.newsletterEyebrow}
+        newsletterTitle={settings?.newsletterTitle}
+        newsletterBody={settings?.newsletterBody}
+        newsletterButtonLabel={settings?.newsletterButtonLabel}
+        newsletterConfirmation={settings?.newsletterConfirmation}
       />
       <SanityLive />
       {isDraftMode && <VisualEditing />}
