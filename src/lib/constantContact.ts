@@ -46,7 +46,16 @@ function basicAuthHeader(): string {
 }
 
 async function getAuthDoc(): Promise<AuthDoc | null> {
-  return writeClient.fetch<AuthDoc | null>(`*[_id == $id][0]`, { id: AUTH_DOC_ID });
+  // perspective: "raw" is required here — the client's default perspective
+  // excludes draft documents from _id-based queries entirely (confirmed
+  // 2026-07-21: an unqualified query for "drafts.constantContactAuth"
+  // silently returned null even though the doc existed), which would make
+  // every access-token refresh think Constant Contact was never connected.
+  return writeClient.fetch<AuthDoc | null>(
+    `*[_id == $id][0]`,
+    { id: AUTH_DOC_ID },
+    { perspective: "raw" }
+  );
 }
 
 async function refreshAccessToken(refreshToken: string) {
