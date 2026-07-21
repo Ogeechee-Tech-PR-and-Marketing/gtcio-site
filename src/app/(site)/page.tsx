@@ -105,21 +105,27 @@ export default async function Home() {
         )}
         <div className="relative mx-auto max-w-7xl">
           {/*
-            Matches PageHero.tsx's hero scrim exactly (kept in sync 2026-07-21
-            — this page predates PageHero and had its own flat bg-brand-black/70
+            Matches PageHero.tsx's hero scrim (kept in sync 2026-07-21 — this
+            page predates PageHero and had its own flat bg-brand-black/70
             overlay, which is why it was still dark after every other hero was
-            lightened). A blurred rectangle behind the text, not a full-frame
-            wash: opacity .65, isolate + -z-10 so it sandwiches between the
-            video/photo and the text without a stacking bug (see PageHero.tsx's
-            comment for why `isolate` is load-bearing here), blur-xl for a soft
-            edge instead of a hard box. Buttons render inside this same card so
-            the halo covers them too, matching how PageHero folds in cta/extra.
-            Description is brand-white, not brand-silver — silver needs the
-            background roughly 10x darker for the same contrast ratio, which is
-            what made brand-silver worth dropping everywhere it sits on a
-            hero photo/video. See PageHero.tsx for the full measured rationale
-            and the numbers behind .65 specifically (a known, deliberate risk
-            on the gold eyebrow, not an oversight).
+            lightened): a blurred rectangle behind the text, opacity .65,
+            isolate + -z-10 so it sandwiches between the video/photo and the
+            text without a stacking bug (see PageHero.tsx's comment for why
+            `isolate` is load-bearing), blur-xl for a soft edge. Description is
+            brand-white, not brand-silver, for the same contrast-headroom
+            reason documented in PageHero.tsx.
+
+            TWO separate cards here, not one — this page's headline is a
+            special case PageHero's interior titles aren't: it's deliberately
+            sized to almost fill the full container on one line (see the
+            measured-font-size comment below), which made it far wider than
+            the description (max-w-2xl) and the button row. `inline-block`
+            shrink-wraps to the WIDEST child, so one shared card sized itself
+            to the headline and left a large, empty dark gap to the right of
+            the shorter description/buttons — reported 2026-07-21 as "the
+            scrim goes way past the end of the text." Splitting into
+            eyebrow+title / description+buttons lets each card fit its own
+            content instead of inheriting the headline's unusual width.
           */}
           <div className="relative isolate inline-block">
             <div
@@ -144,7 +150,15 @@ export default async function Home() {
                   </span>
                 ))}
               </h1>
-              <p className="mt-6 max-w-2xl text-lg text-brand-white">{page.heroDescription}</p>
+            </div>
+          </div>
+          <div className="relative isolate mt-6 inline-block">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-1 -z-10 rounded-3xl bg-black/65 blur-xl"
+            />
+            <div className="px-8 py-6 sm:px-10 sm:py-8">
+              <p className="max-w-2xl text-lg text-brand-white">{page.heroDescription}</p>
               <div className="mt-9 flex flex-wrap gap-4">
                 {heroButtons.map((button, i) => (
                   <CtaButton key={button._key ?? i} button={button} variant="primary" />
