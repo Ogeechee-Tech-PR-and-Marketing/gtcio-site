@@ -103,30 +103,54 @@ export default async function Home() {
             style={{ objectPosition: hero.position }}
           />
         )}
-        <div className="absolute inset-0 bg-brand-black/70" />
         <div className="relative mx-auto max-w-7xl">
-          {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}
-          {/* Jan wants the headline on one line on desktop; it may wrap on small
-              screens. The sizes below are measured, not guessed: this headline
-              renders ~21.7px wide per 1px of font-size in Trade Gothic Next Heavy
-              Compressed, so 52px needs ~1128px and 56px needs ~1215px, inside a
-              1200–1280px container from xl up. Deliberately NOT whitespace-nowrap
-              — this section is overflow-hidden, so a longer headline (or the wider
-              Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
-              than wrapped. Keep the headline short and it stays on one line. */}
-          <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
-            {heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
-              <span key={i}>
-                {line}
-                {i < arr.length - 1 && <br />}
-              </span>
-            ))}
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg text-brand-silver">{page.heroDescription}</p>
-          <div className="mt-9 flex flex-wrap gap-4">
-            {heroButtons.map((button, i) => (
-              <CtaButton key={button._key ?? i} button={button} variant="primary" />
-            ))}
+          {/*
+            Matches PageHero.tsx's hero scrim exactly (kept in sync 2026-07-21
+            — this page predates PageHero and had its own flat bg-brand-black/70
+            overlay, which is why it was still dark after every other hero was
+            lightened). A blurred rectangle behind the text, not a full-frame
+            wash: opacity .65, isolate + -z-10 so it sandwiches between the
+            video/photo and the text without a stacking bug (see PageHero.tsx's
+            comment for why `isolate` is load-bearing here), blur-xl for a soft
+            edge instead of a hard box. Buttons render inside this same card so
+            the halo covers them too, matching how PageHero folds in cta/extra.
+            Description is brand-white, not brand-silver — silver needs the
+            background roughly 10x darker for the same contrast ratio, which is
+            what made brand-silver worth dropping everywhere it sits on a
+            hero photo/video. See PageHero.tsx for the full measured rationale
+            and the numbers behind .65 specifically (a known, deliberate risk
+            on the gold eyebrow, not an oversight).
+          */}
+          <div className="relative isolate inline-block">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-1 -z-10 rounded-3xl bg-black/65 blur-xl"
+            />
+            <div className="px-8 py-6 sm:px-10 sm:py-8">
+              {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}
+              {/* Jan wants the headline on one line on desktop; it may wrap on small
+                  screens. The sizes below are measured, not guessed: this headline
+                  renders ~21.7px wide per 1px of font-size in Trade Gothic Next Heavy
+                  Compressed, so 52px needs ~1128px and 56px needs ~1215px, inside a
+                  1200–1280px container from xl up. Deliberately NOT whitespace-nowrap
+                  — this section is overflow-hidden, so a longer headline (or the wider
+                  Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
+                  than wrapped. Keep the headline short and it stays on one line. */}
+              <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
+                {heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
+                  <span key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg text-brand-white">{page.heroDescription}</p>
+              <div className="mt-9 flex flex-wrap gap-4">
+                {heroButtons.map((button, i) => (
+                  <CtaButton key={button._key ?? i} button={button} variant="primary" />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
