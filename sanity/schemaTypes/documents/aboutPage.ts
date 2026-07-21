@@ -108,7 +108,7 @@ export default defineType({
       name: "historyTimeline",
       title: "Project timeline",
       description:
-        "The milestones shown as a vertical timeline. Drag to reorder — they display in the order listed here, so keep them oldest-first.",
+        "The milestones shown as a scrolling horizontal timeline. Drag to reorder — they display in the order listed here, so keep them oldest-first.",
       type: "array",
       of: [{ type: "timelineEvent" }],
       group: "history",

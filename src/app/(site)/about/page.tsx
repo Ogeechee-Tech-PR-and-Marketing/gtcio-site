@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
+import AboutTimeline from "@/components/AboutTimeline";
 import { sanityFetch } from "@/sanity/lib/live";
 import { ABOUT_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
@@ -70,6 +71,7 @@ const DEFAULTS = {
       title: "First classes begin",
       detail:
         "The Industrial Operations Technology diploma program launches in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, while the new building is finished.",
+      highlight: true,
     },
     {
       date: "September 2026",
@@ -80,6 +82,7 @@ const DEFAULTS = {
       date: "October 15, 2026",
       title: "Ribbon cutting",
       detail: "GTCIO officially opens its doors.",
+      highlight: true,
     },
   ],
   historyNote: "",
@@ -116,6 +119,7 @@ type TimelineEvent = {
   date: string;
   title: string;
   detail?: string;
+  highlight?: boolean;
 };
 
 export default async function AboutPage() {
@@ -190,29 +194,7 @@ export default async function AboutPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
           <p className="mt-4 text-brand-black">{page.historyBody}</p>
 
-          {timeline.length > 0 && (
-            <ol className="mt-12 border-l-2 border-brand-silver/30 pl-8 sm:pl-10">
-              {timeline.map((item: TimelineEvent, i: number) => (
-                <li
-                  key={item._key ?? `${item.date}-${i}`}
-                  className="relative pb-10 last:pb-0"
-                >
-                  {/* Sits on the 2px rule: half the dot (8px) + half the border (1px). */}
-                  <span
-                    aria-hidden
-                    className="absolute -left-[41px] top-1.5 h-4 w-4 rounded-full border-[3px] border-brand-white bg-brand-red sm:-left-[49px]"
-                  />
-                  <p className="font-display text-sm text-brand-red">{item.date}</p>
-                  <h3 className="font-heading mt-1 text-lg font-bold text-brand-black">
-                    {item.title}
-                  </h3>
-                  {item.detail && (
-                    <p className="mt-1 max-w-2xl text-brand-silver">{item.detail}</p>
-                  )}
-                </li>
-              ))}
-            </ol>
-          )}
+          {timeline.length > 0 && <AboutTimeline items={timeline} />}
 
           {page.historyNote && <p className="mt-8 text-sm text-brand-silver">{page.historyNote}</p>}
         </div>

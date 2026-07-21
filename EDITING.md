@@ -162,8 +162,14 @@ Open **IOT Training Programs Page**. Each block has its own tab:
 
 Open **About Page** → the **History** tab → **Project timeline**. Each milestone
 has a *When* ("July 2022" — type it however you want it to read), a *What
-happened* headline, and optional *More detail*. **Keep them oldest-first** — they
-appear on the page in the order they're listed here, top to bottom.
+happened* headline, and optional *More detail*. **Keep them oldest-first** — on
+the page they scroll left to right (swipe on a phone, or the Earlier/Later
+arrows on a computer) in the order they're listed here.
+
+There's also a **"Highlight this milestone?"** checkbox. Turning it on draws a
+gold underline under that milestone's headline, to call out a moment that
+matters most to a visitor — right now that's "First classes begin" and "Ribbon
+cutting." Use it sparingly: it only stands out if most milestones don't have it.
 
 ### Fill in the Advisory Board
 

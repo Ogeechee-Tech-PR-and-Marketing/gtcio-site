@@ -1038,16 +1038,36 @@ shows deploy status.
   `DEFAULTS.faqs` copy of it in `(site)/about/page.tsx`. The FAQ hardcodes it
   rather than reading `siteSettings` because the FAQ is plain editor-authored text
   — a `{address}` placeholder would just confuse whoever edits it.
-- **Project timeline** (from Jan, 2026-07-16; rendered as the vertical timeline in
-  About → History, editable at About Page → History → Project timeline): 7/22 push
-  for funding begins incl. land acquisition from DABC · 9/22 initial funding
-  approved · 7/23 design team selected, **PRAXIS3** (Atlanta architecture/design
-  firm, praxis3.com — verified) · 8/23 construction team selected, **ICB
-  Construction Group** (Macon general contractor, icbconstructiongroup.com —
-  verified; a directory lists the legal name "International City Builders" but
-  their own site doesn't, so the site doesn't claim it) · 9/23 design starts ·
-  6/25 construction starts · 9/26 construction targeted for completion ·
-  **ribbon cutting 10/15/26**.
+- **Project timeline** (from Jan, 2026-07-16; editable at About Page → History →
+  Project timeline): 7/22 push for funding begins incl. land acquisition from
+  DABC · 9/22 initial funding approved · 7/23 design team selected, **PRAXIS3**
+  (Atlanta architecture/design firm, praxis3.com — verified) · 8/23 construction
+  team selected, **ICB Construction Group** (Macon general contractor,
+  icbconstructiongroup.com — verified; a directory lists the legal name
+  "International City Builders" but their own site doesn't, so the site doesn't
+  claim it) · 9/23 design starts · 6/25 construction starts · 9/26 construction
+  targeted for completion · **ribbon cutting 10/15/26**.
+  - **Redesigned horizontal 2026-07-21** (Jake liked the "editorial" of three
+    mockups pitched). `src/components/AboutTimeline.tsx` is a client component
+    (needs the scroll-arrow `onClick` handlers) rendering a CSS
+    scroll-snap track — full desktop cards, one-and-a-peek on phones — sized by
+    **container queries** (`@container` / `@min-[560px]:`, native to Tailwind
+    v4, no plugin), not viewport media queries, so it reflows correctly
+    regardless of where it sits on the page. The `← Earlier` / `Later →` arrow
+    buttons hide below the 560px container breakpoint; touch users swipe
+    instead. The horizontal black rule the dots sit on is a single absolutely-
+    positioned element behind the (non-scrolling) wrapper, not part of the
+    scrolling track — the dots slide along it as the track scrolls, they don't
+    carry it with them. `timelineEvent` objects gained a `highlight` boolean
+    (default off) that draws a gold underline under a milestone's headline, for
+    calling out the one or two stops that matter most to a visitor. Seeded
+    `true` on "First classes begin" and "Ribbon cutting" only, both in the code
+    `DEFAULTS` **and** patched directly onto the published `aboutPage` doc
+    (`historyTimeline[_key=="t6b"]`/`[_key=="t8"]`) via the write token — a
+    brand-new field like this only needs the dataset patch when you want it
+    visibly on *already-seeded* content immediately, per the §4 CMS-override
+    rule. No draft of `aboutPage` existed at the time, so there was nothing to
+    reconcile there (check for one before assuming a future patch is done).
   - **Why Aug 2026 classes precede the Oct 2026 opening (resolved by Jan,
     2026-07-16):** classes begin in the **Industrial Technology Building on OTC's
     main campus** — the college's existing robotics facility (16 Joe Kennedy Blvd;
