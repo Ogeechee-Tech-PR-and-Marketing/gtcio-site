@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
-import { COURSES, TOTAL_CREDITS, CREDENTIALS_BY_CODE } from "@/lib/iot-curriculum";
+import {
+  COURSES,
+  PROGRAM_COURSES,
+  GENERAL_EDUCATION_COURSES,
+  PROGRAM_CREDITS,
+  GENERAL_EDUCATION_CREDITS,
+  TOTAL_CREDITS,
+  CREDENTIALS_BY_CODE,
+} from "@/lib/iot-curriculum";
 import { DESTINATIONS } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
   title: "Courses & Credit Hours | IOT Diploma Program | GTCIO",
-  description: `Every course in Ogeechee Tech's Industrial Operations Technology diploma — ${COURSES.length} courses, ${TOTAL_CREDITS} credit hours, and the SACA certification each one prepares you for.`,
+  description: `Every course in Ogeechee Tech's Industrial Operations Technology diploma — ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and the SACA certification each program course prepares you for.`,
 };
 
 /**
@@ -25,7 +33,7 @@ export default function CurriculumPage() {
       <PageHero
         eyebrow="IOT Diploma Program"
         title="Courses & credit hours"
-        description={`The full Industrial Operations Technology diploma: ${COURSES.length} courses, ${TOTAL_CREDITS} credit hours, and an industry certification attached to nearly every one.`}
+        description={`The full Industrial Operations Technology diploma: ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and an industry certification attached to nearly every program course.`}
         image="/images/hero-iot-program.jpg"
         imageAlt="Students gathered around automation equipment as an instructor explains it"
         imagePosition="50% 18%"
@@ -50,7 +58,7 @@ export default function CurriculumPage() {
           </h2>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {[
-              { value: String(COURSES.length), label: "Courses" },
+              { value: String(PROGRAM_COURSES.length + GENERAL_EDUCATION_COURSES.length), label: "Courses" },
               { value: String(TOTAL_CREDITS), label: "Credit hours" },
               { value: "IS32", label: "Program code" },
             ].map((stat) => (
@@ -68,7 +76,7 @@ export default function CurriculumPage() {
           <div className="mt-10 overflow-x-auto">
             <table className="w-full min-w-[40rem] border-collapse text-left">
               <caption className="sr-only">
-                Industrial Operations Technology diploma courses, credit hours, and SACA
+                Industrial Operations Technology diploma program courses, credit hours, and SACA
                 certifications
               </caption>
               <thead>
@@ -88,7 +96,7 @@ export default function CurriculumPage() {
                 </tr>
               </thead>
               <tbody>
-                {COURSES.map((course) => (
+                {PROGRAM_COURSES.map((course) => (
                   <tr key={course.code} className="border-b border-brand-silver/30 align-top">
                     <td className="py-3 pr-4 whitespace-nowrap font-bold text-brand-black">
                       <a href={`#${course.code.replace(/\s+/g, "-").toLowerCase()}`} className="hover:text-brand-red">
@@ -107,7 +115,7 @@ export default function CurriculumPage() {
                     Program course totals
                   </td>
                   <td className="font-heading py-3 pr-4 text-right font-bold tabular-nums text-brand-black">
-                    {TOTAL_CREDITS}
+                    {PROGRAM_CREDITS}
                   </td>
                   <td />
                 </tr>
@@ -123,15 +131,59 @@ export default function CurriculumPage() {
             </Link>
             .
           </p>
-          {/* The program launches August 2026, which falls in a catalog year
-              Ogeechee Tech has not published yet, and the brochure's course
-              numbers already differ from the 2025-2026 catalog (PROJECT.md §8).
-              Until GTCIO confirms the final sequence, point students at
-              Admissions rather than let them plan around a number that moves. */}
-          <p className="mt-3 max-w-3xl text-sm text-brand-silver">
-            Course numbers and sequence are being finalised ahead of the August 2026 launch.
-            Ogeechee Tech&apos;s admissions team has the current course list.
-          </p>
+
+          <h3 className="font-heading mt-14 text-xl font-bold text-brand-black">
+            Required general education courses
+          </h3>
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full min-w-[30rem] border-collapse text-left">
+              <caption className="sr-only">
+                Required general education courses for the Industrial Operations Technology diploma
+              </caption>
+              <thead>
+                <tr className="border-b-2 border-brand-black">
+                  <th scope="col" className="font-heading py-3 pr-4 text-sm font-bold tracking-wide text-brand-black">
+                    Course
+                  </th>
+                  <th scope="col" className="font-heading py-3 pr-4 text-sm font-bold tracking-wide text-brand-black">
+                    Title
+                  </th>
+                  <th scope="col" className="font-heading py-3 text-right text-sm font-bold tracking-wide text-brand-black">
+                    Credits
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {GENERAL_EDUCATION_COURSES.map((course) => (
+                  <tr key={course.code} className="border-b border-brand-silver/30 align-top">
+                    <td className="py-3 pr-4 whitespace-nowrap font-bold text-brand-black">
+                      <a href={`#${course.code.replace(/\s+/g, "-").toLowerCase()}`} className="hover:text-brand-red">
+                        {course.code}
+                      </a>
+                    </td>
+                    <td className="py-3 pr-4 text-brand-black">{course.title}</td>
+                    <td className="py-3 text-right tabular-nums text-brand-black">{course.credits}</td>
+                  </tr>
+                ))}
+                <tr className="border-b-2 border-brand-black">
+                  <td className="font-heading py-3 pr-4 font-bold text-brand-black" colSpan={2}>
+                    General education totals
+                  </td>
+                  <td className="font-heading py-3 text-right font-bold tabular-nums text-brand-black">
+                    {GENERAL_EDUCATION_CREDITS}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-heading py-3 pr-4 font-bold text-brand-black" colSpan={2}>
+                    Total credits
+                  </td>
+                  <td className="font-heading py-3 text-right font-bold tabular-nums text-brand-black">
+                    {TOTAL_CREDITS}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 

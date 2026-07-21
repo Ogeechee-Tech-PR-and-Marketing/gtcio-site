@@ -27,17 +27,31 @@
  * from SACA, the credentialing authority, so this needed no guesswork about
  * OTC's curriculum.
  *
- * 🔴 OPEN, AND BIGGER THAN IT LOOKED — the brochure disagrees with **Ogeechee
- * Tech's own course catalog** on course numbers and on two credential
- * mappings. Per the 2025-2026 catalog (ogeecheetech.smartcatalogiq.com, prefix
- * "ISAT — Industrial Operations Technology"):
+ * ✅ RESOLVED 2026-07-21 — the brochure vs. catalog numbering conflict on
+ * Operations Technology I/II. An email confirmed two course-number changes
+ * (ISAT 3100 → ISAT 2030, ISAT 3101 → ISAT 2040), and Ogeechee Tech's own
+ * official course sheet for the program ("Industrial Operations Technology
+ * Diploma (Start - Fall Semester 2026)", 0317_001.pdf) corroborates both new
+ * numbers and confirms the rest of the 12-course program matrix unchanged
+ * (titles, credits, and SACA credential mappings all match the brochure).
+ * That same document also supplied a Required General Education block the
+ * brochure never mentioned — ENGL 1010 (or ENGL 1101) 3 cr, MATH 1111 3 cr,
+ * EMPL 1000 2 cr, 8 credits total, bringing the program to 53 credits across
+ * 15 courses. Added below as `generalEducation: true` entries. See
+ * PROJECT.md §8 for the full history of this conflict.
+ *
+ * 🔴 STILL OPEN — the brochure disagrees with **Ogeechee Tech's own course
+ * catalog** on three other course numbers and two credential mappings (the
+ * two Operations Technology renumberings above are now resolved; this is the
+ * rest of the original discrepancy). Per the 2025-2026 catalog
+ * (ogeecheetech.smartcatalogiq.com, prefix "ISAT — Industrial Operations
+ * Technology"):
  *
  *      catalog                                   brochure
  *      ISAT 1103  Programmable Logic Control I    ISAT 1104
  *      ISAT 1104  Programmable Logic Control II   ISAT 1105
  *      ISAT 1105  Motor Control Systems & Tblsh.  ISAT 1103
  *      ISAT 1130  Sensors in Industrial SMART Automation (brochure drops "Smart")
- *      ISAT 2030  Operations Technology I         ISAT 3100
  *      ISAT 1102  → C-201 + **C-206**             → C-201 + C-205
  *      ISAT 1130  → **C-205** + C-213             → C-206 + C-203 + C-213
  *
@@ -47,15 +61,12 @@
  * Controls" — i.e. the two blocks are swapped relative to the catalog's
  * mapping. It is a systematic misalignment, not one stray list.
  *
- * **Deliberately NOT reconciled here.** The catalog is the 2025-2026 edition;
- * this program launches August 2026, in a 2026-2027 catalog that does not exist
- * yet. The brochure may well reflect an approved revision that lands in it (it
- * also carries CIST 1601 and an Operations Technology II that the catalog has
- * no entry for). Two official OTC sources disagree and nothing outside the
- * college can say which governs the launch — so the site publishes the
- * brochure, the document GTCIO actually handed over, and PROJECT.md §8 tracks
- * the conflict for Jan to settle. Do not renumber these courses off the
- * catalog alone.
+ * **Deliberately NOT reconciled here.** 0317_001.pdf, the document that
+ * settled the Operations Technology numbering above, did not touch these
+ * three numbers or the C-205/C-206 mapping — it only listed 1102/1103/1104/
+ * 1105/1130 the same way the brochure already has them. Nothing new resolves
+ * this half of the conflict, so it stays open per PROJECT.md §8. Do not
+ * renumber these three off the catalog alone.
  *
  * Consequently `objectives` stays omitted for the Motor Controls course: its
  * bullets are wrong under either reading, and its two credential descriptions
@@ -75,11 +86,19 @@ export type Course = {
   objectives?: string[];
   /** Prose description, for courses the brochure describes rather than bullets. */
   summary?: string;
+  /**
+   * True for the three Required General Education courses (0317_001.pdf,
+   * added 2026-07-21) rather than the IS32-specific program courses. They
+   * carry no SACA credentials by design, not by omission.
+   */
+  generalEducation?: boolean;
 };
 
 /**
  * Listed in the brochure's own order — note it runs 1105 → 1130 → 1110, which
- * is the college's sequence, not a sort. Credits sum to 45.
+ * is the college's sequence, not a sort. The 12 program courses sum to 45
+ * credits; the 3 general education courses appended after them (0317_001.pdf)
+ * add 8 more, for 53 total.
  */
 export const COURSES: Course[] = [
   {
@@ -256,7 +275,7 @@ export const COURSES: Course[] = [
       "A broad overview of information security, covering terminology, history, and security systems development and implementation, along with the legal, ethical, and professional issues in the field.",
   },
   {
-    code: "ISAT 3100",
+    code: "ISAT 2030",
     title: "Operations Technology I",
     credits: 4,
     credentials: ["C-101", "C-102", "OSHA 10"],
@@ -279,7 +298,7 @@ export const COURSES: Course[] = [
     ],
   },
   {
-    code: "ISAT 3101",
+    code: "ISAT 2040",
     title: "Operations Technology II",
     credits: 4,
     credentials: ["C-104"],
@@ -295,9 +314,49 @@ export const COURSES: Course[] = [
       "Lean manufacturing and system optimization",
     ],
   },
+  {
+    code: "ENGL 1010",
+    title: "Fundamentals of English",
+    credits: 3,
+    credentials: [],
+    generalEducation: true,
+    summary:
+      "Required general education course. May instead be satisfied with ENGL 1101 – Composition & Rhetoric (also 3 credits).",
+  },
+  {
+    code: "MATH 1111",
+    title: "College Algebra",
+    credits: 3,
+    credentials: [],
+    generalEducation: true,
+    summary: "Required general education course.",
+  },
+  {
+    code: "EMPL 1000",
+    title: "Interpersonal Relations and Professional Development",
+    credits: 2,
+    credentials: [],
+    generalEducation: true,
+    summary: "Required general education course.",
+  },
 ];
 
+/** The 12 IS32 program courses — everything except general education. */
+export const PROGRAM_COURSES = COURSES.filter((c) => !c.generalEducation);
+
+/** The 3 Required General Education courses (0317_001.pdf, added 2026-07-21). */
+export const GENERAL_EDUCATION_COURSES = COURSES.filter((c) => c.generalEducation);
+
 /** 45. Derived rather than hardcoded so it can never drift from the table. */
+export const PROGRAM_CREDITS = PROGRAM_COURSES.reduce((sum, c) => sum + c.credits, 0);
+
+/** 8. Derived rather than hardcoded so it can never drift from the table. */
+export const GENERAL_EDUCATION_CREDITS = GENERAL_EDUCATION_COURSES.reduce(
+  (sum, c) => sum + c.credits,
+  0,
+);
+
+/** 53 — program + general education. Derived so it can never drift from the table. */
 export const TOTAL_CREDITS = COURSES.reduce((sum, c) => sum + c.credits, 0);
 
 export type Credential = {

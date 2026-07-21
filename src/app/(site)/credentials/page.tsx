@@ -9,7 +9,7 @@ import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
 import {
   CREDENTIALS,
   CREDENTIAL_FAMILIES,
-  COURSES,
+  PROGRAM_COURSES,
   SACA_INTRO,
 } from "@/lib/iot-curriculum";
 import { SACA_TIERS, OTHER_CREDENTIALS, AFFILIATIONS } from "@/lib/credentials";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 /** Which courses lead to a given credential — the inverse of the course table. */
 const COURSES_BY_CREDENTIAL = new Map<string, string[]>();
-for (const course of COURSES) {
+for (const course of PROGRAM_COURSES) {
   for (const code of course.credentials) {
     COURSES_BY_CREDENTIAL.set(code, [...(COURSES_BY_CREDENTIAL.get(code) ?? []), course.code]);
   }
@@ -120,7 +120,7 @@ export default async function CredentialsPage() {
               <p className="font-display text-3xl text-brand-red">{CREDENTIALS.length}</p>
               <p className="font-heading mt-2 font-bold text-brand-black">SACA certifications</p>
               <p className="mt-2 text-sm text-brand-silver">
-                Built into the diploma across all {COURSES.length} courses.
+                Built into the diploma across all {PROGRAM_COURSES.length} program courses.
               </p>
             </div>
             {OTHER_CREDENTIALS.map((credential) => (

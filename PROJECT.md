@@ -175,7 +175,8 @@ Every decision below exists to protect that. Weigh it accordingly.
   boxes falling back to code. If you add a section, add fields AND seed them —
   don't leave content code-only.
 - **The one deliberate exception: `src/lib/iot-curriculum.ts`** (added
-  2026-07-20). The IS32 course table (12 courses, 45 credit hours) and the SACA
+  2026-07-20). The IS32 course table (12 program courses + 3 required general
+  education courses, 53 credit hours total — see §8) and the SACA
   credential glossary (22 entries) that drive `/iot-diploma-program/curriculum`
   and `/iot-diploma-program/certifications` are **code, not CMS content**. They
   are a faithful transcription of an *accredited* course catalog — codes, credit
@@ -629,44 +630,61 @@ Smaller items:
     "Hydraulic Systems 1", but the brochure's description is maintenance work —
     replacing seals, hoses, filters — so the brochure looks right). Worth a
     one-line confirmation with GTCIO if anyone is asking them about the above.
-- **🔴 The brochure and Ogeechee Tech's own course catalog disagree — Jan needs
-  to settle which governs the August 2026 launch.** Found 2026-07-20 while
-  chasing the objectives defect; it turned out to be systematic, not one stray
-  list. Per the **2025-2026** catalog (`ogeecheetech.smartcatalogiq.com`, prefix
-  "ISAT — Industrial Operations Technology"):
+- **✅ The Operations Technology I/II numbering is resolved** (2026-07-21). An
+  email confirmed two course-number changes — ISAT 3100 → ISAT 2030, ISAT
+  3101 → ISAT 2040 — and Ogeechee Tech's own official course sheet for the
+  program, *"Industrial Operations Technology Diploma (Start - Fall Semester
+  2026)"* (`0317_001.pdf`, in the parent folder), corroborates both new
+  numbers and the rest of the 12-course, 45-credit program matrix unchanged
+  from the brochure. That same document also revealed a **Required General
+  Education** block the brochure never mentioned — `ENGL 1010` (or `ENGL
+  1101` — either satisfies it) 3 cr, `MATH 1111` College Algebra 3 cr, `EMPL
+  1000` Interpersonal Relations and Professional Development 2 cr, 8 credits
+  total — bringing the full program to **15 courses, 53 credit hours**.
+  Updated in `src/lib/iot-curriculum.ts` (new `generalEducation` course flag,
+  `PROGRAM_COURSES`/`GENERAL_EDUCATION_COURSES`/`PROGRAM_CREDITS`/
+  `GENERAL_EDUCATION_CREDITS` exports alongside `COURSES`/`TOTAL_CREDITS`),
+  `/iot-diploma-program/curriculum` (split program vs. general-education
+  tables, both with their own totals row, matching `0317_001.pdf`'s layout),
+  the `courseDetailBody` copy on `/iot-diploma-program` (code default *and*
+  the published Sanity doc — patched directly, no draft existed to
+  reconcile), `/credentials`' "Built into the diploma across all N program
+  courses" line (now correctly scoped to `PROGRAM_COURSES`, since the general
+  education courses carry no SACA credentials), and `SITEMAP.html`.
+  - The interim safeguard that used to sit under the course table —
+    "Course numbers and sequence are being finalised ahead of the August 2026
+    launch" — has been **removed**, since two independent sources now agree.
+  - **🔴 The rest of the brochure/catalog conflict is still open** — found
+    2026-07-20 while chasing the objectives defect, and `0317_001.pdf` didn't
+    touch it (it only lists 1102/1103/1104/1105/1130 the same way the
+    brochure already has them). Per the **2025-2026** catalog
+    (`ogeecheetech.smartcatalogiq.com`, prefix "ISAT — Industrial Operations
+    Technology"):
 
-  | Catalog | Brochure |
-  | --- | --- |
-  | ISAT **1103** Programmable Logic Control I | ISAT 1104 |
-  | ISAT **1104** Programmable Logic Control II | ISAT 1105 |
-  | ISAT **1105** Motor Control Systems & Troubleshooting | ISAT 1103 |
-  | ISAT 1130 Sensors in Industrial **Smart** Automation | drops "Smart" |
-  | ISAT **2030** Operations Technology I | ISAT 3100 |
-  | ISAT 1102 → C-201 + **C-206** | → C-201 + C-205 |
-  | ISAT 1130 → **C-205** + C-213 | → C-206 + C-203 + C-213 |
+    | Catalog | Brochure |
+    | --- | --- |
+    | ISAT **1103** Programmable Logic Control I | ISAT 1104 |
+    | ISAT **1104** Programmable Logic Control II | ISAT 1105 |
+    | ISAT **1105** Motor Control Systems & Troubleshooting | ISAT 1103 |
+    | ISAT 1130 Sensors in Industrial **Smart** Automation | drops "Smart" |
+    | ISAT 1102 → C-201 + **C-206** | → C-201 + C-205 |
+    | ISAT 1130 → **C-205** + C-213 | → C-206 + C-203 + C-213 |
 
-  That last pair **explains the misplaced objective bullets**: the brochure
-  prints *electrical panel installation* objectives (C-206 work) under 1130
-  "Sensors", and *sensor connect-and-test* objectives (C-205 work) under its
-  1103 "Motor Controls" — the two blocks are swapped relative to the catalog.
-  - **The site deliberately still publishes the brochure's version.** The
-    catalog is the 2025-2026 edition; this program starts August 2026, in a
-    **2026-2027 catalog that doesn't exist yet**, and the brochure may reflect an
-    approved revision that lands in it — it also carries CIST 1601 and an
-    Operations Technology II the catalog has no entry for (10 ISAT courses listed
-    vs the brochure's 12-course, 45-credit program). Two official OTC sources
-    disagree and nothing outside the college can say which one governs.
-    **Don't renumber these courses off the catalog alone.**
-  - Interim safeguard on `/iot-diploma-program/curriculum`: a line under the
-    table reads "Course numbers and sequence are being finalised ahead of the
-    August 2026 launch. Ogeechee Tech's admissions team has the current course
-    list." Remove it once the numbering is confirmed.
+    That last pair **explains the misplaced objective bullets**: the brochure
+    prints *electrical panel installation* objectives (C-206 work) under 1130
+    "Sensors", and *sensor connect-and-test* objectives (C-205 work) under its
+    1103 "Motor Controls" — the two blocks are swapped relative to the catalog.
+  - **The site deliberately still publishes the brochure's version of these
+    three numbers.** The catalog is the 2025-2026 edition; this program
+    starts August 2026, in a **2026-2027 catalog that doesn't exist yet**, and
+    the brochure may reflect an approved revision that lands in it. Nothing
+    GTCIO has handed over resolves this half of the conflict. **Don't
+    renumber these three off the catalog alone.**
   - `objectives` stays omitted for the Motor Controls course — its bullets are
     wrong under *either* reading. Its two credential descriptions carry the
     detail, so the page reads complete. Restore once GTCIO confirms.
-  - **Ask Jan specifically:** which course numbers apply for Aug 2026; whether
-    C-205/C-206 sit on 1102 or 1130; and whether Operations Technology II and
-    CIST 1601 are in the final 45-credit program.
+  - **Ask Jan specifically:** whether C-205/C-206 sit on 1102 or 1130, and
+    whether the 1103/1104/1105 sequence follows the catalog or the brochure.
 - **🟡 Possible unstated selling point: graduates may earn a full SACA Specialist
   certification, not just micro-credentials** (noticed 2026-07-20 while building
   `/credentials`). Mapping the program's 22 credentials against SACA's published
@@ -693,13 +711,14 @@ Smaller items:
 - **The brochure's back cover gives 1 Joe Kennedy Blvd** — that is OTC's main
   campus, the stale address (§10). GTCIO is 66 AJ Riggs Road. Don't harvest it.
 - **Content still pending from GTCIO:** final tuition figure and final program
-  length. **Credit hours are now known and published: 45, across 12 courses**
-  (from the brochure, 2026-07-20) — but that is deliberately *not* used to derive
-  either figure. 45 hours doesn't tell a student how many semesters, and a
-  tuition estimate (~$4,800 at OTC's ~$107/credit-hour in-state rate) would
-  exclude fees, books, and lab costs GTCIO hasn't supplied. Jake's call
-  2026-07-20: publish the credit hours, leave both boxes reading "still being
-  confirmed." They appear in **four** places on the IOT Diploma Program page — the
+  length. **Credit hours are now known and published: 53, across 15 courses**
+  (12 program courses + 3 general education courses, per `0317_001.pdf`,
+  2026-07-21 — supersedes the earlier 45-across-12 figure from the brochure
+  alone) — but that is deliberately *not* used to derive either figure. 53
+  hours doesn't tell a student how many semesters, and a tuition estimate
+  (~$5,670 at OTC's ~$107/credit-hour in-state rate) would exclude fees,
+  books, and lab costs GTCIO hasn't supplied. Jake's call 2026-07-20: publish
+  the credit hours, leave both boxes reading "still being confirmed." They appear in **four** places on the IOT Diploma Program page — the
   "Time to complete" and "Approximate cost" boxes (`timeToComplete`,
   `approximateCost`) and the matching FAQ answers (`faqs[_key=="f5"]` and
   `[_key=="f4"]`) — so replace all four together. They no longer say the word

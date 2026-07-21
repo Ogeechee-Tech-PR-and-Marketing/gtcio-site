@@ -35,7 +35,7 @@ const DEFAULTS = {
   ],
   courseDetailHeading: "Every course, in detail",
   courseDetailBody:
-    "The diploma is 12 courses and 45 credit hours. See exactly what each course covers and which industry certification it prepares you for.",
+    "The diploma is 15 courses and 53 credit hours — 12 program courses plus 3 general education courses. See exactly what each course covers and which industry certification it prepares you for.",
   curriculumButton: { label: "COURSES & CREDIT HOURS", destination: "curriculum" as const },
   certificationsButton: { label: "VIEW CREDENTIALS", destination: "certifications" as const },
   moreWaysTitle: "More than one way in",
