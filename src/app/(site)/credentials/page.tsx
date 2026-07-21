@@ -37,6 +37,9 @@ const DEFAULTS = {
   earnTitle: "What you leave with",
   earnBody:
     "Every graduate of the Industrial Operations Technology diploma is credentialed through SACA, and the program builds in two more credentials employers ask for by name.",
+  affiliationsTitle: "Why a credential from here counts",
+  affiliationsBody:
+    "Ogeechee Tech is accredited by the equipment makers and certification bodies whose credentials it awards — so students test on the same platforms the industry runs, at a site those organisations authorised.",
   sacaTitle: "What SACA is, and why it matters",
   ladderTitle: "How SACA credentials stack",
   ladderBody:
@@ -44,9 +47,6 @@ const DEFAULTS = {
   glossaryTitle: "Every credential in the diploma",
   glossaryBody:
     "Twenty-two SACA certifications are built into the program. Each is a separate hands-on and written assessment.",
-  affiliationsTitle: "Why a credential from here counts",
-  affiliationsBody:
-    "Ogeechee Tech is accredited by the equipment makers and certification bodies whose credentials it awards — so students test on the same platforms the industry runs, at a site those organisations authorised.",
   ctaHeading: "Graduate credentialed, not just qualified",
   ctaBody: "Classes begin August 2026. Applications go through Ogeechee Technical College.",
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
@@ -131,6 +131,32 @@ export default async function CredentialsPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-black">
+            {page.affiliationsTitle}
+          </h2>
+          <p className="mt-4 max-w-3xl text-brand-silver">{page.affiliationsBody}</p>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {affiliations.map((affiliation, i) => (
+              <div key={affiliation._key ?? i} className="border-l-4 border-brand-red pl-5">
+                <h3 className="font-heading text-lg font-bold text-brand-black">
+                  {affiliation.title}
+                </h3>
+                <p className="mt-1 text-sm text-brand-silver">{affiliation.detail}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 max-w-3xl text-sm text-brand-silver">
+            Employers can also put current staff through these credentials —{" "}
+            <Link href={DESTINATIONS.training} className="font-bold text-brand-red underline hover:text-brand-black">
+              see the training we run for industry
+            </Link>
+            .
+          </p>
         </div>
       </section>
 
@@ -234,32 +260,6 @@ export default async function CredentialsPage() {
               </div>
             );
           })}
-        </div>
-      </section>
-
-      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">
-            {page.affiliationsTitle}
-          </h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.affiliationsBody}</p>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {affiliations.map((affiliation, i) => (
-              <div key={affiliation._key ?? i} className="border-l-4 border-brand-red pl-5">
-                <h3 className="font-heading text-lg font-bold text-brand-black">
-                  {affiliation.title}
-                </h3>
-                <p className="mt-1 text-sm text-brand-silver">{affiliation.detail}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-8 max-w-3xl text-sm text-brand-silver">
-            Employers can also put current staff through these credentials —{" "}
-            <Link href={DESTINATIONS.training} className="font-bold text-brand-red underline hover:text-brand-black">
-              see the training we run for industry
-            </Link>
-            .
-          </p>
         </div>
       </section>
 

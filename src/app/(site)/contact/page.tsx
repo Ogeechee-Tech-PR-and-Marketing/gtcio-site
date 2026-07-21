@@ -16,7 +16,6 @@ const DEFAULTS = {
     "Prospective student / program question",
     "Employer training inquiry",
     "Partnership inquiry",
-    "Schedule a facility tour",
     "Media inquiry",
     "Something else",
   ],

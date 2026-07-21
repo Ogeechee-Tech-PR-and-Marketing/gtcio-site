@@ -11,8 +11,8 @@ import { heroFields } from "../heroFields";
  * src/lib/iot-curriculum.ts and src/lib/credentials.ts — third-party
  * certification facts rather than marketing copy (PROJECT.md §4).
  *
- * The five accreditations shown near the bottom are authored on the **IOT
- * Training Programs Page** ("Credentials & affiliations"), because they appear
+ * The five accreditations shown below "What you leave with" are authored on
+ * the **IOT Training Programs Page** ("Credentials & affiliations"), because they appear
  * on both pages and an editor should only ever update them once. There is
  * deliberately no second copy of that field here.
  *
@@ -25,10 +25,10 @@ export default defineType({
   groups: [
     { name: "hero", title: "Top of page", default: true },
     { name: "earn", title: "What you leave with" },
+    { name: "affiliations", title: "Why it counts" },
     { name: "saca", title: "What SACA is" },
     { name: "ladder", title: "How credentials stack" },
     { name: "glossary", title: "Credential list" },
-    { name: "affiliations", title: "Why it counts" },
     { name: "cta", title: "Apply band" },
   ],
   fields: [
@@ -43,6 +43,22 @@ export default defineType({
       type: "text",
       rows: 3,
       group: "earn",
+    }),
+
+    defineField({
+      name: "affiliationsTitle",
+      title: "Section heading",
+      type: "string",
+      group: "affiliations",
+    }),
+    defineField({
+      name: "affiliationsBody",
+      title: "Intro paragraph",
+      description:
+        "⚠️ The five accreditations listed under this are edited on the IOT Training Programs Page, under \"Credentials & affiliations\" — they show on both pages, so you only update them once.",
+      type: "text",
+      rows: 3,
+      group: "affiliations",
     }),
 
     defineField({
@@ -78,22 +94,6 @@ export default defineType({
       type: "text",
       rows: 3,
       group: "glossary",
-    }),
-
-    defineField({
-      name: "affiliationsTitle",
-      title: "Section heading",
-      type: "string",
-      group: "affiliations",
-    }),
-    defineField({
-      name: "affiliationsBody",
-      title: "Intro paragraph",
-      description:
-        "⚠️ The five accreditations listed under this are edited on the IOT Training Programs Page, under \"Credentials & affiliations\" — they show on both pages, so you only update them once.",
-      type: "text",
-      rows: 3,
-      group: "affiliations",
     }),
 
     defineField({ name: "ctaHeading", title: "Heading", type: "string", group: "cta" }),
