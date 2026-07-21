@@ -12,6 +12,7 @@ import siteSettings from "./documents/siteSettings";
 import partner from "./documents/partner";
 import newsItem from "./documents/newsItem";
 import formSubmission from "./documents/formSubmission";
+import constantContactAuth from "./documents/constantContactAuth";
 import homePage from "./documents/homePage";
 import aboutPage from "./documents/aboutPage";
 import facilityPage from "./documents/facilityPage";
@@ -35,6 +36,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     partner,
     newsItem,
     formSubmission,
+    constantContactAuth,
     homePage,
     aboutPage,
     facilityPage,

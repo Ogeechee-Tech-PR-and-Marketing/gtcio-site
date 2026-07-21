@@ -40,10 +40,17 @@ export default defineConfig({
         ? prev.filter(
             (option) =>
               !singletonTypes.has(option.templateId) &&
-              option.templateId !== "formSubmission"
+              option.templateId !== "formSubmission" &&
+              option.templateId !== "constantContactAuth"
           )
         : prev,
     actions: (prev, { schemaType }) => {
+      // Holds a live Constant Contact OAuth refresh token, server-managed only
+      // (see the schema file's header comment). No Studio action at all — not
+      // even Delete — so nobody can publish it or hand-edit a token.
+      if (schemaType === "constantContactAuth") {
+        return [];
+      }
       if (singletonTypes.has(schemaType)) {
         return prev.filter(
           ({ action }) => action !== "duplicate" && action !== "delete"

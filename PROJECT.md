@@ -71,8 +71,14 @@ src/app/
   api/
     draft-mode/           enable + disable, for the Studio's live preview
     inquiry/              POST target for all three forms (§5)
+    newsletter/            POST target for the footer sign-up form (§11)
+    constant-contact/
+      oauth/start/         human-run once, kicks off the CTCT OAuth grant (§11)
+      oauth/callback/      stores the resulting refresh token (§11)
 src/lib/
   site.ts                 SITE_URL — the canonical origin (§6)
+  constantContact.ts      token refresh + list lookup/create + the actual
+                          sign-up call. Server-only (§11)
   iot-curriculum.ts       the IS32 course table + SACA credential glossary.
                           A deliberate exception to CMS-first copy — read
                           its header comment before touching it (§4).
@@ -408,6 +414,9 @@ SANITY_API_READ_TOKEN=<viewer-role token, secret>
 SANITY_API_WRITE_TOKEN=<editor-role token, secret — writes form submissions>
 WEB3FORMS_ACCESS_KEY=<see §5; unset = no email, submissions still saved>
 WEB3FORMS_ACCESS_KEY_MEDIA=<see §5; separate key so "Media inquiry" routes to Sean Payne>
+CONSTANT_CONTACT_CLIENT_ID=<see §11; from the Constant Contact developer app>
+CONSTANT_CONTACT_CLIENT_SECRET=<see §11; from the same app, secret>
+CONSTANT_CONTACT_SETUP_SECRET=<see §11; any random string you pick — gates the one-time OAuth URL>
 ```
 
 The read token is **viewer role**, used server-side for draft/preview reads only.
@@ -582,18 +591,18 @@ the CDN has purged — it purges in seconds), **but if a page looks stale right
 after a publish, redeploy before debugging anything else.** When verifying a CMS
 change locally, `rm -rf .next/cache` is not enough — give the CDN a few seconds.
 
-**🟡 Newsletter signup is UI-only.** `src/components/NewsletterSignup.tsx`,
-rendered inside `Footer.tsx` on **every page** (moved out of the home page
-2026-07-21, per Jake — it used to render only in `(site)/page.tsx`), validates
-an email and shows a confirmation but **sends nothing** — no address is stored
-or transmitted. GTCIO expects to use **Constant Contact**. To finish, either
-point the form's `<form action>` at a Constant Contact hosted sign-up URL, or
-replace the `handleSubmit` stub with a POST to a new API route that calls the
-Constant Contact API. The file header documents both paths. Its copy
-(`newsletterEyebrow`/`Title`/`Body`/`ButtonLabel`/`Confirmation`) now lives on
-the `siteSettings` singleton, not `homePage` — it moved with the component so
-one edit covers every page. `(site)/layout.tsx` passes those fields to
-`Footer`, which renders `<NewsletterSignup>` at the top of the `<footer>`.
+**✅ Newsletter signup is wired to Constant Contact** (2026-07-21) —
+`src/components/NewsletterSignup.tsx`, rendered inside `Footer.tsx` on **every
+page** (moved out of the home page the same day, per Jake — it used to render
+only in `(site)/page.tsx`), POSTs to `/api/newsletter`, which adds the address
+via Constant Contact's API. See §11 for the full integration and the one-time
+setup step **Jake still needs to run** — without it the form degrades to a
+friendly "Something went wrong" error, not a crash, but nobody is actually
+being added to a list yet. Its copy
+(`newsletterEyebrow`/`Title`/`Body`/`ButtonLabel`/`Confirmation`) lives on the
+`siteSettings` singleton, not `homePage` — it moved with the component so one
+edit covers every page. `(site)/layout.tsx` passes those fields to `Footer`,
+which renders `<NewsletterSignup>` at the top of the `<footer>`.
 
 Smaller items:
 
@@ -1109,3 +1118,123 @@ shows deploy status.
   are deliberate §7 brand choices; the display font stack degrades to Arial
   Narrow (the guide's own approved substitute) on machines without Adobe Fonts,
   which is expected, not a bug.
+
+---
+
+## 11. Constant Contact newsletter integration
+
+Added 2026-07-21. The footer's newsletter form (§8) POSTs to
+`/api/newsletter`, which calls Constant Contact's v3 API to add the address to
+a dedicated **"GTCIO Website Sign-ups"** list — created automatically the
+first time a real signup happens after setup, not something anyone needs to
+create by hand in Constant Contact.
+
+### How it works
+
+- **Auth is OAuth2, authorization-code grant.** Constant Contact's v3 API has
+  no API-key-only mode — every call needs a per-account access token obtained
+  by a human authorizing the app once. `src/app/api/constant-contact/oauth/start/route.ts`
+  redirects to Constant Contact's login/consent screen (`authz.constantcontact.com`);
+  approving it hits `.../oauth/callback/route.ts`, which exchanges the returned
+  `code` for an access token + refresh token and saves them.
+- **After that one-time step, it's fully automatic.** `src/lib/constantContact.ts`'s
+  `getAccessToken()` runs before every signup: if the cached access token is
+  still valid (with a 5-minute buffer) it's reused, otherwise it's refreshed
+  via the stored refresh token — no human involved again unless the connection
+  is revoked (see Troubleshooting below).
+- **Tokens live in Sanity, not an env var — and this is required, not a
+  preference.** Constant Contact **rotates the refresh token on every use**:
+  each refresh call returns a *new* refresh token, and the old one stops
+  working. A build-time env var can't be rewritten by a running serverless
+  function, so it can't hold a value that changes on every use. The tokens
+  live on a single document, `sanity/schemaTypes/documents/constantContactAuth.ts`,
+  written and read only by `writeClient` (server-only, same as `formSubmission`).
+  **This document must never be published** — the `production` dataset is
+  publicly readable (§5's `formSubmission` trap, same risk here but worse: a
+  leaked refresh token lets someone send email as GTCIO and read the whole
+  contact list, not just one visitor's details) — so it only ever exists as
+  `drafts.constantContactAuth`, exactly like every `formSubmission`.
+  `sanity.config.ts`'s `document.actions` strips **every** Studio action for
+  this type (not even Delete), and it's deliberately left out of
+  `structure.ts`'s nav — nobody should ever open it by hand. If you need to
+  inspect it (e.g. to check the connection is alive), query it directly with
+  the write token rather than looking for it in the Studio:
+  ```bash
+  curl -s "https://$NEXT_PUBLIC_SANITY_PROJECT_ID.api.sanity.io/v$NEXT_PUBLIC_SANITY_API_VERSION/data/query/$NEXT_PUBLIC_SANITY_DATASET?query=*%5B_id==%22drafts.constantContactAuth%22%5D%5B0%5D" \
+    -H "Authorization: Bearer $SANITY_API_WRITE_TOKEN"
+  ```
+- **The list is found-or-created lazily**, on the first real sign-up after
+  setup, and its id is then cached on the same document — every later signup
+  skips the lookup. The list name is the literal string `"GTCIO Website
+  Sign-ups"` (the `LIST_NAME` constant in `constantContact.ts`). To route
+  signups into a *different* existing list instead (an option Jake considered
+  and could still choose later), either rename that constant to match the
+  existing list's exact name before the first signup runs the lookup, or patch
+  `drafts.constantContactAuth`'s `listId` field directly with the target
+  list's id via the same write-token pattern above.
+- **`/contacts/sign_up_form`** (not the more general `/contacts` endpoint) is
+  the call `addNewsletterSignup()` makes — it's purpose-built for opt-in web
+  forms: it upserts by email address with no separate existence check, and is
+  meant only for contacts who explicitly asked to be added, which this form's
+  visitors have.
+- **No `formSubmission` record is kept for newsletter signups** — deliberately
+  different from the other three forms (§5). A newsletter signup isn't a lead
+  needing staff follow-up, so there's no reason to also store the visitor's
+  email in Sanity; Constant Contact's own list is the record of truth.
+- **Spam protection is a honeypot field only** (`botcheck`, same pattern as
+  `InquiryForm.tsx`) — no rate limiting, matching the accepted risk already
+  documented for `/api/inquiry` in §8. If this becomes a problem, add real
+  rate limiting to both routes together.
+
+### One-time setup — Jake still needs to do this
+
+The form works end-to-end in code, but **nobody is being added to a list
+until this runs once.** Until then, submitting the form fails gracefully with
+"Something went wrong on our end" rather than crashing (verified 2026-07-21 —
+this is expected, not a bug, until setup is complete).
+
+1. **Create a Constant Contact "Custom App."** Log into
+   [developer.constantcontact.com](https://developer.constantcontact.com) —
+   important: log in with **whichever Constant Contact account should own the
+   list** GTCIO signups land in (their real OTC/GTCIO account, not a personal
+   one) — and create a new app from "My Applications."
+2. **Set its redirect URI to exactly**
+   `https://gtcio-site.vercel.app/api/constant-contact/oauth/callback` —
+   Constant Contact requires an exact match, no wildcards except at the domain
+   root, so a typo here means the authorization step fails.
+3. **Copy the app's Client ID and Client Secret.**
+4. **Pick any random string** for `CONSTANT_CONTACT_SETUP_SECRET` (e.g.
+   `openssl rand -hex 16`) — it just needs to be hard to guess, since it's the
+   only thing standing between the public internet and the OAuth start route.
+5. **Add all three to Vercel** (`CONSTANT_CONTACT_CLIENT_ID`,
+   `CONSTANT_CONTACT_CLIENT_SECRET`, `CONSTANT_CONTACT_SETUP_SECRET`) —
+   Project → Settings → Environment Variables, Production at minimum — **and
+   redeploy**, since a running serverless function doesn't pick up a new env
+   var until the next deploy.
+6. **Visit**
+   `https://gtcio-site.vercel.app/api/constant-contact/oauth/start?secret=<the secret you picked>`
+   while logged into that same Constant Contact account in your browser.
+   Approve the consent screen (it will ask for contact-list access and
+   offline access).
+7. You should land on a plain page reading "Constant Contact is connected." —
+   that means the tokens saved successfully.
+8. **Submit the footer form once for real** to confirm a contact lands in
+   Constant Contact under "GTCIO Website Sign-ups," then delete that test
+   contact from Constant Contact's side (there's no way to do this from the
+   site).
+
+### Troubleshooting
+
+- **Form shows "Something went wrong on our end."** Check the Vercel function
+  logs for `/api/newsletter` — if it says "Constant Contact is not connected
+  yet," setup above hasn't been run (or was run before the env vars were
+  redeployed). If it says something else (a Constant Contact error response),
+  the connection exists but a call failed — could mean the app was
+  disconnected from Constant Contact's side (Account → Integrations →
+  connected apps), which invalidates the stored refresh token. Re-running step
+  6 above reconnects it (the callback route uses `createOrReplace`, so
+  re-running setup is always safe).
+- **Confirm which account is connected** by checking Constant Contact's own
+  Account → Integrations → connected apps list while logged into the account
+  you *think* is connected, rather than assuming from this end — the site has
+  no way to display which Constant Contact account it's talking to.

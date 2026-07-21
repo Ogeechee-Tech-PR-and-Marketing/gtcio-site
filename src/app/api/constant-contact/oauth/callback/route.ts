@@ -1,0 +1,80 @@
+import { NextResponse } from "next/server";
+import { writeClient } from "@/sanity/lib/writeClient";
+import { SITE_URL } from "@/lib/site";
+
+const TOKEN_URL = "https://authz.constantcontact.com/oauth2/default/v1/token";
+const AUTH_DOC_ID = "drafts.constantContactAuth";
+
+function textResponse(body: string, status: number) {
+  return new NextResponse(body, { status, headers: { "Content-Type": "text/plain" } });
+}
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get("code");
+  const state = searchParams.get("state");
+  const error = searchParams.get("error");
+  const cookieState = request.headers
+    .get("cookie")
+    ?.match(/(?:^|;\s*)cc_oauth_state=([^;]+)/)?.[1];
+
+  if (error) {
+    return textResponse(`Constant Contact authorization failed: ${error}`, 400);
+  }
+  if (!code || !state || !cookieState || state !== cookieState) {
+    return textResponse(
+      "Invalid or expired authorization request. Start over at /api/constant-contact/oauth/start.",
+      400
+    );
+  }
+
+  const clientId = process.env.CONSTANT_CONTACT_CLIENT_ID;
+  const clientSecret = process.env.CONSTANT_CONTACT_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    return textResponse("CONSTANT_CONTACT_CLIENT_ID / CONSTANT_CONTACT_CLIENT_SECRET are not set.", 500);
+  }
+
+  const tokenResponse = await fetch(TOKEN_URL, {
+    method: "POST",
+    headers: {
+      Authorization: "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: `${SITE_URL}/api/constant-contact/oauth/callback`,
+    }),
+  });
+
+  if (!tokenResponse.ok) {
+    return textResponse(
+      `Token exchange failed: ${tokenResponse.status} ${await tokenResponse.text()}`,
+      502
+    );
+  }
+
+  const tokens = (await tokenResponse.json()) as {
+    access_token: string;
+    refresh_token: string;
+    expires_in: number;
+  };
+
+  // createOrReplace, not create: re-running setup (e.g. to reconnect after a
+  // revoke) should overwrite the stale tokens, not fail on a duplicate _id.
+  await writeClient.createOrReplace({
+    _id: AUTH_DOC_ID,
+    _type: "constantContactAuth",
+    accessToken: tokens.access_token,
+    accessTokenExpiresAt: new Date(Date.now() + tokens.expires_in * 1000).toISOString(),
+    refreshToken: tokens.refresh_token,
+    updatedAt: new Date().toISOString(),
+  });
+
+  const response = textResponse(
+    "Constant Contact is connected. New footer sign-ups will now be added to the \"GTCIO Website Sign-ups\" list. You can close this tab.",
+    200
+  );
+  response.cookies.delete("cc_oauth_state");
+  return response;
+}

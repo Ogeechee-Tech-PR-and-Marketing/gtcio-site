@@ -3,17 +3,9 @@
 import { useState } from "react";
 
 /**
- * Newsletter sign-up form, rendered inside the Footer on every page.
- *
- * This is intentionally NOT wired to a mailing provider yet. GTCIO expects to use
- * Constant Contact — when that's ready, either:
- *   1. Point the <form> `action` at the Constant Contact hosted sign-up URL and
- *      set `method="post"` (simplest, no JS), or
- *   2. Replace the handleSubmit stub below with a POST to an API route that calls
- *      the Constant Contact API.
- * Until then, the form validates the email client-side and shows a confirmation,
- * so it looks and feels finished without silently dropping addresses on a real
- * backend that doesn't exist. No address is sent anywhere.
+ * Newsletter sign-up form, rendered inside the Footer on every page. POSTs to
+ * /api/newsletter, which adds the address to Constant Contact — see
+ * src/lib/constantContact.ts and PROJECT.md for how that's wired up.
  */
 type Props = {
   eyebrow?: string;
@@ -32,18 +24,39 @@ export default function NewsletterSignup({
 }: Props) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const botcheck = formData.get("botcheck");
+
     const value = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setError("Please enter a valid email address.");
       return;
     }
+
     setError("");
-    // TODO: send `value` to Constant Contact (see file header).
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: value, botcheck }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setError(result?.error || "Something went wrong. Please try again.");
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -62,6 +75,14 @@ export default function NewsletterSignup({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="w-full max-w-md" noValidate>
+            <input
+              type="text"
+              name="botcheck"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
             <label htmlFor="newsletter-email" className="sr-only">
               Email address
             </label>
@@ -78,9 +99,10 @@ export default function NewsletterSignup({
               />
               <button
                 type="submit"
-                className="font-ui shrink-0 bg-brand-red px-6 py-3 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-black"
+                disabled={submitting}
+                className="font-ui shrink-0 bg-brand-red px-6 py-3 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-black disabled:opacity-60"
               >
-                {buttonLabel}
+                {submitting ? "SIGNING UP…" : buttonLabel}
               </button>
             </div>
             {error && <p className="mt-2 text-sm text-brand-gold">{error}</p>}
