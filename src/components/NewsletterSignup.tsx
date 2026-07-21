@@ -22,6 +22,8 @@ export default function NewsletterSignup({
   buttonLabel = "SIGN UP",
   confirmation = "Thanks for signing up. We'll be in touch with news from the GTCIO.",
 }: Props) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -44,7 +46,12 @@ export default function NewsletterSignup({
       const response = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: value, botcheck }),
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: value,
+          botcheck,
+        }),
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) {
@@ -83,10 +90,42 @@ export default function NewsletterSignup({
               aria-hidden="true"
               className="hidden"
             />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <label htmlFor="newsletter-first-name" className="sr-only">
+                  First name
+                </label>
+                <input
+                  id="newsletter-first-name"
+                  type="text"
+                  name="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="First name"
+                  autoComplete="given-name"
+                  className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
+                />
+              </div>
+              <div>
+                <label htmlFor="newsletter-last-name" className="sr-only">
+                  Last name
+                </label>
+                <input
+                  id="newsletter-last-name"
+                  type="text"
+                  name="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Last name"
+                  autoComplete="family-name"
+                  className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
+                />
+              </div>
+            </div>
             <label htmlFor="newsletter-email" className="sr-only">
               Email address
             </label>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row">
               <input
                 id="newsletter-email"
                 type="email"

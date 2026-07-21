@@ -1177,6 +1177,11 @@ create by hand in Constant Contact.
   forms: it upserts by email address with no separate existence check, and is
   meant only for contacts who explicitly asked to be added, which this form's
   visitors have.
+- **First and last name are optional** (added 2026-07-21) — the form collects
+  them, but signing up with email only still works. `addNewsletterSignup()`
+  omits `first_name`/`last_name` from the request entirely when blank, rather
+  than sending empty strings, so a returning contact who already has a name on
+  file in Constant Contact never gets it blanked out by a bare-email re-signup.
 - **No `formSubmission` record is kept for newsletter signups** — deliberately
   different from the other three forms (§5). A newsletter signup isn't a lead
   needing staff follow-up, so there's no reason to also store the visitor's

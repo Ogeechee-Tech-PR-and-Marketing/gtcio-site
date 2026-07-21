@@ -160,7 +160,17 @@ async function getListId(accessToken: string): Promise<string> {
   return listId;
 }
 
-export async function addNewsletterSignup(email: string): Promise<void> {
+type SignupInput = {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+export async function addNewsletterSignup({
+  email,
+  firstName,
+  lastName,
+}: SignupInput): Promise<void> {
   const accessToken = await getAccessToken();
   const listId = await getListId(accessToken);
 
@@ -175,6 +185,11 @@ export async function addNewsletterSignup(email: string): Promise<void> {
     },
     body: JSON.stringify({
       email_address: email,
+      // Omit rather than send empty strings — first/last name are optional
+      // on the footer form, and an empty string would overwrite a name a
+      // contact already has on file if they sign up again later.
+      ...(firstName ? { first_name: firstName } : {}),
+      ...(lastName ? { last_name: lastName } : {}),
       list_memberships: [listId],
     }),
   });
