@@ -70,15 +70,15 @@ export default async function Home() {
   const hero = resolveHeroImage({
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-construction-poster.jpg",
+    fallbackSrc: "/images/hero-construction-poster-2.jpg",
     fallbackAlt: "Construction of the GTCIO facility",
     fallbackPosition: "50% 50%",
   });
   const heroVideo = resolveHeroVideo({
     video: typed?.heroVideo,
     poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-construction-2.mp4",
-    fallbackPoster: "/images/hero-construction-poster.jpg",
+    fallbackSrc: "/videos/hero-construction-3.mp4",
+    fallbackPoster: "/images/hero-construction-poster-2.jpg",
   });
 
   return (
