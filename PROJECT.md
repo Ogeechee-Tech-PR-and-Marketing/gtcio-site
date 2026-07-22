@@ -453,6 +453,24 @@ year. Rename the file (`hero-construction-2.mp4`) and update its references
 instead. Originals of the re-encoded media live outside the repo in
 `../media-originals/`.
 
+**Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
+after the first pass looked visibly blocky in the construction video's dark
+night sky — banding is the classic failure mode of a fast CRF encode on a dark
+scene). Current approach: two-pass `libx264`, `preset veryslow`, `tune film`,
+scaled to 1600px wide, audio stripped (never used). Two-pass with an explicit
+`-b:v`/`-maxrate`/`-bufsize` target — not a bare CRF value — is what makes
+`veryslow` pay off predictably: CRF alone at a quality-driven setting can land
+almost anywhere in file size (an earlier CRF 20 test came out *larger* than the
+original 21MB source). `hero-construction-2.mp4` targets ~2.2 Mbps (43s →
+11.7MB); `hero-about-2.mp4` targets ~1.1 Mbps (84s → 11.5MB, up from the
+source's own already-lean 1.39 Mbps — there was little headroom to cut there,
+which is why the first pass's more aggressive CRF 30 visibly hurt it less than
+the construction video but still wasn't worth keeping). If a hero video is
+swapped again, re-encode from the untouched originals in `../media-originals/`
+(not from a prior compressed pass — compounding lossy re-encodes compounds
+artifacts), and sanity-check the darkest scene in the clip specifically:
+brighten/contrast-boost a crop of it and look for blockiness before shipping.
+
 **The canonical site origin lives in `src/lib/site.ts`** (`SITE_URL`). It feeds
 `metadataBase` (root layout), `src/app/robots.ts` (which disallows `/studio` and
 `/api/`), and `src/app/sitemap.ts`. On a domain move, change it there — plus the

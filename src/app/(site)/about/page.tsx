@@ -158,7 +158,7 @@ export default async function AboutPage() {
   const heroVideo = resolveHeroVideo({
     video: typed?.heroVideo,
     poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-about.mp4",
+    fallbackSrc: "/videos/hero-about-2.mp4",
     fallbackPoster: "/images/hero-about-poster.jpg",
   });
 

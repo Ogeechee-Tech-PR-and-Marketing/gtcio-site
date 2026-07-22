@@ -77,7 +77,7 @@ export default async function Home() {
   const heroVideo = resolveHeroVideo({
     video: typed?.heroVideo,
     poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-construction.mp4",
+    fallbackSrc: "/videos/hero-construction-2.mp4",
     fallbackPoster: "/images/hero-construction-poster.jpg",
   });
 
