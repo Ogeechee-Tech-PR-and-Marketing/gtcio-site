@@ -89,9 +89,9 @@ export default async function CredentialsPage() {
   const hero = resolveHeroImage({
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-training.jpg",
-    fallbackAlt: "Technician performing PLC maintenance on an electrical control panel",
-    fallbackPosition: "61% 31%",
+    fallbackSrc: "/images/hero-credentials.jpg",
+    fallbackAlt: "Gloved hands testing wiring connections in an industrial control panel with a multimeter",
+    fallbackPosition: "40% 45%",
   });
 
   return (
