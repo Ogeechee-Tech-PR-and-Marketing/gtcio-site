@@ -1,3 +1,4 @@
+import { createHmac } from "node:crypto";
 import { NextResponse } from "next/server";
 import { SITE_URL } from "@/lib/site";
 
@@ -28,7 +29,14 @@ export async function GET(request: Request) {
     return new NextResponse("CONSTANT_CONTACT_CLIENT_ID is not set.", { status: 500 });
   }
 
-  const state = crypto.randomUUID();
+  // The state is signed with the setup secret so the CALLBACK can also verify
+  // the flow began here. Without the signature, anyone who learns the client
+  // ID (client IDs are semi-public in OAuth) could authorize their OWN
+  // Constant Contact account and silently become the recipient of every
+  // newsletter signup — the callback route alone has no secret gate.
+  const nonce = crypto.randomUUID();
+  const signature = createHmac("sha256", setupSecret).update(nonce).digest("hex");
+  const state = `${nonce}.${signature}`;
   const url = new URL(AUTHORIZE_URL);
   url.searchParams.set("client_id", clientId);
   url.searchParams.set("redirect_uri", `${SITE_URL}/api/constant-contact/oauth/callback`);

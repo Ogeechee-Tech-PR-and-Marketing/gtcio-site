@@ -192,7 +192,7 @@ export default defineType({
     }),
     defineField({
       name: "certificationsButton",
-      title: "Course detail band — certifications button",
+      title: "Course detail band — credentials button",
       type: "ctaButton",
       group: "curriculum",
     }),

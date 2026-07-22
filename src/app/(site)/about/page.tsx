@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "About | GTCIO",
 };
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "About GTCIO",
   heroTitle: "Building Georgia's industrial workforce, together",
@@ -109,7 +112,7 @@ const DEFAULTS = {
     {
       question: "Where is GTCIO located?",
       answer:
-        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Until it opens — the ribbon cutting is October 15, 2026 — classes are held in the Industrial Technology Building on Ogeechee Tech's main campus. The Facility page has more, including how to request a tour.",
+        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Until it opens — the ribbon cutting is October 15, 2026 — classes are held in the Industrial Technology Building on Ogeechee Tech's main campus. The Facility page has more about the building.",
     },
   ],
 };
@@ -172,7 +175,7 @@ export default async function AboutPage() {
         videoPoster={useVideo ? heroVideo.poster : undefined}
       />
 
-      <section id="mission" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="mission" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">Mission</h2>
           {page.missionStatement && (
@@ -189,7 +192,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section id="history" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="history" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
           <p className="mt-4 text-brand-black">{page.historyBody}</p>
@@ -200,7 +203,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section id="advisory-board" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="advisory-board" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.advisoryTitle}</h2>
           <p className="mt-4 text-brand-black">{page.advisoryBody}</p>
@@ -208,7 +211,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section id="bulloch-development-authority" className="scroll-mt-24 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="bulloch-development-authority" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.bdaTitle}</h2>
           <p className="mt-4 text-brand-black">{page.bdaBody}</p>
@@ -219,7 +222,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section id="faq" className="scroll-mt-24 px-6 py-16 sm:px-10">
+      <section id="faq" className="scroll-mt-40 sm:scroll-mt-56 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">FAQ</h2>
           <div className="mt-6 flex flex-col gap-6">

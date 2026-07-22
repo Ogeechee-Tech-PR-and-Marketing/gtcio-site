@@ -541,6 +541,14 @@ export const CREDENTIALS: Credential[] = [
 /** Lookup used to link a course's credential codes to the glossary. */
 export const CREDENTIALS_BY_CODE = new Map(CREDENTIALS.map((c) => [c.code, c]));
 
+/**
+ * The SACA-issued subset of the glossary (C-xxx codes). CREDENTIALS also holds
+ * one FANUC America credential (FANUC-1), which is NOT SACA's — any "N SACA
+ * credentials" stat must use this list, not CREDENTIALS.length, or FANUC
+ * gets double-counted against the separate FANUC card on /credentials.
+ */
+export const SACA_CREDENTIALS = CREDENTIALS.filter((c) => c.code.startsWith("C-"));
+
 export const CREDENTIAL_FAMILIES: Credential["family"][] = [
   "Industry 4.0 Associate",
   "Systems & Controls",
@@ -549,7 +557,7 @@ export const CREDENTIAL_FAMILIES: Credential["family"][] = [
 
 /** SACA's own description of itself, condensed from the brochure's p3 sidebar. */
 export const SACA_INTRO = [
-  "The Smart Automation Certification Alliance (SACA) is a non-profit organization whose mission is to develop and deploy modular Industry 4.0 certifications for a wide range of industries. It is the credentialing agency for every certification listed in this program.",
-  "Built with industry at the table, SACA certifications are designed to meet the needs of modern employers who demand both knowledge and hands-on ability. Whether a company is hiring for advanced manufacturing, industrial automation, or smart systems integration, SACA credentials offer a reliable signal of a candidate's workforce readiness.",
-  "SACA certifications are developed in accordance with ISO 17024 standards, the global benchmark for personnel certification — so they are not just well-designed, but credible, consistent, and globally recognized.",
+  "The Smart Automation Certification Alliance (SACA) is a non-profit organization whose mission is to develop and deploy modular Industry 4.0 credentials for a wide range of industries. It is the credentialing agency for every credential listed in this program.",
+  "Built with industry at the table, SACA credentials are designed to meet the needs of modern employers who demand both knowledge and hands-on ability. Whether a company is hiring for advanced manufacturing, industrial automation, or smart systems integration, SACA credentials offer a reliable signal of a candidate's workforce readiness.",
+  "SACA credentials are developed in accordance with ISO 17024 standards, the global benchmark for personnel certification — so they are not just well-designed, but credible, consistent, and globally recognized.",
 ];

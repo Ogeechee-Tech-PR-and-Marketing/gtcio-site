@@ -23,6 +23,14 @@ type InquiryFormProps = {
 const FIELD_CLASSES =
   "w-full border border-brand-silver bg-brand-white px-3 py-2 text-brand-black focus:border-brand-red focus:outline-none";
 
+// Mirror the server's caps in /api/inquiry/route.ts (MAX_SHORT / MAX_EMAIL /
+// MAX_MESSAGE). The server silently truncates anything longer, so without a
+// client-side maxLength a very long message would lose its tail with a
+// success response. Change these together with the route's constants.
+const MAX_SHORT = 200;
+const MAX_EMAIL = 254;
+const MAX_MESSAGE = 5000;
+
 export default function InquiryForm({
   formType,
   fields,
@@ -151,6 +159,7 @@ export default function InquiryForm({
                   name={field.name}
                   required={field.required}
                   rows={4}
+                  maxLength={MAX_MESSAGE}
                   className={FIELD_CLASSES}
                 />
               ) : (
@@ -159,6 +168,7 @@ export default function InquiryForm({
                   name={field.name}
                   type={field.type ?? "text"}
                   required={field.required}
+                  maxLength={field.type === "email" ? MAX_EMAIL : MAX_SHORT}
                   className={FIELD_CLASSES}
                 />
               )}

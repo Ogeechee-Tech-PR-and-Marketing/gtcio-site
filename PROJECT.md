@@ -178,7 +178,7 @@ Every decision below exists to protect that. Weigh it accordingly.
   2026-07-20). The IS32 course table (12 program courses + 3 required general
   education courses, 53 credit hours total — see §8) and the SACA
   credential glossary (22 entries) that drive `/iot-diploma-program/curriculum`
-  and `/iot-diploma-program/certifications` are **code, not CMS content**. They
+  and `/credentials` are **code, not CMS content**. They
   are a faithful transcription of an *accredited* course catalog — codes, credit
   hours, and credential mappings are matters of record, not marketing copy, and
   a wrong edit misstates the program to prospective students. A ~200-bullet
@@ -437,8 +437,21 @@ image host must be added there or images 500.
 `next.config.ts` also sets security headers on every route (added 2026-07-20):
 `X-Frame-Options: SAMEORIGIN` (deliberately not DENY — the Studio's "Edit on
 page" tool iframes the site from `/studio` on the same origin),
-`X-Content-Type-Options: nosniff`, `Referrer-Policy`, and a restrictive
-`Permissions-Policy`.
+`X-Content-Type-Options: nosniff`, `Referrer-Policy`, a restrictive
+`Permissions-Policy`, and (added 2026-07-21) a baseline
+`Content-Security-Policy` (`frame-ancestors 'self'; object-src 'none';
+base-uri 'self'` — deliberately not a full `default-src` policy, which the
+embedded Studio, Adobe Fonts, and Sanity's live APIs would make fragile).
+HSTS is left to Vercel's edge (it sets it on `*.vercel.app`); add a
+`Strict-Transport-Security` header here if the site moves to a custom domain.
+
+`next.config.ts` also serves `public/videos|images|documents` with
+`Cache-Control: public, max-age=31536000, immutable` (added 2026-07-21 — they
+previously revalidated on every visit). ⚠️ Consequence: **never change one of
+those files in place** — prior visitors would see the stale version for up to a
+year. Rename the file (`hero-construction-2.mp4`) and update its references
+instead. Originals of the re-encoded media live outside the repo in
+`../media-originals/`.
 
 **The canonical site origin lives in `src/lib/site.ts`** (`SITE_URL`). It feeds
 `metadataBase` (root layout), `src/app/robots.ts` (which disallows `/studio` and
@@ -834,9 +847,15 @@ Smaller items:
   (or the wider Arial Narrow fallback if Adobe Fonts fails) would be *clipped*
   rather than wrapped. A longer headline just wraps to two lines. Re-measure if
   the headline changes materially.
-- **No rate limiting** on `/api/inquiry`. The honeypot, the 20 KB payload cap,
-  and the per-field length caps (§5) blunt casual abuse, but nothing stops a
-  determined flood. If spam becomes a problem, add real rate limiting.
+- **No rate limiting** on `/api/inquiry` or `/api/newsletter`. The honeypots,
+  the payload caps (20 KB inquiry / 5 KB newsletter, both routes since
+  2026-07-21), and the per-field length caps (§5) blunt casual abuse, but
+  nothing stops a determined flood. If spam becomes a problem, the
+  no-extra-infrastructure fix is a **Vercel WAF rate-limit rule** (Vercel
+  dashboard → gtcio-site → Firewall → New Rule, e.g. 5 requests / 60s per IP on
+  `POST /api/inquiry` and `/api/newsletter`) — one rule is available even on
+  the Hobby plan. Escalate to Cloudflare Turnstile on the forms only if spam
+  persists past that.
 
 ---
 
@@ -901,9 +920,10 @@ shows deploy status.
   Manufacturing Network (wmnorg.com), WIM Georgia
   (womeninmanufacturing.org/georgia). All three verified reachable 2026-07-20.
 - **The IOT Diploma Program hero now carries three buttons** (2026-07-20): Apply
-  Now (red) plus **VIEW IOT PROGRAM** and **DOWNLOAD IOT PROGRAM** in a new
-  white-outline `heroOutline` Button variant — `outline` is black-on-black over a
-  dark hero and effectively invisible, so don't reach for it there. All three are
+  Now plus **VIEW IOT PROGRAM** and **DOWNLOAD IOT PROGRAM**. All three render
+  as the red `primary` variant — `Button.tsx` has only `primary` and `dark`
+  variants (an earlier note here described a white-outline `heroOutline`
+  variant that was never built; corrected 2026-07-21). All three are
   CMS-managed `ctaButton` fields. Two new `DESTINATIONS` keys back them:
   `iotProgramFlipbook` (<https://online.fliphtml5.com/exygb/xhzf/#p=1>, verified
   200, same `exygb` account as the employer catalog flipbook) and
@@ -945,6 +965,18 @@ shows deploy status.
     21px clear of the logo, 47px of the right edge. A tenth item, or materially
     longer labels, will need re-checking; the desktop nav has no wrap/overflow
     handling, it just gets tighter.
+- **Sitewide terminology: "credentials", not "certifications"** (Jake,
+  2026-07-22). Every generic mention was changed in both the code `DEFAULTS`
+  and the published Sanity docs (plus the then-extant `drafts.homePage`).
+  Exceptions, all deliberate: proper nouns and official titles stay as-is —
+  "Smart Automation Certification Alliance (SACA)", "Gold Certification Site",
+  "Certified Industry 4.0 Associate", "FANUC Certified Robot Operator",
+  "Amatrol Certified Instructor Training Site", and ISO 17024's "personnel
+  certification" descriptor — and the code-level identifiers keep their names
+  (`DESTINATIONS.certifications`, the `certificationsButton` field, the
+  `certifications` ctaButton value, and the `/iot-diploma-program/certifications`
+  redirect source), since renaming those would orphan seeded content (§4).
+  Don't reintroduce generic "certification(s)" in new copy.
 - **The `apply` CTA destination changed 2026-07-20**: `DESTINATIONS.apply` in
   `sanity/lib/links.ts` now points to
   `https://www.ogeecheetech.edu/admissions/next-steps` (was `/IOT`, which no
@@ -1262,3 +1294,64 @@ this is expected, not a bug, until setup is complete).
   Account → Integrations → connected apps list while logged into the account
   you *think* is connected, rather than assuming from this end — the site has
   no way to display which Constant Contact account it's talking to.
+
+---
+
+## 12. Accounts, access & handoff
+
+Everything below was true 2026-07-21. The single biggest handoff fact: **the
+site currently runs on Jake Hallman's personal GitHub and Vercel accounts.** A
+permanent handoff should move both to an OTC-owned org/team, or at minimum add
+the successor as a collaborator on each.
+
+### Who owns what
+
+| Service | Identifier | Owner / login | Used for |
+| --- | --- | --- | --- |
+| GitHub | `revjake1/gtcio-site` (private) | Jake Hallman (`revjake1`) | Source of truth; push to `main` deploys |
+| Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman | Hosting, env vars, deploy hooks, function logs |
+| Sanity | project `kjz4q8d4`, dataset `production` | Jake (admin) + `prmarketing@ogeecheetech.edu` (shared marketing login — see §8 re: its role) | All site content, form-submission inbox |
+| Adobe Fonts | web project kit `fgt0fkg` | OTC's Creative Cloud licence | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
+| Web3Forms | two access keys | created with `jmoore@` / `spayne@ogeecheetech.edu` | Form notification email (§5; keys not yet set) |
+| Constant Contact | "Custom App" at developer.constantcontact.com | the OTC/GTCIO Constant Contact account (§11) | Newsletter list (§11; one-time OAuth still pending) |
+
+### Getting set up as a new developer
+
+1. Get invited to the GitHub repo, the Vercel project, and the Sanity project
+   (someone in the table above sends each invite).
+2. `git clone`, `npm install`, then copy `.env.example` → `.env.local` and fill
+   it in. The Sanity tokens you mint yourself once invited:
+   **sanity.io/manage → project `kjz4q8d4` → API → Tokens** — create one
+   **Viewer** token (`SANITY_API_READ_TOKEN`) and one **Editor** token
+   (`SANITY_API_WRITE_TOKEN`). Each token is displayed exactly once.
+   The remaining secrets (Web3Forms keys, Constant Contact app credentials)
+   are in Vercel → Settings → Environment Variables once configured.
+3. `npm run dev` — the site renders without any tokens (published content is
+   public); tokens only gate draft preview and the forms.
+4. Read §4's traps before touching content, and §3 before moving files.
+
+### Adding a page — the full checklist
+
+A new page touches more files than you'd guess; missing one is silent. In
+order:
+
+1. **Schema:** create `sanity/schemaTypes/documents/<name>Page.ts`, register
+   it in `sanity/schemaTypes/index.ts` — including the `singletonTypes` set if
+   it's a one-per-site page.
+2. **Studio nav:** add it to `sanity/structure.ts` (keep the list in site-nav
+   order).
+3. **Edit-on-page:** add it to `PAGE_PATHS` in `sanity/presentation.ts`.
+4. **Route:** create `src/app/(site)/<slug>/page.tsx` — inside `(site)` or it
+   won't get the Header/Footer. Follow the existing pattern: `DEFAULTS`
+   object (in page order), `sanityFetch`, `{...DEFAULTS, ...typed}`.
+5. **Navigation:** add it to `NAV_ITEMS` in `src/components/Header.tsx`
+   (⚠️ re-measure — 9 items barely fit at `xl`) and the Explore column in
+   `src/components/Footer.tsx`.
+6. **Links plumbing:** if CMS buttons should be able to point at it, add a
+   destination key to `sanity/lib/links.ts` AND the options list in
+   `sanity/schemaTypes/objects/ctaButton.ts`.
+7. **Sitemaps, both of them:** `src/app/sitemap.ts` (search engines) and
+   `public/SITEMAP.html` (the stakeholder deliverable — update its tallies and
+   the colophon date).
+8. **Seed the content** in the dataset (§4 — editors should see real copy, not
+   empty boxes), then run both §4 validation commands.

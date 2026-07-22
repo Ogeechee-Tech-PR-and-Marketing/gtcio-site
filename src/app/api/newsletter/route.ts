@@ -10,6 +10,7 @@ type Payload = {
 
 const MAX_EMAIL = 254; // RFC 5321 upper bound
 const MAX_NAME = 100;
+const MAX_BODY_BYTES = 5_000; // three short fields; same guard as /api/inquiry
 
 // Matches api/inquiry/route.ts's clean(): strip control characters, trim, cap
 // length. Built via `new RegExp` (not a /.../ literal) so the \u escapes stay
@@ -21,6 +22,12 @@ function clean(value: string | undefined, max: number): string {
 }
 
 export async function POST(request: Request) {
+  // Reject oversized payloads before parsing them.
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Request too large." }, { status: 413 });
+  }
+
   let body: Payload;
   try {
     body = await request.json();

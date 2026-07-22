@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Facility | GTCIO",
 };
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "Facility",
   heroTitle: "Built for hands-on training",
@@ -72,7 +75,10 @@ export default async function FacilityPage() {
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const stats = typed?.stats?.length ? typed.stats : DEFAULTS.stats;
-  const gallery = typed?.gallery ?? [];
+  // Drop gallery items with no uploaded image: an editor clicking "Add item"
+  // and publishing (or just previewing a draft) mid-edit is a normal state,
+  // and urlForImage() THROWS on an asset-less item — a 500 for the whole page.
+  const gallery = (typed?.gallery ?? []).filter((photo) => photo?.asset);
   const focusAreas = typed?.focusAreas?.length ? typed.focusAreas : FOCUS_AREAS;
 
   const hero = resolveHeroImage({

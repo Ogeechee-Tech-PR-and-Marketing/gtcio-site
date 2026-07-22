@@ -6,6 +6,9 @@ import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
 import type { CtaButton as CtaButtonData } from "@/sanity/lib/links";
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "",
   heroTitle: "Building a workforce ready for industry transformation.",
@@ -13,7 +16,7 @@ const DEFAULTS = {
     "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology. These are the people who keep factories, utilities, and logistics centers running when something breaks or a line goes down. The diploma program opens for enrollment now, ahead of its August 2026 launch.",
   sectionTitle: "Training the next generation",
   sectionBody:
-    "These skills carry well past the factory floor, into facilities management, utilities, and logistics, anywhere equipment has to keep running. Students start with the fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it's robotics, PLCs, and smart automation. Every student who earns the diploma is credentialed through the Smart Automation Certification Alliance (SACA), an industry-recognized certification.",
+    "These skills carry well past the factory floor, into facilities management, utilities, and logistics, anywhere equipment has to keep running. Students start with the fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it's robotics, PLCs, and smart automation. Every student who earns the diploma is credentialed through the Smart Automation Certification Alliance (SACA), an industry-recognized credential.",
   studentsCard: {
     title: "Students",
     description: "Earn a diploma built around hands-on work with real industrial equipment, not just theory.",

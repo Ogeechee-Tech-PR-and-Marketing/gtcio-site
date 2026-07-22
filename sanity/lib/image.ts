@@ -40,7 +40,9 @@ export function resolveHeroImage({
 
   const { hotspot } = image;
   return {
-    src: urlForImage(image).width(2400).quality(80).url(),
+    // auto("format") lets Sanity's CDN serve WebP/AVIF to browsers that accept
+    // it — next/image re-encodes anyway, but its source fetch gets smaller too.
+    src: urlForImage(image).width(1920).quality(80).auto("format").url(),
     alt: alt || fallbackAlt,
     position: hotspot
       ? `${(hotspot.x * 100).toFixed(1)}% ${(hotspot.y * 100).toFixed(1)}%`

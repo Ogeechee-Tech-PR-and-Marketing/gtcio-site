@@ -2,7 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { DESTINATIONS } from "@/sanity/lib/links";
 import NewsletterSignup from "./NewsletterSignup";
+import Year from "./Year";
 
+/**
+ * Code-only by design, like the header nav — a typo'd href here breaks
+ * navigation on every page (PROJECT.md §8). The Explore column mirrors the
+ * top nav's page list; when a route is added or renamed, update both (plus
+ * sitemap.ts, links.ts, SITEMAP.html — PROJECT.md §12's runbook).
+ */
 const COLUMNS = [
   {
     heading: "Explore",
@@ -10,6 +17,7 @@ const COLUMNS = [
       { label: "About", href: "/about" },
       { label: "IOT Training Programs", href: "/training" },
       { label: "IOT Diploma Program", href: "/iot-diploma-program" },
+      { label: "Credentials", href: "/credentials" },
       { label: "Facility", href: "/facility" },
       { label: "Partners", href: "/partners" },
       { label: "News", href: "/news" },
@@ -105,7 +113,7 @@ export default function Footer({
       <div className="border-t border-white/10 px-6 py-5 sm:px-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 text-xs text-brand-silver sm:flex-row sm:justify-between">
           <p>
-            © {new Date().getFullYear()} Georgia Training Center for Industrial Operations. All rights reserved.
+            © <Year /> Georgia Training Center for Industrial Operations. All rights reserved.
           </p>
           {/* Red pipe separator matches the utility banner at the top of the page. */}
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center sm:justify-end sm:text-right">

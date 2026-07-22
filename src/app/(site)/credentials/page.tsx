@@ -10,6 +10,7 @@ import {
   CREDENTIALS,
   CREDENTIAL_FAMILIES,
   PROGRAM_COURSES,
+  SACA_CREDENTIALS,
   SACA_INTRO,
 } from "@/lib/iot-curriculum";
 import { SACA_TIERS, OTHER_CREDENTIALS, AFFILIATIONS } from "@/lib/credentials";
@@ -18,7 +19,7 @@ import { DESTINATIONS } from "@/sanity/lib/links";
 export const metadata: Metadata = {
   title: "Credentials | GTCIO",
   description:
-    "Every industry credential built into GTCIO's training — SACA certifications, FANUC, and OSHA 10 — and the accreditations Ogeechee Tech holds that make them count.",
+    "Every industry credential built into GTCIO's training — SACA credentials, FANUC, and OSHA 10 — and the accreditations Ogeechee Tech holds that make them count.",
 };
 
 /** Which courses lead to a given credential — the inverse of the course table. */
@@ -29,6 +30,9 @@ for (const course of PROGRAM_COURSES) {
   }
 }
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "Credentials",
   heroTitle: "Proof you can do the work",
@@ -39,14 +43,14 @@ const DEFAULTS = {
     "Every graduate of the Industrial Operations Technology diploma is credentialed through SACA, and the program builds in two more credentials employers ask for by name.",
   affiliationsTitle: "Why a credential from here counts",
   affiliationsBody:
-    "Ogeechee Tech is accredited by the equipment makers and certification bodies whose credentials it awards — so students test on the same platforms the industry runs, at a site those organisations authorised.",
+    "Ogeechee Tech is accredited by the equipment makers and credentialing bodies whose credentials it awards — so students test on the same platforms the industry runs, at a site those organisations authorised.",
   sacaTitle: "What SACA is, and why it matters",
   ladderTitle: "How SACA credentials stack",
   ladderBody:
     "SACA is a ladder, not a single exam. Credentials are modular, so each one you pass is banked and counts toward the next tier.",
   glossaryTitle: "Every credential in the diploma",
   glossaryBody:
-    "Twenty-two SACA certifications are built into the program. Each is a separate hands-on and written assessment.",
+    "Twenty-one SACA credentials — plus a FANUC robot-operator credential — are built into the program. Each is a separate hands-on and written assessment.",
   ctaHeading: "Graduate credentialed, not just qualified",
   ctaBody: "Classes begin August 2026. Applications go through Ogeechee Technical College.",
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
@@ -117,10 +121,10 @@ export default async function CredentialsPage() {
           <p className="mt-4 max-w-3xl text-brand-silver">{page.earnBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="border-l-4 border-brand-red bg-brand-black/[0.03] p-6">
-              <p className="font-display text-3xl text-brand-red">{CREDENTIALS.length}</p>
-              <p className="font-heading mt-2 font-bold text-brand-black">SACA certifications</p>
+              <p className="font-display text-3xl text-brand-red">{SACA_CREDENTIALS.length}</p>
+              <p className="font-heading mt-2 font-bold text-brand-black">SACA credentials</p>
               <p className="mt-2 text-sm text-brand-silver">
-                Built into the diploma across all {PROGRAM_COURSES.length} program courses.
+                Built into the diploma&apos;s program courses.
               </p>
             </div>
             {OTHER_CREDENTIALS.map((credential) => (
@@ -228,7 +232,7 @@ export default async function CredentialsPage() {
                       <article
                         key={credential.code}
                         id={credential.code.toLowerCase()}
-                        className="scroll-mt-24 border border-brand-silver/40 p-6"
+                        className="scroll-mt-40 sm:scroll-mt-56 border border-brand-silver/40 p-6"
                       >
                         <p className="font-display text-sm text-brand-gold">{credential.code}</p>
                         <h4 className="font-heading mt-1 text-lg font-bold text-brand-black">

@@ -4,11 +4,15 @@ import CtaButton from "@/components/CtaButton";
 import { sanityFetch } from "@/sanity/lib/live";
 import { IOT_DIPLOMA_PROGRAM_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
+import { safeHref } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
   title: "IOT Diploma Program | GTCIO",
 };
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "IOT Diploma Program: Enrolling now for August 2026",
   heroTitle: "What is Industrial Operations Technology?",
@@ -31,11 +35,11 @@ const DEFAULTS = {
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
     { stage: "Advanced", detail: "Robotics, programmable logic controllers (PLCs), automation controls, smart sensors, industrial wiring, and motor controls." },
-    { stage: "Credential", detail: "Every graduate earns the diploma and is credentialed through the Smart Automation Certification Alliance (SACA) — an industry-recognized certification built into the program, not an optional add-on." },
+    { stage: "Credential", detail: "Every graduate earns the diploma and is credentialed through the Smart Automation Certification Alliance (SACA) — an industry-recognized credential built into the program, not an optional add-on." },
   ],
   courseDetailHeading: "Every course, in detail",
   courseDetailBody:
-    "The diploma is 15 courses and 53 credit hours — 12 program courses plus 3 general education courses. See exactly what each course covers and which industry certification it prepares you for.",
+    "The diploma is 15 courses and 53 credit hours — 12 program courses plus 3 general education courses. See exactly what each course covers and which industry credential it prepares you for.",
   curriculumButton: { label: "COURSES & CREDIT HOURS", destination: "curriculum" as const },
   certificationsButton: { label: "VIEW CREDENTIALS", destination: "certifications" as const },
   moreWaysTitle: "More than one way in",
@@ -164,10 +168,19 @@ export default async function IotDiplomaProgramPage() {
               )}
               {nonTraditionalResources.length > 0 && (
                 <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-                  {nonTraditionalResources.map((resource: { label: string; url: string }, i: number) => (
+                  {/* safeHref: same render-time backstop as news/partner URLs —
+                      these are CMS-authored links. filter(Boolean) drops any
+                      that don't survive it rather than rendering a dead <a>. */}
+                  {nonTraditionalResources
+                    .map((resource: { label: string; url: string }) => ({
+                      ...resource,
+                      url: safeHref(resource.url),
+                    }))
+                    .filter((resource: { url: string | null }) => resource.url)
+                    .map((resource: { label: string; url: string | null }, i: number) => (
                     <li key={i}>
                       <a
-                        href={resource.url}
+                        href={resource.url!}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm font-bold text-brand-red underline hover:text-brand-black"
@@ -296,7 +309,7 @@ export default async function IotDiplomaProgramPage() {
         </div>
       </section>
 
-      <section id="apply" className="scroll-mt-24 bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
+      <section id="apply" className="scroll-mt-40 sm:scroll-mt-56 bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
         <h2 className="font-heading text-3xl font-bold">{page.applyHeading}</h2>
         <div className="mt-8">
           <CtaButton button={page.applyButton} variant="primary" />

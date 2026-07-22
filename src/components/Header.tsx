@@ -4,6 +4,16 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+/**
+ * Code-only by design (a typo'd href here breaks navigation site-wide — see
+ * PROJECT.md §8). Two constraints before adding an item:
+ * - 9 items fit the desktop nav at the xl breakpoint with no overflow handling
+ *   (measured 2026-07-20, ~21px to spare). A 10th item or longer labels need
+ *   re-measuring — the nav just gets tighter, then collides with the logo.
+ * - A new route must ALSO go in src/app/sitemap.ts, Footer.tsx,
+ *   sanity/lib/links.ts, and public/SITEMAP.html (the add-a-page runbook in
+ *   PROJECT.md §12 lists every step).
+ */
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   {
@@ -39,6 +49,10 @@ export default function Header({
   const [aboutOpen, setAboutOpen] = useState(false);
 
   return (
+    // The header is sticky, so in-page anchor targets need a scroll margin
+    // matching its real height (~152px mobile / ~205px from sm up). That's the
+    // scroll-mt-40 sm:scroll-mt-56 on every id'd section — if the banner, logo
+    // size, or padding here changes, those margins must change with it.
     <header className="sticky top-0 z-50 bg-brand-white">
       <div className="bg-brand-black px-4 py-2 text-center">
         <p className="font-ui text-xs font-bold tracking-widest text-brand-white sm:text-sm">
@@ -54,6 +68,9 @@ export default function Header({
               alt="GTCIO — Georgia Training Center for Industrial Operations"
               width={750}
               height={300}
+              // Displayed at ~240-360px wide; without `sizes`, next/image
+              // preloads a 1920px rendition of it on every page for retina.
+              sizes="(min-width: 640px) 360px, 240px"
               className="h-24 w-auto sm:h-36"
               priority
             />

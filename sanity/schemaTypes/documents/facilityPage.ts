@@ -6,6 +6,9 @@ const galleryPhoto = defineArrayMember({
   title: "Photo",
   type: "image",
   options: { hotspot: true },
+  // A gallery item with no uploaded image would crash the page render (the
+  // frontend also filters these out, but tell the editor at the source).
+  validation: (rule) => rule.required().assetRequired(),
   fields: [
     defineField({
       name: "caption",

@@ -41,7 +41,7 @@ export default defineType({
       name: "heroButtons",
       title: "Buttons",
       description:
-        "The buttons under the intro paragraph. The first one is red, the rest are outlined. Drag to reorder.",
+        "The buttons under the intro paragraph — all render as red buttons. Drag to reorder.",
       type: "array",
       of: [{ type: "ctaButton" }],
       validation: (r) => r.max(4),

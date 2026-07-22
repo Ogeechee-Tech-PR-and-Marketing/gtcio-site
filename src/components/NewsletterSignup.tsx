@@ -101,6 +101,7 @@ export default function NewsletterSignup({
                   name="firstName"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  maxLength={100}
                   placeholder="First name"
                   autoComplete="given-name"
                   className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
@@ -116,6 +117,7 @@ export default function NewsletterSignup({
                   name="lastName"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
+                  maxLength={100}
                   placeholder="Last name"
                   autoComplete="family-name"
                   className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
@@ -132,6 +134,7 @@ export default function NewsletterSignup({
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                maxLength={254}
                 placeholder="you@example.com"
                 autoComplete="email"
                 className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"

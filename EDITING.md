@@ -108,19 +108,19 @@ Use **Show on the website** to hide an item without deleting it, the same way as
 partners. The News page shows a "coming soon" message until the first item is
 added.
 
-### Turn off the "tour booking opens…" banner
+### Where did Book a Tour go?
 
-The Facility page shows a yellow notice that tours can't be booked until a certain
-date. To remove it once tours are open, open **Facility Page** → the **Book a Tour
-form** tab, clear **both** the *Notice banner heading* and the *Notice banner
-text*, and Publish. (Changing the date? Edit those same two boxes — the date isn't
-hiding anywhere else.)
+Tour booking is off the website entirely until the building opens for tours
+(late October 2026) — no header button, no footer link, no form on the Facility
+page. That was deliberate, not a glitch. Putting it back is a developer job (the
+old form and its editing fields are preserved, just switched off), so when tours
+are ready to open, ask whoever set the site up.
 
 ### Change the buttons on the Home page
 
-Open **Home Page** → **Top of page** → **Buttons**. The first button in the list
-is the red one; the rest are outlined. Drag to reorder, change *Button text* to
-reword one, or pick a different page under *Where it goes*.
+Open **Home Page** → **Top of page** → **Buttons**. They all render as red
+buttons. Drag to reorder, change *Button text* to reword one, or pick a
+different page under *Where it goes*.
 
 The red band lower down has its own tab (**Red partner band**), and the email
 signup has one too (**Newsletter signup**).
@@ -204,9 +204,10 @@ remove it.
 ### Read the inquiries people send in
 
 Click **Form submissions (inbox)** in the left menu, under Pages. Every message
-sent through Book a Tour, Become a Partner, or Contact is saved here, newest
-first — even if the notification email goes astray. They're read-only; you can't
-edit them, only read them.
+sent through Become a Partner or Contact is saved here, newest first — even if
+the notification email goes astray. (Book a Tour messages will land here too,
+once that form returns in October 2026.) They're read-only; you can't edit
+them, only read them.
 
 Each one shows a small "unpublished draft" dot in the list. That's deliberate,
 not a mistake: keeping them as drafts is what keeps the sender's name, email,
@@ -233,9 +234,9 @@ Open **Contact Page** → the **Contact form** tab. Whatever the person picks
 becomes the subject line of the email GTCIO receives, so keep the choices short
 and specific.
 
-The dropdown on the **Become a Partner** form is different: it's built
+The checkboxes on the **Become a Partner** form are different: they're built
 automatically from the Partnership Pathway cards on the Partners page. Add or
-rename a pathway card and the dropdown follows along on its own.
+rename a pathway card and the checkbox list follows along on its own.
 
 ---
 
@@ -273,17 +274,18 @@ partner, news item, and the project timeline — you can change yourself.
 
 If you need one of these, or you get stuck, ask whoever set the site up.
 
-> ### ⚠️ The newsletter signup on the Home page isn't connected yet
+> ### ⚠️ The newsletter signup isn't switched on yet
 >
-> The "News from the GTCIO" email signup on the Home page looks finished and
-> thanks people for signing up, but it is **not yet wired to Constant Contact** —
-> right now it does not actually store or send anyone's email. Don't rely on it to
-> collect subscribers until whoever set the site up connects it. Nothing is lost
-> that was never captured, but the box currently just shows the thank-you message.
+> The "News from the GTCIO" email signup now sits in the footer of **every**
+> page (its wording is editable under **Site Settings**). The plumbing to
+> Constant Contact is built, but it's waiting on a one-time connection step —
+> until that's done, someone signing up sees a polite "something went wrong"
+> message and **nobody is added to a list**. Ask whoever set the site up to
+> finish connecting it before relying on it to collect subscribers.
 
 > ### The Credentials page and the course page are a special case
 >
-> Two pages carry official certification information copied word-for-word from
+> Two pages carry official credential information copied word-for-word from
 > Ogeechee Tech's brochures: the **Credentials** page (in the top menu) and
 > **Courses & Credit Hours** (linked from the IOT Diploma Program page, not in
 > the menu on purpose).

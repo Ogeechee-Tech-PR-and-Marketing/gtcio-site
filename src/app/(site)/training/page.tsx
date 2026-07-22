@@ -16,6 +16,9 @@ const CATALOG_URL = "https://online.fliphtml5.com/exygb/kvbr/#p=1";
 // The same catalog, as a downloadable PDF.
 const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program.pdf";
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "IOT Training Programs",
   heroTitle: "Students on one side, employers on the other: same goal",
@@ -45,7 +48,7 @@ const DEFAULTS = {
     { question: "What's the value proposition for my business?", answer: "A pipeline of work-ready technicians, plus custom training that upskills the staff you already have, delivered by a team with more than 120 years of combined in-field experience." },
     { question: "How long does training take?", answer: "Short courses run 16–40 hours each. The entry-level Industrial Systems Fast Track is 256 hours over 16 weeks, two 8-hour days a week. The DOL-registered apprenticeships add 384 hours of classroom and lab time, about one 8-hour day a week, alongside 4,000 hours of on-the-job training." },
     { question: "How much does it cost?", answer: "Short courses run about $450–$950 depending on length, and FANUC robotics and CNC courses run $750–$1,936. Comprehensive programs are $4,750 for the 256-hour Industrial Systems Fast Track and $7,750 for each 384-hour apprenticeship program. Customized contract training is scoped and quoted with your company rather than sold at a flat rate." },
-    { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold) and an Amatrol certification provider. The entry-level track prepares students to sit for 8 SACA exams, and the Electrical Apprenticeship lists 14 SACA credentials. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one." },
+    { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold) and an Amatrol credentialing provider. The entry-level track prepares students to sit for 8 SACA exams, and the Electrical Apprenticeship lists 14 SACA credentials. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one." },
     { question: "Who do I contact to set up training?", answer: "Jan Moore, Vice President for Economic Development — jmoore@ogeecheetech.edu, 912-688-6026." },
   ],
 };

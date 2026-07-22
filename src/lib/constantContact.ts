@@ -84,6 +84,23 @@ async function refreshAccessToken(refreshToken: string) {
   }>;
 }
 
+/**
+ * Refresh-token rotation makes refreshes race-sensitive: Constant Contact
+ * invalidates the old refresh token the moment a new one is issued. Two
+ * signups refreshing concurrently means the loser's call fails — and repeated
+ * reuse of a dead token can make Constant Contact revoke the whole grant,
+ * bricking the integration until a human re-runs the OAuth setup. Defenses:
+ * - `refreshInFlight` serializes refreshes within one warm serverless
+ *   instance (separate cold instances can still race — rare at this traffic).
+ * - On a failed refresh, re-read the auth doc once: if a concurrent instance
+ *   won the race, its freshly-saved access token is sitting there — use it
+ *   instead of surfacing an error.
+ * - The new tokens are persisted BEFORE the access token is returned/used;
+ *   if that Sanity write throws, we surface it loudly (better a failed signup
+ *   now than a silently lost refresh token and a dead integration later).
+ */
+let refreshInFlight: Promise<string> | null = null;
+
 async function getAccessToken(): Promise<string> {
   const doc = await getAuthDoc();
   if (!doc?.refreshToken) {
@@ -97,7 +114,31 @@ async function getAccessToken(): Promise<string> {
     return doc.accessToken;
   }
 
-  const refreshed = await refreshAccessToken(doc.refreshToken);
+  if (!refreshInFlight) {
+    refreshInFlight = performRefresh(doc.refreshToken).finally(() => {
+      refreshInFlight = null;
+    });
+  }
+  return refreshInFlight;
+}
+
+async function performRefresh(refreshToken: string): Promise<string> {
+  let refreshed: Awaited<ReturnType<typeof refreshAccessToken>>;
+  try {
+    refreshed = await refreshAccessToken(refreshToken);
+  } catch (error) {
+    // The stored token may have just been rotated out from under us by a
+    // concurrent instance. Re-read once — if that instance saved a live
+    // access token, ride on it rather than failing this visitor's signup.
+    const latest = await getAuthDoc();
+    const latestExpiry = latest?.accessTokenExpiresAt
+      ? new Date(latest.accessTokenExpiresAt).getTime()
+      : 0;
+    if (latest?.accessToken && latestExpiry - EXPIRY_BUFFER_MS > Date.now()) {
+      return latest.accessToken;
+    }
+    throw error;
+  }
 
   await writeClient
     .patch(AUTH_DOC_ID)
@@ -123,8 +164,10 @@ async function findExistingListId(accessToken: string): Promise<string | undefin
       `Constant Contact list lookup failed: ${response.status} ${await response.text()}`
     );
   }
-  const { lists } = (await response.json()) as { lists: { list_id: string; name: string }[] };
-  return lists.find((list) => list.name === LIST_NAME)?.list_id;
+  // `lists` is omitted (not an empty array) when the account has zero lists —
+  // exactly the fresh-account case this found-or-create flow exists for.
+  const { lists } = (await response.json()) as { lists?: { list_id: string; name: string }[] };
+  return (lists ?? []).find((list) => list.name === LIST_NAME)?.list_id;
 }
 
 async function createList(accessToken: string): Promise<string> {

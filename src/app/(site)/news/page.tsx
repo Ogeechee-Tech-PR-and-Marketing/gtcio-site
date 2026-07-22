@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "News | GTCIO",
 };
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "News",
   heroTitle: "News from the GTCIO",

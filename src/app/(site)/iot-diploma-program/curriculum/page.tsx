@@ -15,7 +15,7 @@ import { DESTINATIONS } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
   title: "Courses & Credit Hours | IOT Diploma Program | GTCIO",
-  description: `Every course in Ogeechee Tech's Industrial Operations Technology diploma — ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and the SACA certification each program course prepares you for.`,
+  description: `Every course in Ogeechee Tech's Industrial Operations Technology diploma — ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and the SACA credential each program course prepares you for.`,
 };
 
 /**
@@ -33,7 +33,7 @@ export default function CurriculumPage() {
       <PageHero
         eyebrow="IOT Diploma Program"
         title="Courses & credit hours"
-        description={`The full Industrial Operations Technology diploma: ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and an industry certification attached to nearly every program course.`}
+        description={`The full Industrial Operations Technology diploma: ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and an industry credential attached to nearly every program course.`}
         image="/images/hero-iot-program.jpg"
         imageAlt="Students gathered around automation equipment as an instructor explains it"
         imagePosition="50% 18%"
@@ -77,7 +77,7 @@ export default function CurriculumPage() {
             <table className="w-full min-w-[40rem] border-collapse text-left">
               <caption className="sr-only">
                 Industrial Operations Technology diploma program courses, credit hours, and SACA
-                certifications
+                credentials
               </caption>
               <thead>
                 <tr className="border-b-2 border-brand-black">
@@ -91,7 +91,7 @@ export default function CurriculumPage() {
                     Credits
                   </th>
                   <th scope="col" className="font-heading py-3 text-sm font-bold tracking-wide text-brand-black">
-                    Certifications
+                    Credentials
                   </th>
                 </tr>
               </thead>
@@ -124,7 +124,7 @@ export default function CurriculumPage() {
           </div>
 
           <p className="mt-6 max-w-3xl text-sm text-brand-silver">
-            Certification codes beginning with <span className="font-bold">C-</span> are issued by
+            Credential codes beginning with <span className="font-bold">C-</span> are issued by
             the Smart Automation Certification Alliance (SACA).{" "}
             <Link href={DESTINATIONS.certifications} className="font-bold text-brand-red underline hover:text-brand-black">
               See what each one covers
@@ -195,7 +195,7 @@ export default function CurriculumPage() {
               <article
                 key={course.code}
                 id={course.code.replace(/\s+/g, "-").toLowerCase()}
-                className="scroll-mt-24 border-l-4 border-brand-red pl-6"
+                className="scroll-mt-40 sm:scroll-mt-56 border-l-4 border-brand-red pl-6"
               >
                 <p className="font-display text-sm text-brand-gold">
                   {course.code} · {course.credits} credit hours
@@ -225,7 +225,7 @@ export default function CurriculumPage() {
                 {course.credentials.length > 0 && (
                   <>
                     <p className="font-heading mt-6 text-sm font-bold tracking-wide text-brand-black">
-                      Certifications earned
+                      Credentials earned
                     </p>
                     <div className="mt-3 flex flex-col gap-3">
                       {course.credentials.map((code) => {

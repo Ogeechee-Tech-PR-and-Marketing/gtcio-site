@@ -50,14 +50,14 @@ export const SACA_TIERS: CredentialTier[] = [
     codes: "C-2xx and C-3xx micro-credentials",
     inProgram: true,
     detail:
-      "Each Specialist certification is modular — a set of core micro-credentials that apply everywhere, plus electives matched to a region or employer. Earn the core set and SACA grants the Specialist certification. The diploma's C-2xx and C-3xx credentials are these building blocks, and they stack toward several Specialist tracks including electrical, control, mechanical, and robotics systems.",
+      "Each Specialist credential is modular — a set of core micro-credentials that apply everywhere, plus electives matched to a region or employer. Earn the core set and SACA grants the Specialist credential. The diploma's C-2xx and C-3xx credentials are these building blocks, and they stack toward several Specialist tracks including electrical, control, mechanical, and robotics systems.",
   },
   {
     name: "Professional",
     codes: "Engineering level",
     inProgram: false,
     detail:
-      "An engineering certification covering the analysis, design, and optimization of Industry 4.0 systems. Beyond this diploma, but it is the same ladder — the credentials earned here are the first rungs of it.",
+      "An engineering credential covering the analysis, design, and optimization of Industry 4.0 systems. Beyond this diploma, but it is the same ladder — the credentials earned here are the first rungs of it.",
   },
 ];
 

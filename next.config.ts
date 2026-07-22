@@ -31,6 +31,16 @@ const nextConfig: NextConfig = {
           // SAMEORIGIN (not DENY): the Studio's "Edit on page" tool iframes the
           // site from /studio on the same origin, and that must keep working.
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          // Baseline CSP (added 2026-07-21). Deliberately NOT a full
+          // default-src policy: the embedded Studio, Adobe Fonts, and Sanity's
+          // live/preview APIs make a strict script/connect policy fragile, and
+          // the site renders no user-authored HTML. frame-ancestors 'self'
+          // mirrors X-Frame-Options above (same Studio iframe carve-out);
+          // object-src and base-uri close off legacy injection vectors.
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'",
+          },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
@@ -39,6 +49,17 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Hand-managed media in public/ is served with no cache lifetime by
+      // default (max-age=0), so repeat visitors revalidate multi-MB videos.
+      // These caches are LONG: changing one of these files in place means a
+      // year of stale views for prior visitors — RENAME the file instead
+      // (hero-construction-2.mp4, …) and update its references.
+      ...["/videos/:path*", "/images/:path*", "/documents/:path*"].map((source) => ({
+        source,
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      })),
     ];
   },
 };

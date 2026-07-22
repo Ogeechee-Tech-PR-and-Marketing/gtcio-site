@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Partners | GTCIO",
 };
 
+// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
+// editing this object alone does NOT change the live site. Patch the published
+// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
 const DEFAULTS = {
   heroEyebrow: "Partners",
   heroTitle: "Bridges to industry",
@@ -118,7 +121,9 @@ export default async function PartnersPage() {
               >
                 <div className="flex flex-col gap-6 p-8 sm:flex-row sm:items-start sm:gap-10">
                   <div className="relative h-20 w-full shrink-0 sm:h-24 sm:w-44">
-                    {partner.logo && (
+                    {/* .asset check matters: a logo object with no upload yet
+                        (draft preview mid-edit) makes urlForImage() throw. */}
+                    {partner.logo?.asset && (
                       <Image
                         // Width only: passing a height too makes Sanity crop the
                         // logo to that aspect ratio and clip wordmarks.
@@ -154,7 +159,7 @@ export default async function PartnersPage() {
         </div>
       </section>
 
-      <section id="become-a-partner" className="scroll-mt-24 px-6 py-16 sm:px-10">
+      <section id="become-a-partner" className="scroll-mt-40 sm:scroll-mt-56 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.becomePartnerTitle}</h2>
           <p className="mt-3 text-brand-silver">{page.becomePartnerIntro}</p>

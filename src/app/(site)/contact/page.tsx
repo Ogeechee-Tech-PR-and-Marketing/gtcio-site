@@ -9,9 +9,17 @@ export const metadata: Metadata = {
   title: "Contact | GTCIO",
 };
 
+// ⚠️ CMS values override these defaults once set — editing this object alone
+// does NOT change the live site (PROJECT.md §4, trap 6). The live reasons
+// list is contactPage.contactReasons in the Studio.
 const DEFAULTS = {
   heroEyebrow: "Contact",
   heroTitle: "Get in touch",
+  // The chosen reason becomes the notification email's subject line, and
+  // "Media inquiry" is string-matched (case-insensitive) by MEDIA_REASON in
+  // src/app/api/inquiry/route.ts to route that email to the media contact
+  // instead — renaming that option (here or in the Studio) without updating
+  // MEDIA_REASON silently breaks the routing.
   contactReasons: [
     "Prospective student / program question",
     "Employer training inquiry",

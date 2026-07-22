@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { writeClient } from "@/sanity/lib/writeClient";
 import { SITE_URL } from "@/lib/site";
@@ -7,6 +8,25 @@ const AUTH_DOC_ID = "drafts.constantContactAuth";
 
 function textResponse(body: string, status: number) {
   return new NextResponse(body, { status, headers: { "Content-Type": "text/plain" } });
+}
+
+/**
+ * The state minted by the start route is `<nonce>.<hmac(nonce, setup secret)>`.
+ * Verifying the signature here — not just cookie equality — is what ties the
+ * callback back to the secret-gated start step. Cookie equality alone is NOT
+ * enough: an attacker completing a flow in their own browser controls their
+ * own cookies, so they could otherwise connect their own Constant Contact
+ * account and quietly receive every future newsletter signup.
+ */
+function isValidState(state: string): boolean {
+  const setupSecret = process.env.CONSTANT_CONTACT_SETUP_SECRET;
+  if (!setupSecret) return false;
+  const [nonce, signature] = state.split(".");
+  if (!nonce || !signature) return false;
+  const expected = createHmac("sha256", setupSecret).update(nonce).digest("hex");
+  const a = Buffer.from(signature);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
 }
 
 export async function GET(request: Request) {
@@ -21,7 +41,7 @@ export async function GET(request: Request) {
   if (error) {
     return textResponse(`Constant Contact authorization failed: ${error}`, 400);
   }
-  if (!code || !state || !cookieState || state !== cookieState) {
+  if (!code || !state || !cookieState || state !== cookieState || !isValidState(state)) {
     return textResponse(
       "Invalid or expired authorization request. Start over at /api/constant-contact/oauth/start.",
       400

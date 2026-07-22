@@ -24,8 +24,13 @@ npm install
 npm run dev     # http://localhost:3000  ·  /studio for the CMS
 ```
 
-You'll need `.env.local` with the Sanity project ID, dataset, and API tokens —
-see [PROJECT.md §6](./PROJECT.md#6-environment--config).
+Copy [`.env.example`](./.env.example) to `.env.local` and fill it in — it lists
+every variable, where to get each value, and what breaks without it. Details in
+[PROJECT.md §6](./PROJECT.md#6-environment--config).
+
+**Access a new developer needs** (who to ask: PROJECT.md §12): the GitHub repo
+(`revjake1/gtcio-site`), the Vercel project (`jake-hallmans-projects/gtcio-site`),
+and an invite to the Sanity project (`kjz4q8d4`) to mint API tokens.
 
 ## Checks
 
@@ -46,9 +51,13 @@ explains why.
 
 Push to `main`. Vercel deploys automatically.
 
-⚠️ **Publishing in the Studio does *not* update the live site yet.** No Sanity
-webhook exists, and pages are statically prerendered, so content published by
-marketing only appears on the next deploy. This is the top open item — see
-[PROJECT.md §8](./PROJECT.md#8-open-work) for the two-step fix, alongside the
-other known gaps (no inquiry notification emails yet; the newsletter signup isn't
-wired to Constant Contact).
+Publishing in the Studio also redeploys the site on its own (a Sanity webhook →
+Vercel deploy hook chain, set up 2026-07-20 — see
+[PROJECT.md §8](./PROJECT.md#8-open-work)), so marketing edits go live without a
+developer.
+
+⚠️ **Two integrations await one-time setup** (details in PROJECT.md §8 and §11):
+no Web3Forms keys are configured yet, so form submissions are saved to the
+Studio inbox but **email nobody**; and the newsletter form is fully wired to
+Constant Contact in code but adds nobody to a list until the one-time OAuth
+step is run.

@@ -11,8 +11,10 @@ type TimelineEvent = {
 };
 
 // "July 2022" -> { year: "2022", rest: "July" }. "October 15, 2026" -> { year: "2026", rest: "October 15" }.
-function splitDate(date: string) {
-  const parts = date.trim().split(" ");
+// `date` can be missing mid-edit: required-validation only blocks Publish, and
+// the Studio's draft preview renders a freshly-added milestone immediately.
+function splitDate(date: string | undefined) {
+  const parts = (date ?? "").trim().split(" ");
   const year = parts[parts.length - 1]?.replace(",", "") ?? date;
   const rest = parts.slice(0, -1).join(" ");
   return { year, rest: rest || year };
@@ -22,6 +24,8 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   function scroll(direction: -1 | 1) {
+    // 320 ≈ one card + gap at the widest card size, so each arrow click
+    // advances roughly one milestone.
     trackRef.current?.scrollBy({ left: direction * 320, behavior: "smooth" });
   }
 
