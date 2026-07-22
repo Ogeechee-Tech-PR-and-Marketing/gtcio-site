@@ -626,28 +626,22 @@ that company's logo.
 
 ## 8. Open work
 
-**🔴 Vercel's push-to-deploy is very likely broken as of the 2026-07-22 GitHub
-transfer.** The repo moved from `revjake1/gtcio-site` to the
-`Ogeechee-Tech-PR-and-Marketing` org (see §12), but Vercel's stored project
-link still shows `org: revjake1` (checked via `GET
-https://api.vercel.com/v9/projects/gtcio-site`), and the Vercel GitHub App has
-**zero installations** on the new org (`GET
-/orgs/Ogeechee-Tech-PR-and-Marketing/installations` → `total_count: 0`,
-checked with an org-admin token, so this isn't a permissions gap in the check
-itself). A GitHub App installation is scoped to the account it's installed
-on — moving the repo to an org that never had the app installed means GitHub
-push events no longer reach Vercel. **The CMS→rebuild path is unaffected**
-(the Sanity webhook hits a Vercel Deploy Hook URL directly, independent of
-the GitHub App), so publishing in the Studio should still work; it's
-specifically `git push` → auto-deploy that's suspect. To fix: Vercel →
-`gtcio-site` → Settings → Git → reconnect the repository, which will prompt
-to install the Vercel GitHub App on `Ogeechee-Tech-PR-and-Marketing` (Jake
-has admin rights on the org, confirmed via the API, so he can approve this).
-**Verify with a real test** — push a trivial commit and confirm a new
-Vercel deployment appears — before assuming this is fixed, and re-check that
-the `sanity-publish` deploy hook (id `8r7ONDtCoE`) still exists afterward,
-since a full Git-repo disconnect/reconnect in Vercel's UI has in the past
-been known to drop deploy hooks tied to the old connection.
+**✅ Vercel's connection to the repo was repaired 2026-07-22**, after the
+same-day GitHub transfer to `Ogeechee-Tech-PR-and-Marketing` broke it (a
+GitHub App installation is scoped to the account it's installed on, and the
+new org had no Vercel App installation at all). Jake reconnected Vercel →
+`gtcio-site` → Settings → Git, which installed the Vercel GitHub App on the
+new org — confirmed via the GitHub API (`installations` now shows the
+`vercel` app subscribed to `push` events) and via a real test: pushing commit
+`aa89948` triggered an automatic Vercel deployment that reached `READY`.
+**The reconnect did drop the `sanity-publish` deploy hook**, exactly the risk
+flagged when this was diagnosed — the project's `deployHooks` list came back
+empty afterward. Recreated it (new id `e73E4bmO3a`, same name/branch) and
+re-pointed the existing Sanity webhook (`cu422aiH3auTR0Au`) at its new URL;
+confirmed by POSTing the hook directly and seeing a `PENDING` build job
+returned. **If Vercel's Git connection is ever disconnected/reconnected
+again, re-check `deployHooks` on the project afterward** — this isn't a
+one-time fluke, it's how that Vercel flow behaves.
 
 **🔴 No inquiry emails are being sent yet.** None of the four `MS_GRAPH_*` env
 vars are set, so form submissions are being saved to the Studio inbox but
@@ -687,7 +681,9 @@ that only fires *if someone has the affected page open in a browser at the momen
 of publish*. Without a webhook, a publish with nobody on the site left the static
 page stale until the next deploy. The chain now in place:
 
-1. **Vercel deploy hook** `sanity-publish` on branch `main` (id `8r7ONDtCoE`).
+1. **Vercel deploy hook** `sanity-publish` on branch `main` (id `e73E4bmO3a`
+   as of 2026-07-22 — the original `8r7ONDtCoE` was dropped when Vercel's Git
+   connection was reconnected after the GitHub org transfer, see §8/§12).
    Vercel → **gtcio-site** → Settings → Git → Deploy Hooks.
 2. **Sanity webhook** `sanity-publish` (id `cu422aiH3auTR0Au`), dataset
    `production`, on create/update/delete, filter `_type != "formSubmission"`,
