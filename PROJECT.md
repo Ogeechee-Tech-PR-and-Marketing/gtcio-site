@@ -13,7 +13,8 @@ people for industrial maintenance / automation / controls work, and launches an
 Industrial Operations Technology (IOT) diploma program in **August 2026**.
 
 - **Live:** https://gtcio-site.vercel.app
-- **Repo:** https://github.com/revjake1/gtcio-site (private, GitHub user `revjake1`)
+- **Repo:** https://github.com/Ogeechee-Tech-PR-and-Marketing/gtcio-site (private,
+  transferred 2026-07-22 from Jake's personal `revjake1` account — see §12)
 - **Editing UI (Sanity Studio):** https://gtcio-site.vercel.app/studio
 - **Local source:** `/Users/jhallman/Documents/GTCIO site/gtcio-site`
 
@@ -624,6 +625,29 @@ that company's logo.
 ---
 
 ## 8. Open work
+
+**🔴 Vercel's push-to-deploy is very likely broken as of the 2026-07-22 GitHub
+transfer.** The repo moved from `revjake1/gtcio-site` to the
+`Ogeechee-Tech-PR-and-Marketing` org (see §12), but Vercel's stored project
+link still shows `org: revjake1` (checked via `GET
+https://api.vercel.com/v9/projects/gtcio-site`), and the Vercel GitHub App has
+**zero installations** on the new org (`GET
+/orgs/Ogeechee-Tech-PR-and-Marketing/installations` → `total_count: 0`,
+checked with an org-admin token, so this isn't a permissions gap in the check
+itself). A GitHub App installation is scoped to the account it's installed
+on — moving the repo to an org that never had the app installed means GitHub
+push events no longer reach Vercel. **The CMS→rebuild path is unaffected**
+(the Sanity webhook hits a Vercel Deploy Hook URL directly, independent of
+the GitHub App), so publishing in the Studio should still work; it's
+specifically `git push` → auto-deploy that's suspect. To fix: Vercel →
+`gtcio-site` → Settings → Git → reconnect the repository, which will prompt
+to install the Vercel GitHub App on `Ogeechee-Tech-PR-and-Marketing` (Jake
+has admin rights on the org, confirmed via the API, so he can approve this).
+**Verify with a real test** — push a trivial commit and confirm a new
+Vercel deployment appears — before assuming this is fixed, and re-check that
+the `sanity-publish` deploy hook (id `8r7ONDtCoE`) still exists afterward,
+since a full Git-repo disconnect/reconnect in Vercel's UI has in the past
+been known to drop deploy hooks tied to the old connection.
 
 **🔴 No inquiry emails are being sent yet.** None of the four `MS_GRAPH_*` env
 vars are set, so form submissions are being saved to the Studio inbox but
@@ -1413,17 +1437,19 @@ nobody needs to run them again.
 
 ## 12. Accounts, access & handoff
 
-Everything below was true 2026-07-21. The single biggest handoff fact: **the
-site currently runs on Jake Hallman's personal GitHub and Vercel accounts.** A
-permanent handoff should move both to an OTC-owned org/team, or at minimum add
-the successor as a collaborator on each.
+Everything below was true 2026-07-22. **The GitHub repo moved to an OTC-owned
+org this same day** (`Ogeechee-Tech-PR-and-Marketing`, Jake has admin rights
+there) — see §8 for a likely knock-on break in Vercel's push-to-deploy that
+still needs fixing. **Vercel hosting itself is still Jake Hallman's personal
+account**, pending the self-hosting migration described in the separate
+migration runbook; that's the next piece of this handoff to close.
 
 ### Who owns what
 
 | Service | Identifier | Owner / login | Used for |
 | --- | --- | --- | --- |
-| GitHub | `revjake1/gtcio-site` (private) | Jake Hallman (`revjake1`) | Source of truth; push to `main` deploys |
-| Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman | Hosting, env vars, deploy hooks, function logs |
+| GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (private) | OTC PR & Marketing org (Jake: admin) | Source of truth; push to `main` deploys |
+| Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — **not yet transferred**, see §8 | Hosting, env vars, deploy hooks, function logs |
 | Sanity | project `kjz4q8d4`, dataset `production` | Jake (admin) + `prmarketing@ogeecheetech.edu` (shared marketing login — see §8 re: its role) | All site content, form-submission inbox |
 | Adobe Fonts | web project kit `fgt0fkg` | OTC's Creative Cloud licence | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
 | Microsoft Graph | Azure AD app registration | the OTC Microsoft 365 tenant (§5; tenant admin required) | Form notification email (§5; not yet set up) |

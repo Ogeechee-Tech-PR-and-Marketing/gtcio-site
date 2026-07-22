@@ -29,8 +29,9 @@ every variable, where to get each value, and what breaks without it. Details in
 [PROJECT.md §6](./PROJECT.md#6-environment--config).
 
 **Access a new developer needs** (who to ask: PROJECT.md §12): the GitHub repo
-(`revjake1/gtcio-site`), the Vercel project (`jake-hallmans-projects/gtcio-site`),
-and an invite to the Sanity project (`kjz4q8d4`) to mint API tokens.
+(`Ogeechee-Tech-PR-and-Marketing/gtcio-site`), the Vercel project
+(`jake-hallmans-projects/gtcio-site`), and an invite to the Sanity project
+(`kjz4q8d4`) to mint API tokens.
 
 ## Checks
 

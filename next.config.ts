@@ -47,6 +47,14 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), payment=()",
           },
+          // Vercel's edge previously added this automatically on *.vercel.app.
+          // Self-hosting has no equivalent edge layer, so the app sets it
+          // directly — see the self-hosting runbook (deploy/) for the nginx
+          // side of the TLS termination this assumes.
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains",
+          },
         ],
       },
       // Hand-managed media in public/ is served with no cache lifetime by

@@ -1,0 +1,45 @@
+name: Deploy GTCIO site
+
+# Runs on the self-hosted runner registered on the on-campus server (see
+# deploy/ and the migration runbook). Because that runner lives on the same
+# box that serves the site, "deploy" is a local rsync + restart, not an SSH
+# hop — there is nothing to reach over the network here.
+#
+# Two triggers feed the same job:
+#   - push to main            → a real code change
+#   - repository_dispatch     → a Sanity CMS publish, forwarded here by the
+#     (content-publish)         Sanity webhook (content changed, code didn't,
+#                                but pages are statically prerendered so a
+#                                rebuild is still required)
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [content-publish]
+  workflow_dispatch: {}
+
+concurrency:
+  group: gtcio-site-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        run: bash deploy/deploy.sh
