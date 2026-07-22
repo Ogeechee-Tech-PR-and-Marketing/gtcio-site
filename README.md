@@ -56,8 +56,8 @@ Vercel deploy hook chain, set up 2026-07-20 — see
 [PROJECT.md §8](./PROJECT.md#8-open-work)), so marketing edits go live without a
 developer.
 
-⚠️ **Two integrations await one-time setup** (details in PROJECT.md §8 and §11):
-no Web3Forms keys are configured yet, so form submissions are saved to the
-Studio inbox but **email nobody**; and the newsletter form is fully wired to
-Constant Contact in code but adds nobody to a list until the one-time OAuth
-step is run.
+⚠️ **One integration still awaits one-time setup** (details in PROJECT.md §5):
+Microsoft Graph credentials aren't configured yet, so form submissions are
+saved to the Studio inbox but **email nobody**. Constant Contact (the
+newsletter sign-up, including the Contact form's opt-in checkbox — PROJECT.md
+§11) is fully connected and verified working.

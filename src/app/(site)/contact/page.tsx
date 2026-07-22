@@ -114,6 +114,12 @@ export default async function ContactPage() {
                 { name: "email", label: "Email Address", type: "email", required: true },
                 { name: "phone", label: "Phone Number", type: "tel" },
                 { name: "message", label: "Message", type: "textarea", required: true, halfWidth: false },
+                {
+                  name: "newsletterOptIn",
+                  label: "Sign me up for GTCIO's newsletter",
+                  type: "checkbox",
+                  halfWidth: false,
+                },
               ]}
               submitLabel="SEND MESSAGE"
             />

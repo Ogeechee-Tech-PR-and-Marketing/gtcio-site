@@ -5,8 +5,12 @@ import { useState } from "react";
 export type InquiryField = {
   name: string;
   label: string;
-  /** "checkboxes" renders a group where more than one option can be picked at once. */
-  type?: "text" | "email" | "tel" | "date" | "textarea" | "select" | "checkboxes";
+  /**
+   * "checkboxes" renders a group where more than one option can be picked at
+   * once. "checkbox" is a single standalone opt-in (e.g. a newsletter
+   * sign-up) — its value in the submitted payload is a boolean, not text.
+   */
+  type?: "text" | "email" | "tel" | "date" | "textarea" | "select" | "checkboxes" | "checkbox";
   required?: boolean;
   halfWidth?: boolean;
   options?: string[];
@@ -45,10 +49,15 @@ export default function InquiryForm({
     setError(null);
 
     const formData = new FormData(event.currentTarget);
-    const payload: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
+    const payload: Record<string, FormDataEntryValue | FormDataEntryValue[] | boolean> = {};
     for (const field of fields) {
-      payload[field.name] =
-        field.type === "checkboxes" ? formData.getAll(field.name) : formData.get(field.name) ?? "";
+      if (field.type === "checkboxes") {
+        payload[field.name] = formData.getAll(field.name);
+      } else if (field.type === "checkbox") {
+        payload[field.name] = formData.get(field.name) === "yes";
+      } else {
+        payload[field.name] = formData.get(field.name) ?? "";
+      }
     }
     payload.botcheck = formData.get("botcheck") ?? "";
 
@@ -126,6 +135,11 @@ export default function InquiryForm({
                 ))}
               </div>
             </fieldset>
+          ) : field.type === "checkbox" ? (
+            <label className="flex items-center gap-2 text-sm text-brand-black">
+              <input type="checkbox" name={field.name} value="yes" className="accent-brand-red" />
+              {field.label}
+            </label>
           ) : (
             <>
               <label

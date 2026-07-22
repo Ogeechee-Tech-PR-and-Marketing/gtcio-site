@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { writeClient } from "@/sanity/lib/writeClient";
+import { isConfigured as graphConfigured, sendMail } from "@/lib/graphMail";
+import { addNewsletterSignup } from "@/lib/constantContact";
 
 const FORM_TYPES = ["partner", "contact", "tour"] as const;
 type FormType = (typeof FORM_TYPES)[number];
@@ -16,10 +18,16 @@ type Payload = {
   organization?: string;
   preferredDate?: string;
   message?: string;
+  // Contact form only — "Sign me up for GTCIO's newsletter" checkbox.
+  newsletterOptIn?: boolean;
   botcheck?: string;
 };
 
-const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+// Fixed recipients — no per-request "to" field is needed the way Web3Forms
+// needed a separate access key per address, since Microsoft Graph's sendMail
+// takes an arbitrary recipient on every call from one shared credential.
+const NOTIFY_EMAIL = "jmoore@ogeecheetech.edu"; // general inquiries — Jan Moore
+const NOTIFY_EMAIL_MEDIA = "spayne@ogeecheetech.edu"; // media inquiries — Sean Payne
 
 // Field length caps. Generous for real people, tight enough that nobody can
 // stuff megabytes into the dataset or the notification email.
@@ -102,9 +110,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const name = [clean(body.firstName, MAX_SHORT), clean(body.lastName, MAX_SHORT)]
-    .filter(Boolean)
-    .join(" ");
+  const firstName = clean(body.firstName, MAX_SHORT);
+  const lastName = clean(body.lastName, MAX_SHORT);
+  const name = [firstName, lastName].filter(Boolean).join(" ");
   const organization = clean(body.organization, MAX_SHORT);
   const reasons = cleanReasons(body.reason);
   const reasonText = reasons.join(", ");
@@ -119,12 +127,12 @@ export async function POST(request: Request) {
   // inquiry" alongside another reason, since each covers a different audience.
   const includesMedia = reasons.some((r) => r.toLowerCase() === MEDIA_REASON);
   const includesOther = reasons.length === 0 || reasons.some((r) => r.toLowerCase() !== MEDIA_REASON);
-  const recipients: { accessKey: string | undefined; audience: string }[] = [];
+  const recipients: { to: string; audience: string }[] = [];
   if (includesOther) {
-    recipients.push({ accessKey: process.env.WEB3FORMS_ACCESS_KEY, audience: "general (Jan Moore)" });
+    recipients.push({ to: NOTIFY_EMAIL, audience: "general (Jan Moore)" });
   }
   if (includesMedia) {
-    recipients.push({ accessKey: process.env.WEB3FORMS_ACCESS_KEY_MEDIA, audience: "media (Sean Payne)" });
+    recipients.push({ to: NOTIFY_EMAIL_MEDIA, audience: "media (Sean Payne)" });
   }
 
   const submission = {
@@ -157,50 +165,55 @@ export async function POST(request: Request) {
     console.error("[inquiry] failed to save submission to Sanity", error);
   }
 
-  // Each recipient needs its own Web3Forms key (the key bakes in who receives
-  // it — there's no per-request "to" field), so a submission that needs to
-  // reach both Jan and Sean sends two separate notifications.
-  let anyRecipientConfigured = false;
+  // Contact form's "sign me up for the newsletter" checkbox. Best-effort and
+  // independent of the rest of this handler — a failure here shouldn't turn a
+  // successful inquiry into an error response, so it's caught and logged only.
+  // No formSubmission field records the opt-in (see PROJECT.md §11: Constant
+  // Contact's own list is the record of truth for subscriptions, same as the
+  // footer sign-up form).
+  if (formType === "contact" && body.newsletterOptIn) {
+    try {
+      await addNewsletterSignup({ email, firstName, lastName });
+    } catch (error) {
+      console.error("[inquiry] newsletter opt-in failed", error);
+    }
+  }
+
+  // One shared Microsoft Graph credential can send to any address, so unlike
+  // Web3Forms' per-recipient access keys, "configured" is a single yes/no —
+  // but a submission that needs to reach both Jan and Sean still sends two
+  // separate notifications, since each is its own sendMail call.
+  const anyRecipientConfigured = graphConfigured();
   let allDelivered = true;
 
+  if (!anyRecipientConfigured) {
+    console.warn(
+      "[inquiry] Microsoft Graph is not configured — no notification email sent for this submission."
+    );
+    allDelivered = false;
+  }
+
+  const bodyText = [
+    `Reason for inquiry: ${reasonText || "(not specified)"}`,
+    `Name: ${name || "(not given)"}`,
+    `Email: ${email}`,
+    `Phone: ${phone || "(not given)"}`,
+    `Company / organization: ${organization || "(not given)"}`,
+    ...(formType === "tour" ? [`Preferred date: ${preferredDate || "(not given)"}`] : []),
+    "",
+    message || "(no message)",
+  ].join("\n");
+
   for (const recipient of recipients) {
-    if (!recipient.accessKey) {
-      console.warn(
-        `[inquiry] no Web3Forms access key configured for ${recipient.audience} — no email sent to that recipient.`
-      );
-      allDelivered = false;
-      continue;
-    }
-    anyRecipientConfigured = true;
+    if (!anyRecipientConfigured) continue;
 
     try {
-      const response = await fetch(WEB3FORMS_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: recipient.accessKey,
-          subject,
-          from_name: "GTCIO Website",
-          replyto: email, // so staff can just hit Reply
-          "Reason for inquiry": reasonText || "(not specified)",
-          Name: name || "(not given)",
-          Email: email,
-          Phone: phone || "(not given)",
-          "Company / organization": organization || "(not given)",
-          ...(formType === "tour"
-            ? { "Preferred date": preferredDate || "(not given)" }
-            : {}),
-          Message: message || "(no message)",
-        }),
+      await sendMail({
+        to: recipient.to,
+        subject,
+        text: bodyText,
+        replyTo: email, // so staff can just hit Reply
       });
-
-      const result = await response.json().catch(() => ({}));
-      const delivered = response.ok && result?.success !== false;
-
-      if (!delivered) {
-        allDelivered = false;
-        console.error(`[inquiry] Web3Forms rejected the submission for ${recipient.audience}`, result);
-      }
     } catch (error) {
       allDelivered = false;
       console.error(`[inquiry] email delivery to ${recipient.audience} threw`, error);
@@ -208,7 +221,8 @@ export async function POST(request: Request) {
   }
 
   // "Delivered" means every intended recipient got it — a partial send (e.g.
-  // Jan notified but Sean's key isn't configured yet) still needs manual follow-up.
+  // Jan's address rejected the message but Sean's went through) still needs
+  // manual follow-up.
   const emailDelivered = anyRecipientConfigured && allDelivered;
 
   if (submissionId && emailDelivered) {

@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-21. Check claims against the code before trusting them.
+updated 2026-07-22. Check claims against the code before trusting them.
 
 ---
 
@@ -38,7 +38,7 @@ stray/abandoned Wix sites may still exist in the `jhallman32` Wix account.
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
 | CMS | Sanity v6 (`next-sanity` v13) |
-| Email | Web3Forms (see §5) |
+| Email | Microsoft Graph / Azure AD app (see §5) |
 | Fonts | Adobe Fonts / Typekit — Trade Gothic Next (see §7) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
 | Deploys | **Auto-deploy on push to `main`.** No manual deploy step. |
@@ -327,10 +327,21 @@ in October is just re-adding UI, no backend change. That route, in order:
 3. **Saves the inquiry to Sanity first** as a `formSubmission` document. This
    happens *before* any email is attempted, so a bounced or spam-filtered
    notification never means a lost lead. **Do not flip this order.**
-4. **Then emails staff** via Web3Forms (`https://api.web3forms.com/submit`) with
-   `subject` built from the dropdown choice and `replyto` set to the submitter, so
-   staff can just hit Reply.
-5. **Flags `emailDelivered`** on the saved document. `false` means the email did
+4. **If the Contact form's "Sign me up for GTCIO's newsletter" checkbox is
+   checked, adds the submitter to Constant Contact** (added 2026-07-22) —
+   reuses `addNewsletterSignup()` from `src/lib/constantContact.ts`, the same
+   function the footer's newsletter form calls (see §11). Best-effort and
+   independent of the rest of the handler: a failure here is caught and
+   logged (`console.error`), never turned into an error response — the
+   visitor's inquiry still succeeds either way. No `formSubmission` field
+   records the opt-in choice; Constant Contact's own list is the record of
+   truth, same reasoning as the footer form. This is the only form-level
+   opt-in — Partner and Tour submissions never touch Constant Contact.
+5. **Then emails staff** via Microsoft Graph's `sendMail` API (an Azure AD app
+   registration, client-credentials grant — see the Microsoft Graph subsection
+   below) with `subject` built from the dropdown choice and `replyTo` set to
+   the submitter, so staff can just hit Reply.
+6. **Flags `emailDelivered`** on the saved document. `false` means the email did
    not go out — the Studio preview renders those as "⚠️ NOT EMAILED" so someone
    can follow up by hand.
 
@@ -369,37 +380,101 @@ with an "unpublished" dot). Two guardrails keep it that way:
 
 Whichever option(s) the visitor picks become the **email subject line**.
 
-### ⚠️ Web3Forms: the recipient is baked into the access key, so two keys exist
+### Microsoft Graph: one shared credential, two fixed recipients
 
-Web3Forms sends to whatever address the key was **created with**. There is *no*
-per-request "to" field (`ccemail` is a paid feature) — to change who receives a
-given notification you must generate a **new key** using that address, you
-cannot do it in code.
+Email notifications went through Web3Forms until 2026-07-22, when Jake asked
+to drop the third-party dependency in favor of OTC's own Microsoft 365
+tenant. `src/lib/graphMail.ts` sends via Microsoft Graph's `sendMail` API,
+authenticating with an Azure AD app registration's **client-credentials
+grant** (see "One-time setup" below for the Azure steps a tenant admin has to
+run).
 
-Because of that, `/api/inquiry` now holds **two** keys and picks between them
-per submission (added 2026-07-20, see `MEDIA_REASON` and the `recipients` array
-in `src/app/api/inquiry/route.ts`). The route accepts `reason` as either a single
-string or an array so it works for both forms' field types without special-casing
-which form submitted:
+Unlike Web3Forms — where the recipient address was baked into the access key
+itself, forcing a separate key per recipient — Graph's `sendMail` takes an
+arbitrary `to` address on every call, so **one shared credential** can notify
+either person. `/api/inquiry` still sends up to two separate notifications
+per submission (see `MEDIA_REASON` and the `recipients` array in
+`src/app/api/inquiry/route.ts`), but the recipient addresses themselves are
+now fixed constants in that file (`NOTIFY_EMAIL` / `NOTIFY_EMAIL_MEDIA`), not
+environment variables — there's no reason to indirect through env vars when
+Graph doesn't tie an address to a credential the way Web3Forms did. The route
+still accepts `reason` as either a single string or an array so it works for
+both forms' field types without special-casing which form submitted:
 
-- `WEB3FORMS_ACCESS_KEY` → **`jmoore@ogeecheetech.edu`** — every submission
-  except a Contact-form one where *only* "Media inquiry" is checked.
-- `WEB3FORMS_ACCESS_KEY_MEDIA` → **`spayne@ogeecheetech.edu`** — fires whenever
-  "Media inquiry" is checked. Since Contact is single-select this is currently
-  either/or in practice, but the code doesn't assume that — if a Contact-reason
-  array ever *did* include "Media inquiry" alongside another reason, **both**
-  keys would fire (two separate Web3Forms calls), since each reason serves a
+- **`jmoore@ogeecheetech.edu`** — every submission except a Contact-form one
+  where *only* "Media inquiry" is checked.
+- **`spayne@ogeecheetech.edu`** — fires whenever "Media inquiry" is checked.
+  Since Contact is single-select this is currently either/or in practice, but
+  the code doesn't assume that — if a Contact-reason array ever *did* include
+  "Media inquiry" alongside another reason, **both** addresses would be
+  notified (two separate `sendMail` calls), since each reason serves a
   different audience.
 - Renaming the "Media inquiry" checkbox label in the Studio breaks this
   matching silently — `MEDIA_REASON` in the route file has to change with it.
+- Changing who receives notifications (e.g. Jan or Sean changes roles) means
+  editing `NOTIFY_EMAIL`/`NOTIFY_EMAIL_MEDIA` in the route and redeploying —
+  there's no Studio field for it, same tradeoff the code already accepts for
+  `MEDIA_REASON`.
 
-**If a key is unset, the site still works and still saves every submission —
-it just doesn't email that recipient.** `emailDelivered` on the saved
-`formSubmission` is only `true` when *every* recipient that submission needed
-was successfully notified, so a partial send (e.g. Jan's key configured but
-Sean's isn't) still shows the Studio's "⚠️ NOT EMAILED" flag as a prompt to
-follow up by hand. That's deliberate graceful degradation, not a bug. See §8
-for the current status.
+**If Microsoft Graph isn't configured (any of the four `MS_GRAPH_*` env vars
+missing), the site still works and still saves every submission — it just
+doesn't email anyone.** `emailDelivered` on the saved `formSubmission` is only
+`true` when *every* recipient that submission needed was successfully
+notified, so a partial send (e.g. one address rejects the message) still shows
+the Studio's "⚠️ NOT EMAILED" flag as a prompt to follow up by hand. That's
+deliberate graceful degradation, not a bug. See §8 for the current status.
+
+⚠️ **The Azure app registration must be scoped narrowly.** `Mail.Send` as an
+*application* permission (not delegated) lets the app send as **any** mailbox
+in the tenant by default — an Exchange **application access policy** should
+restrict it to only `MS_GRAPH_SENDER_EMAIL`. Skipping that step leaves the
+credential able to send mail as anyone at OTC, far more blast radius than this
+integration needs.
+
+#### One-time setup — needs an OTC Microsoft 365 tenant admin
+
+Unlike Web3Forms (a public signup any site owner could do alone), this needs
+someone with Azure AD admin rights in OTC's Microsoft 365 tenant. Jake cannot
+do this step himself without that access.
+
+1. **Pick a sending mailbox.** A shared mailbox (e.g.
+   `gtcio-website@ogeecheetech.edu`) is a better fit than a named person's —
+   it survives staff turnover and makes "this is an automated notification"
+   obvious from the address. This becomes `MS_GRAPH_SENDER_EMAIL`.
+2. **Register an app** in the Azure portal (Azure Active Directory →
+   App registrations → New registration). Any name is fine (e.g.
+   "GTCIO Website Mailer"); no redirect URI is needed since this is a
+   client-credentials (server-to-server) grant, not an interactive login.
+3. **Note the Directory (tenant) ID and Application (client) ID** shown on
+   the app's Overview page — these become `MS_GRAPH_TENANT_ID` and
+   `MS_GRAPH_CLIENT_ID`.
+4. **Create a client secret**: Certificates & secrets → New client secret.
+   Copy the secret's **value** immediately — like a Sanity token, it's shown
+   once. This becomes `MS_GRAPH_CLIENT_SECRET`.
+5. **Grant the Graph API permission**: API permissions → Add a permission →
+   Microsoft Graph → **Application permissions** (not Delegated, since
+   nobody logs in interactively) → search for and add `Mail.Send`. Then
+   click **Grant admin consent** — this step requires the tenant admin and
+   is what actually activates the permission; without it, every `sendMail`
+   call fails with an authorization error.
+6. **Scope the app to the one mailbox** (strongly recommended — see the
+   warning above): in Exchange Online PowerShell,
+   `New-ApplicationAccessPolicy -AppId <client-id> -PolicyScopeGroupId <sending-mailbox> -AccessRight RestrictAccess -Description "GTCIO website mailer"`,
+   then verify with `Test-ApplicationAccessPolicy -AppId <client-id> -Identity <sending-mailbox>`.
+   Without this, the app can send as *any* mailbox in the tenant, not just
+   the one intended.
+7. **Set all four `MS_GRAPH_*` vars in Vercel** (Project → Settings →
+   Environment Variables, Production at minimum) and **redeploy**.
+8. **Submit the Contact form twice for real** — once with only "Media
+   inquiry" checked, once with anything else — and confirm the right person
+   (Sean / Jan) receives each one, with Reply-To set to the address you
+   submitted with.
+
+**Troubleshooting:** a `401`/`403` from Graph almost always means either the
+`Mail.Send` permission was added but never admin-consented (step 5), or the
+application access policy (step 6) doesn't include the sender mailbox. A
+`404` on the `sendMail` call usually means `MS_GRAPH_SENDER_EMAIL` doesn't
+match a real mailbox in the tenant.
 
 ---
 
@@ -413,8 +488,10 @@ NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2025-06-01
 SANITY_API_READ_TOKEN=<viewer-role token, secret>
 SANITY_API_WRITE_TOKEN=<editor-role token, secret — writes form submissions>
-WEB3FORMS_ACCESS_KEY=<see §5; unset = no email, submissions still saved>
-WEB3FORMS_ACCESS_KEY_MEDIA=<see §5; separate key so "Media inquiry" routes to Sean Payne>
+MS_GRAPH_TENANT_ID=<see §5; unset = no email, submissions still saved>
+MS_GRAPH_CLIENT_ID=<see §5; from the Azure AD app registration>
+MS_GRAPH_CLIENT_SECRET=<see §5; from the same app registration, secret>
+MS_GRAPH_SENDER_EMAIL=<see §5; the mailbox notification emails send AS>
 CONSTANT_CONTACT_CLIENT_ID=<see §11; from the Constant Contact developer app>
 CONSTANT_CONTACT_CLIENT_SECRET=<see §11; from the same app, secret>
 CONSTANT_CONTACT_SETUP_SECRET=<see §11; any random string you pick — gates the one-time OAuth URL>
@@ -548,17 +625,22 @@ that company's logo.
 
 ## 8. Open work
 
-**🔴 No inquiry emails are being sent yet.** Neither `WEB3FORMS_ACCESS_KEY` nor
-`WEB3FORMS_ACCESS_KEY_MEDIA` is set, so form submissions are being saved to the
-Studio inbox but **nobody is being notified**. To finish: create **two** keys at
-[web3forms.com](https://web3forms.com), one signed up with
-`jmoore@ogeecheetech.edu` and one with `spayne@ogeecheetech.edu` (see §5 — the
-recipient is tied to the key, and the two now route different Contact-form
-submissions), set both `WEB3FORMS_ACCESS_KEY` and `WEB3FORMS_ACCESS_KEY_MEDIA`
-in Vercel, and redeploy. Then submit the Contact form twice — once with only
-"Media inquiry" checked, once with anything else — and confirm each lands with
-the right person. **Email delivery has never been tested end to end**, because
-it can't be without real keys.
+**🔴 No inquiry emails are being sent yet.** None of the four `MS_GRAPH_*` env
+vars are set, so form submissions are being saved to the Studio inbox but
+**nobody is being notified**. To finish (see §5's Microsoft Graph subsection
+for the full detail): an OTC Microsoft 365 tenant admin registers an Azure AD
+app, grants it `Mail.Send`
+(application permission, admin-consented), scopes it via an Exchange
+application access policy to a single sending mailbox, sets
+`MS_GRAPH_TENANT_ID`/`MS_GRAPH_CLIENT_ID`/`MS_GRAPH_CLIENT_SECRET`/
+`MS_GRAPH_SENDER_EMAIL` in Vercel, and redeploys. Then submit the Contact form
+twice — once with only "Media inquiry" checked, once with anything else — and
+confirm each lands with the right person (Jan Moore / Sean Payne — both fixed
+in `src/app/api/inquiry/route.ts`, not env-configurable). **Email delivery has
+never been tested end to end**, because it can't be without a working Azure
+app registration. (This replaced a Web3Forms-based design 2026-07-22 — Jake
+chose to drop the third-party dependency in favor of the business's own
+Microsoft 365 tenant; see §5 for how the new integration differs.)
 
 **Sanity role:** the shared marketing account (below) was invited as
 **Administrator**, which can delete the dataset and revoke the tokens the live site
@@ -631,14 +713,16 @@ the CDN has purged — it purges in seconds), **but if a page looks stale right
 after a publish, redeploy before debugging anything else.** When verifying a CMS
 change locally, `rm -rf .next/cache` is not enough — give the CDN a few seconds.
 
-**✅ Newsletter signup is wired to Constant Contact** (2026-07-21) —
+**✅ Newsletter signup is wired to Constant Contact, and the one-time OAuth
+setup is done** (2026-07-21) —
 `src/components/NewsletterSignup.tsx`, rendered inside `Footer.tsx` on **every
 page** (moved out of the home page the same day, per Jake — it used to render
 only in `(site)/page.tsx`), POSTs to `/api/newsletter`, which adds the address
-via Constant Contact's API. See §11 for the full integration and the one-time
-setup step **Jake still needs to run** — without it the form degrades to a
-friendly "Something went wrong" error, not a crash, but nobody is actually
-being added to a list yet. Its copy
+via Constant Contact's API. See §11 for the full integration; the connection
+was verified live 2026-07-22 (a real test signup landed in the "GTCIO Website
+Sign-ups" list). **2026-07-22:** the Contact form also gained a "Sign me up
+for GTCIO's newsletter" checkbox that reuses this same integration — see §5.
+Its copy
 (`newsletterEyebrow`/`Title`/`Body`/`ButtonLabel`/`Confirmation`) lives on the
 `siteSettings` singleton, not `homePage` — it moved with the component so one
 edit covers every page. `(site)/layout.tsx` passes those fields to `Footer`,
@@ -1268,12 +1352,16 @@ create by hand in Constant Contact.
   documented for `/api/inquiry` in §8. If this becomes a problem, add real
   rate limiting to both routes together.
 
-### One-time setup — Jake still needs to do this
+### One-time setup — done (completed 2026-07-21)
 
-The form works end-to-end in code, but **nobody is being added to a list
-until this runs once.** Until then, submitting the form fails gracefully with
-"Something went wrong on our end" rather than crashing (verified 2026-07-21 —
-this is expected, not a bug, until setup is complete).
+This has already been run — `drafts.constantContactAuth` holds a live access
+token + refresh token as of 2026-07-21, confirmed working 2026-07-22 (a real
+test signup via the Contact form's newsletter checkbox, §5, landed in the
+"GTCIO Website Sign-ups" list; that test contact needs manual deletion from
+Constant Contact's side — flagged, not yet done as of this writing). The
+steps below are kept as reference for **reconnecting** if the app is ever
+disconnected from Constant Contact's side (see Troubleshooting) — until then,
+nobody needs to run them again.
 
 1. **Create a Constant Contact "Custom App."** Log into
    [developer.constantcontact.com](https://developer.constantcontact.com) —
@@ -1338,8 +1426,8 @@ the successor as a collaborator on each.
 | Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman | Hosting, env vars, deploy hooks, function logs |
 | Sanity | project `kjz4q8d4`, dataset `production` | Jake (admin) + `prmarketing@ogeecheetech.edu` (shared marketing login — see §8 re: its role) | All site content, form-submission inbox |
 | Adobe Fonts | web project kit `fgt0fkg` | OTC's Creative Cloud licence | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
-| Web3Forms | two access keys | created with `jmoore@` / `spayne@ogeecheetech.edu` | Form notification email (§5; keys not yet set) |
-| Constant Contact | "Custom App" at developer.constantcontact.com | the OTC/GTCIO Constant Contact account (§11) | Newsletter list (§11; one-time OAuth still pending) |
+| Microsoft Graph | Azure AD app registration | the OTC Microsoft 365 tenant (§5; tenant admin required) | Form notification email (§5; not yet set up) |
+| Constant Contact | "Custom App" at developer.constantcontact.com | the OTC/GTCIO Constant Contact account (§11) | Newsletter list (§11; connected and verified working since 2026-07-21) |
 
 ### Getting set up as a new developer
 
@@ -1350,8 +1438,9 @@ the successor as a collaborator on each.
    **sanity.io/manage → project `kjz4q8d4` → API → Tokens** — create one
    **Viewer** token (`SANITY_API_READ_TOKEN`) and one **Editor** token
    (`SANITY_API_WRITE_TOKEN`). Each token is displayed exactly once.
-   The remaining secrets (Web3Forms keys, Constant Contact app credentials)
-   are in Vercel → Settings → Environment Variables once configured.
+   The remaining secrets (Microsoft Graph app credentials, Constant Contact
+   app credentials) are in Vercel → Settings → Environment Variables once
+   configured.
 3. `npm run dev` — the site renders without any tokens (published content is
    public); tokens only gate draft preview and the forms.
 4. Read §4's traps before touching content, and §3 before moving files.
