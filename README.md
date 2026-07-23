@@ -16,6 +16,7 @@ Next.js 16 (App Router) · React 19 · Tailwind v4 · Sanity CMS · Adobe Fonts
 | **[PROJECT.md](./PROJECT.md)** | **Developers and AI agents. Start here.** Architecture, the CMS content model, how the forms work, environment variables, the confirmed facts behind the copy, and the non-obvious traps that will bite you. |
 | [EDITING.md](./EDITING.md) | Marketing staff. Plain-English guide to changing anything on the site — copy, photos, buttons, partners, news, the timeline — no code. |
 | [AGENTS.md](./AGENTS.md) | Warning that this is Next.js 16, not the version in your training data. |
+| [deploy/README.md](./deploy/README.md) | Whoever runs the (planned, not started) migration off Vercel onto an OTC server. |
 
 ## Getting started
 
@@ -51,6 +52,11 @@ explains why.
 ## Deploying
 
 Push to `main`. Vercel deploys automatically.
+
+A migration to an OTC-hosted server is planned but **not started** —
+scaffolding and the runbook live in [`deploy/`](./deploy/README.md), status in
+PROJECT.md §8. The `Deploy GTCIO site` Actions workflow is parked
+(manual-trigger only) until that begins.
 
 Publishing in the Studio also redeploys the site on its own (a Sanity webhook →
 Vercel deploy hook chain, set up 2026-07-20 — see

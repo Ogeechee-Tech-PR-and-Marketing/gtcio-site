@@ -29,7 +29,7 @@ partner's logo. For those, use the **Pages** tab at the top:
 
 | Menu item | What's in it |
 | --- | --- |
-| **Site Settings** | The black bar at the top of every page, the address, phone numbers, and the contacts shown on the Contact page. |
+| **Site Settings** | The black bar at the top of every page, the address, phone numbers, and the contacts shown on the Contact page (the media contact is also named on the News page). |
 | **Home Page**, **About Page**, etc. | One entry per page, in the same order as the website's own menu. Each is split into tabs ("Top of page," "FAQ," …) so you only see one section at a time. |
 | **Partner logos & info** | The companies shown on the Partners page. |
 | **News items (press & media)** | Each press release or media mention shown on the News page. |
@@ -102,7 +102,14 @@ box blank and the block simply has no button.
 3. Fill in the **Headline** and **Date**, the **Source / outlet** (e.g. "Statesboro
    Herald"), and the **Link** to the article or release. The **Short summary** is
    optional.
-4. Press **Publish** — it appears on the News page automatically, newest first.
+4. Optionally add a **Photo** — it shows as a thumbnail next to the item. Use
+   the hotspot (drag the circle) to pick what stays in frame, and fill in the
+   short photo description for screen readers. **Only use OTC's own photos**
+   for this: a picture from someone else's article (WSAV, the Herald, Grice
+   Connect…) belongs to that outlet, and we don't have permission to republish
+   it. That's why the "In the news" items have no photos — leave them that way
+   unless the outlet has said yes in writing.
+5. Press **Publish** — it appears on the News page automatically, newest first.
 
 Use **Show on the website** to hide an item without deleting it, the same way as
 partners. The News page shows a "coming soon" message until the first item is
@@ -274,14 +281,14 @@ partner, news item, and the project timeline — you can change yourself.
 
 If you need one of these, or you get stuck, ask whoever set the site up.
 
-> ### ⚠️ The newsletter signup isn't switched on yet
+> ### ✅ The newsletter signup is live
 >
-> The "News from the GTCIO" email signup now sits in the footer of **every**
-> page (its wording is editable under **Site Settings**). The plumbing to
-> Constant Contact is built, but it's waiting on a one-time connection step —
-> until that's done, someone signing up sees a polite "something went wrong"
-> message and **nobody is added to a list**. Ask whoever set the site up to
-> finish connecting it before relying on it to collect subscribers.
+> The email signup in the footer of every page (its wording is editable under
+> **Site Settings**) is connected to Constant Contact and working. Everyone
+> who signs up — including anyone who ticks the newsletter checkbox on the
+> Contact form — lands in the **"GTCIO Website Sign-ups"** list in Constant
+> Contact. Subscribers are managed there, not in the Studio; the Studio never
+> shows them.
 
 > ### The Credentials page and the course page are a special case
 >

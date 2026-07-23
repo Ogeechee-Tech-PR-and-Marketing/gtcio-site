@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-22. Check claims against the code before trusting them.
+updated 2026-07-23. Check claims against the code before trusting them.
 
 ---
 
@@ -103,6 +103,15 @@ sanity/
   presentation.ts         maps documents ↔ page URLs for "Edit on page"
 sanity.config.ts          Studio config (root)
 sanity.cli.ts             CLI config (root)
+deploy/                   self-hosting scaffolding — NOT yet in use (§8):
+  README.md               the migration runbook (setup + cutover steps)
+  gtcio-site.service      systemd unit for the on-campus server
+  nginx.conf.example      reverse proxy + TLS termination template
+  deploy.sh               rsync + restart, run by the Actions workflow
+.github/workflows/
+  deploy.yml              build-and-deploy on a self-hosted runner — parked
+                          (manual workflow_dispatch only) until the
+                          migration starts; see §8
 ```
 
 **Why the `(site)` route group exists:** so `/studio` does *not* inherit the
@@ -522,8 +531,10 @@ page" tool iframes the site from `/studio` on the same origin),
 `Content-Security-Policy` (`frame-ancestors 'self'; object-src 'none';
 base-uri 'self'` — deliberately not a full `default-src` policy, which the
 embedded Studio, Adobe Fonts, and Sanity's live APIs would make fragile).
-HSTS is left to Vercel's edge (it sets it on `*.vercel.app`); add a
-`Strict-Transport-Security` header here if the site moves to a custom domain.
+`Strict-Transport-Security` is set by the app itself as of 2026-07-22
+(previously left to Vercel's edge, which sets it on `*.vercel.app` — the
+planned self-hosted setup has no equivalent edge layer, so the app owns the
+header now; harmless duplication while still on Vercel).
 
 `next.config.ts` also serves `public/videos|images|documents` with
 `Cache-Control: public, max-age=31536000, immutable` (added 2026-07-21 — they
@@ -644,6 +655,21 @@ confirmed by POSTing the hook directly and seeing a `PENDING` build job
 returned. **If Vercel's Git connection is ever disconnected/reconnected
 again, re-check `deployHooks` on the project afterward** — this isn't a
 one-time fluke, it's how that Vercel flow behaves.
+
+**🟡 The self-hosting migration is scaffolded but not started.** `deploy/`
+(systemd unit, nginx template, deploy script) and
+`.github/workflows/deploy.yml` were committed 2026-07-22 as the first step of
+moving hosting off Jake's personal Vercel account onto an OTC on-campus
+server. Nothing is live: no server exists yet, no self-hosted runner is
+registered, and the site still deploys through Vercel. The full setup +
+cutover checklist is **`deploy/README.md`** (this is "the migration runbook"
+the deploy files refer to). The workflow's automatic triggers (`push` and
+`repository_dispatch`) are **commented out as of 2026-07-23** — with no
+runner to land on, every push to `main` was leaving a GitHub Actions run
+stuck "queued" indefinitely (observed sitting 16+ hours; all cancelled).
+Only manual `workflow_dispatch` remains enabled. **Restoring those two
+triggers is part of the migration** (deploy/README.md, server setup step 3)
+— don't forget, or the finished pipeline will only ever deploy by hand.
 
 **🔴 No inquiry emails are being sent yet.** None of the four `MS_GRAPH_*` env
 vars are set, so form submissions are being saved to the Studio inbox but
@@ -1452,19 +1478,22 @@ nobody needs to run them again.
 
 ## 12. Accounts, access & handoff
 
-Everything below was true 2026-07-22. **The GitHub repo moved to an OTC-owned
-org this same day** (`Ogeechee-Tech-PR-and-Marketing`, Jake has admin rights
-there) — see §8 for a likely knock-on break in Vercel's push-to-deploy that
-still needs fixing. **Vercel hosting itself is still Jake Hallman's personal
-account**, pending the self-hosting migration described in the separate
-migration runbook; that's the next piece of this handoff to close.
+Everything below was true 2026-07-23. **The GitHub repo moved to an OTC-owned
+org 2026-07-22** (`Ogeechee-Tech-PR-and-Marketing`, Jake has admin rights
+there). That transfer briefly broke Vercel's push-to-deploy and silently
+dropped a deploy hook — both fixed the same day; see §8 for the details and
+the re-check to do if Git is ever reconnected again. **Vercel hosting itself
+is still Jake Hallman's personal account**, pending the self-hosting
+migration to an on-campus server — scaffolding and runbook live in
+[`deploy/`](./deploy/README.md), status in §8. That's the next piece of this
+handoff to close.
 
 ### Who owns what
 
 | Service | Identifier | Owner / login | Used for |
 | --- | --- | --- | --- |
 | GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (private) | OTC PR & Marketing org (Jake: admin) | Source of truth; push to `main` deploys |
-| Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — **not yet transferred**, see §8 | Hosting, env vars, deploy hooks, function logs |
+| Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — **not yet migrated off**; self-hosting planned, see §8 + `deploy/README.md` | Hosting, env vars, deploy hooks, function logs |
 | Sanity | project `kjz4q8d4`, dataset `production` | Jake (admin) + `prmarketing@ogeecheetech.edu` (shared marketing login — see §8 re: its role) | All site content, form-submission inbox |
 | Adobe Fonts | web project kit `fgt0fkg` | OTC's Creative Cloud licence | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
 | Microsoft Graph | Azure AD app registration | the OTC Microsoft 365 tenant (§5; tenant admin required) | Form notification email (§5; not yet set up) |
