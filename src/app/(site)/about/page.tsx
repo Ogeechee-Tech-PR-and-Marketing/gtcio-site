@@ -26,14 +26,22 @@ const DEFAULTS = {
   missionQuoteAttribution: "Jan Moore — Vice President for Economic Development, Ogeechee Technical College",
   bdaTitle: "Development Authority of Bulloch County",
   bdaBody:
-    "The Development Authority of Bulloch County helped make GTCIO's new facility possible. A training center this size doesn't get built without local backing.",
+    "The Development Authority of Bulloch County deeded the land GTCIO sits on to the Technical College System of Georgia, and Bulloch County's Board of Commissioners funded the project's initial site design and an economic-impact study — the local backing that turned GTCIO from an idea into a funded state capital project.",
   bdaQuote:
     "I cannot stress enough what an asset this will be for Bulloch County and the surrounding region. The training will range from foundational skills in industrial operations to that of an automation engineer. Finding that under one roof is almost unheard of. It will be life changing for many of our residents.",
   bdaQuoteAttribution: "Benjy Thompson — CEO, Development Authority of Bulloch County",
   historyTitle: "History",
   historyBody:
-    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outran the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply than Georgia industry could hire. The center was planned as a regional answer to that, serving credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
+    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outran the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply than Georgia industry could hire. A Georgia Southern University economic-impact study projects the center will generate $8.98 million in regional economic output in its first year, growing to $15.68 million by FY2033. The center was planned as a regional answer to that shortage, serving credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
   historyTimeline: [
+    {
+      date: "September 2021",
+      title: "County commissioners approve funding",
+      detail:
+        "Bulloch County commissioners approve funding for the project — the earliest public step toward what became GTCIO.",
+      sourceUrl:
+        "https://www.ogeecheetech.edu/about/news/post/commissioners-otc-to-build-new-training-facility",
+    },
     {
       date: "July 2022",
       title: "The push for funding begins",
@@ -45,6 +53,14 @@ const DEFAULTS = {
       title: "Initial funding approved",
       detail:
         "The Technical College System of Georgia's state board approves the project on its FY24 capital outlay list, clearing the way from idea to plan.",
+    },
+    {
+      date: "June 2023",
+      title: "State budget funds the project",
+      detail:
+        "Governor Brian Kemp signs the project's construction funding into Georgia's amended FY23 budget.",
+      sourceUrl:
+        "https://www.ogeecheetech.edu/about/news/post/ogeechee-technical-college-announces-development-of-state-of-the-art-industrial-systems-industrial-robotics-training-center",
     },
     {
       date: "July 2023",
@@ -65,9 +81,25 @@ const DEFAULTS = {
         "Design work starts on a building meant to triple Ogeechee Tech's industrial systems and robotics training capacity, anchor training for the wider region, and serve as a model other technical colleges in Georgia can replicate.",
     },
     {
+      date: "November 2024",
+      title: "Groundbreaking ceremony",
+      detail:
+        "OTC breaks ground on the facility, a project built in partnership with Bulloch County and the Development Authority of Bulloch County.",
+      sourceUrl:
+        "https://www.ogeecheetech.edu/about/news/post/otc-breaks-ground-on-37-000-sq-ft-industrial-systems-robotics-facility",
+    },
+    {
       date: "June 2025",
       title: "Construction begins",
       detail: "Ground is broken on the 40,000-square-foot facility.",
+    },
+    {
+      date: "December 2025",
+      title: "Beam signing ceremony",
+      detail:
+        "OTC faculty and staff, joined by design and construction partners PRAXIS3, ICB, LS3P, and Buro Happold, sign one of the last beams to be installed in the building during the college's Fall Professional Development Day.",
+      sourceUrl:
+        "https://www.ogeecheetech.edu/about/news/post/intimate-beam-signing-ceremony-marks-progress-for-new-robotics-building",
     },
     {
       date: "August 2026",
@@ -123,6 +155,7 @@ type TimelineEvent = {
   title: string;
   detail?: string;
   highlight?: boolean;
+  sourceUrl?: string;
 };
 
 export default async function AboutPage() {

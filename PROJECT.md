@@ -1315,6 +1315,71 @@ shows deploy status.
     is consistent with the 10/15 ribbon cutting.
   - Jan's source note said "9/26 HOPEFULLY finished" — the site says "targeted for
     completion"/"scheduled" instead. Don't publish the hedge verbatim.
+  - **Expanded 2026-07-23 by actually reading the linked articles behind the
+    News page's `newsItem` docs** (WebFetch on all 13 URLs; an initial pass had
+    only mined the excerpts already stored in Sanity, which missed everything
+    below). Grice Connect (4 URLs) and WSAV both blocked/hung on every attempt,
+    live browser included — same bot-protection PROJECT.md already flagged for
+    Grice; Issuu's Statesboro Magazine embed returned only viewer chrome, no
+    article text. Everything added is sourced from the 5 OTC press releases and
+    1 Statesboro Herald piece that did return content:
+    - Three new `historyTimeline` milestones, each carrying its source article
+      in the new `sourceUrl` field (see below): **September 2021** "County
+      commissioners approve funding" (`_key: t0`, now the timeline's earliest
+      entry — the article itself calls this "the earliest public step");
+      **June 2023** "State budget funds the project" (`_key: t2b`, Governor
+      Kemp signing the amended FY23 budget — a distinct step from the
+      September 2022 TCSG capital-outlay-list approval, confirmed by the OTC
+      article rather than guessed); **November 2024** "Groundbreaking
+      ceremony" (`_key: t5b`).
+    - ⚠️ **The Nov 2024 groundbreaking and the existing "Construction begins —
+      June 2025" milestone (Jan's figure, approved 2026-07-16) read like the
+      same event ~7 months apart.** Jake was asked and chose to keep both as
+      separate milestones rather than have either overwritten — don't
+      "resolve" this a different way without asking again.
+    - `timelineEvent` gained a `sourceUrl` field (optional `url`, alongside
+      `highlight`) — renders as a small "Read more →" link under a milestone
+      in `AboutTimeline.tsx`. Only set where a specific `newsItem` on the News
+      page actually documents that exact milestone — 4 entries have one so far
+      (t0, t2b, t5b, and Dec 2025 "Beam signing ceremony" `t6a`); don't add one
+      just because a date is close, per the same reasoning as the
+      groundbreaking/June-2025 tension above.
+    - `aboutPage.bdaBody` (Development Authority of Bulloch County section)
+      was rewritten — it previously read as filler ("helped make GTCIO's new
+      facility possible... doesn't get built without local backing"). It now
+      states the actual mechanism: DABC deeded the land to TCSG, and Bulloch
+      County's Board of Commissioners (a separate body from DABC) funded the
+      initial site design and an economic-impact study. The existing
+      `bdaQuote` (Benjy Thompson) was left as-is — it's presumably from an
+      internal doc Jake supplied, not something contradicted by the new
+      sourcing, so it wasn't swapped for the differently-worded Thompson quote
+      the groundbreaking article carries ("It was an easy yes for us...").
+    - `aboutPage.historyBody` gained a sourced economic-impact figure: a
+      Georgia Southern University Center for Business Analytics and Economic
+      Research study projects **$8.98M in regional economic output in year
+      one, growing to $15.68M by FY2033** — sharper than not having a number
+      there at all. (The groundbreaking article's own project-cost figure,
+      $23M, is an earlier estimate superseded by the confirmed $27M already on
+      site — not used.)
+    - `facilityPage.overviewBody` gained a room-level detail from the same
+      groundbreaking article: **12 industrial labs, plus classrooms, computer
+      labs, and meeting space** — the page previously described the building
+      only in aggregate (square footage, cost, hours).
+    - The Dec 2025 beam-signing milestone's `detail` was expanded to name the
+      design/construction partners OTC's own release listed as attending —
+      **PRAXIS3, ICB, LS3P, and Buro Happold** — the first mention on the site
+      of LS3P or Buro Happold; their specific roles weren't stated in the
+      source, so don't infer more than "attended" from this.
+    - Not added, on purpose: ACE Electric's gift and Justin Goodman's Diamond
+      Award (both confirmed, on a full read, to have no GTCIO connection —
+      consistent with PROJECT.md's existing note on those two items) and the
+      2021 Amazon MRA / 2023 Amatrol items (OTC training capability generally,
+      already the reasoning on file for excluding them from a "strictly
+      GTCIO" read).
+    - All changes patched to both the code `DEFAULTS` and the published
+      Sanity docs (`aboutPage`, `facilityPage`); no drafts existed for either
+      at patch time. `npx sanity schema validate` and `documents validate`
+      both ran clean afterward.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.

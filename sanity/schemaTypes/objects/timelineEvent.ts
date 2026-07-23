@@ -28,6 +28,13 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: "sourceUrl",
+      title: "Source link (optional)",
+      description:
+        "Link to the press release or news coverage of this milestone, e.g. from the News page. Renders as a small \"Read more\" link under the milestone. Leave blank if there's no article to point to.",
+      type: "url",
+    }),
+    defineField({
       name: "highlight",
       title: "Highlight this milestone?",
       description:

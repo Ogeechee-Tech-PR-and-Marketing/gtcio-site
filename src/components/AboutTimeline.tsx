@@ -8,6 +8,7 @@ type TimelineEvent = {
   title: string;
   detail?: string;
   highlight?: boolean;
+  sourceUrl?: string;
 };
 
 // "July 2022" -> { year: "2022", rest: "July" }. "October 15, 2026" -> { year: "2026", rest: "October 15" }.
@@ -73,6 +74,16 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
                   </span>
                 </h3>
                 {item.detail && <p className="max-w-[30ch] text-sm text-brand-silver">{item.detail}</p>}
+                {item.sourceUrl && (
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-heading mt-2 inline-block text-xs font-bold tracking-wide text-brand-red hover:text-brand-black"
+                  >
+                    Read more &rarr;
+                  </a>
+                )}
               </div>
             );
           })}
