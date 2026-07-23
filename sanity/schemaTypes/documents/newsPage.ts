@@ -15,7 +15,8 @@ export default defineType({
     defineField({
       name: "introText",
       title: "Intro paragraph",
-      description: "Short paragraph under the banner, above the news lists.",
+      description:
+        "Short paragraph under the banner, above the news lists. The \"For media inquiries…\" line right below it is separate and not editable here — it's generated from Site Settings → Media Inquiries contact.",
       type: "text",
       rows: 3,
       group: "sections",

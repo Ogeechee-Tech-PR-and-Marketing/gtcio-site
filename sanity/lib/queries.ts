@@ -64,7 +64,9 @@ export const NEWS_PAGE_QUERY = defineQuery(`
       date,
       source,
       url,
-      excerpt
+      excerpt,
+      image,
+      imageAlt
     }
   }
 `);

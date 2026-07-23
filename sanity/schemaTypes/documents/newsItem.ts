@@ -59,6 +59,21 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: "image",
+      title: "Thumbnail",
+      description:
+        "Optional. A small photo shown next to the headline on the News page. Drag the dot in the editor to set what part of the photo stays in view when it's cropped.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "imageAlt",
+      title: "Thumbnail alt text",
+      description: "Describe the image for screen readers, e.g. \"Ribbon-cutting ceremony at the GTCIO site.\"",
+      type: "string",
+      hidden: ({ parent }) => !parent?.image,
+    }),
+    defineField({
       name: "showOnWebsite",
       title: "Show on the website",
       description:
@@ -81,14 +96,16 @@ export default defineType({
       date: "date",
       source: "source",
       showOnWebsite: "showOnWebsite",
+      media: "image",
     },
-    prepare({ title, category, date, source, showOnWebsite }) {
+    prepare({ title, category, date, source, showOnWebsite, media }) {
       const kind = category === "media" ? "In the news" : "Press release";
       const hidden = showOnWebsite === false ? "  ·  HIDDEN" : "";
       const parts = [date, source].filter(Boolean).join(" · ");
       return {
         title: `${title}${hidden}`,
         subtitle: [kind, parts].filter(Boolean).join("  —  "),
+        media,
       };
     },
   },

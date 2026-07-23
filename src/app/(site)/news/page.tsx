@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import { sanityFetch } from "@/sanity/lib/live";
-import { NEWS_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
+import { NEWS_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
 import { safeHref } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
@@ -17,8 +19,7 @@ const DEFAULTS = {
   heroTitle: "News from the GTCIO",
   heroDescription:
     "Press releases from our office, and coverage of GTCIO in the media.",
-  introText:
-    "Announcements, milestones, and mentions as GTCIO gets underway. For media inquiries, see the contacts on our Contact page.",
+  introText: "Announcements, milestones, and mentions as GTCIO gets underway.",
   pressTitle: "Press Releases",
   mediaTitle: "In the News",
 };
@@ -31,6 +32,8 @@ type NewsItem = {
   source?: string;
   url?: string;
   excerpt?: string;
+  image?: SanityImage;
+  imageAlt?: string;
 };
 
 function formatDate(date?: string) {
@@ -53,38 +56,56 @@ function NewsList({ items }: { items: NewsItem[] }) {
       {items.map((item) => {
         const meta = [formatDate(item.date), item.source].filter(Boolean).join("  ·  ");
         const url = safeHref(item.url);
+        const hotspot = item.image?.hotspot;
+        const position = hotspot
+          ? `${(hotspot.x * 100).toFixed(1)}% ${(hotspot.y * 100).toFixed(1)}%`
+          : "50% 50%";
         return (
-          <li key={item._id} className="py-6">
-            {meta && (
-              <p className="font-heading text-xs font-bold uppercase tracking-widest text-brand-silver">
-                {meta}
-              </p>
+          <li key={item._id} className="flex flex-col gap-6 py-6 sm:flex-row">
+            {item.image?.asset && (
+              <div className="relative h-40 w-full shrink-0 sm:h-28 sm:w-44">
+                <Image
+                  src={urlForImage(item.image).width(480).height(320).fit("crop").auto("format").url()}
+                  alt={item.imageAlt || item.title}
+                  fill
+                  sizes="176px"
+                  style={{ objectPosition: position }}
+                  className="object-cover"
+                />
+              </div>
             )}
-            <h3 className="font-heading mt-2 text-xl font-bold text-brand-black">
-              {url ? (
+            <div className="min-w-0 flex-1">
+              {meta && (
+                <p className="font-heading text-xs font-bold uppercase tracking-widest text-brand-silver">
+                  {meta}
+                </p>
+              )}
+              <h3 className="font-heading mt-2 text-xl font-bold text-brand-black">
+                {url ? (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-brand-red"
+                  >
+                    {item.title}
+                  </a>
+                ) : (
+                  item.title
+                )}
+              </h3>
+              {item.excerpt && <p className="mt-2 max-w-3xl text-brand-silver">{item.excerpt}</p>}
+              {url && (
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-brand-red"
+                  className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
                 >
-                  {item.title}
+                  Read more →
                 </a>
-              ) : (
-                item.title
               )}
-            </h3>
-            {item.excerpt && <p className="mt-2 max-w-3xl text-brand-silver">{item.excerpt}</p>}
-            {url && (
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
-              >
-                Read more →
-              </a>
-            )}
+            </div>
           </li>
         );
       })}
@@ -93,7 +114,10 @@ function NewsList({ items }: { items: NewsItem[] }) {
 }
 
 export default async function NewsPage() {
-  const { data } = await sanityFetch({ query: NEWS_PAGE_QUERY });
+  const [{ data }, { data: settingsData }] = await Promise.all([
+    sanityFetch({ query: NEWS_PAGE_QUERY }),
+    sanityFetch({ query: SITE_SETTINGS_QUERY }),
+  ]);
   const typed = data as {
     page?: (Partial<typeof DEFAULTS> & {
       heroImage?: SanityImage;
@@ -108,6 +132,15 @@ export default async function NewsPage() {
   const items = typed?.items ?? [];
   const press = items.filter((i) => i.category !== "media");
   const media = items.filter((i) => i.category === "media");
+
+  // Media contact name/email is the same siteSettings.mediaContact record the
+  // Contact page shows (kept in sync there) — not re-entered here, just a
+  // shorter first-and-last-name link plus a mailto.
+  const settings = settingsData as {
+    mediaContact?: { name?: string; email?: string };
+  } | null;
+  const mediaContactName = settings?.mediaContact?.name?.split(",")[0]?.trim() || "Sean Payne";
+  const mediaContactEmail = settings?.mediaContact?.email || "spayne@ogeecheetech.edu";
 
   const hero = resolveHeroImage({
     image: cms?.heroImage,
@@ -130,7 +163,21 @@ export default async function NewsPage() {
 
       <section className="px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <p className="max-w-3xl text-brand-black">{page.introText}</p>
+          <p className="max-w-3xl text-brand-black">
+            {page.introText}{" "}
+            For media inquiries, contact{" "}
+            <a
+              href={`mailto:${mediaContactEmail}`}
+              className="font-bold text-brand-red hover:text-brand-black"
+            >
+              {mediaContactName}
+            </a>
+            , or see our{" "}
+            <Link href="/contact" className="font-bold text-brand-red hover:text-brand-black">
+              Contact page
+            </Link>
+            .
+          </p>
 
           {items.length === 0 ? (
             <div className="font-heading mt-10 border border-dashed border-brand-silver/60 px-6 py-16 text-center text-sm font-bold tracking-wide text-brand-silver">

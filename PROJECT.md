@@ -139,8 +139,10 @@ Every decision below exists to protect that. Weigh it accordingly.
   on the Partners page links out to it).
 - **`newsItem`** — one document per press release / media mention (`category`
   = `press` | `media`, `title`, `date`, `source`, `url`, `excerpt`,
-  `showOnWebsite`). Queried directly like `partner` (see trap 1), split into two
-  groups on `/news` by `category`.
+  `showOnWebsite`, optional `image` + `imageAlt` — hotspot-cropped thumbnail,
+  same pattern as a partner logo). Queried directly like `partner` (see trap
+  1), split into two groups on `/news` by `category`. See §8 for which items
+  currently have a thumbnail and why the media (outside-outlet) items don't.
 - **`formSubmission`** — a saved copy of every form inquiry (§5). Read-only;
   written only by the server, never created by hand in the Studio.
 - **Objects:** `faq`, `statCard`, `pathwayCard`, `timelineEvent`, `infoCard`,
@@ -925,6 +927,23 @@ Smaller items:
     name, phone, and URL, so it may be a sponsored placement rather than
     independent reporting; it is filed as media because it ran in an outside
     outlet.
+  - **Thumbnails added 2026-07-23** — `newsItem` gained optional `image` +
+    `imageAlt` fields (hotspot-cropped, same pattern as a partner logo).
+    Populated for the **5 of 7 press releases** whose OTC article page had a
+    usable photo, pulled directly from `ogeecheetech.edu` and uploaded as
+    Sanity assets: beam signing, ACE Electric gift, groundbreaking, the 2023
+    training-center-announcement rendering, and Goodman's Diamond Award. The
+    2026-07-08 IOT launch item has no URL to pull from (see above); the
+    2021-09-29 commissioners item's image path 404s (an old relative-path
+    image link on OTC's site that no longer resolves) — soft-404 HTML was
+    returned with a 200 status, so **check any future pull actually got image
+    bytes, not an HTML error page, before uploading it as an asset.**
+    **Deliberately not pulled for the 7 "In the News" (media) items** — Jake's
+    call: those photos belong to WSAV/Statesboro Herald/Statesboro
+    Magazine/Grice Connect, and republishing another outlet's editorial
+    photography on GTCIO's own site has no license behind it, unlike reusing
+    OTC's own press photos on OTC's own division site. If that changes, get
+    each outlet's permission first — don't bulk-pull them the same way.
 - **🔴 Book a Tour is off the site entirely until 2026-10-26** (Jake, 2026-07-20
   — reversed the earlier plan of keeping the form live with a gold "not open
   yet" notice banner). Removed: the red header button (desktop nav and mobile
