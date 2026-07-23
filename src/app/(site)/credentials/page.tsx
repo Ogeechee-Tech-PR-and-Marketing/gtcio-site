@@ -37,7 +37,7 @@ const DEFAULTS = {
   heroEyebrow: "Credentials",
   heroTitle: "Proof you can do the work",
   heroDescription:
-    "A diploma says you finished. A credential says an industry body tested you and agreed. Everything GTCIO teaches is built around earning the second one.",
+    "A diploma says you finished. A credential says an industry body tested you and agreed.",
   earnTitle: "What you leave with",
   earnBody:
     "Every graduate of the Industrial Operations Technology diploma is credentialed through SACA, and the program builds in two more credentials employers ask for by name.",
