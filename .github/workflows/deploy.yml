@@ -5,7 +5,11 @@ name: Deploy GTCIO site
 # box that serves the site, "deploy" is a local rsync + restart, not an SSH
 # hop — there is nothing to reach over the network here.
 #
-# Two triggers feed the same job:
+# ⚠️ PARKED until the migration actually starts (2026-07-23). The site still
+# deploys through Vercel, and no self-hosted runner is registered — with the
+# automatic triggers on, every push to main left a run stuck "queued" forever.
+# So only manual workflow_dispatch is enabled for now. When the runner exists
+# (deploy/README.md step 3), restore the two commented-out triggers:
 #   - push to main            → a real code change
 #   - repository_dispatch     → a Sanity CMS publish, forwarded here by the
 #     (content-publish)         Sanity webhook (content changed, code didn't,
@@ -13,10 +17,10 @@ name: Deploy GTCIO site
 #                                rebuild is still required)
 
 on:
-  push:
-    branches: [main]
-  repository_dispatch:
-    types: [content-publish]
+  # push:
+  #   branches: [main]
+  # repository_dispatch:
+  #   types: [content-publish]
   workflow_dispatch: {}
 
 concurrency:
