@@ -560,15 +560,22 @@ compounding lossy re-encodes compounds artifacts), and sanity-check the
 darkest scene in the clip specifically: brighten/contrast-boost a crop of it
 and look for blockiness before shipping.
 
-**`hero-construction-3.mp4`** (swapped in 2026-07-22, replacing the night
-drone shot `hero-construction-2.mp4` above with a daytime drone pass showing
-the actual building) is **not** part of that pipeline — Jake supplied it
-already compressed (18MB, 1920×1080, h264, ~3 Mbps, no audio), and it's used
-byte-for-byte as delivered. **Do not re-encode it** if it's swapped again;
-same reasoning applies to whatever replaces it unless told otherwise.
-`hero-construction-poster-2.jpg` is a plain `ffmpeg -ss 2 ... -vf scale=1600:-2`
-frame grab from it (no original to preserve — regenerate the same way from
-whatever video replaces this one).
+**`hero-construction-4.mp4`** (swapped in 2026-07-27, replacing
+`hero-construction-3.mp4` with a further-along daytime drone pass — roofline
+and windows now complete) is **not** part of that pipeline — Jake supplied it
+already compressed (16MB, 1920×1080, h264, ~3 Mbps, no audio), and it's used
+byte-for-byte as delivered, same as `-3` before it. **Do not re-encode it** if
+it's swapped again; same reasoning applies to whatever replaces it unless told
+otherwise. The delivered original lives at
+`../media-originals/hero-construction-4-source.mp4`.
+`hero-construction-poster-3.jpg` is a plain `ffmpeg -ss 2 ... -vf scale=1600:-2`
+frame grab from it — regenerate the same way from whatever video replaces this
+one. The prior pair, `hero-construction-3.mp4` and `hero-construction-poster-2.jpg`,
+were deleted from `public/` after the swap, following the same pattern as
+`hero-construction-2.mp4` before them — nothing else in the repo referenced
+them (verified by grep) and Sanity's `homePage` doc has no
+`heroVideo`/`heroImage` override (verified via the API) that would need
+patching.
 
 **The canonical site origin lives in `src/lib/site.ts`** (`SITE_URL`). It feeds
 `metadataBase` (root layout), `src/app/robots.ts` (which disallows `/studio` and

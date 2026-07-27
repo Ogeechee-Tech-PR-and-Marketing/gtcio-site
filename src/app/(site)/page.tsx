@@ -57,8 +57,8 @@ export default async function Home() {
   const heroTitle = page.heroTitle || DEFAULTS.heroTitle;
 
   const pathways = [
-    { ...DEFAULTS.studentsCard, ...page.studentsCard, href: "/iot-diploma-program", cta: "Explore the IOT Diploma Program" },
     { ...DEFAULTS.employersCard, ...page.employersCard, href: "/training", cta: "See Training for Employers" },
+    { ...DEFAULTS.studentsCard, ...page.studentsCard, href: "/iot-diploma-program", cta: "Explore the IOT Diploma Program" },
     { ...DEFAULTS.partnersCard, ...page.partnersCard, href: "/partners", cta: "Become a Partner" },
   ];
 
@@ -70,15 +70,15 @@ export default async function Home() {
   const hero = resolveHeroImage({
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-construction-poster-2.jpg",
+    fallbackSrc: "/images/hero-construction-poster-3.jpg",
     fallbackAlt: "Construction of the GTCIO facility",
     fallbackPosition: "50% 50%",
   });
   const heroVideo = resolveHeroVideo({
     video: typed?.heroVideo,
     poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-construction-3.mp4",
-    fallbackPoster: "/images/hero-construction-poster-2.jpg",
+    fallbackSrc: "/videos/hero-construction-4.mp4",
+    fallbackPoster: "/images/hero-construction-poster-3.jpg",
   });
 
   return (
