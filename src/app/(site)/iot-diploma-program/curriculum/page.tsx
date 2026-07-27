@@ -106,7 +106,11 @@ export default function CurriculumPage() {
                     <td className="py-3 pr-4 text-brand-black">{course.title}</td>
                     <td className="py-3 pr-4 text-right tabular-nums text-brand-black">{course.credits}</td>
                     <td className="py-3 text-sm text-brand-silver">
-                      {course.credentials.length ? course.credentials.join(", ") : "—"}
+                      {course.credentials.length
+                        ? course.credentials
+                            .map((code) => (code.startsWith("C-") ? `SACA ${code}` : code))
+                            .join(", ")
+                        : "—"}
                     </td>
                   </tr>
                 ))}
@@ -232,10 +236,11 @@ export default function CurriculumPage() {
                         const credential = CREDENTIALS_BY_CODE.get(code);
                         // OSHA 10 is a mapping the brochure lists, not a SACA
                         // credential, so it has no glossary entry to link to.
+                        const label = code.startsWith("C-") ? `SACA ${code}` : code;
                         if (!credential) {
                           return (
                             <p key={code} className="text-sm text-brand-silver">
-                              <span className="font-bold text-brand-black">{code}</span>
+                              <span className="font-bold text-brand-black">{label}</span>
                             </p>
                           );
                         }
@@ -246,7 +251,7 @@ export default function CurriculumPage() {
                             className="group border border-brand-silver/40 p-4 transition-colors hover:border-brand-red"
                           >
                             <p className="font-heading font-bold text-brand-black group-hover:text-brand-red">
-                              {code}
+                              {label}
                               {credential.title && (
                                 <span className="font-normal text-brand-silver"> — {credential.title}</span>
                               )}

@@ -1219,6 +1219,17 @@ shows deploy status.
     one-line parenthetical calling this out ("The FANUC credential further
     down is issued directly by FANUC America, not SACA...") so the umbrella
     heading doesn't misstate that one card.
+  - Every SACA-issued code (`C-` prefix) on the page now displays as
+    "SACA C-201" rather than bare "C-201" — both tier boxes above and every
+    card in the glossary — so it's visually unambiguous next to `FANUC-1`,
+    which stays unprefixed. Both tier boxes also link out to SACA's own
+    Associate/Specialist Certifications pages. **The same "SACA C-XXX"
+    prefix was applied 2026-07-28 to `/iot-diploma-program/curriculum`'s**
+    course table (the "Credentials" column) and its per-course "Credentials
+    earned" cards — same logic (`code.startsWith("C-")`), so `FANUC-1` and
+    the literal string `"OSHA 10"` in `PROGRAM_COURSES` stay unprefixed
+    there too. Anchor hrefs/ids on both pages still use the raw code
+    (`c-201`, lowercase, no "SACA") — only the display label changed.
 - **Sitewide terminology: "credentials", not "certifications"** (Jake,
   2026-07-22). Every generic mention was changed in both the code `DEFAULTS`
   and the published Sanity docs (plus the then-extant `drafts.homePage`).
