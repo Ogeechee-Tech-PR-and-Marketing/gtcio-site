@@ -1147,6 +1147,78 @@ shows deploy status.
     21px clear of the logo, 47px of the right edge. A tenth item, or materially
     longer labels, will need re-checking; the desktop nav has no wrap/overflow
     handling, it just gets tighter.
+- **Affiliations now split by audience, and Amatrol was dropped as an
+  accreditation** (Jake, 2026-07-27). `AFFILIATIONS` in `src/lib/credentials.ts`
+  is still the one shared list feeding both `/credentials` and `/training`
+  (`trainingPage.affiliations`, one field, two pages — §4), but each item now
+  carries a `showOn: "both" | "employer" | "student"` tag, and each page
+  filters through the new `affiliationsFor()` helper. Reason: the diploma only
+  builds in FANUC and SACA credentials, so `/credentials` showing Mitsubishi
+  Electric or Rockwell overstated what a student leaves with. `/credentials`
+  now shows only FANUC + SACA Gold (`showOn: "both"`); `/training` shows all
+  four, including the two `showOn: "employer"` cards.
+  - **Amatrol removed as an affiliation card entirely** — gone from both
+    pages' accreditation grids, the `/training` "What credentials can
+    employees earn?" FAQ answer, and the About page FAQ line ("...and an
+    Amatrol certified instructor training site"). **Deliberately NOT removed**
+    from `SERVICES` on `/training` (the "Amatrol's e-learning curriculum",
+    "Amatrol LMS & open lab", and "Amatrol ATTI" instructor-training entries)
+    — those describe how OTC delivers *other* companies' short courses, a
+    delivery-method fact rather than a credential/accreditation claim, and
+    Jake's call was to leave that alone.
+  - **The old "Advanced Manufacturing Academy Training Center" entry is now
+    "Rockwell Automation."** The brochure's own wording doesn't match
+    Rockwell's actual program name — Rockwell's is "**Academy of** Advanced
+    Manufacturing" (AAM), word order reversed from the brochure's "Advanced
+    Manufacturing Academy." Web research 2026-07-27 found no public
+    confirmation anywhere (not Rockwell's own AAM page, its press coverage, or
+    OTC's site) that GTCIO is an AAM partner site. **Jake confirmed it
+    directly**, so it's published as Rockwell — but if this ever needs
+    re-verifying, that's why the brochure's wording doesn't line up on its
+    own. New copy: "An Academy of Advanced Manufacturing (AAM) training
+    site."
+  - New Sanity object type `affiliationCard` (`sanity/schemaTypes/objects/`)
+    replaces `infoCard` for just the `affiliations` field — adds the "Show on"
+    radio (Both pages / Training only / Credentials only) without leaking that
+    concept onto Facility's focus-area cards or Training's own service cards,
+    which also use `infoCard` and don't need it. `trainingPage.affiliations`
+    in the dataset was patched directly (write token) to the new `_type` and
+    tags; no draft existed to reconcile. `npx sanity schema validate` and
+    `documents validate` both ran clean afterward.
+- **SACA tier ladder on `/credentials` reordered, Professional dropped, and the
+  glossary now labels its micro-credential block** (Jake, 2026-07-27).
+  `SACA_TIERS` in `src/lib/credentials.ts` no longer includes the Professional
+  tier (engineering-level, `inProgram: false` — the diploma never touched it,
+  and it was cluttering the page). The remaining two entries were reordered —
+  **Specialist displays as Tier 1, Associate as Tier 2** — which is a pure
+  presentation choice, not a correction: re-verified 2026-07-27 directly
+  against saca.org's Associate and Specialist Certifications pages, SACA does
+  **not** rank its three categories ("Associate", "Specialist",
+  "Professional") hierarchically or number them — it calls them stackable.
+  The page's own `Tier {i+1}` numbering (`(site)/credentials/page.tsx`) was
+  always this site's invention, driven by array order.
+  - **New glossary heading**, "Micro-credentials included in Specialist
+    Certification," inserted in the "Every credential in the diploma" section
+    right after the four Associate credentials (C-101–C-104) and before the
+    Systems & Controls family begins — i.e. it introduces every family from
+    that point on (Systems & Controls, Robotics). Jake's first draft said
+    "Associate," not "Specialist" — corrected before publishing: saca.org's
+    Specialist Certifications page explicitly says Specialist certifications
+    "consist of a series of core and elective **micro-credentials**," and the
+    Associate page never mentions micro-credentials at all. This also matches
+    the page's own pre-existing Specialist-tier copy ("The diploma's C-2xx and
+    C-3xx credentials are these building blocks"), which the original wording
+    would have contradicted a few sections up the same page. Jake confirmed
+    "Specialist" after being shown the conflict.
+  - ⚠️ **The Robotics family mixes a real SACA micro-credential (C-215,
+    C-216) with one that isn't (FANUC-1)** — FANUC-1 is FANUC America's own
+    credential, unrelated to SACA's Specialist bundling (see the existing
+    `SACA_CREDENTIALS` filter comment in `iot-curriculum.ts`, which excludes
+    it from SACA counts for the same reason). Rather than split the Robotics
+    family or add a second heading, the new intro paragraph carries a
+    one-line parenthetical calling this out ("The FANUC credential further
+    down is issued directly by FANUC America, not SACA...") so the umbrella
+    heading doesn't misstate that one card.
 - **Sitewide terminology: "credentials", not "certifications"** (Jake,
   2026-07-22). Every generic mention was changed in both the code `DEFAULTS`
   and the published Sanity docs (plus the then-extant `drafts.homePage`).

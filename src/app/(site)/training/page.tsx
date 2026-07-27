@@ -5,7 +5,7 @@ import CtaButton from "@/components/CtaButton";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
-import { AFFILIATIONS } from "@/lib/credentials";
+import { AFFILIATIONS, affiliationsFor, type Affiliation } from "@/lib/credentials";
 
 export const metadata: Metadata = {
   title: "IOT Training Programs | GTCIO",
@@ -48,7 +48,7 @@ const DEFAULTS = {
     { question: "What's the value proposition for my business?", answer: "A pipeline of work-ready technicians, plus custom training that upskills the staff you already have, delivered by a team with more than 120 years of combined in-field experience." },
     { question: "How long does training take?", answer: "Short courses run 16–40 hours each. The entry-level Industrial Systems Fast Track is 256 hours over 16 weeks, two 8-hour days a week. The DOL-registered apprenticeships add 384 hours of classroom and lab time, about one 8-hour day a week, alongside 4,000 hours of on-the-job training." },
     { question: "How much does it cost?", answer: "Short courses run about $450–$950 depending on length, and FANUC robotics and CNC courses run $750–$1,936. Comprehensive programs are $4,750 for the 256-hour Industrial Systems Fast Track and $7,750 for each 384-hour apprenticeship program. Customized contract training is scoped and quoted with your company rather than sold at a flat rate." },
-    { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold) and an Amatrol credentialing provider. The entry-level track prepares students to sit for 8 SACA exams, and the Electrical Apprenticeship lists 14 SACA credentials. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one." },
+    { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold), the only authorized FANUC satellite training site in Georgia, a Mitsubishi Electric Automation Training Provider, and a Rockwell Automation Academy of Advanced Manufacturing training site. The entry-level track prepares employees to sit for 8 SACA exams, and the Electrical Apprenticeship lists 14 SACA credentials. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one." },
     { question: "Who do I contact to set up training?", answer: "Jan Moore, Vice President for Economic Development — jmoore@ogeecheetech.edu, 912-688-6026." },
   ],
 };
@@ -95,14 +95,18 @@ export default async function TrainingPage() {
     heroImage?: SanityImage;
     heroImageAlt?: string;
     stats?: Array<{ _key?: string; value: string; label: string }>;
-    affiliations?: InfoCard[];
+    affiliations?: Affiliation[];
     services?: InfoCard[];
     courseAreas?: CourseAreaItem[];
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const employerFaqs = typed?.employerFaqs?.length ? typed.employerFaqs : DEFAULTS.employerFaqs;
   const stats = typed?.stats?.length ? typed.stats : STATS;
-  const affiliations = typed?.affiliations?.length ? typed.affiliations : AFFILIATIONS;
+  // Filtered to this page's audience — see the matching filter on /credentials.
+  const affiliations = affiliationsFor(
+    typed?.affiliations?.length ? typed.affiliations : AFFILIATIONS,
+    "employer"
+  );
   const services = typed?.services?.length ? typed.services : SERVICES;
   const courseAreas: CourseAreaItem[] = typed?.courseAreas?.length
     ? typed.courseAreas

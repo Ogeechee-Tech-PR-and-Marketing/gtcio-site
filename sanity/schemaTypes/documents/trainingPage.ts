@@ -95,9 +95,10 @@ export default defineType({
     defineField({
       name: "affiliations",
       title: "Credentials & affiliations",
-      description: "Drag to reorder. Use Add item to add one.",
+      description:
+        "Drag to reorder. Use Add item to add one. Each card has a \"Show on\" field — this same list also feeds the Credentials page, and a card can be limited to just one of the two.",
       type: "array",
-      of: [{ type: "infoCard" }],
+      of: [{ type: "affiliationCard" }],
       group: "credentials",
     }),
 

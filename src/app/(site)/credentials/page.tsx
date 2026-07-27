@@ -13,7 +13,13 @@ import {
   SACA_CREDENTIALS,
   SACA_INTRO,
 } from "@/lib/iot-curriculum";
-import { SACA_TIERS, OTHER_CREDENTIALS, AFFILIATIONS } from "@/lib/credentials";
+import {
+  SACA_TIERS,
+  OTHER_CREDENTIALS,
+  AFFILIATIONS,
+  affiliationsFor,
+  type Affiliation,
+} from "@/lib/credentials";
 import { DESTINATIONS } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
@@ -56,8 +62,6 @@ const DEFAULTS = {
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
 };
 
-type Affiliation = { _key?: string; title: string; detail: string };
-
 /**
  * The site's single home for credential information, combining what was on
  * /iot-diploma-program/certifications (the SACA glossary) with the
@@ -81,10 +85,13 @@ export default async function CredentialsPage() {
     | null;
   const page = { ...DEFAULTS, ...typed };
   // Affiliations are authored on the Training page's document — one field, two
-  // pages, so an editor never updates the same accreditation twice.
-  const affiliations: Affiliation[] = typed?.affiliations?.length
-    ? typed.affiliations
-    : AFFILIATIONS;
+  // pages, so an editor never updates the same accreditation twice. Filtered
+  // to this page's audience — a card can be employer-training-only (Mitsubishi
+  // Electric, Rockwell) since the diploma only builds in FANUC and SACA.
+  const affiliations: Affiliation[] = affiliationsFor(
+    typed?.affiliations?.length ? typed.affiliations : AFFILIATIONS,
+    "student"
+  );
 
   const hero = resolveHeroImage({
     image: typed?.heroImage,
@@ -155,7 +162,7 @@ export default async function CredentialsPage() {
             ))}
           </div>
           <p className="mt-8 max-w-3xl text-sm text-brand-silver">
-            Employers can also put current staff through these credentials —{" "}
+            Employers can also put current staff through these credentials, plus a few more —{" "}
             <Link href={DESTINATIONS.training} className="font-bold text-brand-red underline hover:text-brand-black">
               see the training we run for industry
             </Link>
@@ -207,6 +214,14 @@ export default async function CredentialsPage() {
                   )}
                 </div>
                 <p className="mt-3 text-sm text-brand-silver">{tier.detail}</p>
+                <a
+                  href={tier.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-block text-sm font-bold text-brand-red underline hover:text-brand-black"
+                >
+                  {tier.name} Certifications on saca.org →
+                </a>
               </li>
             ))}
           </ol>
@@ -222,6 +237,23 @@ export default async function CredentialsPage() {
             if (!inFamily.length) return null;
             return (
               <div key={family} className="mt-10">
+                {/* The diploma's other family, "Industry 4.0 Associate", is four
+                    standalone Associate certifications (C-101–C-104) — not
+                    micro-credentials. Everything from here on is, so this intro
+                    only renders once, ahead of the first family that qualifies. */}
+                {family === "Systems & Controls" && (
+                  <div className="mb-10 border-t-2 border-brand-gold pt-8">
+                    <h3 className="font-heading text-xl font-bold text-brand-black">
+                      Micro-credentials included in Specialist Certification
+                    </h3>
+                    <p className="mt-3 max-w-3xl text-brand-silver">
+                      Each credential below is a separate SACA exam. Passing the required core set
+                      for a track earns the Specialist certification — see &quot;How SACA
+                      credentials stack&quot; above. (The FANUC credential further down is issued
+                      directly by FANUC America, not SACA, and isn&apos;t part of that bundle.)
+                    </p>
+                  </div>
+                )}
                 <h3 className="font-heading border-b-2 border-brand-black pb-2 text-lg font-bold text-brand-black">
                   {family}
                 </h3>
@@ -234,7 +266,9 @@ export default async function CredentialsPage() {
                         id={credential.code.toLowerCase()}
                         className="scroll-mt-40 sm:scroll-mt-56 border border-brand-silver/40 p-6"
                       >
-                        <p className="font-display text-sm text-brand-gold">{credential.code}</p>
+                        <p className="font-display text-sm text-brand-gold">
+                          {credential.code.startsWith("C-") ? `SACA ${credential.code}` : credential.code}
+                        </p>
                         <h4 className="font-heading mt-1 text-lg font-bold text-brand-black">
                           {credential.title ?? credential.code}
                         </h4>

@@ -134,7 +134,7 @@ const DEFAULTS = {
     {
       question: "Is GTCIO only for students?",
       answer:
-        "No. Three groups use it. Students earn the Industrial Operations Technology diploma. Employers send the staff they already have for short courses, customized contract training, and DOL-registered apprenticeships. And instructors come from across Georgia and the nation to be trained and certified — Ogeechee Tech is a SACA Regional Instructor Training Center and an Amatrol certified instructor training site.",
+        "No. Three groups use it. Students earn the Industrial Operations Technology diploma. Employers send the staff they already have for short courses, customized contract training, and DOL-registered apprenticeships. And instructors come from across Georgia and the nation to be trained and certified — Ogeechee Tech is a SACA Regional Instructor Training Center.",
     },
     {
       question: "When does the Industrial Operations Technology program start?",
