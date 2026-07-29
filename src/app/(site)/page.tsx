@@ -13,21 +13,21 @@ const DEFAULTS = {
   heroEyebrow: "",
   heroTitle: "Building a workforce ready for industry transformation.",
   heroDescription:
-    "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology. These are the people who keep factories, utilities, and logistics centers running when something breaks or a line goes down. The diploma program opens for enrollment now, ahead of its August 2026 launch.",
+    "The GTCIO trains Georgia's workforce for careers in Industrial Operations Technology. These individuals are essential in keeping manufacturing facilities, utilities, logistics centers, and related industries up and running.",
   sectionTitle: "Training the next generation",
   sectionBody:
-    "These skills carry well past the factory floor, into facilities management, utilities, and logistics, anywhere equipment has to keep running. Students start with the fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it's robotics, PLCs, and smart automation. Every student who earns the diploma is credentialed through the Smart Automation Certification Alliance (SACA), an industry-recognized credential.",
+    "These skills carry well past the manufacturing floor, into facilities management, utilities, and logistics – anywhere equipment has to keep running. Training includes the fundamentals: mechanical, electrical, hydraulic, and pneumatic systems. From there it's robotics, PLCs, and smart automation. Certification and credentialing are done through the Smart Automation Certification Alliance (SACA), the leader in industry-recognized credentialing.",
   studentsCard: {
     title: "Students",
     description: "Earn a diploma built around hands-on work with real industrial equipment, not just theory.",
   },
   employersCard: {
     title: "Employers",
-    description: "Need to hire skilled graduates or upskill the crew you've already got? GTCIO can help with both.",
+    description: "Need to hire skilled graduates or upskill the crew that you have? GTCIO can help with both.",
   },
   partnersCard: {
     title: "Partners",
-    description: "Equipment sponsorships, facility tours, a seat on the advisory board: there's more than one way in.",
+    description: "Internships, apprenticeships, hiring, sponsorships, tours – there's more than one way in.",
   },
   heroButtons: [
     { label: "IOT TRAINING PROGRAMS", destination: "training" },
@@ -36,7 +36,7 @@ const DEFAULTS = {
   ] as CtaButtonData[],
   partnerBandTitle: "Become a GTCIO Partner",
   partnerBandBody:
-    "GTCIO is built alongside the employers who hire our graduates. Sponsor equipment, host a tour, hire our technicians, or take a seat on the advisory board. There's more than one way to get involved, and we're actively growing our partner network.",
+    "GTCIO is built alongside the employers who hire our graduates. Hire our technicians, provide internships and apprenticeships; there is more than one way to get involved. We are actively growing our partner network – come be a part!",
   partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } as CtaButtonData,
 };
 

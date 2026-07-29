@@ -18,7 +18,7 @@ type Props = {
 export default function NewsletterSignup({
   eyebrow = "Stay in the loop",
   title = "News from the GTCIO",
-  body = "Program updates, facility milestones, partnership news, and enrollment dates, sent straight to your inbox. No spam.",
+  body = "Program updates, partnership news, and training news and calendars sent straight to your inbox. No spam.",
   buttonLabel = "SIGN UP",
   confirmation = "Thanks for signing up. We'll be in touch with news from the GTCIO.",
 }: Props) {
