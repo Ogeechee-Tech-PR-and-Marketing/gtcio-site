@@ -12,6 +12,22 @@ export const metadata: Metadata = {
   title: "Partners | GTCIO",
 };
 
+// Anchor id for a partner's directory card below, e.g. "Ajin Georgia" → "ajin-georgia".
+function partnerSlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+// A pathway card's title, read as a form checkbox choice instead.
+const FORM_LABEL_OVERRIDES: Record<string, string> = {
+  "Training Program Partner": "Become a Training Partner",
+};
+
+// Form checkbox choices with no pathway card of their own.
+const EXTRA_FORM_OPTIONS = ["Facility Tour"];
+
 // ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
 // editing this object alone does NOT change the live site. Patch the published
 // doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
@@ -21,15 +37,14 @@ const DEFAULTS = {
   heroDescription:
     "GTCIO's training only works when it's built alongside the employers who'll hire our graduates. Here's how to get involved.",
   introText:
-    "Whether you want to hire our graduates, put your name on the equipment students train on, or help write the curriculum, there's a partnership pathway built for it.",
+    "Whether you want to hire our graduates, send your employees for training at the GTCIO, or sponsor programming and equipment, there's a partnership pathway built for it.",
   introButton: { label: "HOW TO BECOME A PARTNER", destination: "becomePartner" as const },
   pathwaysTitle: "Partnership Pathways",
   pathways: [
-    { title: "Hire Our Graduates", description: "Access a pipeline of technicians trained in maintenance, automation, and industrial operations." },
-    { title: "Sponsor Equipment", description: "Invest in the machinery and robotics students train on, and put your company's name on the tools that build careers." },
-    { title: "Sponsor a Robot", description: "Put your company's name on a specific piece of automation equipment. It's a hands-on, high-visibility way to support the program." },
-    { title: "Facility Tour", description: "Bring your team through GTCIO's facility to see the training firsthand and meet future hires." },
-    { title: "GTCIO Advisory Board", description: "Help shape what we teach so graduates arrive ready for the equipment and processes your industry actually uses." },
+    { title: "Hire Our Graduates", description: "Access a pipeline of technicians and specialists trained in maintenance, automation, and industrial operations." },
+    { title: "Sponsorship Opportunities", description: "Invest in the machinery and robotics students train on, and put your company's name on the tools that build careers." },
+    { title: "Training Program Partner", description: "Details on this partnership pathway are coming soon." },
+    { title: "K-12 Partner", description: "Details on this partnership pathway are coming soon." },
   ],
   directoryTitle: "Our Partners",
   directoryIntro: "A few of the organizations working with GTCIO to build Georgia's industrial workforce.",
@@ -49,10 +64,14 @@ export default async function PartnersPage() {
   const pathways = typed?.pathways?.length ? typed.pathways : DEFAULTS.pathways;
   const partners = typed?.partners ?? [];
 
-  // The dropdown is generated from the pathway cards shown above it, so editing a
-  // card in the CMS keeps the form in step with the page automatically.
+  // The checkbox list is generated from the pathway cards shown above it, so
+  // editing a card in the CMS keeps the form in step with the page
+  // automatically — except FORM_LABEL_OVERRIDES (a card title that should read
+  // differently as a form choice) and EXTRA_FORM_OPTIONS (a form choice with
+  // no pathway card of its own).
   const pathwayOptions = [
-    ...pathways.map((p: { title: string }) => p.title),
+    ...pathways.map((p: { title: string }) => FORM_LABEL_OVERRIDES[p.title] ?? p.title),
+    ...EXTRA_FORM_OPTIONS,
     "Something else / not sure yet",
   ];
 
@@ -108,6 +127,36 @@ export default async function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.directoryTitle}</h2>
           <p className="mt-3 max-w-2xl text-brand-silver">{page.directoryIntro}</p>
+
+          {/* Logo collage: a clickable wall of every partner's logo, each
+              jumping to its full card (logo, description, Learn More) in the
+              directory list below. Uniform white tiles keep very different
+              logo shapes/colors (wordmarks vs. icons) reading as one set. */}
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {partners.map((partner) => (
+              <a
+                key={partner._id}
+                href={`#${partnerSlug(partner.name)}`}
+                className="group flex flex-col items-center gap-3 border border-brand-silver/20 bg-brand-white p-6 shadow-sm transition-colors hover:border-brand-red"
+              >
+                <div className="relative h-16 w-full sm:h-20">
+                  {partner.logo?.asset && (
+                    <Image
+                      src={urlForImage(partner.logo).width(320).fit("max").url()}
+                      alt={`${partner.name} logo`}
+                      fill
+                      sizes="200px"
+                      className="object-contain"
+                    />
+                  )}
+                </div>
+                <span className="font-ui text-center text-xs font-bold tracking-wide text-brand-silver group-hover:text-brand-red">
+                  {partner.name}
+                </span>
+              </a>
+            ))}
+          </div>
+
           {/* Wide cards stacked one per row: logo left, copy right, CTA bottom
               right — the layout of the Georgia Cyber Center partners directory
               this page is modelled on. */}
@@ -117,7 +166,8 @@ export default async function PartnersPage() {
               return (
               <div
                 key={partner._id}
-                className="flex flex-col border border-brand-silver/20 bg-brand-white shadow-sm"
+                id={partnerSlug(partner.name)}
+                className="flex scroll-mt-40 flex-col border border-brand-silver/20 bg-brand-white shadow-sm sm:scroll-mt-56"
               >
                 <div className="flex flex-col gap-6 p-8 sm:flex-row sm:items-start sm:gap-10">
                   <div className="relative h-20 w-full shrink-0 sm:h-24 sm:w-44">
