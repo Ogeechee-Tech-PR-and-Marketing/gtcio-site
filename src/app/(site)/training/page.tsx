@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import CtaButton from "@/components/CtaButton";
+import LinkifyEmail from "@/components/LinkifyEmail";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
@@ -24,7 +25,7 @@ const DEFAULTS = {
   heroTitle: "Students on one side, employers on the other: same goal",
   employersTitle: "Training for employers",
   employersBody2:
-    "Training happens on the same industrial equipment your team works on every day, and courses are built to stack: an employee can start with a single short course and keep going, all the way to a registered apprenticeship.",
+    "Respected for the highly-skilled level of training it provides, the GTCIO also trains and certifies instructors from across Georgia and the nation to provide this same training.",
   employersButton: { label: "TALK TO US ABOUT TRAINING", destination: "contact" as const },
   catalogEyebrow: "Full catalog",
   catalogTitle: "Industrial Systems Training Program",
@@ -41,14 +42,15 @@ const DEFAULTS = {
   courseAreasIntro:
     "Short courses run 16–40 hours each and can be taken on their own or combined. Full descriptions, hours, and pricing are in the training catalog.",
   employersBody:
-    "Custom, hands-on training for your current workforce, built around your own equipment and processes — less downtime, more maintenance capability in-house. Ogeechee Tech's industrial systems training team runs everything from single 16-hour short courses to DOL-registered apprenticeships, and trains and certifies instructors from across Georgia and the nation.",
+    "Custom, hands-on training for your current workforce, applicable to your equipment and processes – resulting in less downtime, more maintenance capability in-house. Ogeechee Tech's industrial systems training team runs everything from simple 16-hour short courses to DOL-registered apprenticeships. Courses are built to stack: an employee can start with a single short course and keep going all the way to a registered apprenticeship.",
   faqTitle: "Employer FAQ",
   employerFaqs: [
-    { question: "What are employees trained in?", answer: "Electrical systems and industrial wiring, motor controls, PLCs (Allen-Bradley and Siemens), robotics (FANUC), process control, fluid power, mechanical drives, and industrial troubleshooting — all on real industrial equipment." },
+    { question: "What are employees trained in?", answer: "Electrical systems and industrial wiring, motor controls, PLCs (Allen-Bradley, Mitsubishi, and Siemens), robotics, process control, fluid power, mechanical drives, and industrial troubleshooting." },
     { question: "What's the value proposition for my business?", answer: "A pipeline of work-ready technicians, plus custom training that upskills the staff you already have, delivered by a team with more than 120 years of combined in-field experience." },
     { question: "How long does training take?", answer: "Short courses run 16–40 hours each. The entry-level Industrial Systems Fast Track is 256 hours over 16 weeks, two 8-hour days a week. The DOL-registered apprenticeships add 384 hours of classroom and lab time, about one 8-hour day a week, alongside 4,000 hours of on-the-job training." },
-    { question: "How much does it cost?", answer: "Short courses run about $450–$950 depending on length, and FANUC robotics and CNC courses run $750–$1,936. Comprehensive programs are $4,750 for the 256-hour Industrial Systems Fast Track and $7,750 for each 384-hour apprenticeship program. Customized contract training is scoped and quoted with your company rather than sold at a flat rate." },
-    { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold), the only authorized FANUC satellite training site in Georgia, a Mitsubishi Electric Automation Training Provider, and a Rockwell Automation Academy of Advanced Manufacturing training site. The entry-level track prepares employees to sit for 8 SACA exams, and the Electrical Apprenticeship lists 14 SACA credentials. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one." },
+    { question: "How much does it cost?", answer: "Short courses run about $575–$1,350 depending on length, and FANUC and CNC courses run $1,150–$2,250. Comprehensive programs are $4,750 for the 256-hour Industrial Systems Fast Track and $7,750 for each 384-hour apprenticeship program. Customized contract training is scoped and quoted with your company rather than sold at a flat rate." },
+    { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold), the only authorized FANUC satellite training site in Georgia, a Mitsubishi Electric Automation Training Provider, and a Rockwell Automation Academy of Advanced Manufacturing training site. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one. Available credentials are listed below each course description in the training course catalog." },
+    { question: "Can I have a training program designed just for my employees?", answer: "Yes. Customized contract training is built around your company's specific equipment, processes, and skill gaps rather than a standardized course, and it's scoped and quoted directly with your company instead of sold at a flat rate. Talk to Jan Moore to start scoping a program for your team." },
     { question: "Who do I contact to set up training?", answer: "Jan Moore, Vice President for Economic Development — jmoore@ogeecheetech.edu, 912-688-6026." },
   ],
 };
@@ -71,7 +73,7 @@ const STATS = [
 const SERVICES = [
   { title: "Standardized training", detail: "Short and comprehensive courses developed when several industries need the same training. Content is industry-wide, not specific to one company, and runs at basic, intermediate, and advanced levels." },
   { title: "Customized contract training", detail: "Programs designed in collaboration with your company to fill specific gaps in your employees' knowledge and skills." },
-  { title: "Skills assessments", detail: "Hands-on and written assessments — for prospective hires or current employees — to gauge real skill levels, using Amatrol's e-learning curriculum." },
+  { title: "Skills assessments", detail: "Hands-on and written assessments to gauge real skill levels and design training plans." },
   { title: "DOL-registered apprenticeships", detail: "Electrical, Mechanical, and Industrial Systems apprenticeship tracks pairing classroom and lab work with on-the-job hours under a mentor." },
   { title: "Amatrol LMS & open lab", detail: "Access to the full Amatrol LMS libraries with progress tracking, plus open-lab time on the industrial systems equipment." },
   { title: "Instructor training", detail: "SACA Gold instructor training and Amatrol ATTI courses, for instructors and trainers from across Georgia and the nation." },
@@ -233,7 +235,7 @@ export default async function TrainingPage() {
             {employerFaqs.map((item: { question: string; answer: string }, i: number) => (
               <div key={i} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
-                <p className="mt-1 text-brand-silver">{item.answer}</p>
+                <p className="mt-1 text-brand-silver"><LinkifyEmail text={item.answer} /></p>
               </div>
             ))}
           </div>

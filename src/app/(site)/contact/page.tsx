@@ -85,7 +85,7 @@ export default async function ContactPage() {
               <p>{settings?.programContact?.name ?? "Jan Moore, Vice President for Economic Development"}</p>
               <p>{settings?.programContact?.office ?? "Office 1110, Jack Hill Building"}</p>
               <p>{settings?.programContact?.phone ?? "912-688-6026"}</p>
-              <p>{settings?.programContact?.email ?? "jmoore@ogeecheetech.edu"}</p>
+              <p><a href={`mailto:${settings?.programContact?.email ?? "jmoore@ogeecheetech.edu"}`} className="font-bold text-brand-red hover:text-brand-black">{settings?.programContact?.email ?? "jmoore@ogeecheetech.edu"}</a></p>
             </div>
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Media Inquiries</h2>
@@ -93,7 +93,7 @@ export default async function ContactPage() {
               <p>{settings?.mediaContact?.name ?? "Sean Payne, Executive Director for Public Relations & Marketing"}</p>
               {settings?.mediaContact?.office && <p>{settings.mediaContact.office}</p>}
               <p>{settings?.mediaContact?.phone ?? "912-871-8559"}</p>
-              <p>{settings?.mediaContact?.email ?? "spayne@ogeecheetech.edu"}</p>
+              <p><a href={`mailto:${settings?.mediaContact?.email ?? "spayne@ogeecheetech.edu"}`} className="font-bold text-brand-red hover:text-brand-black">{settings?.mediaContact?.email ?? "spayne@ogeecheetech.edu"}</a></p>
             </div>
           </div>
           <div>

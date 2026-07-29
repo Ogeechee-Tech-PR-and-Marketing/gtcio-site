@@ -136,7 +136,7 @@ export const AFFILIATIONS: Affiliation[] = [
   {
     title: "SACA Gold",
     detail:
-      "A Smart Automation Certification Alliance Gold Certification Site, and a SACA Regional Instructor Training Center — the first in Georgia.",
+      "A Smart Automation Certification Alliance Gold Certification Site, and a SACA Regional Instructor Training Center — the first in the United States.",
     showOn: "both",
   },
   {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
+import LinkifyEmail from "@/components/LinkifyEmail";
 import { sanityFetch } from "@/sanity/lib/live";
 import { IOT_DIPLOMA_PROGRAM_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
@@ -302,7 +303,7 @@ export default async function IotDiplomaProgramPage() {
             {faqs.map((item: { question: string; answer: string }, i: number) => (
               <div key={i} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
-                <p className="mt-1 text-brand-silver">{item.answer}</p>
+                <p className="mt-1 text-brand-silver"><LinkifyEmail text={item.answer} /></p>
               </div>
             ))}
           </div>
