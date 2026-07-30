@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-23. Check claims against the code before trusting them.
+updated 2026-07-30. Check claims against the code before trusting them.
 
 ---
 
@@ -83,12 +83,17 @@ src/lib/
   iot-curriculum.ts       the IS32 course table + SACA credential glossary.
                           A deliberate exception to CMS-first copy — read
                           its header comment before touching it (§4).
-  credentials.ts          SACA's tier ladder + the five accreditations OTC holds.
+  credentials.ts          SACA's tier ladder + the four accreditations OTC holds.
                           Same code-not-CMS reasoning (§4). The accreditations
-                          are the shared fallback for /credentials AND /training.
+                          are the shared fallback for /credentials AND /training
+                          (each page shows a different subset — see §10's
+                          "Affiliations now split by audience" note).
 src/components/           Header, Footer, PageHero, InquiryForm
   Button.tsx              the raw styled link (variant, target/rel)
   CtaButton.tsx           renders a CMS-configured button via links.ts (§4)
+  HeroCard.tsx            the blurred rounded scrim card behind hero copy,
+                          shared by Home and every PageHero — see §10's
+                          "Home hero headline is sized to fit one line" note
   NewsletterSignup.tsx    rendered inside Footer, sitewide, UI-only — see §8
 sanity/
   env.ts                  projectId / dataset / apiVersion
@@ -201,11 +206,12 @@ Every decision below exists to protect that. Weigh it accordingly.
   labels these pages "…data code-managed" so the stakeholder view matches.
   `src/lib/credentials.ts` (the SACA tier ladder and OTC's accreditations, both
   on `/credentials`) is code for the same reason. **One cross-page wrinkle:** the
-  five accreditations shown on `/credentials` are *authored on the Training
-  page's document* (`trainingPage.affiliations`) — `CREDENTIALS_PAGE_QUERY`
-  reads that field with a sub-query, so an editor updates them once and both
-  pages follow. There is deliberately no `affiliations` field on
-  `credentialsPage`. If Training's field is ever removed, add the fallback path.
+  accreditations shown on `/credentials` (2 of the 4 — see §10's "Affiliations
+  now split by audience" note) are *authored on the Training page's document*
+  (`trainingPage.affiliations`) — `CREDENTIALS_PAGE_QUERY` reads that field
+  with a sub-query, so an editor updates them once and both pages follow.
+  There is deliberately no `affiliations` field on `credentialsPage`. If
+  Training's field is ever removed, add the fallback path.
 - **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
   Contact form's dropdown. The Become a Partner dropdown has no field of its own —
   it is derived from `partnersPage.pathways` (§5).
@@ -379,12 +385,17 @@ with an "unpublished" dot). Two guardrails keep it that way:
 ### Dropdowns
 
 - **Become a Partner** — options are generated from `partnersPage.pathways`, i.e.
-  the same Partnership Pathway cards displayed above the form, plus a hardcoded
-  "Something else / not sure yet". This is deliberate: rename a pathway card and
-  the dropdown follows, so the form can never drift out of sync with the page.
-  There is no separate list to maintain — **don't add one.** **Checkboxes, not a
-  dropdown** (changed 2026-07-20) — a prospective partner can be interested in
-  more than one pathway at once.
+  the same Partnership Pathway cards displayed above the form, so renaming a
+  pathway card's title generally carries through to the form automatically.
+  **This is deliberately NOT total sync, though** — `FORM_LABEL_OVERRIDES` and
+  `EXTRA_FORM_OPTIONS` in `partners/page.tsx` let two checkbox choices diverge
+  from the cards on purpose (currently: "Training Program Partner" shows as
+  "Become a Training Partner" on the form, and "Facility Tour" is a form
+  choice with no matching card at all) — see §10's "Partners page pathways
+  restructured" note for why. Don't "fix" that mismatch by reconciling the two
+  lists. Then a hardcoded "Something else / not sure yet" is appended.
+  **Checkboxes, not a dropdown** (changed 2026-07-20) — a prospective partner
+  can be interested in more than one pathway at once.
 - **Contact** — options come from `contactPage.contactReasons`, editable in the
   Studio. **Single-select dropdown** — a visitor picks exactly one reason (tried
   as checkboxes on 2026-07-20, reverted the same day: Contact stays one-at-a-time,
@@ -888,34 +899,25 @@ Smaller items:
   specific. Don't publish "opening September 2026" anywhere.
 - **The brochure's back cover gives 1 Joe Kennedy Blvd** — that is OTC's main
   campus, the stale address (§10). GTCIO is 66 AJ Riggs Road. Don't harvest it.
-- **Content still pending from GTCIO:** final tuition figure and final program
-  length. **Credit hours are now known and published: 53, across 15 courses**
-  (12 program courses + 3 general education courses, per `0317_001.pdf`,
-  2026-07-21 — supersedes the earlier 45-across-12 figure from the brochure
-  alone) — but that is deliberately *not* used to derive either figure. 53
-  hours doesn't tell a student how many semesters, and a tuition estimate
-  (~$5,670 at OTC's ~$107/credit-hour in-state rate) would exclude fees,
-  books, and lab costs GTCIO hasn't supplied. Jake's call 2026-07-20: publish
-  the credit hours, leave both boxes reading "still being confirmed." They appear in **four** places on the IOT Diploma Program page — the
+- **✅ Tuition, program length, and financial aid are now confirmed and
+  published** (Jake, 2026-07-30 — resolves both the "content still pending"
+  and "financial aid not mentioned" cautions that used to sit here, dated
+  2026-07-16/07-20; see them in git history if the reasoning below ever needs
+  re-checking). **Time to complete: four semesters. Approximate cost: ~$9,000**
+  before financial aid — the site now explicitly names the **HOPE Grant, HOPE
+  Career Grant, and Pell Grant** as applicable, which resolves the earlier
+  caution against claiming HOPE Career Grant eligibility without GTCIO
+  confirmation (Jake confirmed it directly this session). Both figures appear
+  in the same **four** places on the IOT Diploma Program page as before — the
   "Time to complete" and "Approximate cost" boxes (`timeToComplete`,
   `approximateCost`) and the matching FAQ answers (`faqs[_key=="f5"]` and
-  `[_key=="f4"]`) — so replace all four together. They no longer say the word
-  "Placeholder": that was an internal note rendering to prospective students, and
-  now reads "Still being confirmed ahead of the August 2026 launch." The Studio
-  field descriptions still flag them as needing replacement. The mission statement
-  and the partnership timeline were both outstanding here and are now done.
-- **🟡 Financial aid is not mentioned anywhere on the site, deliberately.** It is
-  probably the biggest unanswered question for a prospective student, because the
-  **HOPE Career Grant covers ALL tuition** for eligible programs. OTC's own list
-  (<https://www.ogeecheetech.edu/financial-aid/hope-career-grant>) includes
-  *"Electrical & Industrial Systems Technology"* but **not** Industrial Operations
-  Technology — IS32 is brand new, and the eligible-program list is set annually by
-  the Governor and General Assembly, effective each Fall. **Do not claim IOT is
-  HOPE Career Grant eligible without confirming it with GTCIO** — a student could
-  choose the program believing tuition is free. Jake didn't know as of 2026-07-16;
-  confirm, then add an FAQ. For reference, OTC tuition is ~$107/credit hour
-  in-state, but IS32's credit-hour count isn't published anywhere findable, so the
-  total can't be derived.
+  `[_key=="f4"]`) — patched in code and in the published `iotDiplomaProgramPage`
+  doc (no draft existed to reconcile). **The "still being confirmed" wording is
+  gone from all four; don't reintroduce it.** Credit hours (**53, across 15
+  courses** — 12 program courses + 3 general education courses, per
+  `0317_001.pdf`, 2026-07-21 — supersedes the earlier 45-across-12 figure from
+  the brochure alone) remain a separate fact from tuition/length and were never
+  used to derive either.
 - **Advisory Board section (About page)** ships with placeholder copy
   (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
   under About Page → Advisory Board.
@@ -1029,6 +1031,37 @@ Smaller items:
   (or the wider Arial Narrow fallback if Adobe Fonts fails) would be *clipped*
   rather than wrapped. A longer headline just wraps to two lines. Re-measure if
   the headline changes materially.
+  - **🔴→✅ Fixed 2026-07-30: the scrim card used to overshoot a wrapped
+    headline.** Reported by Jake: on viewports too narrow for one line but
+    still fairly wide, the dark card behind the Home headline extended well
+    past "...industry" even though "transformation." (alone on line two) is
+    much shorter than line one. Root cause, confirmed with an isolated test
+    page: a shrink-to-fit box's auto width (this card was a plain
+    `inline-block` div) resolves to the full *available* width the instant
+    its content wraps to more than one line — not to the narrower width the
+    wrapped lines actually render at. Verified this isn't an `inline-block`
+    quirk specifically — a `display:table` box does the exact same thing, so
+    no swap of display mode fixes it. The card and PageHero's card share this
+    exact structure, so both had the bug; it stayed invisible on interior
+    pages because those titles are usually short enough to hold one line.
+    Fixed by extracting both into `HeroCard.tsx`, a small client component
+    that measures the actual widest rendered text line via
+    `Range.getClientRects()` and sets an explicit pixel width, re-measuring
+    on resize and once Adobe Fonts finishes loading (fallback-vs-real-font
+    metrics differ, §7). One non-obvious trap hit while building it: the
+    first version cleared the card's width by mutating `card.style.width`
+    directly before remeasuring, then called `setState` with the recomputed
+    value — if that value happened to equal the already-committed state
+    (the common case, e.g. the fonts.ready remeasure firing right after
+    mount at the same viewport), React bails out of re-rendering for an
+    unchanged value, silently stranding the DOM with the manually-cleared
+    style and no re-render to restore it. Fixed by doing the "reset to
+    natural width" step through React state (`setWidth(undefined)`) instead
+    of a raw DOM mutation, so the DOM never goes out of sync with what React
+    thinks it rendered. Per-line "highlighter chip" backgrounds
+    (`box-decoration-break: clone`) were considered and rejected — Jake
+    already disliked that look when it came up for PageHero (see its code
+    comment: "per-line chips read as 'gross'/segmented").
 - **No rate limiting** on `/api/inquiry` or `/api/newsletter`. The honeypots,
   the payload caps (20 KB inquiry / 5 KB newsletter, both routes since
   2026-07-21), and the per-field length caps (§5) blunt casual abuse, but
@@ -1242,6 +1275,31 @@ shows deploy status.
   `certifications` ctaButton value, and the `/iot-diploma-program/certifications`
   redirect source), since renaming those would orphan seeded content (§4).
   Don't reintroduce generic "certification(s)" in new copy.
+- **Sitewide terminology: "manufacturing facility/facilities", not "factory"**
+  (Jan via Jake, 2026-07-30) — "factory" reads as having a negative connotation.
+  Fixed this pass in the Home hero, the Facility page's focus-area copy and
+  hero alt text, the IOT Diploma Program hero/intro, and the SACA credential
+  glossary in `iot-curriculum.ts`; applies to all future copy too, not just
+  those instances. No proper noun or direct quote on the site currently uses
+  "factory," so there's no exception to carry forward.
+- **Partners page pathways restructured, and a logo collage added above the
+  directory** (Jake, 2026-07-30). `DEFAULTS.pathways` in `partners/page.tsx`
+  (and the published `partnersPage` doc) dropped "Sponsor a Robot," "Facility
+  Tour," and "GTCIO Advisory Board" entirely; "Sponsor Equipment" was renamed
+  "Sponsorship Opportunities"; two new cards were added with placeholder copy
+  ("Details on this partnership pathway are coming soon."): "Training Program
+  Partner" and "K-12 Partner" — four cards total, down from five. The new
+  **logo collage** (a uniform grid of white tiles, one per partner logo) sits
+  between the directory intro and the existing full-card directory list;
+  each tile links via `#${partnerSlug(partner.name)}` down to that partner's
+  full card, which now also carries a matching `id`.
+  **The "Become a Partner" form's checkbox list is deliberately NOT kept in
+  sync with the pathway cards** — `FORM_LABEL_OVERRIDES`/`EXTRA_FORM_OPTIONS`
+  in `partners/page.tsx` mean the form still offers "Facility Tour" and
+  "Become a Training Partner" (renamed from "Training Program Partner") even
+  though neither matches a current pathway card verbatim. This is Jake's
+  explicit instruction, not drift — don't "fix" the mismatch by reconciling
+  the two lists.
 - **The `apply` CTA destination changed 2026-07-20**: `DESTINATIONS.apply` in
   `sanity/lib/links.ts` now points to
   `https://www.ogeecheetech.edu/admissions/next-steps` (was `/IOT`, which no

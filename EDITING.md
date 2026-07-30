@@ -79,8 +79,9 @@ which reveals a box for the address. Change *Button text* to change the wording.
    and so on).
 6. Press **Publish**.
 
-That's it — they'll appear on the Partners page automatically. You don't need to
-touch the Partners Page entry at all.
+That's it — they'll appear on the Partners page automatically, both in the
+clickable row of logos near the top and in the full directory list below it.
+You don't need to touch the Partners Page entry at all.
 
 ### Hide a partner without deleting them
 
@@ -160,7 +161,7 @@ Open **IOT Training Programs Page**. Each block has its own tab:
 | **Stat boxes** | The three big figures under the banner. |
 | **Training for employers** | The heading, the two paragraphs, and the button. |
 | **Catalog band** | The black band and its link to the training catalog. |
-| **Credentials & affiliations** | The FANUC / SACA / Amatrol boxes. |
+| **Credentials & affiliations** | The FANUC / SACA / Mitsubishi / Rockwell boxes. |
 | **What we offer** | The grid of services. |
 | **Course areas** | Each area and the courses listed under it. |
 | **Employer FAQ** | The questions and answers. |
@@ -241,9 +242,13 @@ Open **Contact Page** → the **Contact form** tab. Whatever the person picks
 becomes the subject line of the email GTCIO receives, so keep the choices short
 and specific.
 
-The checkboxes on the **Become a Partner** form are different: they're built
-automatically from the Partnership Pathway cards on the Partners page. Add or
-rename a pathway card and the checkbox list follows along on its own.
+The checkboxes on the **Become a Partner** form are different: they're mostly
+built automatically from the Partnership Pathway cards on the Partners page —
+add or rename a pathway card and the checkbox list mostly follows along on
+its own. Two checkbox options ("Facility Tour" and "Become a Training
+Partner") are fixed and stay on the form even if you don't have a matching
+pathway card — that's deliberate, not a bug, so don't expect every checkbox
+to have a twin card above the form.
 
 ---
 
@@ -298,19 +303,22 @@ If you need one of these, or you get stuck, ask whoever set the site up.
 > the menu on purpose).
 >
 > The course table, credit hours, SACA credential descriptions, and the list of
-> accreditations (FANUC, SACA Gold, Amatrol, and so on) are locked — because a
-> typo there would misstate the program to a student thinking about enrolling,
-> only a developer can change them. **If the college publishes an updated
-> brochure, send it to whoever set the site up.**
+> accreditations (FANUC, SACA Gold, Mitsubishi Electric, Rockwell Automation)
+> are locked — because a typo there would misstate the program to a student
+> thinking about enrolling, only a developer can change them. **If the college
+> publishes an updated brochure, send it to whoever set the site up.**
 >
 > You *can* still edit the wording that introduces each section. On the
 > **Credentials Page** you'll find editable headings and intro paragraphs for
 > every section, plus the Apply button.
 >
-> **One thing to know:** the five accreditations near the bottom of the
+> **One thing to know:** the accreditations near the bottom of the
 > Credentials page are edited in just one place — **IOT Training Programs Page →
-> Credentials & affiliations** — because they appear on both pages. Change them
-> there and both update together.
+> Credentials & affiliations** — because they appear on both pages (the
+> Credentials page shows two of the four — FANUC and SACA Gold — since those
+> are the two the diploma itself builds credentials in; Mitsubishi and
+> Rockwell show on the Training page only). Change them there and both pages
+> that use them update together.
 >
 > For the course page, the editable intro lives on **IOT Diploma Program Page →
 > Curriculum tab** — the "Course detail band" heading, paragraph, and buttons.
