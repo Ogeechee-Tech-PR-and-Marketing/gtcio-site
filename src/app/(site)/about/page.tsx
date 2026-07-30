@@ -19,7 +19,7 @@ const DEFAULTS = {
     "GTCIO exists to close the gap between the skills employers need and the training available to fill those roles.",
   missionStatement: "Building a workforce ready for industry transformation.",
   missionBody:
-    "GTCIO trains people for jobs in industrial automation, the kind of work Georgia employers are actively short on candidates for. These jobs pay well, and the demand isn't slowing down. GTCIO exists to meet that demand: training new workers coming up, and helping employers upskill the ones they already have.",
+    "GTCIO trains people for jobs in industrial automation, the employees that Georgia employers are actively seeking. These jobs pay well, and the demand isn't slowing down. GTCIO exists to meet that demand: training new workers coming up, and helping employers upskill the ones they already have.",
   missionNote: "",
   missionQuote:
     "We are surrounded by industries that are looking for employees with these skill sets. The jobs pay well, offer excellent career growth opportunities, and the demand continues to increase.",
@@ -32,13 +32,13 @@ const DEFAULTS = {
   bdaQuoteAttribution: "Benjy Thompson — CEO, Development Authority of Bulloch County",
   historyTitle: "History",
   historyBody:
-    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outran the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply than Georgia industry could hire. A Georgia Southern University economic-impact study projects the center will generate $8.98 million in regional economic output in its first year, growing to $15.68 million by FY2033. The center was planned as a regional answer to that shortage, serving credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
+    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outpaced the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply. The GTCIO was designed to address that shortage.\n\nA Georgia Southern University economic-impact study projects the center will generate $8.98 million in regional economic output in its first year, growing to $15.68 million by FY2033. The GTCIO serves credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
   historyTimeline: [
     {
       date: "September 2021",
-      title: "County commissioners approve funding",
+      title: "County commissioners support project",
       detail:
-        "Bulloch County commissioners approve funding for the project — the earliest public step toward what became GTCIO.",
+        "Bulloch County commissioners vote to seek funding for the project — the earliest public step toward what became GTCIO.",
       sourceUrl:
         "https://www.ogeecheetech.edu/about/news/post/commissioners-otc-to-build-new-training-facility",
     },
@@ -228,7 +228,9 @@ export default async function AboutPage() {
       <section id="history" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
-          <p className="mt-4 text-brand-black">{page.historyBody}</p>
+          {page.historyBody.split("\n\n").map((paragraph: string, i: number) => (
+            <p key={i} className="mt-4 text-brand-black">{paragraph}</p>
+          ))}
 
           {timeline.length > 0 && <AboutTimeline items={timeline} />}
 
