@@ -18,10 +18,10 @@ const DEFAULTS = {
   heroEyebrow: "IOT Diploma Program: Enrolling now for August 2026",
   heroTitle: "What is Industrial Operations Technology?",
   heroDescription:
-    "It's the training behind keeping factories, utilities, and logistics centers running. Make things work. Keep them working.",
+    "It's the training behind keeping manufacturing facilities, utilities, and logistics centers running. Make things work. Keep them working.",
   whatIsTitle: "What is Industrial Operations Technology?",
   whatIsBody:
-    "These same skills apply well outside a factory. Facilities management (office buildings, apartment complexes, schools, hospitals) needs people who can keep equipment running, and so do utilities, warehouses, and distribution centers.",
+    "These same skills apply well outside of a manufacturing facility. Facilities management (office buildings, apartment complexes, schools, hospitals) needs people who can keep equipment running, and so do utilities and distribution centers.",
   nonTraditionalHeading: "This is a non-traditional program",
   nonTraditionalBody:
     "OTC classifies Industrial Operations Technology as a non-traditional program — one where a single gender makes up less than 25% of the field's workforce, which today mostly means women. OTC supports students pursuing careers in under-represented fields; here are a few places to start:",
@@ -36,7 +36,7 @@ const DEFAULTS = {
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
     { stage: "Advanced", detail: "Robotics, programmable logic controllers (PLCs), automation controls, smart sensors, industrial wiring, and motor controls." },
-    { stage: "Credential", detail: "Every graduate earns the diploma and is credentialed through the Smart Automation Certification Alliance (SACA) — an industry-recognized credential built into the program, not an optional add-on." },
+    { stage: "Credential", detail: "Every graduate earns the diploma including credentials with each course through the Smart Automation Certification Alliance (SACA) – industry-recognized credentials built into the program, not an optional add-on." },
   ],
   courseDetailHeading: "Every course, in detail",
   courseDetailBody:
@@ -47,34 +47,51 @@ const DEFAULTS = {
   moreWaysBody:
     "The diploma isn't the only option. OTC also breaks the same curriculum into three standalone certificates, so you can start smaller, or focus on just the part of the job you're after.",
   programOptions: [
-    { name: "Industrial Operations Technology Diploma", code: "IS32", detail: "The full program." },
-    { name: "Certificate: Electrical/Mechanical", detail: "Focused on the electrical and mechanical side of the curriculum." },
-    { name: "Certificate: PLC", detail: "Focused on programmable logic controllers." },
-    { name: "Certificate: Robotics", detail: "Focused on robotics." },
+    {
+      name: "Industrial Operations Technology Diploma",
+      code: "IS32",
+      detail: "The full program.",
+      url: "https://ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/industrial-operations-technology/industrial-operations-technology-diploma-is32",
+    },
+    {
+      name: "Certificate: Electrical/Mechanical",
+      detail: "Focused on the electrical and mechanical side of the curriculum.",
+      url: "https://ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/industrial-operations-technology/industrial-operations-technology-electricalmechanical-certificate-ia91",
+    },
+    {
+      name: "Certificate: PLC",
+      detail: "Focused on programmable logic controllers.",
+      url: "https://ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/industrial-operations-technology/industrial-operations-technology-plc-certificate-ic91",
+    },
+    {
+      name: "Certificate: Robotics",
+      detail: "Focused on robotics.",
+      url: "https://ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/industrial-operations-technology/industrial-smart-automation-technology-robotics-certificate-ie91",
+    },
   ],
   careersTitle: "Careers this prepares you for",
-  careers: ["Industrial Maintenance Technician", "Operations Technician", "Automation & Controls Specialist"],
+  careers: ["Industrial Maintenance Technician", "Industrial Operations Technician", "Automation & Controls Specialist"],
   careersNote: "Stick with it and there's room to move up, into production supervisor or operations manager roles.",
   jobDutiesTitle: "What the job looks like",
+  // Rendered in a row-major 2-col grid (sm:grid-cols-2), so this array order
+  // controls the visual columns: odd positions (1st, 3rd, 5th) fall in the
+  // left column, even positions (2nd, 4th, 6th) in the right column.
   jobDuties: [
-    { label: "Preventive maintenance", detail: "Scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs." },
+    { label: "Keeping things moving", detail: "Installs, troubleshoots, and repairs manufacturing machinery, equipment, and controls." },
     { label: "Fixing what breaks", detail: "Diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems." },
     { label: "Electrical and controls work", detail: "AC/DC circuit troubleshooting, industrial wiring, motor controls, and programming/troubleshooting PLCs, the \"brains\" behind automated equipment." },
     { label: "Reading blueprints and schematics", detail: "Understanding how a machine goes together or how a system is wired." },
+    { label: "Preventive maintenance", detail: "Scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs." },
     { label: "Precision measurement and adjustment", detail: "Checking part dimensions with calipers and gauges, calibrating equipment, running metalworking machines to make replacement fittings." },
   ],
   payTitle: "Jobs & pay after graduation",
   payRanges: [
-    { value: "Mid-$30ks to low-$40ks", label: "Entry-Level / Operator" },
-    { value: "$55k – $70k", label: "Working Technician (a few years in)" },
-    { value: "$80k – $100k+", label: "Specialists & Supervisors" },
+    { value: "Mid-$30ks to low-$40ks", label: "Entry-Level Maintenance Technician" },
+    { value: "$55k – $75k", label: "Experienced Maintenance and Operations Technician" },
+    { value: "$75k – $100k+", label: "Automation and Controls Specialist and Supervisor" },
   ],
-  // Student-facing wording for figures GTCIO hasn't confirmed yet. Deliberately
-  // not the word "Placeholder" — that's an internal note, and it was rendering
-  // to prospective students. The Studio field descriptions still flag both as
-  // needing replacement, and PROJECT.md §8 tracks them.
-  timeToComplete: "Still being confirmed ahead of the August 2026 launch.",
-  approximateCost: "Still being confirmed ahead of the August 2026 launch.",
+  timeToComplete: "Four semesters.",
+  approximateCost: "$9,000 before financial aid such as the HOPE Grant, HOPE Career Grant, and Pell Grant funds are applied.",
   studentFaqTitle: "Student FAQ",
   // Ordered the way a prospective student actually asks: when → am I eligible →
   // how do I apply → where/when → how long → how much → what do I get → what
@@ -84,12 +101,12 @@ const DEFAULTS = {
     { question: "Do I need any experience to start?", answer: "No. The program is built for people coming into the field, whatever their background. You start with the fundamentals — mechanical, electrical, hydraulic, and pneumatic systems — and move on to robotics, PLCs, and automation controls from there." },
     { question: "How do I apply?", answer: "Applications go through Ogeechee Technical College — any of the Apply Now buttons on this page take you straight there. Admissions will walk you through what's needed. If you'd rather talk to a person first, Jan Moore is the program contact: jmoore@ogeecheetech.edu, 912-688-6026." },
     { question: "Where will classes be held?", answer: "Classes begin in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, and move into GTCIO's new building once it opens. The ribbon cutting is scheduled for October 15, 2026." },
-    { question: "Is this an online program?", answer: "No. It's in person, in day classes. This is hands-on work on real industrial equipment, so you need to be in the shop. Ogeechee Tech's admissions team has the current class times." },
-    { question: "How long does it take to finish?", answer: "The final program length is still being confirmed ahead of the August 2026 launch. Ogeechee Tech's admissions team can tell you where it lands." },
-    { question: "How much does the program cost?", answer: "The final tuition figure is still being confirmed ahead of the August 2026 launch. Ogeechee Tech's admissions team can give you the current cost." },
-    { question: "What credential do I earn?", answer: "Every student who completes the diploma is credentialed through SACA (the Smart Automation Certification Alliance). The SACA credential is built into the program for all graduates, and it's recognized industry-wide, not just in Georgia." },
+    { question: "Is this an online program?", answer: "Some lectures are available online, but labs are not. Skills are acquired through hands-on labs at Ogeechee Tech." },
+    { question: "How long does it take to finish?", answer: "The entire program can be completed in four semesters." },
+    { question: "How much does the program cost?", answer: "The program costs approximately $9,000 before financial aid — such as the HOPE Grant, HOPE Career Grant, and Pell Grant — is applied." },
+    { question: "What credential do I earn?", answer: "Every student who completes the diploma earns micro-credentials through SACA (the Smart Automation Certification Alliance). Four SACA credentials are built into the program for all graduates, and they are recognized industry-wide, not just in Georgia." },
     { question: "Should I do the diploma or one of the certificates?", answer: "The diploma is the full program, and every diploma graduate is credentialed through SACA. The three certificates — Electrical/Mechanical, PLC, and Robotics — break the same curriculum into smaller pieces, so you can start smaller or focus on just the part of the job you're after. All four options are listed under \"More than one way in\" above." },
-    { question: "How much can I expect to earn after graduating?", answer: "Most graduates start in entry-level or operator roles and grow from there. The pay ranges are listed above: mid-$30ks to low-$40ks starting out, $55k–$70k for a working technician a few years in, and $80k–$100k+ for specialists and supervisors." },
+    { question: "How much can I expect to earn after graduating?", answer: "Most graduates start in entry-level or operator roles and grow from there. The pay ranges are listed above: mid-$30ks to low-$40ks starting out, $55k–$75k for an experienced maintenance and operations technician, and $75k–$100k+ for an automation and controls specialist and supervisor." },
   ],
   applyHeading: "Sign up today, and we'll see you here!",
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
@@ -160,40 +177,6 @@ export default async function IotDiplomaProgramPage() {
             </p>
           </div>
           <p className="mt-6 max-w-3xl text-brand-silver">{page.whatIsBody}</p>
-
-          {page.nonTraditionalHeading && (
-            <div className="mt-8 max-w-3xl border border-brand-silver/40 p-6">
-              <p className="font-heading font-bold text-brand-black">{page.nonTraditionalHeading}</p>
-              {page.nonTraditionalBody && (
-                <p className="mt-2 text-sm text-brand-silver">{page.nonTraditionalBody}</p>
-              )}
-              {nonTraditionalResources.length > 0 && (
-                <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-                  {/* safeHref: same render-time backstop as news/partner URLs —
-                      these are CMS-authored links. filter(Boolean) drops any
-                      that don't survive it rather than rendering a dead <a>. */}
-                  {nonTraditionalResources
-                    .map((resource: { label: string; url: string }) => ({
-                      ...resource,
-                      url: safeHref(resource.url),
-                    }))
-                    .filter((resource: { url: string | null }) => resource.url)
-                    .map((resource: { label: string; url: string | null }, i: number) => (
-                    <li key={i}>
-                      <a
-                        href={resource.url!}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-bold text-brand-red underline hover:text-brand-black"
-                      >
-                        {resource.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
         </div>
       </section>
 
@@ -230,15 +213,28 @@ export default async function IotDiplomaProgramPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.moreWaysTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-silver">{page.moreWaysBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {programOptions.map((option: { name: string; code?: string; detail: string }, i: number) => (
+            {programOptions.map((option: { name: string; code?: string; detail: string; url?: string }, i: number) => {
+              const catalogUrl = safeHref(option.url);
+              return (
               <div key={i} className="border border-brand-silver/40 p-5">
                 <p className="font-bold text-brand-black">
                   {option.name}
                   {option.code && <span className="text-brand-silver"> ({option.code})</span>}
                 </p>
                 <p className="mt-1 text-sm text-brand-silver">{option.detail}</p>
+                {catalogUrl && (
+                  <a
+                    href={catalogUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
+                  >
+                    View catalog page →
+                  </a>
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
           <div className="mt-10 text-center">
             <CtaButton button={page.applyButton} variant="primary" />
@@ -316,6 +312,44 @@ export default async function IotDiplomaProgramPage() {
           <CtaButton button={page.applyButton} variant="primary" />
         </div>
       </section>
+
+      {page.nonTraditionalHeading && (
+        <section className="px-6 py-16 sm:px-10">
+          <div className="mx-auto max-w-5xl">
+            <div className="max-w-3xl border border-brand-silver/40 p-6">
+              <p className="font-heading font-bold text-brand-black">{page.nonTraditionalHeading}</p>
+              {page.nonTraditionalBody && (
+                <p className="mt-2 text-sm text-brand-silver">{page.nonTraditionalBody}</p>
+              )}
+              {nonTraditionalResources.length > 0 && (
+                <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                  {/* safeHref: same render-time backstop as news/partner URLs —
+                      these are CMS-authored links. filter(Boolean) drops any
+                      that don't survive it rather than rendering a dead <a>. */}
+                  {nonTraditionalResources
+                    .map((resource: { label: string; url: string }) => ({
+                      ...resource,
+                      url: safeHref(resource.url),
+                    }))
+                    .filter((resource: { url: string | null }) => resource.url)
+                    .map((resource: { label: string; url: string | null }, i: number) => (
+                    <li key={i}>
+                      <a
+                        href={resource.url!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-bold text-brand-red underline hover:text-brand-black"
+                      >
+                        {resource.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

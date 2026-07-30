@@ -41,6 +41,13 @@ const programOption = defineArrayMember({
       type: "string",
     }),
     defineField({ name: "detail", title: "Short description", type: "text", rows: 2, validation: (r) => r.required() }),
+    defineField({
+      name: "url",
+      title: "Catalog page link",
+      description: "The program/certificate's page on OTC's course catalog (smartcatalogiq.com).",
+      type: "url",
+      validation: (r) => r.uri({ scheme: ["http", "https"] }),
+    }),
   ],
   preview: { select: { title: "name", subtitle: "detail" } },
 });
@@ -269,7 +276,6 @@ export default defineType({
     defineField({
       name: "timeToComplete",
       title: "Time to complete",
-      description: "Still a placeholder — replace once the final program length is confirmed.",
       type: "text",
       rows: 2,
       group: "pay",
@@ -277,7 +283,6 @@ export default defineType({
     defineField({
       name: "approximateCost",
       title: "Approximate cost",
-      description: "Still a placeholder — replace once the final tuition figure is confirmed.",
       type: "text",
       rows: 2,
       group: "pay",

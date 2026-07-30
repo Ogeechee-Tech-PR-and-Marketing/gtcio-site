@@ -381,7 +381,7 @@ export const CREDENTIALS: Credential[] = [
     title: "Certified Industry 4.0 Associate II — Advanced Operations",
     family: "Industry 4.0 Associate",
     description:
-      "Prepares individuals to analyze and modify modern production control systems that use Industry 4.0 automation technologies and processes. Appropriate for people in maintenance, IT, and engineering roles seeking to become versed in factory floor controls, automation, and programming.",
+      "Prepares individuals to analyze and modify modern production control systems that use Industry 4.0 automation technologies and processes. Appropriate for people in maintenance, IT, and engineering roles seeking to become versed in manufacturing facility floor controls, automation, and programming.",
   },
   {
     code: "C-103",

@@ -56,7 +56,7 @@ const FOCUS_AREAS = [
   {
     title: "IoT Infrastructure & Troubleshooting",
     detail:
-      "The connected sensors, networks, and data behind a smart factory, and what to do when that layer misbehaves.",
+      "The connected sensors, networks, and data behind a smart manufacturing facility, and what to do when that layer misbehaves.",
   },
   {
     title: "CNC in Advanced Manufacturing",
@@ -85,7 +85,7 @@ export default async function FacilityPage() {
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
     fallbackSrc: "/images/hero-facility.jpg",
-    fallbackAlt: "Technician repairing an automated robotic arm in a factory",
+    fallbackAlt: "Technician repairing an automated robotic arm in a manufacturing facility",
     fallbackPosition: "66% 36%",
   });
 
