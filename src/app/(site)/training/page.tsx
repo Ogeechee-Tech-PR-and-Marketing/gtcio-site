@@ -63,6 +63,7 @@ const STATS = [
   { value: "~460,000", label: "Hours of instruction GTCIO can deliver each year" },
   { value: "120+ years", label: "Combined in-field industrial systems experience on the training team" },
   { value: "80 years", label: "Combined industrial systems training experience" },
+  { value: "6,226", label: "Student certifications and credentials earned since 2024" },
 ];
 
 // Moved to src/lib/credentials.ts 2026-07-20 so this page and /credentials
@@ -131,7 +132,7 @@ export default async function TrainingPage() {
         imageAlt={hero.alt}
         imagePosition={hero.position}
         extra={
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat, i) => (
               <div key={i} className="border-l-4 border-brand-red pl-5">
                 <p className="font-heading text-3xl font-bold text-brand-white">{stat.value}</p>
