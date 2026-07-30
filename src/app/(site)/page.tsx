@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CtaButton from "@/components/CtaButton";
+import HeroCard from "@/components/HeroCard";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
@@ -122,53 +123,49 @@ export default async function Home() {
             special case PageHero's interior titles aren't: it's deliberately
             sized to almost fill the full container on one line (see the
             measured-font-size comment below), which made it far wider than
-            the description (max-w-2xl) and the button row. `inline-block`
-            shrink-wraps to the WIDEST child, so one shared card sized itself
-            to the headline and left a large, empty dark gap to the right of
-            the shorter description/buttons — reported 2026-07-21 as "the
-            scrim goes way past the end of the text." Splitting into
+            the description (max-w-2xl) and the button row. Splitting into
             eyebrow+title / description+buttons lets each card fit its own
             content instead of inheriting the headline's unusual width.
+
+            Each card is a <HeroCard>, not a plain `inline-block` div — a
+            shrink-to-fit box's auto width resolves to the full *available*
+            width the moment its content wraps to more than one line, not to
+            the (narrower) width the wrapped lines actually render at. Bit
+            for bit the same with `display:table`, so it's not an
+            inline-block quirk, just how CSS auto-width works. Reported
+            2026-07-30: on viewports too narrow for the one-line headline but
+            still fairly wide, the card visibly extended well past
+            "...industry" because "transformation." alone on line two is much
+            shorter than line one. HeroCard measures the actual rendered text
+            and sets an explicit width instead of trusting shrink-to-fit.
           */}
-          <div className="relative isolate inline-block">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-1 -z-10 rounded-3xl bg-black/65 blur-xl"
-            />
-            <div className="px-8 py-6 sm:px-10 sm:py-8">
-              {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}
-              {/* Jan wants the headline on one line on desktop; it may wrap on small
-                  screens. The sizes below are measured, not guessed: this headline
-                  renders ~21.7px wide per 1px of font-size in Trade Gothic Next Heavy
-                  Compressed, so 52px needs ~1128px and 56px needs ~1215px, inside a
-                  1200–1280px container from xl up. Deliberately NOT whitespace-nowrap
-                  — this section is overflow-hidden, so a longer headline (or the wider
-                  Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
-                  than wrapped. Keep the headline short and it stays on one line. */}
-              <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
-                {heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
-                  <span key={i}>
-                    {line}
-                    {i < arr.length - 1 && <br />}
-                  </span>
-                ))}
-              </h1>
+          <HeroCard>
+            {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}
+            {/* Jan wants the headline on one line on desktop; it may wrap on small
+                screens. The sizes below are measured, not guessed: this headline
+                renders ~21.7px wide per 1px of font-size in Trade Gothic Next Heavy
+                Compressed, so 52px needs ~1128px and 56px needs ~1215px, inside a
+                1200–1280px container from xl up. Deliberately NOT whitespace-nowrap
+                — this section is overflow-hidden, so a longer headline (or the wider
+                Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
+                than wrapped. Keep the headline short and it stays on one line. */}
+            <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
+              {heroTitle.split("\n").map((line: string, i: number, arr: string[]) => (
+                <span key={i}>
+                  {line}
+                  {i < arr.length - 1 && <br />}
+                </span>
+              ))}
+            </h1>
+          </HeroCard>
+          <HeroCard className="mt-6">
+            <p className="max-w-2xl text-lg text-brand-white">{page.heroDescription}</p>
+            <div className="mt-9 flex flex-wrap gap-4">
+              {heroButtons.map((button, i) => (
+                <CtaButton key={button._key ?? i} button={button} variant="primary" />
+              ))}
             </div>
-          </div>
-          <div className="relative isolate mt-6 inline-block">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-1 -z-10 rounded-3xl bg-black/65 blur-xl"
-            />
-            <div className="px-8 py-6 sm:px-10 sm:py-8">
-              <p className="max-w-2xl text-lg text-brand-white">{page.heroDescription}</p>
-              <div className="mt-9 flex flex-wrap gap-4">
-                {heroButtons.map((button, i) => (
-                  <CtaButton key={button._key ?? i} button={button} variant="primary" />
-                ))}
-              </div>
-            </div>
-          </div>
+          </HeroCard>
         </div>
       </section>
 

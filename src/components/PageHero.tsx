@@ -1,4 +1,5 @@
 import Image from "next/image";
+import HeroCard from "@/components/HeroCard";
 
 type PageHeroProps = {
   eyebrow?: string;
@@ -113,24 +114,29 @@ export default function PageHero({
           not an oversight, so don't "fix" this by recoloring them without
           asking again. At .65 (current) that caption fails by more, not
           less.
+
+          This card is a <HeroCard>, not a plain `inline-block` div — a
+          shrink-to-fit box's auto width resolves to the full *available*
+          width the moment its content wraps to more than one line, not to
+          the (narrower) width the wrapped lines actually render at (same
+          with `display:table` — not an inline-block quirk, just how CSS
+          auto-width works). Usually invisible here since interior titles
+          are short, but the same card shape is shared with the Home hero,
+          where a wrapped headline exposed it clearly (2026-07-30).
+          HeroCard measures the actual rendered text and sets an explicit
+          width instead of trusting shrink-to-fit.
         */}
-        <div className="relative isolate inline-block">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-1 -z-10 rounded-3xl bg-black/65 blur-xl"
-          />
-          <div className="px-8 py-6 sm:px-10 sm:py-8">
-            {eyebrow && (
-              <p className="font-display mb-3 text-sm text-brand-gold">{eyebrow}</p>
-            )}
-            <h1 className="font-display text-4xl sm:text-5xl">{title}</h1>
-            {description && (
-              <p className="mt-5 max-w-2xl text-lg text-brand-white">{description}</p>
-            )}
-            {cta && <div className="mt-8">{cta}</div>}
-            {extra && <div className="mt-10">{extra}</div>}
-          </div>
-        </div>
+        <HeroCard>
+          {eyebrow && (
+            <p className="font-display mb-3 text-sm text-brand-gold">{eyebrow}</p>
+          )}
+          <h1 className="font-display text-4xl sm:text-5xl">{title}</h1>
+          {description && (
+            <p className="mt-5 max-w-2xl text-lg text-brand-white">{description}</p>
+          )}
+          {cta && <div className="mt-8">{cta}</div>}
+          {extra && <div className="mt-10">{extra}</div>}
+        </HeroCard>
       </div>
     </section>
   );
