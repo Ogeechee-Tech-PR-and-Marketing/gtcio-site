@@ -71,15 +71,15 @@ export default async function Home() {
   const hero = resolveHeroImage({
     image: typed?.heroImage,
     alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-construction-poster-4.jpg",
+    fallbackSrc: "/images/hero-construction-poster-5.jpg",
     fallbackAlt: "Construction of the GTCIO facility",
     fallbackPosition: "50% 50%",
   });
   const heroVideo = resolveHeroVideo({
     video: typed?.heroVideo,
     poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-construction-5.mp4",
-    fallbackPoster: "/images/hero-construction-poster-4.jpg",
+    fallbackSrc: "/videos/hero-construction-6.mp4",
+    fallbackPoster: "/images/hero-construction-poster-5.jpg",
   });
 
   return (
