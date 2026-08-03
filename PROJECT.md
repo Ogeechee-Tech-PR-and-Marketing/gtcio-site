@@ -571,19 +571,18 @@ compounding lossy re-encodes compounds artifacts), and sanity-check the
 darkest scene in the clip specifically: brighten/contrast-boost a crop of it
 and look for blockiness before shipping.
 
-**`hero-construction-4.mp4`** (swapped in 2026-07-27, replacing
-`hero-construction-3.mp4` with a further-along daytime drone pass — roofline
-and windows now complete) is **not** part of that pipeline — Jake supplied it
+**`hero-construction-5.mp4`** (swapped in 2026-08-03, replacing
+`hero-construction-4.mp4`) is **not** part of that pipeline — Jake supplied it
 already compressed (16MB, 1920×1080, h264, ~3 Mbps, no audio), and it's used
-byte-for-byte as delivered, same as `-3` before it. **Do not re-encode it** if
+byte-for-byte as delivered, same as `-4` before it. **Do not re-encode it** if
 it's swapped again; same reasoning applies to whatever replaces it unless told
 otherwise. The delivered original lives at
-`../media-originals/hero-construction-4-source.mp4`.
-`hero-construction-poster-3.jpg` is a plain `ffmpeg -ss 2 ... -vf scale=1600:-2`
+`../media-originals/hero-construction-5-source.mp4`.
+`hero-construction-poster-4.jpg` is a plain `ffmpeg -ss 2 ... -vf scale=1600:-2`
 frame grab from it — regenerate the same way from whatever video replaces this
-one. The prior pair, `hero-construction-3.mp4` and `hero-construction-poster-2.jpg`,
+one. The prior pair, `hero-construction-4.mp4` and `hero-construction-poster-3.jpg`,
 were deleted from `public/` after the swap, following the same pattern as
-`hero-construction-2.mp4` before them — nothing else in the repo referenced
+`hero-construction-3.mp4` before them — nothing else in the repo referenced
 them (verified by grep) and Sanity's `homePage` doc has no
 `heroVideo`/`heroImage` override (verified via the API) that would need
 patching.
