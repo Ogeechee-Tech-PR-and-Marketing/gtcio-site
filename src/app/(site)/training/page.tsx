@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // The public flipbook of "OTC Industrial Systems Training Program".
 const CATALOG_URL = "https://online.fliphtml5.com/exygb/kvbr/#p=1";
 // The same catalog, as a downloadable PDF.
-const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program.pdf";
+const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program-2.pdf";
 
 // ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
 // editing this object alone does NOT change the live site. Patch the published

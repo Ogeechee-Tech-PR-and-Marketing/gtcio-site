@@ -555,6 +555,18 @@ year. Rename the file (`hero-construction-2.mp4`) and update its references
 instead. Originals of the re-encoded media live outside the repo in
 `../media-originals/`.
 
+**`otc-industrial-systems-training-program-2.pdf`** (swapped in 2026-08-05,
+replacing `otc-industrial-systems-training-program.pdf`) restores the training
+catalog PDF to its **original, uncompressed 29.7MB** file — the previous file
+had been recompressed to 11.9MB at some point and Jake said it "looks
+terrible" (visibly degraded image quality in the brochure's photos). Restored
+byte-for-byte from `../media-originals/otc-industrial-systems-training-program.pdf`
+(checksum-verified identical to Jake's supplied copy) rather than
+re-compressed — **do not recompress this file**. `industrial-operations-program.pdf`
+was checked at the same time and was already byte-identical to Jake's supplied
+copy, so it needed no change. Referenced from `CATALOG_PDF_URL` in
+`src/app/(site)/training/page.tsx`.
+
 **Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
 after the first pass looked visibly blocky in the (then-current) construction
 video's dark night sky — banding is the classic failure mode of a fast CRF
