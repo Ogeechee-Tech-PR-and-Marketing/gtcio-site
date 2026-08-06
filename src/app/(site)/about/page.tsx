@@ -19,20 +19,20 @@ const DEFAULTS = {
     "GTCIO exists to close the gap between the skills employers need and the training available to fill those roles.",
   missionStatement: "Building a workforce ready for industry transformation.",
   missionBody:
-    "GTCIO trains people for jobs in industrial automation, the employees that Georgia employers are actively seeking. These jobs pay well, and the demand isn't slowing down. GTCIO exists to meet that demand: training new workers coming up, and helping employers upskill the ones they already have.",
+    "GTCIO trains people for jobs in industrial operations and automation, the employees that Georgia employers are actively seeking. These jobs pay well, and the demand isn't slowing down. GTCIO exists to meet that demand: training new workers coming up, and helping employers upskill the ones they already have.",
   missionNote: "",
   missionQuote:
     "We are surrounded by industries that are looking for employees with these skill sets. The jobs pay well, offer excellent career growth opportunities, and the demand continues to increase.",
   missionQuoteAttribution: "Jan Moore — Vice President for Economic Development, Ogeechee Technical College",
   bdaTitle: "Development Authority of Bulloch County",
   bdaBody:
-    "The Development Authority of Bulloch County deeded the land GTCIO sits on to the Technical College System of Georgia, and Bulloch County's Board of Commissioners funded the project's initial site design and an economic-impact study — the local backing that turned GTCIO from an idea into a funded state capital project.",
+    "The Development Authority of Bulloch County deeded the land GTCIO sits on to the Technical College System of Georgia, and Bulloch County's Board of Commissioners funded the project's initial site design, an economic-impact study, and an access road from Highway 301 — the local backing that turned GTCIO from an idea into a funded state capital project.",
   bdaQuote:
     "I cannot stress enough what an asset this will be for Bulloch County and the surrounding region. The training will range from foundational skills in industrial operations to that of an automation engineer. Finding that under one roof is almost unheard of. It will be life changing for many of our residents.",
   bdaQuoteAttribution: "Benjy Thompson — CEO, Development Authority of Bulloch County",
   historyTitle: "History",
   historyBody:
-    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outpaced the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply. The GTCIO was designed to address that shortage.\n\nA Georgia Southern University economic-impact study projects the center will generate $8.98 million in regional economic output in its first year, growing to $15.68 million by FY2033. The GTCIO serves credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
+    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outpaced the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply. The GTCIO was designed to address that shortage.\n\nA Georgia Southern University economic-impact study projects the center will generate $13.21 million in regional economic output in its first year in the new building, growing to $16.64 million by FY2035, the study's final year of analysis. The GTCIO serves credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
   historyTimeline: [
     {
       date: "September 2021",
@@ -46,7 +46,7 @@ const DEFAULTS = {
       date: "July 2022",
       title: "The push for funding begins",
       detail:
-        "Work kicks off to fund the project, including acquiring the land from the Development Authority of Bulloch County.",
+        "Work kicks off to fund the project, including a pledge to donate the land from the Development Authority of Bulloch County.",
     },
     {
       date: "September 2022",
@@ -78,7 +78,7 @@ const DEFAULTS = {
       date: "September 2023",
       title: "Design begins",
       detail:
-        "Design work starts on a building meant to triple Ogeechee Tech's industrial systems and robotics training capacity, anchor training for the wider region, and serve as a model other technical colleges in Georgia can replicate.",
+        "Design work starts on a building meant to triple Ogeechee Tech's industrial systems and robotics training capacity, to anchor training for the wider region, and to serve as a model other technical colleges in Georgia can replicate.",
     },
     {
       date: "November 2024",
@@ -105,7 +105,7 @@ const DEFAULTS = {
       date: "August 2026",
       title: "First classes begin",
       detail:
-        "The Industrial Operations Technology diploma program launches in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, while the new building is finished.",
+        "The Industrial Operations Technology diploma program launches in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing industrial operations training facility, while the new building is finished.",
       highlight: true,
     },
     {

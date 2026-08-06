@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-07-30. Check claims against the code before trusting them.
+updated 2026-08-06. Check claims against the code before trusting them.
 
 ---
 
@@ -1059,6 +1059,23 @@ Smaller items:
   alone — `formType: "tour"` still works, nothing to restore there. Keep
   `public/SITEMAP.html` in sync when it comes back (Facility card, Header/Footer
   "On every page" cards, and the two form/deep-link tallies at the top).
+- **🔴 The Partners page's "Our Partners" section is hidden — no return date
+  set** (Jake, 2026-08-06). Both halves of it are off: the logo collage and
+  the five full per-partner cards (logo, description, LEARN MORE) below it —
+  they're both inside the same `<section>` in `partners/page.tsx`, so hiding
+  one meant hiding both. Implementation is a `SHOW_PARTNER_DIRECTORY = false`
+  constant guarding the whole section with `{SHOW_PARTNER_DIRECTORY && (...)}`
+  — lighter-weight than the Book a Tour removal above since there's no schema
+  or nav/footer link tied to this section (no header/footer link points at
+  it, and it carries no `id` anchor of its own — only the individual partner
+  cards inside it do, e.g. `#ajin-georgia`, which are also hidden along with
+  everything else in the section). **To restore: flip the constant back to
+  `true`.** Nothing else needs to change — the `partner` documents, the
+  Sanity query, and `directoryTitle`/`directoryIntro` copy were all left
+  alone. Kept in sync: `public/SITEMAP.html`'s Partners card lost the "Our
+  Partners" section row and its purpose line was trimmed, plus a tag noting
+  the removal and its date (no return date given, unlike Book a Tour's fixed
+  10/26 — update the tag if one is set later).
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
   are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
   A new **"What it will look like"** band above it (added 2026-07-20) now carries
@@ -1481,8 +1498,8 @@ shows deploy status.
   rather than reading `siteSettings` because the FAQ is plain editor-authored text
   — a `{address}` placeholder would just confuse whoever edits it.
 - **Project timeline** (from Jan, 2026-07-16; editable at About Page → History →
-  Project timeline): 7/22 push for funding begins incl. land acquisition from
-  DABC · 9/22 initial funding approved · 7/23 design team selected, **PRAXIS3**
+  Project timeline): 7/22 push for funding begins incl. a pledge from DABC to
+  donate the land · 9/22 initial funding approved · 7/23 design team selected, **PRAXIS3**
   (Atlanta architecture/design firm, praxis3.com — verified) · 8/23 construction
   team selected, **ICB Construction Group** (Macon general contractor,
   icbconstructiongroup.com — verified; a directory lists the legal name
@@ -1512,7 +1529,8 @@ shows deploy status.
     reconcile there (check for one before assuming a future patch is done).
   - **Why Aug 2026 classes precede the Oct 2026 opening (resolved by Jan,
     2026-07-16):** classes begin in the **Industrial Technology Building on OTC's
-    main campus** — the college's existing robotics facility (16 Joe Kennedy Blvd;
+    main campus** — the college's existing industrial operations training
+    facility (16 Joe Kennedy Blvd;
     houses the robotics and industrial maintenance labs, Electrical Systems
     Technology and Logistics; built 2018) — and move into the new GTCIO building on
     AJ Riggs Road once it opens. OTC's own release notes the industrial systems
@@ -1522,6 +1540,20 @@ shows deploy status.
     is consistent with the 10/15 ribbon cutting.
   - Jan's source note said "9/26 HOPEFULLY finished" — the site says "targeted for
     completion"/"scheduled" instead. Don't publish the hedge verbatim.
+  - **Three wording corrections, Jake, 2026-08-06** (all patched in both the
+    code `DEFAULTS` and the published `aboutPage` doc, no draft to reconcile):
+    July 2022 (`t1`) now reads "a pledge to donate the land from the
+    Development Authority of Bulloch County," not "acquiring the land" — DABC
+    pledged the land at this point in the timeline, the formal deed came
+    later (matches `bdaBody`'s "deeded the land ... to the Technical College
+    System of Georgia"). September 2023 (`t5`) gained a second and third "to"
+    for parallel structure — "meant to triple ... capacity, to anchor
+    training ... and to serve as a model ..." — a pure grammar fix, no
+    factual change. August 2026 (`t6b`) now calls the Industrial Technology
+    Building "the college's existing industrial operations training
+    facility" instead of "existing robotics facility" — the building's own
+    description a few paragraphs up (16 Joe Kennedy Blvd note, this same
+    bullet) was updated to match.
   - **Expanded 2026-07-23 by actually reading the linked articles behind the
     News page's `newsItem` docs** (WebFetch on all 13 URLs; an initial pass had
     only mined the excerpts already stored in Sanity, which missed everything
@@ -1561,6 +1593,10 @@ shows deploy status.
       internal doc Jake supplied, not something contradicted by the new
       sourcing, so it wasn't swapped for the differently-worded Thompson quote
       the groundbreaking article carries ("It was an easy yes for us...").
+      **Updated again 2026-08-06 (Jake):** added a third funded item — the
+      sentence now reads "initial site design, an economic-impact study, and
+      an access road from Highway 301." Patched in both the code `DEFAULTS`
+      and the published doc (no draft existed).
     - `aboutPage.historyBody` gained a sourced economic-impact figure: a
       Georgia Southern University Center for Business Analytics and Economic
       Research study projects **$8.98M in regional economic output in year
@@ -1568,6 +1604,7 @@ shows deploy status.
       there at all. (The groundbreaking article's own project-cost figure,
       $23M, is an earlier estimate superseded by the confirmed $27M already on
       site — not used.)
+      **⚠️ Superseded 2026-08-06 — see the dated note below.**
     - `facilityPage.overviewBody` gained a room-level detail from the same
       groundbreaking article: **12 industrial labs, plus classrooms, computer
       labs, and meeting space** — the page previously described the building
@@ -1587,6 +1624,42 @@ shows deploy status.
       Sanity docs (`aboutPage`, `facilityPage`); no drafts existed for either
       at patch time. `npx sanity schema validate` and `documents validate`
       both ran clean afterward.
+- **✅ Economic-impact figure updated 2026-08-06** against a new, formal source:
+  *Economic Impact Analysis of the Georgia Training Center for Industrial
+  Operations* (CBAER — Center for Business Analytics and Economic Research,
+  Georgia Southern University's Business Innovation Group — July 31, 2026,
+  in the parent folder as `OTC 2026 GTCIO Report.pdf`). This supersedes the
+  2026-07-23 figure above ($8.98M / $15.68M by FY2033), which came from an
+  earlier/informal source this report doesn't cite or reconcile against.
+  The new report frames the 10-year IMPLAN analysis (FY2026–FY2035) around
+  three benchmark years — **FY2026** ($12.14M output, last year of operations
+  on the OTC campus), **FY2027** ($13.21M output, first year in the new
+  building), and **FY2035** ($16.64M output, "the total economic impact for
+  this analysis") — plus GRP, labor income, and employment figures for each
+  (Tables 1–4, p8–9). `aboutPage.historyBody`'s sentence now reads **"$13.21
+  million in regional economic output in its first year in the new building,
+  growing to $16.64 million by FY2035"** — output was kept as the cited metric
+  (matching the old sentence's framing) rather than switching to GRP or labor
+  income. Patched in both the code `DEFAULTS` and the published `aboutPage`
+  doc (no draft existed to reconcile); `tsc`, `eslint`, and both `sanity`
+  validation commands ran clean afterward.
+  - Same pass: the About page's mission paragraph (`missionBody`) changed
+    "people for jobs in industrial automation" to **"people for jobs in
+    industrial operations and automation"** (Jake, 2026-08-06) — a wording
+    request independent of the report, patched the same way.
+  - **🔴 Not touched, flagged for Jake:** this report states the new GTCIO
+    building at **39,700 gross square feet** (p1, p8 — 6,500 office + 20,000
+    instructional + 13,200 common area), not the 40,000 sq ft already
+    published sitewide (`aboutPage.historyBody`, `facilityPage`, and
+    elsewhere — the figure this project has treated as current since the
+    2026-07 press release). The user's request this pass was scoped to the
+    economic-impact numbers and the mission-copy wording, not building specs,
+    so the existing 40,000 sq ft figure was left alone — **confirm with Jake
+    before changing it**, since it's used in several places and 39,700 could
+    be either a more precise architectural figure or a genuine revision.
+  - Also worth noting, not yet acted on: the report gives a total project
+    cost of $27M nowhere — it's silent on construction cost — so that figure's
+    sourcing is still just the 2026-07 press release, unchanged by this report.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.

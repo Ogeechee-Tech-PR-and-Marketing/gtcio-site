@@ -28,6 +28,11 @@ const FORM_LABEL_OVERRIDES: Record<string, string> = {
 // Form checkbox choices with no pathway card of their own.
 const EXTRA_FORM_OPTIONS = ["Facility Tour"];
 
+// Temporarily hides the "Our Partners" section (logo collage + per-partner
+// cards) at Jake's request, 2026-08-06. Flip back to true to restore — see
+// PROJECT.md §8.
+const SHOW_PARTNER_DIRECTORY = false;
+
 // ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
 // editing this object alone does NOT change the live site. Patch the published
 // doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
@@ -123,6 +128,7 @@ export default async function PartnersPage() {
         </div>
       </section>
 
+      {SHOW_PARTNER_DIRECTORY && (
       <section className="border-b border-brand-silver/30 bg-brand-silver/10 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.directoryTitle}</h2>
@@ -208,6 +214,7 @@ export default async function PartnersPage() {
           </div>
         </div>
       </section>
+      )}
 
       <section id="become-a-partner" className="scroll-mt-40 sm:scroll-mt-56 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-3xl">
