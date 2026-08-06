@@ -54,8 +54,10 @@ stray/abandoned Wix sites may still exist in the `jhallman32` Wix account.
 ## 3. Layout of the code
 
 ```
+src/middleware.ts         site-wide PIN gate — see §6
 src/app/
   layout.tsx              root: <html>/<body> only, no chrome
+  site-pin/               /site-pin    PIN entry screen (outside (site) — no Header/Footer)
   (site)/                 ← every public page. Route group.
     layout.tsx            Header + Footer + SanityLive + VisualEditing
     page.tsx              /            (home)
@@ -70,6 +72,7 @@ src/app/
     contact/              /contact
   studio/[[...tool]]/     /studio      ← Sanity Studio, embedded
   api/
+    site-pin/             POST target that checks the PIN gate cookie (§6)
     draft-mode/           enable + disable, for the Studio's live preview
     inquiry/              POST target for all three forms (§5)
     newsletter/            POST target for the footer sign-up form (§11)
@@ -78,6 +81,7 @@ src/app/
       oauth/callback/      stores the resulting refresh token (§11)
 src/lib/
   site.ts                 SITE_URL — the canonical origin (§6)
+  site-pin.ts             SITE_PIN_COOKIE — shared by middleware.ts and api/site-pin (§6)
   constantContact.ts      token refresh + list lookup/create + the actual
                           sign-up call. Server-only (§11)
   iot-curriculum.ts       the IS32 course table + SACA credential glossary.
@@ -518,7 +522,35 @@ MS_GRAPH_SENDER_EMAIL=<see §5; the mailbox notification emails send AS>
 CONSTANT_CONTACT_CLIENT_ID=<see §11; from the Constant Contact developer app>
 CONSTANT_CONTACT_CLIENT_SECRET=<see §11; from the same app, secret>
 CONSTANT_CONTACT_SETUP_SECRET=<see §11; any random string you pick — gates the one-time OAuth URL>
+SITE_ACCESS_PIN=<optional — see "Site-wide PIN gate" below; unset = gate is off>
 ```
+
+**Site-wide PIN gate** (added 2026-08-06, pre-launch). `src/middleware.ts` runs
+on every request; if `SITE_ACCESS_PIN` is set, a visitor with no matching
+`gtcio_pin` cookie is redirected to `/site-pin`, a plain form (no CMS fetch, no
+Header/Footer — same isolation reasoning as `/studio`, §3) that POSTs to
+`/api/site-pin`. A correct submission sets an httpOnly cookie holding the PIN
+itself, valid 30 days, and the visitor is sent back to the page they wanted.
+This is a **basic deterrent, not real authentication** — the PIN is shared and
+sits in plaintext in the cookie (readable in devtools by the visitor holding
+it, not by anyone else) and there's no rate limiting on guesses. Good enough to
+keep an unlaunched site off casual visitors' radar; not a substitute for actual
+auth if that's ever needed.
+- **Unset = fails open.** Forgetting to set `SITE_ACCESS_PIN` in Vercel means
+  the site is fully public, not fully locked — deliberate, so a missing env var
+  can't accidentally lock Jake out too.
+- **Bypassed paths** (`BYPASS_PATHS` in `middleware.ts`): `/site-pin` and
+  `/api/site-pin` (or the gate could never be passed), and
+  `/api/constant-contact/oauth/callback` (§11's OAuth redirect target — a third
+  party sends the visitor's browser here, and it shouldn't depend on gate-cookie
+  state). Everything else, including `/studio`, sits behind the gate.
+- **Static assets bypass the gate entirely** via `middleware.ts`'s `matcher`
+  (common file extensions, `_next/*`) — a direct link to a video or PDF isn't
+  blocked, only the pages that link to them are. Acceptable for a casual-visitor
+  deterrent.
+- **To turn the gate off:** unset `SITE_ACCESS_PIN` in Vercel and redeploy — no
+  code change needed. To change the PIN, just change the env var and redeploy;
+  everyone's existing cookie stops matching and they'll be asked again.
 
 The read token is **viewer role**, used server-side for draft/preview reads only.
 The write token is **editor role**, used *only* by `/api/inquiry`, via the
