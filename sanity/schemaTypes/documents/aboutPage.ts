@@ -135,8 +135,17 @@ export default defineType({
       group: "advisory",
     }),
     defineField({
+      name: "advisoryMembers",
+      title: "Board roster",
+      description:
+        "Drag to reorder within a category. Set each person's Category to Board Member or Ex Officio — the page groups and labels them separately.",
+      type: "array",
+      of: [{ type: "boardMember" }],
+      group: "advisory",
+    }),
+    defineField({
       name: "advisoryNote",
-      title: "Small note under the paragraph",
+      title: "Small note under the roster",
       description: "Clear this field to remove the italic note from the page.",
       type: "string",
       group: "advisory",

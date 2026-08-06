@@ -124,7 +124,99 @@ const DEFAULTS = {
   advisoryTitle: "Advisory Board",
   advisoryBody:
     "GTCIO's curriculum is shaped by an advisory board of regional employers and industry leaders, so what we teach stays aligned with the equipment and skills the workforce actually needs.",
-  advisoryNote: "(Advisory board members and full description to be added.)",
+  advisoryMembers: [
+    {
+      name: "Jan Moore",
+      title: "Board Chair and Vice President for Economic Development",
+      organization: "Ogeechee Technical College",
+      category: "board",
+    },
+    {
+      name: "Daniel Cox",
+      title: "Professor and Founding Chair of Manufacturing Engineering",
+      organization: "Georgia Southern University",
+      category: "board",
+    },
+    {
+      name: "Tramaine Melvin",
+      title: "Manufacturing Production Manager",
+      organization: "JTEKT",
+      category: "board",
+    },
+    {
+      name: "Stuart Gregory",
+      title: "Director of Business Development",
+      organization: "Shalotek",
+      category: "board",
+    },
+    {
+      name: "Sandy Lake",
+      title: "Director of Logistics",
+      organization: "Georgia Center for Innovation",
+      category: "board",
+    },
+    {
+      name: "Rob Lanham",
+      title: "General Manager",
+      organization: "Silver Lake Automation",
+      category: "board",
+    },
+    {
+      name: "Kent Powell",
+      title: "Vice President of Sales",
+      organization: "Amatrol",
+      category: "board",
+    },
+    {
+      name: "David Rogers",
+      title: "CEO",
+      organization: "Georgia Technologies",
+      category: "board",
+    },
+    {
+      name: "Jim Wall",
+      title: "Executive Director",
+      organization: "Smart Automation Certification Alliance",
+      category: "board",
+    },
+    {
+      name: "Lori Durden",
+      title: "President",
+      organization: "Ogeechee Technical College",
+      category: "exOfficio",
+    },
+    {
+      name: "Matt Dollar",
+      title: "Deputy Commissioner — Economic Development",
+      organization: "Technical College System of Georgia",
+      category: "exOfficio",
+    },
+    {
+      name: "Billy Hickman",
+      title: "Georgia State Senator, District 4",
+      organization: "Georgia General Assembly",
+      category: "exOfficio",
+    },
+    {
+      name: "Lehman Franklin",
+      title: "Georgia State Representative, District 160",
+      organization: "Georgia General Assembly",
+      category: "exOfficio",
+    },
+    {
+      name: "Doug Lambert",
+      title: "Board Member",
+      organization: "Technical College System of Georgia State Board",
+      category: "exOfficio",
+    },
+    {
+      name: "Benjy Thompson",
+      title: "CEO",
+      organization: "Development Authority of Bulloch County",
+      category: "exOfficio",
+    },
+  ],
+  advisoryNote: "",
   faqs: [
     {
       question: "Who runs GTCIO?",
@@ -158,6 +250,14 @@ type TimelineEvent = {
   sourceUrl?: string;
 };
 
+type BoardMember = {
+  _key?: string;
+  name: string;
+  title: string;
+  organization: string;
+  category: "board" | "exOfficio";
+};
+
 export default async function AboutPage() {
   const { data } = await sanityFetch({ query: ABOUT_PAGE_QUERY });
   const typed = data as (Partial<typeof DEFAULTS> & {
@@ -166,12 +266,18 @@ export default async function AboutPage() {
     heroVideo?: { asset?: { url?: string } | null };
     heroVideoPoster?: SanityImage;
     historyTimeline?: TimelineEvent[];
+    advisoryMembers?: BoardMember[];
   }) | null;
   const page = { ...DEFAULTS, ...typed };
   const faqs = typed?.faqs?.length ? typed.faqs : DEFAULTS.faqs;
   const timeline: TimelineEvent[] = typed?.historyTimeline?.length
     ? typed.historyTimeline
     : DEFAULTS.historyTimeline;
+  const advisoryMembers: BoardMember[] = typed?.advisoryMembers?.length
+    ? typed.advisoryMembers
+    : (DEFAULTS.advisoryMembers as BoardMember[]);
+  const boardMembers = advisoryMembers.filter((m) => m.category !== "exOfficio");
+  const exOfficioMembers = advisoryMembers.filter((m) => m.category === "exOfficio");
 
   const hero = resolveHeroImage({
     image: typed?.heroImage,
@@ -242,7 +348,42 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.advisoryTitle}</h2>
           <p className="mt-4 text-brand-black">{page.advisoryBody}</p>
-          {page.advisoryNote && <p className="mt-4 text-sm text-brand-silver">{page.advisoryNote}</p>}
+
+          {boardMembers.length > 0 && (
+            <div className="mt-10">
+              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-silver uppercase">
+                Board Members
+              </h3>
+              <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                {boardMembers.map((member, i) => (
+                  <div key={member._key ?? i} className="border-l-4 border-brand-red pl-4">
+                    <p className="font-heading font-bold text-brand-black">{member.name}</p>
+                    <p className="text-sm text-brand-silver">{member.title}</p>
+                    <p className="text-sm text-brand-silver">{member.organization}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {exOfficioMembers.length > 0 && (
+            <div className="mt-10">
+              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-silver uppercase">
+                Ex Officio
+              </h3>
+              <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                {exOfficioMembers.map((member, i) => (
+                  <div key={member._key ?? i} className="border-l-4 border-brand-black pl-4">
+                    <p className="font-heading font-bold text-brand-black">{member.name}</p>
+                    <p className="text-sm text-brand-silver">{member.title}</p>
+                    <p className="text-sm text-brand-silver">{member.organization}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {page.advisoryNote && <p className="mt-8 text-sm text-brand-silver">{page.advisoryNote}</p>}
         </div>
       </section>
 

@@ -962,9 +962,24 @@ Smaller items:
   `0317_001.pdf`, 2026-07-21 — supersedes the earlier 45-across-12 figure from
   the brochure alone) remain a separate fact from tuition/length and were never
   used to derive either.
-- **Advisory Board section (About page)** ships with placeholder copy
-  (`advisoryBody` / `advisoryNote`). Real description + members to come; editable
-  under About Page → Advisory Board.
+- **✅ Advisory Board section (About page) is populated** (Jake, 2026-08-06),
+  from a photo of the GTCIO Advisory Board roster sheet. New object type
+  `boardMember` (`sanity/schemaTypes/objects/boardMember.ts` — name, title,
+  organization, and a `category` radio splitting Board Member vs. Ex Officio)
+  backs a new `aboutPage.advisoryMembers` array field; `about/page.tsx` renders
+  the two groups as separate labeled card grids under the existing
+  `advisoryBody` paragraph. Seeded in code `DEFAULTS` and patched directly onto
+  the published `aboutPage` doc (no draft existed to reconcile) — 9 Board
+  Members, 6 Ex Officio. `advisoryNote`'s old "(members to be added)" placeholder
+  is cleared in both places.
+  - **Two rows on the source sheet were incomplete and were omitted rather than
+    guessed**, per Jake's explicit choice when asked: a "Board Member" seat
+    tied to "Ogeechee Technical College Local Board of Directors" had no name
+    filled in, and Southeastern Technical College's President was listed as
+    "TBD." Neither is on the published roster. **If either name is confirmed
+    later, add them to `advisoryMembers` in both `about/page.tsx`'s `DEFAULTS`
+    and the published Sanity doc** (same two-place pattern as every other
+    CMS-overrides-code field, §4).
 - **Partner website links:** each partner block shows a red **LEARN MORE** button
   only when that partner's `website` URL is set. All five are set and were each
   verified against the live site (2026-07-16): Development Authority of Bulloch
