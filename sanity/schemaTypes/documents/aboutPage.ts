@@ -90,6 +90,14 @@ export default defineType({
       type: "string",
       group: "bda",
     }),
+    defineField({
+      name: "bdaWebsite",
+      title: "Website",
+      description:
+        "The Development Authority of Bulloch County's own site. Shows a LEARN MORE button at the end of this section when set.",
+      type: "url",
+      group: "bda",
+    }),
 
     defineField({
       name: "historyTitle",

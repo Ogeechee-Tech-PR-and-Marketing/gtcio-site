@@ -599,6 +599,26 @@ was checked at the same time and was already byte-identical to Jake's supplied
 copy, so it needed no change. Referenced from `CATALOG_PDF_URL` in
 `src/app/(site)/training/page.tsx`.
 
+**`otc-industrial-systems-training-program-3.pdf`** (swapped in 2026-08-06,
+replacing `-2.pdf`) is a genuinely updated brochure Jake supplied directly —
+`2026-08-06_Industrial_Operations_Program_v01_jh.pdf`, 22 pages, 5.85MB — not
+a re-compression of the old one. Content confirmed via `pypdf` text
+extraction to be the same "Train Your Team, Retain Your Team" employer
+training catalog before wiring it up (its filename's "Industrial Operations
+Program" is misleading — that's the name of the *other* PDF on this site,
+`industrial-operations-program.pdf`; don't confuse the two on a future
+update). Copied byte-for-byte (checksum-verified) to both
+`public/documents/otc-industrial-systems-training-program-3.pdf` and
+`../media-originals/otc-industrial-systems-training-program-3-source.pdf`,
+same `-source.pdf` naming pattern as the hero video swaps. **The old
+`-2.pdf` (29.7MB) was deleted from `public/`** — confirmed by grep it was
+referenced nowhere else in the repo besides `CATALOG_PDF_URL`, same cleanup
+pattern as retired hero videos (§10's home-hero notes). If this file is
+swapped again, re-encode/replace from a fresh original rather than
+compounding edits on this one, and re-verify the content still matches the
+training catalog (not the diploma-program PDF) before pointing
+`CATALOG_PDF_URL` at it.
+
 **Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
 after the first pass looked visibly blocky in the (then-current) construction
 video's dark night sky — banding is the classic failure mode of a fast CRF
@@ -980,6 +1000,29 @@ Smaller items:
     later, add them to `advisoryMembers` in both `about/page.tsx`'s `DEFAULTS`
     and the published Sanity doc** (same two-place pattern as every other
     CMS-overrides-code field, §4).
+  - **Roster fact-checked 2026-08-06** (web research, all 15 people). 12 of 15
+    checked out cleanly against current sources: Daniel Cox, Tramaine Melvin,
+    Rob Lanham, Kent Powell, David Rogers, Jim Wall, Lori Durden, Billy
+    Hickman, Lehman Franklin, Doug Lambert, Benjy Thompson, and — per Jake's
+    direct confirmation — **Matt Dollar** (independent sourcing found was
+    ~4 years old, from his Feb. 2022 appointment as TCSG Deputy Commissioner
+    of Economic Development, with nothing more recent; Jake confirmed he's
+    still in the role) and **Jan Moore's "Board Chair" title** (not
+    independently verifiable online, since it's an internal board
+    designation rather than a public title; Jake confirmed it directly).
+    Two findings acted on differently:
+    - **Sandy Lake's org fixed**: "Georgia Center **for** Innovation" →
+      "Georgia Center **of** Innovation" (the Georgia Dept. of Economic
+      Development's actual name for it, confirmed via LinkedIn and
+      georgia.org). Patched in both the code `DEFAULTS`
+      (`advisoryMembers`, key `bm5`) and the published `aboutPage` doc (no
+      draft existed).
+    - **Stuart Gregory's org left as Shalotek, deliberately** — every
+      independent source found (RocketReach, ZoomInfo, the
+      Statesboro-Bulloch Chamber directory) ties him to Bulloch Solutions
+      instead, but **Jake confirmed Shalotek is correct** and asked to keep
+      it as published. Don't "fix" this to Bulloch Solutions based on the
+      secondary sourcing alone — this has already been checked with Jake.
 - **Partner website links:** each partner block shows a red **LEARN MORE** button
   only when that partner's `website` URL is set. All five are set and were each
   verified against the live site (2026-07-16): Development Authority of Bulloch
@@ -988,6 +1031,18 @@ Smaller items:
   rebranded the Koyo bearings brand to JTEKT in 2022; Jake chose JTEKT North
   America), Amazon → aboutamazon.com (corporate, Jake's choice over retail).
   Verify any new partner URL against the real site before setting it.
+  ⚠️ **That partner card's LEARN MORE button isn't currently visible** — the
+  whole "Our Partners" section is hidden site-wide as of 2026-08-06 (see the
+  §8 entry above). Jake asked 2026-08-06 for at least one *currently live*
+  place linking to advantagebulloch.com, so a second, independent link was
+  added: `aboutPage.bdaWebsite` (new `url` field, bda group), rendered as a
+  matching red LEARN MORE button at the end of the About page's Development
+  Authority of Bulloch County section (`#bulloch-development-authority`),
+  same styling as a partner card's button and same `safeHref()` sanitizing.
+  Seeded to `https://advantagebulloch.com/` in both the code `DEFAULTS` and
+  the published doc (no draft existed). If the Partners directory section
+  ever comes back, both links will point at DABC's site independently —
+  that's intentional redundancy, not a bug to reconcile.
 - **News page is populated** (2026-07-20) with 14 `newsItem` docs — 7 press
   (OTC's own posts) and 7 media, spanning 2021 to 2026. All 13 outbound URLs were
   checked and return 200; the 2026-07-08 IOT program launch release has **no

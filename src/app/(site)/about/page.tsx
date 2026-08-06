@@ -4,6 +4,7 @@ import AboutTimeline from "@/components/AboutTimeline";
 import { sanityFetch } from "@/sanity/lib/live";
 import { ABOUT_PAGE_QUERY } from "@/sanity/lib/queries";
 import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
+import { safeHref } from "@/sanity/lib/links";
 
 export const metadata: Metadata = {
   title: "About | GTCIO",
@@ -30,6 +31,7 @@ const DEFAULTS = {
   bdaQuote:
     "I cannot stress enough what an asset this will be for Bulloch County and the surrounding region. The training will range from foundational skills in industrial operations to that of an automation engineer. Finding that under one roof is almost unheard of. It will be life changing for many of our residents.",
   bdaQuoteAttribution: "Benjy Thompson — CEO, Development Authority of Bulloch County",
+  bdaWebsite: "https://advantagebulloch.com/",
   historyTitle: "History",
   historyBody:
     "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outpaced the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply. The GTCIO was designed to address that shortage.\n\nA Georgia Southern University economic-impact study projects the center will generate $13.21 million in regional economic output in its first year in the new building, growing to $16.64 million by FY2035, the study's final year of analysis. The GTCIO serves credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
@@ -152,7 +154,7 @@ const DEFAULTS = {
     {
       name: "Sandy Lake",
       title: "Director of Logistics",
-      organization: "Georgia Center for Innovation",
+      organization: "Georgia Center of Innovation",
       category: "board",
     },
     {
@@ -278,6 +280,7 @@ export default async function AboutPage() {
     : (DEFAULTS.advisoryMembers as BoardMember[]);
   const boardMembers = advisoryMembers.filter((m) => m.category !== "exOfficio");
   const exOfficioMembers = advisoryMembers.filter((m) => m.category === "exOfficio");
+  const bdaWebsite = safeHref(page.bdaWebsite);
 
   const hero = resolveHeroImage({
     image: typed?.heroImage,
@@ -395,6 +398,16 @@ export default async function AboutPage() {
             <p className="text-lg italic text-brand-black">&ldquo;{page.bdaQuote}&rdquo;</p>
             <p className="mt-3 text-sm text-brand-silver">{page.bdaQuoteAttribution}</p>
           </blockquote>
+          {bdaWebsite && (
+            <a
+              href={bdaWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-ui mt-6 inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
+            >
+              LEARN MORE
+            </a>
+          )}
         </div>
       </section>
 
