@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { writeClient } from "@/sanity/lib/writeClient";
 import { isConfigured as graphConfigured, sendMail } from "@/lib/graphMail";
 import { addNewsletterSignup } from "@/lib/constantContact";
 
@@ -135,36 +134,6 @@ export async function POST(request: Request) {
     recipients.push({ to: NOTIFY_EMAIL_MEDIA, audience: "media (Sean Payne)" });
   }
 
-  const submission = {
-    // The dataset is publicly readable (the website reads it without a token), so
-    // a plain published document here would expose the visitor's name, email, and
-    // phone to anyone on the internet. Draft documents (ids under "drafts.") are
-    // only readable with authentication, and the Studio inbox lists them just the
-    // same — so every submission is written as a draft. sanity.config.ts removes
-    // the Publish action for this type so one can't be made public by accident.
-    _id: `drafts.${crypto.randomUUID()}`,
-    _type: "formSubmission",
-    formType,
-    reason: reasonText || undefined,
-    name: name || undefined,
-    email,
-    phone: phone || undefined,
-    organization: organization || undefined,
-    preferredDate: preferredDate || undefined,
-    message: message || undefined,
-    submittedAt: new Date().toISOString(),
-  };
-
-  // Record the inquiry BEFORE attempting email. If mail delivery fails, bounces,
-  // or lands in a spam folder, the lead still exists in the Studio inbox.
-  let submissionId: string | undefined;
-  try {
-    const created = await writeClient.create({ ...submission, emailDelivered: false });
-    submissionId = created._id;
-  } catch (error) {
-    console.error("[inquiry] failed to save submission to Sanity", error);
-  }
-
   // Contact form's "sign me up for the newsletter" checkbox. Best-effort and
   // independent of the rest of this handler — a failure here shouldn't turn a
   // successful inquiry into an error response, so it's caught and logged only.
@@ -225,17 +194,11 @@ export async function POST(request: Request) {
   // manual follow-up.
   const emailDelivered = anyRecipientConfigured && allDelivered;
 
-  if (submissionId && emailDelivered) {
-    try {
-      await writeClient.patch(submissionId).set({ emailDelivered: true }).commit();
-    } catch (error) {
-      console.error("[inquiry] failed to flag submission as emailed", error);
-    }
-  }
-
-  // If we couldn't save AND couldn't email, the inquiry is genuinely lost — say so
-  // rather than showing a thank-you for something that vanished.
-  if (!submissionId && !emailDelivered) {
+  // Email is the only record of a submission now (the Sanity inbox that used
+  // to save every inquiry as a backup was removed with the CMS). If it wasn't
+  // delivered, the inquiry is genuinely lost — say so rather than showing a
+  // thank-you for something that vanished.
+  if (!emailDelivered) {
     return NextResponse.json(
       { error: "Something went wrong on our end. Please email us directly." },
       { status: 500 }

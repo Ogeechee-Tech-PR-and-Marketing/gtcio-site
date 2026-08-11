@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import AboutTimeline from "@/components/AboutTimeline";
-import { sanityFetch } from "@/sanity/lib/live";
-import { ABOUT_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
-import { safeHref } from "@/sanity/lib/links";
+import { safeHref } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "About | GTCIO",
 };
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "About GTCIO",
   heroTitle: "Building Georgia's industrial workforce, together",
@@ -260,61 +257,25 @@ type BoardMember = {
   category: "board" | "exOfficio";
 };
 
-export default async function AboutPage() {
-  const { data } = await sanityFetch({ query: ABOUT_PAGE_QUERY });
-  const typed = data as (Partial<typeof DEFAULTS> & {
-    heroImage?: SanityImage;
-    heroImageAlt?: string;
-    heroVideo?: { asset?: { url?: string } | null };
-    heroVideoPoster?: SanityImage;
-    historyTimeline?: TimelineEvent[];
-    advisoryMembers?: BoardMember[];
-  }) | null;
-  const page = { ...DEFAULTS, ...typed };
-  const faqs = typed?.faqs?.length ? typed.faqs : DEFAULTS.faqs;
-  const timeline: TimelineEvent[] = typed?.historyTimeline?.length
-    ? typed.historyTimeline
-    : DEFAULTS.historyTimeline;
-  const advisoryMembers: BoardMember[] = typed?.advisoryMembers?.length
-    ? typed.advisoryMembers
-    : (DEFAULTS.advisoryMembers as BoardMember[]);
+export default function AboutPage() {
+  const page = DEFAULTS;
+  const faqs = DEFAULTS.faqs;
+  const timeline: TimelineEvent[] = DEFAULTS.historyTimeline;
+  const advisoryMembers: BoardMember[] = DEFAULTS.advisoryMembers as BoardMember[];
   const boardMembers = advisoryMembers.filter((m) => m.category !== "exOfficio");
   const exOfficioMembers = advisoryMembers.filter((m) => m.category === "exOfficio");
   const bdaWebsite = safeHref(page.bdaWebsite);
 
-  const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-about.jpg",
-    fallbackAlt: "Engineer working with a robotic arm",
-    fallbackPosition: "61% 25%",
-  });
-
-  // The banner plays GTCIO's own footage of the robotics lab. An editor can
-  // override it by uploading a Background photo in the Studio — otherwise that
-  // field would silently do nothing, which the schema description promises it
-  // won't. The fallback position above is tuned for the stock photo, so it is
-  // deliberately not applied to the video (centred is right for the robot).
-  // Absent a photo, an uploaded Background video replaces the default footage.
-  const useVideo = !typed?.heroImage;
-  const heroVideo = resolveHeroVideo({
-    video: typed?.heroVideo,
-    poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-about-2.mp4",
-    fallbackPoster: "/images/hero-about-poster.jpg",
-  });
-
+  // No CMS hero photo override anymore — the banner always plays GTCIO's own
+  // footage of the robotics lab.
   return (
     <>
       <PageHero
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image={hero.src}
-        imageAlt={hero.alt}
-        imagePosition={useVideo ? undefined : hero.position}
-        video={useVideo ? heroVideo.src : undefined}
-        videoPoster={useVideo ? heroVideo.poster : undefined}
+        video="/videos/hero-about-2.mp4"
+        videoPoster="/images/hero-about-poster.jpg"
       />
 
       <section id="mission" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">

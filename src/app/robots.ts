@@ -6,8 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // The embedded CMS and the API have no business in a search index.
-      disallow: ["/studio", "/api/"],
+      // The API has no business in a search index.
+      disallow: ["/api/"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };

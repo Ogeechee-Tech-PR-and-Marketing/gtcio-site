@@ -1,12 +1,10 @@
 /**
- * Turns the `destination` picked in the Studio into a real href.
+ * Maps a page's `destination` key to a real href.
  *
- * Editors choose a page from a dropdown instead of typing a URL, so links can't
- * rot from a typo. If a route ever moves, change it HERE and every CMS-managed
- * button across the site follows — no editor has to touch anything.
- *
- * Keep the keys in sync with the options list in
- * sanity/schemaTypes/objects/ctaButton.ts.
+ * Originally driven by an editor's dropdown choice in the Sanity Studio
+ * (removed 2026-08-11); now every CtaButton in the DEFAULTS objects picks one
+ * of these keys directly. If a route ever moves, change it HERE and every
+ * button across the site follows.
  */
 export const DESTINATIONS = {
   home: "/",
@@ -16,14 +14,14 @@ export const DESTINATIONS = {
   curriculum: "/iot-diploma-program/curriculum",
   // Key kept as `certifications` on purpose. The page moved to a top-level
   // /credentials route on 2026-07-20, and this is exactly what DESTINATIONS is
-  // for — the URL changed here and every CMS button followed, with no editor
-  // action and no dataset patch. Renaming the key would have orphaned the
-  // already-seeded `certificationsButton` on the IOT page.
+  // for — the URL changed here and every button followed, with no dataset
+  // patch. Renaming the key would have orphaned the already-seeded
+  // `certificationsButton` on the IOT page.
   certifications: "/credentials",
   facility: "/facility",
   // "tour" removed 2026-07-20 — tour booking is off the site until
   // 2026-10-26. Restore as `tour: "/facility#book-a-tour"` once the Book a
-  // Tour section is back in facility/page.tsx, along with its ctaButton.ts option.
+  // Tour section is back in facility/page.tsx.
   partners: "/partners",
   becomePartner: "/partners#become-a-partner",
   news: "/news",
@@ -54,9 +52,7 @@ export type CtaButton = {
 
 /**
  * Accepts only site-relative or http(s) URLs; anything else (javascript:,
- * data:, vbscript:…) comes back null and simply doesn't render. The Studio
- * already validates schemes at authoring time — this is the render-time
- * backstop for values that reached the dataset some other way.
+ * data:, vbscript:…) comes back null and simply doesn't render.
  */
 export function safeHref(url: string | null | undefined): string | null {
   if (!url) return null;
@@ -64,7 +60,7 @@ export function safeHref(url: string | null | undefined): string | null {
   return null;
 }
 
-/** Resolves a CMS button to an href, or null if it isn't usable yet. */
+/** Resolves a button to an href, or null if it isn't usable. */
 export function resolveHref(button?: CtaButton | null): string | null {
   if (!button?.destination) return null;
   if (button.destination === "external") return safeHref(button.externalUrl);

@@ -1,15 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.sanity.io",
-        pathname: "/images/**",
-      },
-    ],
-  },
   async redirects() {
     return [
       {
@@ -28,18 +19,15 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          // SAMEORIGIN (not DENY): the Studio's "Edit on page" tool iframes the
-          // site from /studio on the same origin, and that must keep working.
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Frame-Options", value: "DENY" },
           // Baseline CSP (added 2026-07-21). Deliberately NOT a full
-          // default-src policy: the embedded Studio, Adobe Fonts, and Sanity's
-          // live/preview APIs make a strict script/connect policy fragile, and
-          // the site renders no user-authored HTML. frame-ancestors 'self'
-          // mirrors X-Frame-Options above (same Studio iframe carve-out);
-          // object-src and base-uri close off legacy injection vectors.
+          // default-src policy: Adobe Fonts' script/connect needs make a
+          // strict script/connect policy fragile, and the site renders no
+          // user-authored HTML. object-src and base-uri close off legacy
+          // injection vectors.
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'",
+            value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
           },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },

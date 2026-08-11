@@ -4,7 +4,7 @@ import {
   isExternal,
   DOWNLOAD_DESTINATIONS,
   type CtaButton as CtaButtonData,
-} from "@/sanity/lib/links";
+} from "@/lib/links";
 
 type Props = {
   button?: CtaButtonData | null;

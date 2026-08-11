@@ -11,7 +11,7 @@ import Link from "next/link";
  *   (measured 2026-07-20, ~21px to spare). A 10th item or longer labels need
  *   re-measuring — the nav just gets tighter, then collides with the logo.
  * - A new route must ALSO go in src/app/sitemap.ts, Footer.tsx,
- *   sanity/lib/links.ts, and public/SITEMAP.html (the add-a-page runbook in
+ *   src/lib/links.ts, and public/SITEMAP.html (the add-a-page runbook in
  *   PROJECT.md §12 lists every step).
  */
 const NAV_ITEMS = [
@@ -36,15 +36,10 @@ const NAV_ITEMS = [
   { label: "Contact", href: "/contact" },
 ];
 
-type HeaderProps = {
-  bannerOrgText?: string;
-  bannerParentText?: string;
-};
+const BANNER_ORG_TEXT = "WELCOME TO THE GTCIO";
+const BANNER_PARENT_TEXT = "A DIVISION OF OGEECHEE TECHNICAL COLLEGE";
 
-export default function Header({
-  bannerOrgText = "WELCOME TO THE GTCIO",
-  bannerParentText = "A DIVISION OF OGEECHEE TECHNICAL COLLEGE",
-}: HeaderProps) {
+export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
 
@@ -56,7 +51,7 @@ export default function Header({
     <header className="sticky top-0 z-50 bg-brand-white">
       <div className="bg-brand-black px-4 py-2 text-center">
         <p className="font-ui text-xs font-bold tracking-widest text-brand-white sm:text-sm">
-          {bannerOrgText} <span className="text-brand-red">|</span> {bannerParentText}
+          {BANNER_ORG_TEXT} <span className="text-brand-red">|</span> {BANNER_PARENT_TEXT}
         </p>
       </div>
 

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
 // Every public route in the (site) group. Keep in step with the nav
-// (Header.tsx) and with sanity/lib/links.ts when routes are added or moved.
+// (Header.tsx) and with src/lib/links.ts when routes are added or moved.
 const ROUTES = [
   "/",
   "/about",

@@ -1,7 +1,7 @@
 # GTCIO website — project brief
 
 Everything a developer or AI agent needs to pick this project up cold. Last
-updated 2026-08-06. Check claims against the code before trusting them.
+updated 2026-08-11. Check claims against the code before trusting them.
 
 ---
 
@@ -15,7 +15,10 @@ Industrial Operations Technology (IOT) diploma program in **August 2026**.
 - **Live:** https://gtcio-site.vercel.app
 - **Repo:** https://github.com/Ogeechee-Tech-PR-and-Marketing/gtcio-site (private,
   transferred 2026-07-22 from Jake's personal `revjake1` account — see §12)
-- **Editing UI (Sanity Studio):** https://gtcio-site.vercel.app/studio
+- **Editing UI:** none right now. The Sanity CMS was fully removed from the
+  codebase 2026-08-11, ahead of handing the site off to a new agency, **Third
+  Wave Digital**, who will connect their own CMS. Until then, content lives in
+  code — see §4.
 - **Local source:** `/Users/jhallman/Documents/GTCIO site/gtcio-site`
 
 **Stakeholder:** Jan Moore, VP for Economic Development at OTC. She drives
@@ -38,7 +41,6 @@ stray/abandoned Wix sites may still exist in the `jhallman32` Wix account.
 | Framework | Next.js **16.2.10**, App Router, Turbopack |
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
-| CMS | Sanity v6 (`next-sanity` v13) |
 | Email | Microsoft Graph / Azure AD app (see §5) |
 | Fonts | Adobe Fonts / Typekit — Trade Gothic Next (see §7) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
@@ -59,7 +61,7 @@ src/app/
   layout.tsx              root: <html>/<body> only, no chrome
   site-pin/               /site-pin    PIN entry screen (outside (site) — no Header/Footer)
   (site)/                 ← every public page. Route group.
-    layout.tsx            Header + Footer + SanityLive + VisualEditing
+    layout.tsx            Header + Footer
     page.tsx              /            (home)
     about/                /about
     training/             /training    ("IOT Training Programs" in the nav)
@@ -70,10 +72,8 @@ src/app/
     partners/             /partners
     news/                 /news
     contact/              /contact
-  studio/[[...tool]]/     /studio      ← Sanity Studio, embedded
   api/
     site-pin/             POST target that checks the PIN gate cookie (§6)
-    draft-mode/           enable + disable, for the Studio's live preview
     inquiry/              POST target for all three forms (§5)
     newsletter/            POST target for the footer sign-up form (§11)
     constant-contact/
@@ -84,9 +84,21 @@ src/lib/
   site-pin.ts             SITE_PIN_COOKIE — shared by middleware.ts and api/site-pin (§6)
   constantContact.ts      token refresh + list lookup/create + the actual
                           sign-up call. Server-only (§11)
+  constantContactStore.ts Vercel KV wrapper (getConstantContactAuth /
+                          setConstantContactAuth / patchConstantContactAuth) —
+                          replaced the old Sanity draft-doc token store
+                          2026-08-11, see §11
+  links.ts                DESTINATIONS: ctaButton destination keys → real
+                          hrefs, plus safeHref/resolveHref/isExternal — moved
+                          here verbatim from sanity/lib/links.ts 2026-08-11
+  partners.ts             the 5 partner companies (name/description/logo
+                          path/website) — exported from Sanity 2026-08-11,
+                          see §4
+  news.ts                 all 14 news items (press + media) — exported from
+                          Sanity 2026-08-11, see §4
   iot-curriculum.ts       the IS32 course table + SACA credential glossary.
-                          A deliberate exception to CMS-first copy — read
-                          its header comment before touching it (§4).
+                          Always code, not CMS — read its header comment
+                          before touching it (§4).
   credentials.ts          SACA's tier ladder + the four accreditations OTC holds.
                           Same code-not-CMS reasoning (§4). The accreditations
                           are the shared fallback for /credentials AND /training
@@ -94,24 +106,11 @@ src/lib/
                           "Affiliations now split by audience" note).
 src/components/           Header, Footer, PageHero, InquiryForm
   Button.tsx              the raw styled link (variant, target/rel)
-  CtaButton.tsx           renders a CMS-configured button via links.ts (§4)
+  CtaButton.tsx           renders a `ctaButton`-shaped value via links.ts (§4)
   HeroCard.tsx            the blurred rounded scrim card behind hero copy,
                           shared by Home and every PageHero — see §10's
                           "Home hero headline is sized to fit one line" note
   NewsletterSignup.tsx    rendered inside Footer, sitewide, UI-only — see §8
-sanity/
-  env.ts                  projectId / dataset / apiVersion
-  lib/client.ts           read client
-  lib/writeClient.ts      write client — server-only, form submissions
-  lib/live.ts             sanityFetch + SanityLive (draft/preview)
-  lib/queries.ts          all GROQ
-  lib/image.ts            urlForImage + resolveHeroImage (hotspot → focal point)
-  lib/links.ts            DESTINATIONS: ctaButton destination keys → real hrefs
-  schemaTypes/            documents/ + objects/ + heroFields.ts
-  structure.ts            the Studio's left-hand menu
-  presentation.ts         maps documents ↔ page URLs for "Edit on page"
-sanity.config.ts          Studio config (root)
-sanity.cli.ts             CLI config (root)
 deploy/                   self-hosting scaffolding — NOT yet in use (§8):
   README.md               the migration runbook (setup + cutover steps)
   gtcio-site.service      systemd unit for the on-campus server
@@ -123,211 +122,94 @@ deploy/                   self-hosting scaffolding — NOT yet in use (§8):
                           migration starts; see §8
 ```
 
-**Why the `(site)` route group exists:** so `/studio` does *not* inherit the
-site's Header/Footer. If you move pages out of `(site)`, the Studio will render
-with a GTCIO nav bar stapled to it. This was a real bug once. Leave it alone.
+**Why the `(site)` route group exists:** so plain, chrome-free routes — `/site-pin`
+today — don't inherit the site's Header/Footer. `/site-pin` sits outside `(site)`
+for exactly this reason (no CMS fetch either, it's a static form). If you add
+another route that shouldn't carry the nav/footer, keep it out of `(site)` too.
 
 ---
 
-## 4. The CMS — read this before touching content
+## 4. Content — now static, pending Third Wave Digital's CMS
 
-Sanity project **`kjz4q8d4`**, dataset **`production`**. The Studio is embedded at
-`/studio` (not separately hosted). It is configured to land on the **"Edit on
-page"** (Presentation) tool, so an editor sees the live site and clicks what they
-want to change.
+**The Sanity CMS was fully removed from the codebase 2026-08-11.** As of that
+date, content is code-only: every page component defines a `DEFAULTS` object
+and renders it directly — no CMS fetch, no fallback, no `{...DEFAULTS,
+...cmsData}` merge. `DEFAULTS` **is** the content now, not a fallback for it.
+The site is being prepared for handoff to a new agency, **Third Wave Digital**,
+who will connect their own CMS; until that happens, a copy change means editing
+the relevant file, committing, and pushing to `main` (which auto-deploys — see
+§9). This section describes where that content lives today.
 
-The whole point of the CMS is that **non-technical marketing staff operate it.**
-Every decision below exists to protect that. Weigh it accordingly.
+This was a mechanical refactor, not a content edit: every field was diffed
+against the live published Sanity document before removal and matched
+character-for-character in every case across all 9 pages plus the old
+`siteSettings`. So every fact documented elsewhere in this file (tuition,
+timeline, advisory board roster, brand terminology, etc. — see §10) is still
+accurate and still live on the site; it's just sourced from a file now instead
+of a document in a CMS.
 
-### Content model
+### Where content lives
 
-- **Singletons, one per page:** `homePage`, `aboutPage`, `facilityPage`,
-  `trainingPage`, `iotDiplomaProgramPage`, `credentialsPage`, `partnersPage`,
-  `newsPage`, `contactPage`. Each has a fixed `_id` equal to its type name. They can't be
-  created, duplicated, or deleted from the Studio (see `document.actions` in
-  `sanity.config.ts`). Any new singleton must be added to `singletonTypes` in
-  `sanity/schemaTypes/index.ts` AND to `structure.ts` + `presentation.ts`.
-- **`siteSettings`** — top banner text, address, phone, program + media contacts,
-  and the footer newsletter signup copy (moved here from `homePage` 2026-07-21 —
-  the signup itself now renders inside `Footer.tsx` on every page, not just
-  Home, so its copy lives on the sitewide settings doc rather than a single
-  page). Used by Header, Footer, and the Contact page.
-- **`partner`** — one document per partner company (`logo`, `order`,
-  `showOnWebsite`, plus an optional `website` URL — when set, the partner's block
-  on the Partners page links out to it).
-- **`newsItem`** — one document per press release / media mention (`category`
-  = `press` | `media`, `title`, `date`, `source`, `url`, `excerpt`,
-  `showOnWebsite`, optional `image` + `imageAlt` — hotspot-cropped thumbnail,
-  same pattern as a partner logo). Queried directly like `partner` (see trap
-  1), split into two groups on `/news` by `category`. See §8 for which items
-  currently have a thumbnail and why the media (outside-outlet) items don't.
-- **`formSubmission`** — a saved copy of every form inquiry (§5). Read-only;
-  written only by the server, never created by hand in the Studio.
-- **Objects:** `faq`, `statCard`, `pathwayCard`, `timelineEvent`, `infoCard`,
-  `courseArea`, `ctaButton`, plus per-page inline types (`curriculumStage`,
-  `programOption`, `jobDuty`, `payRange`).
-- **`ctaButton` — how links stay unbreakable.** Editors pick a `destination` from
-  a dropdown of real pages, never a raw href; `sanity/lib/links.ts` maps those
-  keys to actual URLs and `<CtaButton>` renders them (adding `target="_blank"`
-  automatically for external ones). **If a route ever moves, change
-  `DESTINATIONS` in `links.ts` and every CMS button follows** — no editor action.
-  Adding a destination means editing BOTH the options list in
-  `objects/ctaButton.ts` and `DESTINATIONS`. A half-filled button (no label, or
-  `external` with no URL) renders nothing rather than a dead link.
-- **Convention: Studio order mirrors page order.** A document's `groups` must be
-  listed top-to-bottom in the order those sections appear on the page, fields
-  within a group likewise, and `structure.ts`'s page list must match the site nav.
-  An editor should be able to read the tabs like they're scrolling the page. This
-  is why `applyHeading` got its own "Apply band" group (it had been filed under
-  FAQ, though the Apply band renders *after* the FAQ) and why `introText` moved out
-  of "Ways to partner" into its own "Intro & button" group. Keep the code `DEFAULTS`
-  objects in page order too — same reason.
-- **Convention: every page's copy is CMS-first, with the code `DEFAULTS` as a
-  fallback.** As of 2026-07-21 the only things NOT editable are the top nav, the
-  footer's link columns, and the logo (all deliberate — see §8). Everything
-  else is: the Home hero buttons / red partner band; the footer's newsletter
-  signup (on `siteSettings`, not `homePage` — see §8); the
-  Training stats, employer copy, catalog band, credentials, services and course
-  areas; the Facility focus areas; the Partners intro button; the IOT Apply band
-  + button; the About mission statement and project timeline. (The Facility
-  tour-notice banner was CMS-editable too, until Book a Tour was pulled off the
-  site entirely 2026-07-20 — see §8.)
-  The CMS is **seeded** with all of that copy so editors see real text, not empty
-  boxes falling back to code. If you add a section, add fields AND seed them —
-  don't leave content code-only.
-- **The one deliberate exception: `src/lib/iot-curriculum.ts`** (added
-  2026-07-20). The IS32 course table (12 program courses + 3 required general
-  education courses, 53 credit hours total — see §8) and the SACA
-  credential glossary (22 entries) that drive `/iot-diploma-program/curriculum`
-  and `/credentials` are **code, not CMS content**. They
-  are a faithful transcription of an *accredited* course catalog — codes, credit
-  hours, and credential mappings are matters of record, not marketing copy, and
-  a wrong edit misstates the program to prospective students. A ~200-bullet
-  editing surface would also be hostile to the non-technical editors the CMS
-  exists for. When the curriculum changes it arrives as a new brochure and a
-  developer updates the file. The *framing* around it (headings, intro copy, the
-  buttons on the IOT page) IS CMS-editable, and is seeded. `public/SITEMAP.html`
-  labels these pages "…data code-managed" so the stakeholder view matches.
-  `src/lib/credentials.ts` (the SACA tier ladder and OTC's accreditations, both
-  on `/credentials`) is code for the same reason. **One cross-page wrinkle:** the
-  accreditations shown on `/credentials` (2 of the 4 — see §10's "Affiliations
-  now split by audience" note) are *authored on the Training page's document*
-  (`trainingPage.affiliations`) — `CREDENTIALS_PAGE_QUERY` reads that field
-  with a sub-query, so an editor updates them once and both pages follow.
-  There is deliberately no `affiliations` field on `credentialsPage`. If
-  Training's field is ever removed, add the fallback path.
-- **Dropdown sources:** `contactPage.contactReasons` (array of strings) feeds the
-  Contact form's dropdown. The Become a Partner dropdown has no field of its own —
-  it is derived from `partnersPage.pathways` (§5).
-- Interior page heroes share `heroFields()` in `sanity/schemaTypes/heroFields.ts`,
-  which wraps `heroMediaFields()` — the photo (+ optional video) part, reused
-  directly by `homePage` since its headline fields don't match the interior-page
-  shape (see next point). Every hero's Background photo overrides any video —
-  home and About are the only two with a hero video, uploading a photo replaces
-  it. Absent a photo, an uploaded Background video (`heroVideo`, a `file` field
-  with `accept: "video/*"`) replaces the default footage; `heroVideoPoster`
-  supplies its loading frame. A `file` asset's URL isn't self-contained the way
-  an image asset's is — `HOME_PAGE_QUERY`/`ABOUT_PAGE_QUERY` dereference it with
-  `heroVideo{..., asset->}`, and `resolveHeroVideo()` in `sanity/lib/image.ts`
-  picks between it and the fallback the same way `resolveHeroImage()` does for
-  photos.
+- **Every page's copy** is a `DEFAULTS` object in
+  `src/app/(site)/<page>/page.tsx` (home, about, facility, training,
+  credentials, iot-diploma-program, contact, partners, news). Every page
+  component is a plain synchronous function now — no `async`, no CMS fetch, no
+  `await`.
+- **What used to be `siteSettings`** (top banner text, address, phone, footer
+  newsletter copy) is now hardcoded constants directly in the components that
+  use them: `BANNER_ORG_TEXT`/`BANNER_PARENT_TEXT` in
+  `src/components/Header.tsx`, `TAGLINE`/`ADDRESS`/`PHONE` in
+  `src/components/Footer.tsx`, and
+  `EYEBROW`/`TITLE`/`BODY`/`BUTTON_LABEL`/`CONFIRMATION` in
+  `src/components/NewsletterSignup.tsx`.
+- **`src/lib/partners.ts`** — the 5 partner companies (Ajin Georgia, Amazon,
+  Development Authority of Bulloch County, Georgia Power, Koyo Bearings), each
+  with name/description/logo path/website. This content had **no** code
+  fallback before removal — it was queried live from Sanity with nothing to
+  fall back to — so it was newly exported here 2026-08-11. Logos live at
+  `public/images/partner-<slug>.<ext>`, downloaded byte-for-byte from Sanity's
+  CDN before the CMS was removed.
+- **`src/lib/news.ts`** — all 14 news items (7 press, 7 media), same fields as
+  before the removal (category/title/date/source/url/excerpt/image/imageAlt/
+  imagePosition). Also had no prior code fallback, also newly exported
+  2026-08-11. The 5 items that carry a thumbnail have their images at
+  `public/images/news/<slug>.<ext>`, also downloaded byte-for-byte beforehand.
+- **`src/lib/links.ts`** — `DESTINATIONS` (ctaButton destination keys → real
+  hrefs), the `CtaButton` type, and `safeHref`/`resolveHref`/`isExternal`.
+  Moved verbatim from `sanity/lib/links.ts` 2026-08-11 (it was already pure
+  TypeScript with no real Sanity dependency); every importer across the
+  codebase was updated to `@/lib/links`. **If a route ever moves, change
+  `DESTINATIONS` here** — every button that references that key follows.
+- **`src/lib/iot-curriculum.ts` and `src/lib/credentials.ts` were ALWAYS
+  code, not CMS** — this is a different, older, and still-unchanged reason
+  from the rest of the site being code-only as of today. The IS32 course table
+  (12 program courses + 3 required general education courses, 53 credit hours
+  total) and the SACA credential glossary (22 entries) that drive
+  `/iot-diploma-program/curriculum` and `/credentials` are a faithful
+  transcription of an *accredited* course catalog — codes, credit hours, and
+  credential mappings are matters of record, not marketing copy, and a wrong
+  edit misstates the program to prospective students. When the curriculum
+  changes it arrives as a new brochure and a developer updates the file, same
+  as always. `public/SITEMAP.html` still labels these pages "…data
+  code-managed" for the stakeholder view. `src/lib/credentials.ts` (the SACA
+  tier ladder and OTC's accreditations, both on `/credentials`) is code for
+  the same reason. **One cross-page wrinkle, unchanged by the CMS removal:**
+  the accreditations shown on `/credentials` (2 of the 4 — see §10's
+  "Affiliations now split by audience" note) are the same array as
+  `/training` shows, filtered by a `showOn` tag (`affiliationsFor()` in
+  `credentials.ts`) — a single source feeding both pages, not two lists to
+  keep in sync by hand.
+- Don't confuse these two categories of "code, not a CMS field": everything in
+  the previous bullet list (partners, news, page DEFAULTS, links) is code
+  *as of 2026-08-11, because Sanity was removed*; `iot-curriculum.ts` and
+  `credentials.ts` were *always* code, for a program-accuracy reason that has
+  nothing to do with the CMS removal.
 
-### 🔴 Six traps that will bite you
-
-**1. Partners are queried directly. Never reintroduce a reference list.**
-The first version had `partnersPage.directory` as an array of references to
-partner docs. That meant creating a partner did *nothing* until you also added it
-to that list — a silent no-op that reads as "the CMS is broken" to a
-non-technical editor. Now `PARTNERS_PAGE_QUERY` does:
-
-```groq
-"partners": *[_type == "partner" && showOnWebsite != false] | order(order asc, name asc)
-```
-
-Creating a partner is sufficient to publish them. `order` (number) sets position,
-`showOnWebsite` (boolean) hides without deleting. **Keep it this way.**
-
-**2. Array items must carry a `_type`.** If you seed or migrate content, every
-object inside an array needs `_type` matching the schema (`{_key, _type: "faq",
-...}`). Without it the *website renders fine* but the Studio shows the item as a
-broken "unknown type" row an editor can't fix. This actually happened. It's
-invisible from the frontend — which is exactly why it survived a browser check.
-
-**3. Partner logos: request width only.** `urlForImage(logo).width(480).fit("max")`.
-Passing **both** width and height makes Sanity crop to that aspect ratio, which
-clipped the Amazon wordmark. CSS `object-contain` does the fitting. The logo field
-deliberately has **no hotspot** so an editor cannot crop a company's trademark.
-
-**4. Hero focal point comes from the Sanity hotspot.** `resolveHeroImage()` in
-`sanity/lib/image.ts` converts the hotspot's image-relative x/y into an
-`object-position` percentage. Use the subject's true position in the image — never
-a crop offset eyeballed at one screen width, because the hero crops differently on
-every viewport. Each hero falls back to a hardcoded image + hand-tuned focal point
-when no CMS image is set.
-
-**5. `writeClient` is server-only.** `sanity/lib/writeClient.ts` carries a
-read+write token and imports `server-only` to guarantee it can't be pulled into a
-client bundle. Never import it from a `"use client"` component, and never pass the
-token to the browser.
-
-**6. Sanity content overrides code `DEFAULTS`.** Every page component defines a
-`DEFAULTS` object and renders `{...DEFAULTS, ...(cmsData)}`. Once a field exists on
-the Sanity document, the CMS value wins and the code default is *never shown*. So
-editing only the code default (address, hero copy, a heading, a nav-adjacent
-label like the Training hero eyebrow, an FAQ answer) leaves the live site
-unchanged. **When changing existing copy, change both the code default and patch
-the Sanity doc.** Patch published docs with the write token from `.env.local` via
-`POST /v<ver>/data/mutate/<dataset>` — `{mutations:[{patch:{id, set:{…}}}]}`;
-array items patch by key, e.g. `set:{"faqs[_key==\"f3\"].answer": "…"}`. Brand-new
-fields (ones no doc has ever had) are safe to change in code alone — the default
-applies until an editor fills them. Local gotcha: Next's `.next/cache` fetch cache
-can serve a *stale* Sanity value across `npm run build`s — `rm -rf .next/cache`
-before rebuilding to verify a CMS change locally (Vercel builds fresh, so deploys
-are unaffected). ⚠️ **`rm -rf .next/cache` alone was NOT enough** when verifying
-the news items on 2026-07-20: a dev server started with the cache cleared still
-served a one-item page for several restarts, and only `rm -rf .next` (the whole
-directory) picked up all six. If local output disagrees with what the API
-returns, wipe all of `.next` before you start debugging the query. Also confirm
-you killed every dev server first — `pkill -f "next dev"` missed a live
-`next-server` process that kept answering on port 3000 with its own stale cache,
-which looks exactly like a caching bug in the code. `lsof -ti:3000` to be sure.
-
-**⚠️ Patching a published doc leaves any DRAFT of it stale — and the draft wins
-later.** A `patch` on `homePage` does *not* touch `drafts.homePage`. If a draft
-exists (an editor opened the page in the Studio at some point, even without
-saving anything meaningful), then: the public site still shows your published
-change, but the **Studio preview shows the stale draft**, and the moment anyone
-presses **Publish** the draft silently **reverts your change**. This actually
-happened — a 2026-07-14 `drafts.homePage` sat on the old hero copy *and* the old
-"optional SACA" wording for two days after both were changed, primed to undo them.
-**After patching a published doc, always check for a draft and patch it to match:**
-
-```bash
-# list every draft in the dataset (perspective=raw is required to see them)
-*[_id in path("drafts.**")]{_id,_updatedAt,_type}
-# then diff drafts.<id> against <id> and patch the draft with the same values
-```
-
-Prefer patching the draft over deleting it. Note `sanity.previewUrlSecret` drafts
-are system docs for the Presentation tool — leave those alone.
-
-Related: if someone reports the live site showing old copy that you know you
-changed, suspect **draft mode** before cache. Clicking through the Studio's "Edit
-on page" sets a draft-mode cookie, so *their browser* renders drafts on the real
-site. `https://gtcio-site.vercel.app/api/draft-mode/disable` clears it.
-
-### Verifying CMS work
-
-You cannot log into the Studio (it needs Jake's password), so **do not "verify"
-CMS changes by looking at the rendered website** — a correct page can hide a
-broken editor (see trap 2). Use:
-
-```bash
-npx sanity schema validate                                 # schema is well-formed
-npx sanity documents validate --dataset production --yes   # every doc matches the schema
-```
-
-Both should report 0 errors. The second is what catches trap 2.
+If you're reading an older commit, a design doc, or a stakeholder note that
+still says "CMS-first" or "patch the Sanity doc" — that language describes how
+things worked before 2026-08-11 and no longer applies. §10's historical bullets
+still use that old phrasing in places since they're a record of what actually
+happened at the time; see the note at the top of §10 for how to read those now.
 
 ---
 
@@ -346,51 +228,45 @@ in October is just re-adding UI, no backend change. That route, in order:
    (200 chars for short fields, 5 000 for the message), and strips control
    characters from the fields that end up in the email subject line, so a
    submission can never smuggle CR/LF toward anything that builds email headers.
-3. **Saves the inquiry to Sanity first** as a `formSubmission` document. This
-   happens *before* any email is attempted, so a bounced or spam-filtered
-   notification never means a lost lead. **Do not flip this order.**
-4. **If the Contact form's "Sign me up for GTCIO's newsletter" checkbox is
+3. **If the Contact form's "Sign me up for GTCIO's newsletter" checkbox is
    checked, adds the submitter to Constant Contact** (added 2026-07-22) —
    reuses `addNewsletterSignup()` from `src/lib/constantContact.ts`, the same
    function the footer's newsletter form calls (see §11). Best-effort and
    independent of the rest of the handler: a failure here is caught and
    logged (`console.error`), never turned into an error response — the
-   visitor's inquiry still succeeds either way. No `formSubmission` field
-   records the opt-in choice; Constant Contact's own list is the record of
-   truth, same reasoning as the footer form. This is the only form-level
+   visitor's inquiry still succeeds either way. This is the only form-level
    opt-in — Partner and Tour submissions never touch Constant Contact.
-5. **Then emails staff** via Microsoft Graph's `sendMail` API (an Azure AD app
+4. **Emails staff** via Microsoft Graph's `sendMail` API (an Azure AD app
    registration, client-credentials grant — see the Microsoft Graph subsection
    below) with `subject` built from the dropdown choice and `replyTo` set to
-   the submitter, so staff can just hit Reply.
-6. **Flags `emailDelivered`** on the saved document. `false` means the email did
-   not go out — the Studio preview renders those as "⚠️ NOT EMAILED" so someone
-   can follow up by hand.
+   the submitter, so staff can just hit Reply. **This is now the only record
+   of an inquiry — there is nothing else it's saved to.**
 
-Marketing reads these in the Studio under **"Form submissions (inbox)"**.
-
-### 🔴 Submissions are saved as DRAFTS on purpose — privacy depends on it
-
-The `production` dataset is **publicly readable** (that's how the website reads
-content without a token, and how `cdn.sanity.io` serves images). A regular
-published `formSubmission` document would therefore expose the visitor's name,
-email, phone, and message to anyone on the internet via a one-line GROQ query.
-Draft documents (`_id` under `drafts.`) are the exception: they require
-authentication to read. So `/api/inquiry` writes every submission with
-`_id: "drafts.<uuid>"` (verified 2026-07-20: unauthenticated queries — including
-`perspective=raw` — return nothing; the Studio inbox lists them normally, just
-with an "unpublished" dot). Two guardrails keep it that way:
-
-- `sanity.config.ts` strips every document action except **Delete** for
-  `formSubmission`, so an editor can't Publish one (which would make it public).
-- **Never "fix" the inbox by publishing submissions**, and if the dataset is ever
-  made private or submissions move elsewhere, revisit this whole section.
+**🔴 Changed 2026-08-11, and this is a deliberate, accepted risk Jake signed
+off on:** until 2026-08-11, every submission was saved to Sanity as a
+`formSubmission` document *before* any email was attempted, specifically so a
+bounced or spam-filtered notification never meant a lost lead — a failed send
+still left the inquiry sitting in the Studio inbox for someone to find by hand.
+That Sanity write is gone; there is no CMS to write it to anymore. The route
+now succeeds **only if the email actually delivers to every intended
+recipient**. If Microsoft Graph isn't configured, or delivery fails for any
+other reason, the route returns a `500` with
+`{"error": "Something went wrong on our end. Please email us directly."}` and
+the submission is gone — not saved anywhere, not queued, not recoverable.
+**As of today none of the four `MS_GRAPH_*` vars are set in Vercel production**
+(see §8) — this is the same pre-existing gap as before 2026-08-11, but the
+consequence changed: previously a misconfigured Graph meant "saved but not
+emailed," now it means **lost entirely**. Finishing the Microsoft Graph setup
+(§8) is now urgent, not just a nice-to-have — until it's done, every Partner
+and Contact submission that reaches the site with Graph unconfigured
+disappears with no trace.
 
 ### Dropdowns
 
-- **Become a Partner** — options are generated from `partnersPage.pathways`, i.e.
-  the same Partnership Pathway cards displayed above the form, so renaming a
-  pathway card's title generally carries through to the form automatically.
+- **Become a Partner** — options are generated from `DEFAULTS.pathways` in
+  `partners/page.tsx`, i.e. the same Partnership Pathway cards displayed above
+  the form, so renaming a pathway card's title generally carries through to
+  the form automatically.
   **This is deliberately NOT total sync, though** — `FORM_LABEL_OVERRIDES` and
   `EXTRA_FORM_OPTIONS` in `partners/page.tsx` let two checkbox choices diverge
   from the cards on purpose (currently: "Training Program Partner" shows as
@@ -400,8 +276,9 @@ with an "unpublished" dot). Two guardrails keep it that way:
   lists. Then a hardcoded "Something else / not sure yet" is appended.
   **Checkboxes, not a dropdown** (changed 2026-07-20) — a prospective partner
   can be interested in more than one pathway at once.
-- **Contact** — options come from `contactPage.contactReasons`, editable in the
-  Studio. **Single-select dropdown** — a visitor picks exactly one reason (tried
+- **Contact** — options come from `DEFAULTS.contactReasons` in
+  `src/app/(site)/contact/page.tsx`, a plain array in code. **Single-select
+  dropdown** — a visitor picks exactly one reason (tried
   as checkboxes on 2026-07-20, reverted the same day: Contact stays one-at-a-time,
   only Become a Partner allows multiple).
 
@@ -436,20 +313,19 @@ both forms' field types without special-casing which form submitted:
   "Media inquiry" alongside another reason, **both** addresses would be
   notified (two separate `sendMail` calls), since each reason serves a
   different audience.
-- Renaming the "Media inquiry" checkbox label in the Studio breaks this
+- Renaming the "Media inquiry" checkbox label in the code breaks this
   matching silently — `MEDIA_REASON` in the route file has to change with it.
 - Changing who receives notifications (e.g. Jan or Sean changes roles) means
   editing `NOTIFY_EMAIL`/`NOTIFY_EMAIL_MEDIA` in the route and redeploying —
-  there's no Studio field for it, same tradeoff the code already accepts for
-  `MEDIA_REASON`.
+  same tradeoff the code already accepts for `MEDIA_REASON`.
 
-**If Microsoft Graph isn't configured (any of the four `MS_GRAPH_*` env vars
-missing), the site still works and still saves every submission — it just
-doesn't email anyone.** `emailDelivered` on the saved `formSubmission` is only
-`true` when *every* recipient that submission needed was successfully
-notified, so a partial send (e.g. one address rejects the message) still shows
-the Studio's "⚠️ NOT EMAILED" flag as a prompt to follow up by hand. That's
-deliberate graceful degradation, not a bug. See §8 for the current status.
+**🔴 If Microsoft Graph isn't configured (any of the four `MS_GRAPH_*` env
+vars missing), the submission is lost.** Before 2026-08-11 this degraded
+gracefully — the site still worked and still saved every submission to the
+Sanity inbox, it just didn't email anyone. There is no CMS to fall back to
+now: the route returns a `500` and nothing about the inquiry survives
+anywhere. See the 🔴 note above and §8 for the current status — this is why
+finishing Microsoft Graph setup is now urgent.
 
 ⚠️ **The Azure app registration must be scoped narrowly.** `Mail.Send` as an
 *application* permission (not delegated) lets the app send as **any** mailbox
@@ -476,8 +352,8 @@ do this step himself without that access.
    the app's Overview page — these become `MS_GRAPH_TENANT_ID` and
    `MS_GRAPH_CLIENT_ID`.
 4. **Create a client secret**: Certificates & secrets → New client secret.
-   Copy the secret's **value** immediately — like a Sanity token, it's shown
-   once. This becomes `MS_GRAPH_CLIENT_SECRET`.
+   Copy the secret's **value** immediately — it's shown once and can't be
+   retrieved again. This becomes `MS_GRAPH_CLIENT_SECRET`.
 5. **Grant the Graph API permission**: API permissions → Add a permission →
    Microsoft Graph → **Application permissions** (not Delegated, since
    nobody logs in interactively) → search for and add `Mail.Send`. Then
@@ -510,25 +386,28 @@ match a real mailbox in the tenant.
 `.env.local` (gitignored) and Vercel env vars (all three environments):
 
 ```
-NEXT_PUBLIC_SANITY_PROJECT_ID=kjz4q8d4
-NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_SANITY_API_VERSION=2025-06-01
-SANITY_API_READ_TOKEN=<viewer-role token, secret>
-SANITY_API_WRITE_TOKEN=<editor-role token, secret — writes form submissions>
-MS_GRAPH_TENANT_ID=<see §5; unset = no email, submissions still saved>
+MS_GRAPH_TENANT_ID=<see §5; unset = no email, and the inquiry is lost, not saved>
 MS_GRAPH_CLIENT_ID=<see §5; from the Azure AD app registration>
 MS_GRAPH_CLIENT_SECRET=<see §5; from the same app registration, secret>
 MS_GRAPH_SENDER_EMAIL=<see §5; the mailbox notification emails send AS>
 CONSTANT_CONTACT_CLIENT_ID=<see §11; from the Constant Contact developer app>
 CONSTANT_CONTACT_CLIENT_SECRET=<see §11; from the same app, secret>
 CONSTANT_CONTACT_SETUP_SECRET=<see §11; any random string you pick — gates the one-time OAuth URL>
+KV_REST_API_URL=<see §11; auto-injected once Vercel KV is provisioned — NOT set as of 2026-08-11, see §8>
+KV_REST_API_TOKEN=<see §11; auto-injected alongside KV_REST_API_URL>
 SITE_ACCESS_PIN=<optional — see "Site-wide PIN gate" below; unset = gate is off>
 ```
+
+`KV_REST_API_URL`/`KV_REST_API_TOKEN` come from a Vercel KV (Upstash Redis)
+store connected to the project — you don't set these by hand. Vercel →
+gtcio-site → Storage → Create Database auto-injects both into every
+environment. **This store does not exist yet as of 2026-08-11** (Jake said
+he'll provision it himself) — see §8 and §11.
 
 **Site-wide PIN gate** (added 2026-08-06, pre-launch). `src/middleware.ts` runs
 on every request; if `SITE_ACCESS_PIN` is set, a visitor with no matching
 `gtcio_pin` cookie is redirected to `/site-pin`, a plain form (no CMS fetch, no
-Header/Footer — same isolation reasoning as `/studio`, §3) that POSTs to
+Header/Footer — same route-group isolation as noted in §3) that POSTs to
 `/api/site-pin`. A correct submission sets an httpOnly cookie holding the PIN
 itself, valid 30 days, and the visitor is sent back to the page they wanted.
 This is a **basic deterrent, not real authentication** — the PIN is shared and
@@ -543,7 +422,7 @@ auth if that's ever needed.
   `/api/site-pin` (or the gate could never be passed), and
   `/api/constant-contact/oauth/callback` (§11's OAuth redirect target — a third
   party sends the visitor's browser here, and it shouldn't depend on gate-cookie
-  state). Everything else, including `/studio`, sits behind the gate.
+  state). Everything else sits behind the gate.
 - **Static assets bypass the gate entirely** via `middleware.ts`'s `matcher`
   (common file extensions, `_next/*`) — a direct link to a video or PDF isn't
   blocked, only the pages that link to them are. Acceptable for a casual-visitor
@@ -552,32 +431,26 @@ auth if that's ever needed.
   code change needed. To change the PIN, just change the env var and redeploy;
   everyone's existing cookie stops matching and they'll be asked again.
 
-The read token is **viewer role**, used server-side for draft/preview reads only.
-The write token is **editor role**, used *only* by `/api/inquiry`, via the
-server-only `writeClient`. Editors authenticate to the Studio with their own Sanity
-login; neither token is involved in that.
-
-**Sanity CORS origins** (`npx sanity cors list`) currently allow
-`http://localhost:3000` and `https://gtcio-site.vercel.app`.
-⚠️ **If the site moves to a custom domain (e.g. a real ogeecheetech.edu address),
-add that origin** or the Studio's "Edit on page" preview will silently fail:
-`npx sanity cors add https://newdomain --credentials`.
-
-`next.config.ts` allow-lists `cdn.sanity.io` for `next/image`. Any new remote
-image host must be added there or images 500.
+`next.config.ts` no longer allow-lists any remote image host (the `images.remotePatterns`
+block was deleted 2026-08-11 along with `cdn.sanity.io`, the only entry it
+ever had) — every image on the site is local, served from `public/`. If a
+future integration needs a remote image host again, add an `images` config
+block back to `next.config.ts` or those images will 500.
 
 `next.config.ts` also sets security headers on every route (added 2026-07-20):
-`X-Frame-Options: SAMEORIGIN` (deliberately not DENY — the Studio's "Edit on
-page" tool iframes the site from `/studio` on the same origin),
-`X-Content-Type-Options: nosniff`, `Referrer-Policy`, a restrictive
-`Permissions-Policy`, and (added 2026-07-21) a baseline
-`Content-Security-Policy` (`frame-ancestors 'self'; object-src 'none';
-base-uri 'self'` — deliberately not a full `default-src` policy, which the
-embedded Studio, Adobe Fonts, and Sanity's live APIs would make fragile).
-`Strict-Transport-Security` is set by the app itself as of 2026-07-22
-(previously left to Vercel's edge, which sets it on `*.vercel.app` — the
-planned self-hosted setup has no equivalent edge layer, so the app owns the
-header now; harmless duplication while still on Vercel).
+**`X-Frame-Options: DENY`** and **`Content-Security-Policy`'s
+`frame-ancestors 'none'`** (tightened 2026-08-11 — these were `SAMEORIGIN` /
+`frame-ancestors 'self'` only because the Sanity Studio's "Edit on page" tool
+iframed the site from `/studio` on the same origin; with the Studio gone
+there's no legitimate same-origin iframe use case left, so this is a security
+tightening, not just cleanup), `X-Content-Type-Options: nosniff`,
+`Referrer-Policy`, a restrictive `Permissions-Policy`, and (added 2026-07-21) a
+baseline `Content-Security-Policy` (`object-src 'none'; base-uri 'self'` —
+deliberately not a full `default-src` policy, which Adobe Fonts would make
+fragile). `Strict-Transport-Security` is set by the app itself as of
+2026-07-22 (previously left to Vercel's edge, which sets it on `*.vercel.app`
+— the planned self-hosted setup has no equivalent edge layer, so the app owns
+the header now; harmless duplication while still on Vercel).
 
 `next.config.ts` also serves `public/videos|images|documents` with
 `Cache-Control: public, max-age=31536000, immutable` (added 2026-07-21 — they
@@ -653,9 +526,10 @@ them (verified by grep) and Sanity's `homePage` doc has no
 patching.
 
 **The canonical site origin lives in `src/lib/site.ts`** (`SITE_URL`). It feeds
-`metadataBase` (root layout), `src/app/robots.ts` (which disallows `/studio` and
-`/api/`), and `src/app/sitemap.ts`. On a domain move, change it there — plus the
-Sanity CORS origin (§6 above) and the Adobe Fonts project (§7).
+`metadataBase` (root layout), `src/app/robots.ts` (which disallows `/api/` —
+the `/studio` entry was dropped 2026-08-11, that route no longer exists), and
+`src/app/sitemap.ts`. On a domain move, change it there — plus the Adobe Fonts
+project (§7).
 
 ---
 
@@ -753,13 +627,17 @@ Only manual `workflow_dispatch` remains enabled. **Restoring those two
 triggers is part of the migration** (deploy/README.md, server setup step 3)
 — don't forget, or the finished pipeline will only ever deploy by hand.
 
-**🔴 No inquiry emails are being sent yet.** None of the four `MS_GRAPH_*` env
-vars are set, so form submissions are being saved to the Studio inbox but
-**nobody is being notified**. To finish (see §5's Microsoft Graph subsection
-for the full detail): an OTC Microsoft 365 tenant admin registers an Azure AD
-app, grants it `Mail.Send`
-(application permission, admin-consented), scopes it via an Exchange
-application access policy to a single sending mailbox, sets
+**🔴 No inquiry emails are being sent yet — and as of 2026-08-11 this means
+lost leads, not just unsent notifications.** None of the four `MS_GRAPH_*` env
+vars are set. Before 2026-08-11, an unconfigured Graph meant a submission was
+still saved to the Sanity inbox for someone to follow up on by hand. The
+Sanity save is gone now — see §5's 🔴 note — so today, every Partner/Contact
+submission that comes in disappears with no record anywhere. **This raises the
+priority of finishing Microsoft Graph setup considerably.** To finish (see
+§5's Microsoft Graph subsection for the full detail): an OTC Microsoft 365
+tenant admin registers an Azure AD app, grants it `Mail.Send` (application
+permission, admin-consented), scopes it via an Exchange application access
+policy to a single sending mailbox, sets
 `MS_GRAPH_TENANT_ID`/`MS_GRAPH_CLIENT_ID`/`MS_GRAPH_CLIENT_SECRET`/
 `MS_GRAPH_SENDER_EMAIL` in Vercel, and redeploys. Then submit the Contact form
 twice — once with only "Media inquiry" checked, once with anything else — and
@@ -770,78 +648,46 @@ app registration. (This replaced a Web3Forms-based design 2026-07-22 — Jake
 chose to drop the third-party dependency in favor of the business's own
 Microsoft 365 tenant; see §5 for how the new integration differs.)
 
-**Sanity role:** the shared marketing account (below) was invited as
-**Administrator**, which can delete the dataset and revoke the tokens the live site
-depends on. It should be **Editor**. Flagged 2026-07-14 — **verify the current role
-in sanity.io/manage before assuming it was fixed.** Editor may require the paid
-Growth plan (~$15/seat/mo).
+**🔴 Vercel KV store not yet provisioned — blocks the newsletter's Constant
+Contact integration.** The Constant Contact OAuth token store moved from a
+Sanity draft document to Vercel KV on 2026-08-11 (see §11) — `src/lib/constantContactStore.ts`
+wraps `@vercel/kv`. No KV store is connected to the `gtcio-site` Vercel
+project yet, so every call throws, which currently surfaces to visitors as the
+newsletter form's existing "Constant Contact is not connected yet" failure
+mode (same symptom as before 2026-08-11, different underlying cause). Jake
+said he'll provision it himself: Vercel → gtcio-site → Storage → Create
+Database, which auto-injects `KV_REST_API_URL`/`KV_REST_API_TOKEN`. This is
+also explicitly an **interim** solution — when Third Wave Digital takes over,
+Jake will work out the newsletter integration's longer-term home with them
+directly, so don't treat Vercel KV as a permanent architectural decision.
 
-**Who edits the site:** a *shared* departmental mailbox,
-`prmarketing@ogeecheetech.edu`, so anyone in OTC marketing can make changes — not a
-single named person. Consequences: (a) all edits are attributed to that one
-account, so Sanity's per-user history can't tell you *which person* changed
-something; (b) the credential must be rotated when someone leaves. Dataset revision
-history is 90 days, so content mistakes are recoverable.
+**The Sanity project itself (`kjz4q8d4`/`production`) was deliberately left
+intact, not deleted**, when the CMS was removed from the codebase 2026-08-11
+— it sits dormant as a historical record/rollback option. That's Jake's
+account-level call, nothing in this repo depends on it anymore. Nobody needs
+Sanity access for day-to-day site operation now — the shared-account
+Administrator-vs-Editor role concern that used to sit here is moot.
 
-**✅ Publishing in the Studio now redeploys the site** (set up and verified
-2026-07-20). Every page is statically prerendered at build time, and `SanityLive`
-does *not* cover this on its own: it revalidates via a **client-side** server
-action (`revalidateTag(tag, 'max')` in `next-sanity/dist/live/server-actions`)
-that only fires *if someone has the affected page open in a browser at the moment
-of publish*. Without a webhook, a publish with nobody on the site left the static
-page stale until the next deploy. The chain now in place:
+**Who edits the site:** as of 2026-08-11, through a developer — there's no
+CMS login for marketing staff to make changes with. The shared departmental
+mailbox `prmarketing@ogeecheetech.edu` was the Sanity Studio login before the
+CMS was removed; it isn't how edits happen anymore. See §4 for where content
+lives and how to change it.
 
-1. **Vercel deploy hook** `sanity-publish` on branch `main` (id `e73E4bmO3a`
-   as of 2026-07-22 — the original `8r7ONDtCoE` was dropped when Vercel's Git
-   connection was reconnected after the GitHub org transfer, see §8/§12).
-   Vercel → **gtcio-site** → Settings → Git → Deploy Hooks.
-2. **Sanity webhook** `sanity-publish` (id `cu422aiH3auTR0Au`), dataset
-   `production`, on create/update/delete, filter `_type != "formSubmission"`,
-   POST, GROQ API v2021-03-25, drafts off, pointed at that deploy hook.
-
-Verified end to end: patching a published doc logged a webhook attempt with
-**201** and produced a production deployment; creating *and* deleting a
-`formSubmission` produced **no** attempt, so inquiries never trigger rebuilds
-(both the filter and `includeDrafts: false` block them — submissions are drafts).
-
-⚠️ **Correcting an earlier note in this file:** the Sanity webhook *is*
-API-creatable — the trick is that `on` and `filter` nest under a **`rule`**
-object, not at the top level. Top-level `filter` returns `"filter" is not
-allowed`, and passing `type: "document"` with a string filter returns `"filter"
-must be of type object`, which is what made it look impossible. The endpoint is
-`POST https://api.sanity.io/v2025-08-04/hooks/projects/kjz4q8d4` with a
-**user** token (`~/.config/sanity/config.json`) — the editor-role
-`SANITY_API_WRITE_TOKEN` lacks the `sanity.project.webhooks` grant. Note
-`sanity hooks create` itself only opens the manage UI in a browser; it calls no
-API. The **Vercel** deploy hook is also API-creatable:
-`POST https://api.vercel.com/v1/projects/<projectId>/deploy-hooks?teamId=<orgId>`
-with `{"name","ref"}`, using the CLI token in
-`~/Library/Application Support/com.vercel.cli/auth.json`.
-
-⚠️ Do **not** recreate these by hand without deleting the old ones first — two
-webhooks pointed at the same deploy hook means two rebuilds per publish. List
-them with `npx sanity hooks list`.
-
-A `revalidatePath` API route was considered instead (faster, no rebuild) but
-rejected: `cacheComponents` is off, so pages use the fetch cache, and
-`revalidatePath` would re-render the page while `sanityFetch` could still return
-its own cached response — the same staleness `rm -rf .next/cache` fixes locally.
-A full rebuild is the guaranteed-correct option and publishes are infrequent.
-
-**⚠️ A build can bake in stale Sanity data, and you cannot config your way out.**
-`defineLive` **forces** `useCdn: true` on your client —
-`_client.withConfig({allowReconfigure: false, useCdn: true, perspective: 'published'})`
-— so the `useCdn` in `sanity/lib/live.ts` is ignored. Worse, per fetch it does
-`cacheMode = useCdn !== false && !isBuildPhase ? 'noStale' : undefined`: at runtime
-it asks the CDN for fresh data, but **during `next build` it deliberately does
-not**, so a build started seconds after a publish can prerender pre-publish
-content. Observed 2026-07-16: a CMS array edit was verified present via both
-`apicdn` and `api`, yet `.next/server/app/<page>.html` was generated without it;
-rebuilding a minute later fixed it. Practical impact on the webhook flow is small
-(Vercel spends ~60–90s installing/compiling before it prerenders, by which point
-the CDN has purged — it purges in seconds), **but if a page looks stale right
-after a publish, redeploy before debugging anything else.** When verifying a CMS
-change locally, `rm -rf .next/cache` is not enough — give the CDN a few seconds.
+**✅ The old Sanity publish webhook was deleted 2026-08-11.** Before that date,
+a Sanity webhook (`sanity-publish`, id `cu422aiH3auTR0Au`) fired a Vercel
+deploy hook (id `e73E4bmO3a`) on every publish, so an editor's change would
+trigger a fresh production build without anyone having to push code — full
+mechanics were documented here in earlier revisions of this file, see git
+history if that's ever useful again. That chain became moot the moment Sanity
+was removed (no more publish event to trigger anything), and the webhook
+itself was deleted via the Sanity Management API the same day (confirmed via
+`GET /v2025-08-04/hooks/projects/kjz4q8d4` returning `[]` afterward).
+**Deploys are now purely push-to-`main`** — every content change is a code
+change, and Vercel's existing auto-deploy-on-push (unaffected by any of this,
+§2) is the only mechanism left. The Vercel deploy hook itself was left in
+place (harmless, and reused as-is if the self-hosting migration's
+`repository_dispatch` idea ever comes back for a different trigger).
 
 **✅ Newsletter signup is wired to Constant Contact, and the one-time OAuth
 setup is done** (2026-07-21) —
@@ -852,11 +698,10 @@ via Constant Contact's API. See §11 for the full integration; the connection
 was verified live 2026-07-22 (a real test signup landed in the "GTCIO Website
 Sign-ups" list). **2026-07-22:** the Contact form also gained a "Sign me up
 for GTCIO's newsletter" checkbox that reuses this same integration — see §5.
-Its copy
-(`newsletterEyebrow`/`Title`/`Body`/`ButtonLabel`/`Confirmation`) lives on the
-`siteSettings` singleton, not `homePage` — it moved with the component so one
-edit covers every page. `(site)/layout.tsx` passes those fields to `Footer`,
-which renders `<NewsletterSignup>` at the top of the `<footer>`.
+Its copy (`EYEBROW`/`TITLE`/`BODY`/`BUTTON_LABEL`/`CONFIRMATION`) lives as
+constants directly in `NewsletterSignup.tsx` itself as of 2026-08-11 (formerly
+on the Sanity `siteSettings` singleton — see §4) — one file, rendered inside
+`Footer.tsx` on every page, so one edit still covers every page.
 
 Smaller items:
 
@@ -1098,22 +943,28 @@ Smaller items:
   yet" notice banner). Removed: the red header button (desktop nav and mobile
   menu), the Footer's "Book a Tour" link, and the whole `#book-a-tour` section
   on the Facility page (heading, notice banner, and the request form itself).
-  Also pulled from the Studio for now so editors don't see dead fields for a
-  form that isn't on the site: the `tour` group and its four fields
-  (`bookTourTitle`, `bookTourIntro`, `tourNoticeHeading`, `tourNotice`) are
-  commented out of `facilityPage.ts` rather than deleted, and the `tour`
-  `ctaButton` destination is commented out in both `ctaButton.ts` and
-  `DESTINATIONS` (`sanity/lib/links.ts`) — see the code comments at each
-  spot. Existing field *values* in the dataset were left untouched (not
-  unset), so restoring is: uncomment those four schema fields + the two
-  destination entries, and re-add the `<section id="book-a-tour">` block to
-  `facility/page.tsx` (removed 2026-07-20 — check git history for the exact
-  JSX) plus the two Header links and the Footer link. The old copy, including
-  the October 26 date, will still be sitting in the document once the fields
-  are back. `src/app/api/inquiry/route.ts` and `InquiryForm.tsx` were left
-  alone — `formType: "tour"` still works, nothing to restore there. Keep
-  `public/SITEMAP.html` in sync when it comes back (Facility card, Header/Footer
-  "On every page" cards, and the two form/deep-link tallies at the top).
+  At the time, the `tour` group and its four fields (`bookTourTitle`,
+  `bookTourIntro`, `tourNoticeHeading`, `tourNotice`) were commented out of
+  the Sanity schema rather than deleted, so the field *values* — including the
+  October 26 date — sat intact in the dataset, ready to reappear once
+  uncommented. **That restore path no longer exists as of 2026-08-11** — there
+  is no Sanity schema to uncomment anymore, and `facilityPage.ts`'s `DEFAULTS`
+  in `src/app/(site)/facility/page.tsx` was never given a `tour`/`bookTour*`
+  block (the section was already off the page before today's removal, so
+  there was nothing live to carry over). **Restoring Book a Tour now means
+  writing the copy fresh in code**, not recovering it from anywhere — though
+  the old field values may still be sitting in the dormant `kjz4q8d4` Sanity
+  project (left intact, not deleted, see above) if anyone wants to mint a
+  fresh read token and pull them for reference before writing the section by
+  hand. Restoring also means: re-adding the `<section id="book-a-tour">` block
+  to `facility/page.tsx` (removed 2026-07-20 — check git history for the exact
+  JSX) plus the two Header links and the Footer link, and adding a `tour`
+  destination back to `DESTINATIONS` in `src/lib/links.ts` if the section uses
+  a `ctaButton`-style link. `src/app/api/inquiry/route.ts` and
+  `InquiryForm.tsx` were left alone — `formType: "tour"` still works, nothing
+  to restore there. Keep `public/SITEMAP.html` in sync when it comes back
+  (Facility card, Header/Footer "On every page" cards, and the two
+  form/deep-link tallies at the top).
 - **🔴 The Partners page's "Our Partners" section is hidden — no return date
   set** (Jake, 2026-08-06). Both halves of it are off: the logo collage and
   the five full per-partner cards (logo, description, LEARN MORE) below it —
@@ -1125,35 +976,43 @@ Smaller items:
   it, and it carries no `id` anchor of its own — only the individual partner
   cards inside it do, e.g. `#ajin-georgia`, which are also hidden along with
   everything else in the section). **To restore: flip the constant back to
-  `true`.** Nothing else needs to change — the `partner` documents, the
-  Sanity query, and `directoryTitle`/`directoryIntro` copy were all left
-  alone. Kept in sync: `public/SITEMAP.html`'s Partners card lost the "Our
-  Partners" section row and its purpose line was trimmed, plus a tag noting
-  the removal and its date (no return date given, unlike Book a Tour's fixed
-  10/26 — update the tag if one is set later).
+  `true`.** Nothing else needs to change — the 5 partner companies now live in
+  `src/lib/partners.ts` (moved there from Sanity 2026-08-11, see §4) and
+  `directoryTitle`/`directoryIntro` copy is part of `DEFAULTS` in
+  `partners/page.tsx`; neither needed touching for the section to be hidden,
+  same as before. Kept in sync: `public/SITEMAP.html`'s Partners card lost the
+  "Our Partners" section row and its purpose line was trimmed, plus a tag
+  noting the removal and its date (no return date given, unlike Book a Tour's
+  fixed 10/26 — update the tag if one is set later).
 - **Facility photo gallery** shows grey PHOTO PLACEHOLDER boxes until real photos
-  are uploaded (the gallery *is* CMS-editable — Facility Page → Photo gallery).
-  A new **"What it will look like"** band above it (added 2026-07-20) now carries
-  the architect's exterior rendering, extracted from the Industrial Operations
-  Program brochure to `public/images/facility-rendering.jpg` (2400×1350, 720 KB).
-  It is its own 16:9 band rather than a gallery slot — the gallery crops square
-  and a square crop loses the building. The image is code-side; its heading and
-  caption are CMS fields (`renderingTitle`, `renderingCaption`). **Keep the word
-  "rendering" in the caption** — the building is under construction until autumn
-  2026 and an uncaptioned drawing reads as a photo of a finished facility.
+  are added — as of 2026-08-11 that means editing the gallery array in
+  `DEFAULTS` in `src/app/(site)/facility/page.tsx` (formerly a Studio field,
+  Facility Page → Photo gallery). A new **"What it will look like"** band
+  above it (added 2026-07-20) now carries the architect's exterior rendering,
+  extracted from the Industrial Operations Program brochure to
+  `public/images/facility-rendering.jpg` (2400×1350, 720 KB). It is its own
+  16:9 band rather than a gallery slot — the gallery crops square and a square
+  crop loses the building. The image is code-side; its heading and caption
+  (`renderingTitle`, `renderingCaption`) are also plain `DEFAULTS` fields now.
+  **Keep the word "rendering" in the caption** — the building is under
+  construction until autumn 2026 and an uncaptioned drawing reads as a photo
+  of a finished facility.
   ⚠️ The brochure's other usable image is a **lab photo with identifiable
   students' faces**. Jake declined to publish it 2026-07-20 pending confirmation
   that photo releases exist — don't add it without asking.
 - **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
   box on the IOT page. Not produced, not scoped.
 - **Nav and footer link columns** are code-only (`Header.tsx`, `Footer.tsx`) —
-  deliberate, since a typo'd href there breaks navigation site-wide. Everything
-  else on the page is CMS-editable; see the `ctaButton` note in §4 for how
-  in-page buttons stay safe. The logo is also code-only. The footer's newsletter
-  signup is the one part of `Footer.tsx` that IS CMS-editable, via
-  `siteSettings` (moved off `homePage` 2026-07-21 — see §8). The Home and About
-  hero videos are now CMS-editable — see §4's `heroMediaFields()` note (closed
-  2026-07-20).
+  deliberate even before the CMS removal, since a typo'd href there breaks
+  navigation site-wide; as of 2026-08-11 the rest of the site's content is
+  code-only too, see §4 for the `ctaButton`/`links.ts` pattern that keeps
+  in-page buttons safe. The logo is also code-only, as it always was. The
+  footer's newsletter signup copy lives in `NewsletterSignup.tsx` as of
+  2026-08-11 (moved off the Sanity `siteSettings` singleton — formerly moved
+  off `homePage` onto `siteSettings` 2026-07-21, see §8). The Home and About
+  hero videos are plain `DEFAULTS` fields on their pages now, same as
+  everything else (closed as a CMS feature 2026-07-20, superseded by the
+  broader CMS removal 2026-08-11).
 - **Home hero headline is sized to fit one line** (Jan, 2026-07-16). The sizes in
   `(site)/page.tsx` are measured, not guessed: the headline renders ~21.7px wide
   per 1px of font-size in Trade Gothic Next Heavy Compressed, so 52px ≈ 1128px and
@@ -1208,21 +1067,18 @@ Smaller items:
 ## 9. Commands
 
 ```bash
-npm run dev                # dev server (localhost:3000; /studio for the CMS)
+npm run dev                # dev server (localhost:3000)
 npm run build              # production build
 npx tsc --noEmit           # typecheck
 npx eslint .               # lint
-
-npx sanity schema validate                                 # see §4
-npx sanity documents validate --dataset production --yes   # see §4
-npx sanity cors list                                       # allowed Studio origins
 
 # Exercise the form endpoint without a browser:
 curl -s -X POST http://localhost:3000/api/inquiry \
   -H "Content-Type: application/json" \
   -d '{"formType":"contact","reason":"Media inquiry","firstName":"A","lastName":"B","email":"a@b.com","message":"hi"}'
-# → {"ok":true}, and a formSubmission doc appears in Sanity.
-# Clean up test docs by ID afterwards — don't leave them in the client's inbox.
+# → {"ok":true} only if Microsoft Graph is configured and the email actually
+# delivers (§5) — as of 2026-08-11 there's nowhere else the submission is
+# recorded, so a 500 here with Graph unconfigured is expected, not a bug.
 ```
 
 Push to `main` → Vercel deploys automatically. `npx vercel ls gtcio-site --yes`
@@ -1231,6 +1087,19 @@ shows deploy status.
 ---
 
 ## 10. Working notes
+
+**Read this before the dates below confuse you.** Everything in this section
+is a historical log — it records content decisions, sourcing, and how past
+edits were made, in the state they were true at the time. Many entries below
+describe patching a change into "both the code `DEFAULTS` and the published
+Sanity doc" (and checking for a stale draft to reconcile) — that was how a
+copy change reached the live site **before 2026-08-11**, when the CMS was
+removed (see §4). **It no longer applies.** As of 2026-08-11 every fact below
+is still accurate and still live on the site, but a future change to any of
+it only touches the code side — there is no Sanity doc to patch anymore, and
+no draft to check for. The individual bullets below are left in their
+original wording as a record of what happened; don't take their "patch the
+Sanity doc" phrasing as current instructions.
 
 - **Site nav order** (as of 2026-07-20): About (Mission / History / Advisory Board
   / Development Authority of Bulloch County / FAQ) · IOT Training Programs · IOT
@@ -1241,8 +1110,10 @@ shows deploy status.
   home hero buttons are IOT Training Programs · IOT Diploma Program · Become a
   Partner (a red "Become a GTCIO Partner" band sits lower on the home page).
   Nav/footer link columns are code-only (`Header.tsx`, `Footer.tsx`); the
-  footer's newsletter signup is CMS-editable via `siteSettings` and renders on
-  every page, not just Home (moved 2026-07-21 — see §8).
+  footer's newsletter signup copy is a `DEFAULTS`-style constant in
+  `NewsletterSignup.tsx` as of 2026-08-11 (was on the Sanity `siteSettings`
+  singleton before that — see §4) and renders on every page, not just Home
+  (moved out of Home-only 2026-07-21 — see §8).
 - **The IOT Diploma Program FAQ is ordered as a student funnel** (rewritten
   2026-07-16): when it starts → do I need experience → how do I apply → where →
   online? → how long → how much → what credential → diploma vs certificates →
@@ -1256,8 +1127,10 @@ shows deploy status.
 - **The IOT Diploma Program page has a "non-traditional program" note** (added
   2026-07-20), sitting right after the "What is Industrial Operations Technology?"
   intro paragraph — `nonTraditionalHeading` / `nonTraditionalBody` /
-  `nonTraditionalResources` on `iotDiplomaProgramPage`, all CMS-editable (What is
-  IOT? group). Mirrors OTC's own program page, which flags IOT as non-traditional
+  `nonTraditionalResources` are plain fields on `DEFAULTS` in
+  `iot-diploma-program/page.tsx` as of 2026-08-11 (were on the `iotDiplomaProgramPage`
+  Sanity doc's "What is IOT?" group before that). Mirrors OTC's own program
+  page, which flags IOT as non-traditional
   (a program where one gender is under 25% of the field's workforce, currently
   women) and links out to support resources. `nonTraditionalResources` is a plain
   array of `{label, url}` — three seeded: Women in Manufacturing
@@ -1270,13 +1143,14 @@ shows deploy status.
   as the red `primary` variant — `Button.tsx` has only `primary` and `dark`
   variants (an earlier note here described a white-outline `heroOutline`
   variant that was never built; corrected 2026-07-21). All three are
-  CMS-managed `ctaButton` fields. Two new `DESTINATIONS` keys back them:
+  `ctaButton`-shaped `DEFAULTS` fields (§4). Two new `DESTINATIONS` keys back them:
   `iotProgramFlipbook` (<https://online.fliphtml5.com/exygb/xhzf/#p=1>, verified
   200, same `exygb` account as the employer catalog flipbook) and
   `iotProgramPdf` (`/documents/industrial-operations-program.pdf`). This mirrors
   the Training page's existing `CATALOG_URL` / `CATALOG_PDF_URL` pairing.
   - **File destinations download rather than navigate.** `DOWNLOAD_DESTINATIONS`
-    in `sanity/lib/links.ts` lists which keys are files; `CtaButton` adds the
+    in `src/lib/links.ts` (moved from `sanity/lib/links.ts` 2026-08-11, see §4)
+    lists which keys are files; `CtaButton` adds the
     `download` attribute for those. A file destination is never "external" in the
     new-tab sense, so the two branches are mutually exclusive. **Adding another
     downloadable PDF means adding its key to that set too**, or the button will
@@ -1286,7 +1160,7 @@ shows deploy status.
   (Jake) — students reach it from the "Every course, in detail" band in the
   Curriculum section. It cross-links with `/credentials` by anchor in both
   directions: courses use `#isat-1102`-style ids, credentials use `#c-201`-style
-  ids. In `sitemap.ts`, `SITEMAP.html`, and `ctaButton.ts` + `DESTINATIONS`.
+  ids. In `sitemap.ts`, `SITEMAP.html`, and `src/lib/links.ts`'s `DESTINATIONS`.
   Content comes from `src/lib/iot-curriculum.ts` — see §4 and §8 before editing.
 - **`/credentials` is a top-level nav item** (added 2026-07-20, between IOT
   Diploma Program and Facility, at Jake's request). It combines what had been
@@ -1301,10 +1175,13 @@ shows deploy status.
   - **The `certifications` key in `DESTINATIONS` was kept and now points at
     `/credentials`** — the entire point of the destination indirection (§4). The
     already-seeded `certificationsButton` on the IOT page followed with no
-    dataset patch; its label was changed to "VIEW CREDENTIALS". Renaming the key
-    would have orphaned that button. The Studio dropdown label is now
-    "Credentials page".
-  - Framing copy is the `credentialsPage` singleton (seeded); reference data is
+    other change needed; its label was changed to "VIEW CREDENTIALS". Renaming
+    the key would have orphaned that button. (In the old Sanity Studio, the
+    dropdown for that destination showed "Credentials page" — moot now that
+    there's no Studio, but explains why the destination key itself
+    (`certifications`) doesn't match the page's current name.)
+  - Framing copy is `DEFAULTS` in `credentials/page.tsx` as of 2026-08-11 (was
+    the `credentialsPage` Sanity singleton before that); reference data is
     `src/lib/iot-curriculum.ts` + `src/lib/credentials.ts`.
   - ⚠️ **The nav is now 9 top-level items.** Verified 2026-07-20 to fit without
     overflow at the `xl` (1280px) breakpoint where the desktop nav appears —
@@ -1432,29 +1309,33 @@ shows deploy status.
   explicit instruction, not drift — don't "fix" the mismatch by reconciling
   the two lists.
 - **The `apply` CTA destination changed 2026-07-20**: `DESTINATIONS.apply` in
-  `sanity/lib/links.ts` now points to
+  `src/lib/links.ts` (moved from `sanity/lib/links.ts` 2026-08-11, see §4) now points to
   `https://www.ogeecheetech.edu/admissions/next-steps` (was `/IOT`, which no
   longer resolved to an application path). The IOT Diploma Program page also
   gained two more Apply Now buttons — one in the hero, one after "More than one
   way in" — beyond the original bottom Apply band, all sharing the same
-  CMS-managed `applyButton` field. The footer's "Apply to the Program" link
+  `applyButton` `DEFAULTS` field. The footer's "Apply to the Program" link
   (code-only, `Footer.tsx`) now points straight at `DESTINATIONS.apply` instead of
   the in-page `#apply` anchor, and opens in a new tab like the site's other
   external footer links.
 - **The mission statement is signed off** (Jan, 2026-07-16): **"Building a
   workforce ready for industry transformation."** It is deliberately the same
   sentence as the Home hero headline — the hero states the mission verbatim, so
-  **if one changes, change both** (`aboutPage.missionStatement` and
-  `homePage.heroTitle`, plus the code `DEFAULTS` for each). The old "(Formal
-  mission-statement wording pending final sign-off…)" note is gone; don't
-  reintroduce it.
+  **if one changes, change both**: `DEFAULTS.missionStatement` in
+  `about/page.tsx` and `DEFAULTS.heroTitle` in `(site)/page.tsx` (formerly
+  `aboutPage.missionStatement` and `homePage.heroTitle` on Sanity, plus the
+  code `DEFAULTS` for each — now just the two `DEFAULTS`, see §4). The old
+  "(Formal mission-statement wording pending final sign-off…)" note is gone;
+  don't reintroduce it.
 - **Partners page is the priority page.** Jan called it out as needing to work
   "even before the website."
 - **IOT Training Programs page is employer-facing.** The old "For Students" box
   was removed 2026-07-16 (students are served by the IOT Diploma Program page), and
-  `trainingPage.studentsBody` was dropped from the schema and unset in the dataset.
-  The whole page — stats, employer copy, catalog band, credentials, services,
-  course areas, FAQ — is CMS-editable; the code constants are fallbacks only.
+  `trainingPage.studentsBody` was dropped from the Sanity schema and unset in
+  the dataset at the time. The whole page — stats, employer copy, catalog
+  band, credentials, services, course areas, FAQ — is a single `DEFAULTS`
+  object in `training/page.tsx` as of 2026-08-11 (§4); there's no separate
+  fallback layer anymore, `DEFAULTS` is the only copy.
 - **The section directly under any PageHero must stay light.** A dark band there
   makes the hero photo read as fading to black early and opens a large empty gap
   between the hero copy and the next section. That was a real complaint from Jan
@@ -1470,7 +1351,8 @@ shows deploy status.
   ft facility, ~460,000 instructional hours/year capacity, August 2026 launch.
   Media contact: Sean Payne, spayne@ogeecheetech.edu. Applications:
   www.ogeecheetech.edu/admissions/next-steps (the `apply` destination in
-  `sanity/lib/links.ts` — changed 2026-07-20 from the old `/IOT` URL, which no
+  `src/lib/links.ts`, moved from `sanity/lib/links.ts` 2026-08-11 — changed
+  2026-07-20 from the old `/IOT` URL, which no
   longer resolved to an application path). **Every diploma graduate is credentialed through SACA**
   (Smart Automation Certification Alliance) — the site states this explicitly; it
   is not framed as an optional add-on (changed 2026-07-15 per Jan).
@@ -1739,7 +1621,7 @@ shows deploy status.
   ⚠️ **Not to be confused with `src/app/sitemap.ts`**, which generates the
   machine-readable `sitemap.xml` for search engines. Different audience, same
   route list — a new or renamed route has to be added to **both**, plus
-  `Header.tsx` and `sanity/lib/links.ts`. Regenerate the tallies (pages / nav items /
+  `Header.tsx` and `src/lib/links.ts`. Regenerate the tallies (pages / nav items /
   forms / deep links) if the counts move. The page's palette and condensed type
   are deliberate §7 brand choices; the display font stack degrades to Arial
   Narrow (the guide's own approved substitute) on machines without Adobe Fonts,
@@ -1768,36 +1650,39 @@ create by hand in Constant Contact.
   still valid (with a 5-minute buffer) it's reused, otherwise it's refreshed
   via the stored refresh token — no human involved again unless the connection
   is revoked (see Troubleshooting below).
-- **Tokens live in Sanity, not an env var — and this is required, not a
-  preference.** Constant Contact **rotates the refresh token on every use**:
-  each refresh call returns a *new* refresh token, and the old one stops
-  working. A build-time env var can't be rewritten by a running serverless
-  function, so it can't hold a value that changes on every use. The tokens
-  live on a single document, `sanity/schemaTypes/documents/constantContactAuth.ts`,
-  written and read only by `writeClient` (server-only, same as `formSubmission`).
-  **This document must never be published** — the `production` dataset is
-  publicly readable (§5's `formSubmission` trap, same risk here but worse: a
-  leaked refresh token lets someone send email as GTCIO and read the whole
-  contact list, not just one visitor's details) — so it only ever exists as
-  `drafts.constantContactAuth`, exactly like every `formSubmission`.
-  `sanity.config.ts`'s `document.actions` strips **every** Studio action for
-  this type (not even Delete), and it's deliberately left out of
-  `structure.ts`'s nav — nobody should ever open it by hand. If you need to
-  inspect it (e.g. to check the connection is alive), query it directly with
-  the write token rather than looking for it in the Studio:
-  ```bash
-  curl -s "https://$NEXT_PUBLIC_SANITY_PROJECT_ID.api.sanity.io/v$NEXT_PUBLIC_SANITY_API_VERSION/data/query/$NEXT_PUBLIC_SANITY_DATASET?query=*%5B_id==%22drafts.constantContactAuth%22%5D%5B0%5D" \
-    -H "Authorization: Bearer $SANITY_API_WRITE_TOKEN"
-  ```
+- **🔴 Tokens live in Vercel KV as of 2026-08-11, not an env var — and this is
+  required, not a preference.** Constant Contact **rotates the refresh token
+  on every use**: each refresh call returns a *new* refresh token, and the old
+  one stops working. A build-time env var can't be rewritten by a running
+  serverless function, so it can't hold a value that changes on every use.
+  Before 2026-08-11 the tokens lived on a Sanity draft document
+  (`drafts.constantContactAuth`); that store is gone along with the rest of
+  the CMS (§4). `src/lib/constantContactStore.ts` now wraps `@vercel/kv`'s
+  `kv` client with `getConstantContactAuth()` / `setConstantContactAuth()` /
+  `patchConstantContactAuth()`, storing one record under the key
+  `"constantContactAuth"` — same shape as before
+  (accessToken/accessTokenExpiresAt/refreshToken/listId/updatedAt).
+  `src/lib/constantContact.ts` and
+  `src/app/api/constant-contact/oauth/callback/route.ts` use the store instead
+  of the old `writeClient`. **This requires a Vercel KV (Upstash Redis) store
+  connected to the project, which does not exist yet as of 2026-08-11** — see
+  §6 and §8; every `@vercel/kv` call throws until Jake provisions one (Vercel
+  → gtcio-site → Storage → Create Database). This is explicitly an **interim**
+  solution — when Third Wave Digital takes over, Jake will work out this
+  integration's longer-term home with them directly, so don't treat Vercel KV
+  as a permanent architectural decision. If you need to inspect the stored
+  record (e.g. to check the connection is alive) once the store exists, use
+  the Vercel CLI or dashboard (Storage → the KV store → Data Browser →
+  key `constantContactAuth`) — there's no more Studio/API-token route to it.
 - **The list is found-or-created lazily**, on the first real sign-up after
   setup, and its id is then cached on the same document — every later signup
   skips the lookup. The list name is the literal string `"GTCIO Website
   Sign-ups"` (the `LIST_NAME` constant in `constantContact.ts`). To route
   signups into a *different* existing list instead (an option Jake considered
   and could still choose later), either rename that constant to match the
-  existing list's exact name before the first signup runs the lookup, or patch
-  `drafts.constantContactAuth`'s `listId` field directly with the target
-  list's id via the same write-token pattern above.
+  existing list's exact name before the first signup runs the lookup, or call
+  `patchConstantContactAuth({ listId: "<target list id>" })` directly (once
+  the KV store exists) to override the cached lookup.
 - **`/contacts/sign_up_form`** (not the more general `/contacts` endpoint) is
   the call `addNewsletterSignup()` makes — it's purpose-built for opt-in web
   forms: it upserts by email address with no separate existence check, and is
@@ -1808,25 +1693,36 @@ create by hand in Constant Contact.
   omits `first_name`/`last_name` from the request entirely when blank, rather
   than sending empty strings, so a returning contact who already has a name on
   file in Constant Contact never gets it blanked out by a bare-email re-signup.
-- **No `formSubmission` record is kept for newsletter signups** — deliberately
-  different from the other three forms (§5). A newsletter signup isn't a lead
-  needing staff follow-up, so there's no reason to also store the visitor's
-  email in Sanity; Constant Contact's own list is the record of truth.
+- **No separate record is kept for newsletter signups** beyond Constant
+  Contact's own list — always true, and more so now that §5's forms have no
+  record-keeping of their own left either (see §5's 🔴 note). A newsletter
+  signup isn't a lead needing staff follow-up the way a Partner/Contact
+  inquiry is, so Constant Contact's list has always been the sole record of
+  truth here; that was true even back when the other three forms had a Sanity
+  inbox behind them, and it's still true today.
 - **Spam protection is a honeypot field only** (`botcheck`, same pattern as
   `InquiryForm.tsx`) — no rate limiting, matching the accepted risk already
   documented for `/api/inquiry` in §8. If this becomes a problem, add real
   rate limiting to both routes together.
 
-### One-time setup — done (completed 2026-07-21)
+### One-time setup — needs re-running once Vercel KV exists
 
-This has already been run — `drafts.constantContactAuth` holds a live access
-token + refresh token as of 2026-07-21, confirmed working 2026-07-22 (a real
-test signup via the Contact form's newsletter checkbox, §5, landed in the
-"GTCIO Website Sign-ups" list; that test contact needs manual deletion from
-Constant Contact's side — flagged, not yet done as of this writing). The
-steps below are kept as reference for **reconnecting** if the app is ever
-disconnected from Constant Contact's side (see Troubleshooting) — until then,
-nobody needs to run them again.
+The Constant Contact "Custom App" itself (steps 1–4 below) was set up once,
+2026-07-21, and doesn't need repeating — that's account-level config on
+Constant Contact's side, unrelated to where the tokens are stored. But the
+**tokens themselves** lived in the now-deleted Sanity draft document, and
+Vercel KV — their new home as of 2026-08-11 (see "How it works" above) — does
+not exist yet (§8). A runtime store's contents can't be carried over by a code
+change, so **once Jake provisions the KV store, step 6 below (visiting the
+OAuth start URL and approving the consent screen) needs to be run again** to
+populate it — until then, `/api/newsletter` and the Contact form's newsletter
+checkbox will fail with "Constant Contact is not connected yet." The `.env`
+values from the original 2026-07-21 setup (Client ID/Secret,
+`CONSTANT_CONTACT_SETUP_SECRET`) are unaffected by the KV migration and don't
+need reissuing — only the callback needs to fire once more to write into the
+new store. The steps below are also kept as reference for **reconnecting** if
+the app is ever disconnected from Constant Contact's side (see
+Troubleshooting).
 
 1. **Create a Constant Contact "Custom App."** Log into
    [developer.constantcontact.com](https://developer.constantcontact.com) —
@@ -1878,15 +1774,20 @@ nobody needs to run them again.
 
 ## 12. Accounts, access & handoff
 
-Everything below was true 2026-07-23. **The GitHub repo moved to an OTC-owned
-org 2026-07-22** (`Ogeechee-Tech-PR-and-Marketing`, Jake has admin rights
-there). That transfer briefly broke Vercel's push-to-deploy and silently
-dropped a deploy hook — both fixed the same day; see §8 for the details and
-the re-check to do if Git is ever reconnected again. **Vercel hosting itself
-is still Jake Hallman's personal account**, pending the self-hosting
-migration to an on-campus server — scaffolding and runbook live in
-[`deploy/`](./deploy/README.md), status in §8. That's the next piece of this
-handoff to close.
+Everything below was true 2026-07-23 except where a later date is noted.
+**The GitHub repo moved to an OTC-owned org 2026-07-22**
+(`Ogeechee-Tech-PR-and-Marketing`, Jake has admin rights there). That transfer
+briefly broke Vercel's push-to-deploy and silently dropped a deploy hook —
+both fixed the same day; see §8 for the details and the re-check to do if Git
+is ever reconnected again. **Vercel hosting itself is still Jake Hallman's
+personal account**, pending the self-hosting migration to an on-campus server
+— scaffolding and runbook live in [`deploy/`](./deploy/README.md), status in
+§8. That's one piece of this handoff to close.
+
+**The site is being prepared for handoff to a new agency, Third Wave
+Digital**, as of 2026-08-11 — they'll connect their own CMS once that handoff
+happens (§1, §4). Nothing beyond that is settled in this repo; don't assume
+more about the handoff than what's stated here.
 
 ### Who owns what
 
@@ -1894,49 +1795,49 @@ handoff to close.
 | --- | --- | --- | --- |
 | GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (private) | OTC PR & Marketing org (Jake: admin) | Source of truth; push to `main` deploys |
 | Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — **not yet migrated off**; self-hosting planned, see §8 + `deploy/README.md` | Hosting, env vars, deploy hooks, function logs |
-| Sanity | project `kjz4q8d4`, dataset `production` | Jake (admin) + `prmarketing@ogeecheetech.edu` (shared marketing login — see §8 re: its role) | All site content, form-submission inbox |
+| Vercel KV | not yet provisioned | Jake — **not yet provisioned as of 2026-08-11**, see §6, §8, §11 | Constant Contact OAuth token store |
 | Adobe Fonts | web project kit `fgt0fkg` | OTC's Creative Cloud licence | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
 | Microsoft Graph | Azure AD app registration | the OTC Microsoft 365 tenant (§5; tenant admin required) | Form notification email (§5; not yet set up) |
-| Constant Contact | "Custom App" at developer.constantcontact.com | the OTC/GTCIO Constant Contact account (§11) | Newsletter list (§11; connected and verified working since 2026-07-21) |
+| Constant Contact | "Custom App" at developer.constantcontact.com | the OTC/GTCIO Constant Contact account (§11) | Newsletter list (§11; app connected since 2026-07-21, but its token store needs Vercel KV provisioned before it works again — §11) |
+
+*(The Sanity project (`kjz4q8d4`/`production`) is no longer used by this repo
+as of 2026-08-11 — see §4 and §8. It was deliberately left intact, not
+deleted, as a dormant historical record/rollback option; that's Jake's
+account-level call. Nobody needs Sanity access for day-to-day site operation
+anymore.)*
 
 ### Getting set up as a new developer
 
-1. Get invited to the GitHub repo, the Vercel project, and the Sanity project
-   (someone in the table above sends each invite).
-2. `git clone`, `npm install`, then copy `.env.example` → `.env.local` and fill
-   it in. The Sanity tokens you mint yourself once invited:
-   **sanity.io/manage → project `kjz4q8d4` → API → Tokens** — create one
-   **Viewer** token (`SANITY_API_READ_TOKEN`) and one **Editor** token
-   (`SANITY_API_WRITE_TOKEN`). Each token is displayed exactly once.
-   The remaining secrets (Microsoft Graph app credentials, Constant Contact
-   app credentials) are in Vercel → Settings → Environment Variables once
-   configured.
-3. `npm run dev` — the site renders without any tokens (published content is
-   public); tokens only gate draft preview and the forms.
-4. Read §4's traps before touching content, and §3 before moving files.
+1. Get invited to the GitHub repo and the Vercel project (someone in the
+   table above sends each invite).
+2. `git clone`, `npm install`, then copy `.env.example` → `.env.local` and
+   fill it in. There are no CMS tokens to mint anymore (§4) — the secrets you
+   need (Microsoft Graph app credentials, Constant Contact app credentials,
+   the Vercel KV vars once that store exists) are in Vercel → Settings →
+   Environment Variables once configured.
+3. `npm run dev` — the site renders with no env vars set at all (every page's
+   content is code, §4); env vars only gate the forms (§5) and the newsletter
+   integration (§11).
+4. Read §4 before touching content, and §3 before moving files.
 
 ### Adding a page — the full checklist
 
-A new page touches more files than you'd guess; missing one is silent. In
-order:
+A new page touches more files than you'd guess; missing one is silent. As of
+2026-08-11 (no CMS — §4) this is shorter than it used to be: there's no schema
+to register, no Studio nav, no "Edit on page" wiring. In order:
 
-1. **Schema:** create `sanity/schemaTypes/documents/<name>Page.ts`, register
-   it in `sanity/schemaTypes/index.ts` — including the `singletonTypes` set if
-   it's a one-per-site page.
-2. **Studio nav:** add it to `sanity/structure.ts` (keep the list in site-nav
-   order).
-3. **Edit-on-page:** add it to `PAGE_PATHS` in `sanity/presentation.ts`.
-4. **Route:** create `src/app/(site)/<slug>/page.tsx` — inside `(site)` or it
-   won't get the Header/Footer. Follow the existing pattern: `DEFAULTS`
-   object (in page order), `sanityFetch`, `{...DEFAULTS, ...typed}`.
-5. **Navigation:** add it to `NAV_ITEMS` in `src/components/Header.tsx`
+1. **Route:** create `src/app/(site)/<slug>/page.tsx` — inside `(site)` or it
+   won't get the Header/Footer. Follow the existing pattern: a `DEFAULTS`
+   object (in page order) rendered directly — no fetch, no `async`, `DEFAULTS`
+   *is* the content (§4).
+2. **Navigation:** add it to `NAV_ITEMS` in `src/components/Header.tsx`
    (⚠️ re-measure — 9 items barely fit at `xl`) and the Explore column in
    `src/components/Footer.tsx`.
-6. **Links plumbing:** if CMS buttons should be able to point at it, add a
-   destination key to `sanity/lib/links.ts` AND the options list in
-   `sanity/schemaTypes/objects/ctaButton.ts`.
-7. **Sitemaps, both of them:** `src/app/sitemap.ts` (search engines) and
+3. **Links plumbing:** if any `ctaButton`-shaped button elsewhere should be
+   able to point at it, add a destination key to `DESTINATIONS` in
+   `src/lib/links.ts`.
+4. **Sitemaps, both of them:** `src/app/sitemap.ts` (search engines) and
    `public/SITEMAP.html` (the stakeholder deliverable — update its tallies and
    the colophon date).
-8. **Seed the content** in the dataset (§4 — editors should see real copy, not
-   empty boxes), then run both §4 validation commands.
+5. **Write the content** directly into `DEFAULTS` — there's no separate
+   seeding step anymore, the code you write is what ships.

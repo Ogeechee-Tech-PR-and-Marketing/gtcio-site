@@ -25,7 +25,7 @@ over the network.
 ## Prerequisites (get these before starting)
 
 - A Linux server from OTC IT (Ubuntu assumed by the paths below), reachable on
-  ports 80/443, with outbound internet (GitHub, npm, Sanity, api.github.com).
+  ports 80/443, with outbound internet (GitHub, npm, api.github.com).
 - A hostname assigned by OTC IT (the nginx template guesses
   `gtcio.ogeecheetech.edu` — **placeholder, not decided**) and a DNS record
   pointing it at the server.
@@ -82,46 +82,32 @@ over the network.
 
 7. **First deploy:** push to `main` (or run the workflow via
    `workflow_dispatch`) and watch the Actions run. Then hit the hostname over
-   HTTPS and check `/`, `/studio`, and a form submission.
+   HTTPS and check `/` and a form submission.
 
 ## Cutover checklist — the part that breaks things if skipped
 
-This is the **domain move** PROJECT.md warns about in §6/§7, plus re-pointing
-the CMS-publish rebuild path:
+This is the **domain move** PROJECT.md warns about in §6/§7. (There used to be
+a CMS-publish rebuild path to re-point here too — moot since Sanity was
+removed 2026-08-11; deploys are now purely push-to-`main` triggered, which the
+workflow's own `push` trigger already covers once the runner is registered.)
 
 1. `SITE_URL` in `src/lib/site.ts` → the new origin (feeds metadata, robots,
    sitemap.xml).
-2. Sanity CORS: `npx sanity cors add https://<new-hostname> --credentials` —
-   without it the Studio's "Edit on page" silently fails.
-3. Adobe Fonts: add the new domain to web project `fgt0fkg` in Adobe's
+2. Adobe Fonts: add the new domain to web project `fgt0fkg` in Adobe's
    dashboard, or Trade Gothic stops loading.
-4. Constant Contact: the OAuth redirect URI on the Custom App points at
+3. Constant Contact: the OAuth redirect URI on the Custom App points at
    `gtcio-site.vercel.app` (PROJECT.md §11). It only matters when re-running
    the one-time connect flow, but update it to the new origin anyway so a
    future reconnect doesn't fail mysteriously.
-5. **Re-point the Sanity publish webhook.** Today: Sanity webhook
-   `sanity-publish` → Vercel deploy hook (PROJECT.md §8). After cutover it
-   must instead trigger the Actions workflow via `repository_dispatch` —
-   POST `https://api.github.com/repos/Ogeechee-Tech-PR-and-Marketing/gtcio-site/dispatches`
-   with header `Authorization: Bearer <fine-grained PAT, Contents read+write>`
-   and body `{"event_type":"content-publish"}` (the type
-   `.github/workflows/deploy.yml` listens for). Sanity webhooks support custom
-   headers and a projection-shaped payload, so this fits — **⚠️ untested;
-   verify a Studio publish produces an Actions run before decommissioning
-   Vercel.** Keep the `_type != "formSubmission"` filter and drafts-off
-   settings so inquiries don't trigger rebuilds.
-6. DNS flip / announce the new URL. The old `gtcio-site.vercel.app` URL is
-   printed on shared material (SITEMAP.html links, the Studio URL marketing
-   uses) — update EDITING.md, README.md, and PROJECT.md's URLs in the same
-   change.
+4. DNS flip / announce the new URL. The old `gtcio-site.vercel.app` URL is
+   printed on shared material (SITEMAP.html links) — update README.md and
+   PROJECT.md's URLs in the same change.
 
 ## After cutover
 
-- Keep the Vercel project up until the new host has survived a real content
-  publish and a real code deploy, then remove the Sanity→Vercel webhook + the
-  Vercel deploy hook and archive the Vercel project.
-- Update PROJECT.md §8 (close this item) and §12 (ownership table), and
-  EDITING.md's Studio URL. Flip the relevant SITEMAP.html status if routes
-  change.
+- Keep the Vercel project up until the new host has survived a real code
+  deploy, then remove the Vercel deploy hook and archive the Vercel project.
+- Update PROJECT.md §8 (close this item) and §12 (ownership table). Flip the
+  relevant SITEMAP.html status if routes change.
 - Rollback while Vercel still exists: point DNS back / share the vercel.app
   URL — the Vercel deployment keeps working untouched until it's deleted.

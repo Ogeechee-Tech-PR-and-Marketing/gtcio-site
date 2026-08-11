@@ -1,10 +1,9 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import { writeClient } from "@/sanity/lib/writeClient";
+import { setConstantContactAuth } from "@/lib/constantContactStore";
 import { SITE_URL } from "@/lib/site";
 
 const TOKEN_URL = "https://authz.constantcontact.com/oauth2/default/v1/token";
-const AUTH_DOC_ID = "drafts.constantContactAuth";
 
 function textResponse(body: string, status: number) {
   return new NextResponse(body, { status, headers: { "Content-Type": "text/plain" } });
@@ -80,11 +79,9 @@ export async function GET(request: Request) {
     expires_in: number;
   };
 
-  // createOrReplace, not create: re-running setup (e.g. to reconnect after a
-  // revoke) should overwrite the stale tokens, not fail on a duplicate _id.
-  await writeClient.createOrReplace({
-    _id: AUTH_DOC_ID,
-    _type: "constantContactAuth",
+  // Full replace: re-running setup (e.g. to reconnect after a revoke) should
+  // overwrite the stale tokens, not merge with them.
+  await setConstantContactAuth({
     accessToken: tokens.access_token,
     accessTokenExpiresAt: new Date(Date.now() + tokens.expires_in * 1000).toISOString(),
     refreshToken: tokens.refresh_token,

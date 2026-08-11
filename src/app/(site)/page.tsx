@@ -1,15 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import CtaButton from "@/components/CtaButton";
 import HeroCard from "@/components/HeroCard";
-import { sanityFetch } from "@/sanity/lib/live";
-import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, resolveHeroVideo, type SanityImage } from "@/sanity/lib/image";
-import type { CtaButton as CtaButtonData } from "@/sanity/lib/links";
+import type { CtaButton as CtaButtonData } from "@/lib/links";
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "",
   heroTitle: "Building a workforce ready for industry transformation.",
@@ -41,72 +37,33 @@ const DEFAULTS = {
   partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } as CtaButtonData,
 };
 
-export default async function Home() {
-  const { data } = await sanityFetch({ query: HOME_PAGE_QUERY });
-  const typed = data as
-    | (Partial<typeof DEFAULTS> & {
-        heroImage?: SanityImage;
-        heroImageAlt?: string;
-        heroVideo?: { asset?: { url?: string } | null };
-        heroVideoPoster?: SanityImage;
-      })
-    | null;
-  const page = { ...DEFAULTS, ...typed };
-  const heroButtons = page.heroButtons?.length ? page.heroButtons : DEFAULTS.heroButtons;
-  // An unfinished draft can carry heroTitle: null, which would override the
-  // spread default and crash the .split() below — fall back explicitly.
-  const heroTitle = page.heroTitle || DEFAULTS.heroTitle;
+export default function Home() {
+  const page = DEFAULTS;
+  const heroButtons = DEFAULTS.heroButtons;
+  const heroTitle = DEFAULTS.heroTitle;
 
   const pathways = [
-    { ...DEFAULTS.employersCard, ...page.employersCard, href: "/training", cta: "See Training for Employers" },
-    { ...DEFAULTS.studentsCard, ...page.studentsCard, href: "/iot-diploma-program", cta: "Explore the IOT Diploma Program" },
-    { ...DEFAULTS.partnersCard, ...page.partnersCard, href: "/partners", cta: "Become a Partner" },
+    { ...DEFAULTS.employersCard, href: "/training", cta: "See Training for Employers" },
+    { ...DEFAULTS.studentsCard, href: "/iot-diploma-program", cta: "Explore the IOT Diploma Program" },
+    { ...DEFAULTS.partnersCard, href: "/partners", cta: "Become a Partner" },
   ];
-
-  // The banner plays a looping construction video by default. An editor can
-  // override it by uploading a Background photo in the Studio, which always
-  // takes priority — otherwise the field would silently do nothing. Absent a
-  // photo, an uploaded Background video replaces the default footage.
-  const useVideo = !typed?.heroImage;
-  const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-construction-poster-5.jpg",
-    fallbackAlt: "Construction of the GTCIO facility",
-    fallbackPosition: "50% 50%",
-  });
-  const heroVideo = resolveHeroVideo({
-    video: typed?.heroVideo,
-    poster: typed?.heroVideoPoster,
-    fallbackSrc: "/videos/hero-construction-6.mp4",
-    fallbackPoster: "/images/hero-construction-poster-5.jpg",
-  });
 
   return (
     <>
       <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
-        {useVideo ? (
-          <video
-            src={heroVideo.src}
-            poster={heroVideo.poster}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            aria-hidden
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : (
-          <Image
-            src={hero.src}
-            alt={hero.alt}
-            fill
-            priority
-            className="object-cover"
-            style={{ objectPosition: hero.position }}
-          />
-        )}
+        {/* No CMS hero photo override anymore — the banner always plays the
+            looping construction video. */}
+        <video
+          src="/videos/hero-construction-6.mp4"
+          poster="/images/hero-construction-poster-5.jpg"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         <div className="relative mx-auto max-w-7xl">
           {/*
             Matches PageHero.tsx's hero scrim (kept in sync 2026-07-21 — this

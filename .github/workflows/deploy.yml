@@ -7,20 +7,20 @@ name: Deploy GTCIO site
 #
 # ⚠️ PARKED until the migration actually starts (2026-07-23). The site still
 # deploys through Vercel, and no self-hosted runner is registered — with the
-# automatic triggers on, every push to main left a run stuck "queued" forever.
+# automatic trigger on, every push to main left a run stuck "queued" forever.
 # So only manual workflow_dispatch is enabled for now. When the runner exists
-# (deploy/README.md step 3), restore the two commented-out triggers:
-#   - push to main            → a real code change
-#   - repository_dispatch     → a Sanity CMS publish, forwarded here by the
-#     (content-publish)         Sanity webhook (content changed, code didn't,
-#                                but pages are statically prerendered so a
-#                                rebuild is still required)
+# (deploy/README.md step 3), restore the commented-out trigger below.
+#
+# There used to be a second trigger here, `repository_dispatch` on
+# `content-publish`, forwarded by a Sanity CMS webhook whenever an editor
+# published a change (pages are statically prerendered, so a content-only
+# change still needed a rebuild). Removed 2026-08-11 along with the rest of
+# the Sanity integration — content now lives in code, so only a real code
+# push (the trigger below) ever needs a rebuild.
 
 on:
   # push:
   #   branches: [main]
-  # repository_dispatch:
-  #   types: [content-publish]
   workflow_dispatch: {}
 
 concurrency:

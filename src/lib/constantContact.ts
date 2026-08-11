@@ -1,6 +1,6 @@
 import "server-only";
 
-import { writeClient } from "@/sanity/lib/writeClient";
+import { getConstantContactAuth, patchConstantContactAuth } from "./constantContactStore";
 
 /**
  * Adds a website newsletter sign-up to Constant Contact.
@@ -11,28 +11,18 @@ import { writeClient } from "@/sanity/lib/writeClient";
  * this module refreshes its own access token forever using the stored
  * refresh token — no further human involvement.
  *
- * Tokens live in a single Sanity draft document (never published — see
- * sanity/schemaTypes/documents/constantContactAuth.ts for why) rather than an
+ * Tokens live in Vercel KV (src/lib/constantContactStore.ts) rather than an
  * env var, because Constant Contact rotates the refresh token on every use:
  * each refresh call returns a NEW refresh token that must be saved for next
  * time, which only a writable store (not a build-time env var) can do.
  */
 
-const AUTH_DOC_ID = "drafts.constantContactAuth";
 const TOKEN_URL = "https://authz.constantcontact.com/oauth2/default/v1/token";
 const API_BASE = "https://api.cc.email/v3";
 const LIST_NAME = "GTCIO Website Sign-ups";
 
 // Refresh a bit before actual expiry so a slow request never straddles it.
 const EXPIRY_BUFFER_MS = 5 * 60 * 1000;
-
-type AuthDoc = {
-  _id: string;
-  accessToken?: string;
-  accessTokenExpiresAt?: string;
-  refreshToken?: string;
-  listId?: string;
-};
 
 function basicAuthHeader(): string {
   const id = process.env.CONSTANT_CONTACT_CLIENT_ID;
@@ -43,19 +33,6 @@ function basicAuthHeader(): string {
     );
   }
   return "Basic " + Buffer.from(`${id}:${secret}`).toString("base64");
-}
-
-async function getAuthDoc(): Promise<AuthDoc | null> {
-  // perspective: "raw" is required here — the client's default perspective
-  // excludes draft documents from _id-based queries entirely (confirmed
-  // 2026-07-21: an unqualified query for "drafts.constantContactAuth"
-  // silently returned null even though the doc existed), which would make
-  // every access-token refresh think Constant Contact was never connected.
-  return writeClient.fetch<AuthDoc | null>(
-    `*[_id == $id][0]`,
-    { id: AUTH_DOC_ID },
-    { perspective: "raw" }
-  );
 }
 
 async function refreshAccessToken(refreshToken: string) {
@@ -96,13 +73,13 @@ async function refreshAccessToken(refreshToken: string) {
  *   won the race, its freshly-saved access token is sitting there — use it
  *   instead of surfacing an error.
  * - The new tokens are persisted BEFORE the access token is returned/used;
- *   if that Sanity write throws, we surface it loudly (better a failed signup
+ *   if that KV write throws, we surface it loudly (better a failed signup
  *   now than a silently lost refresh token and a dead integration later).
  */
 let refreshInFlight: Promise<string> | null = null;
 
 async function getAccessToken(): Promise<string> {
-  const doc = await getAuthDoc();
+  const doc = await getConstantContactAuth();
   if (!doc?.refreshToken) {
     throw new Error(
       "Constant Contact is not connected yet — run the one-time setup at /api/constant-contact/oauth/start (see PROJECT.md)."
@@ -130,7 +107,7 @@ async function performRefresh(refreshToken: string): Promise<string> {
     // The stored token may have just been rotated out from under us by a
     // concurrent instance. Re-read once — if that instance saved a live
     // access token, ride on it rather than failing this visitor's signup.
-    const latest = await getAuthDoc();
+    const latest = await getConstantContactAuth();
     const latestExpiry = latest?.accessTokenExpiresAt
       ? new Date(latest.accessTokenExpiresAt).getTime()
       : 0;
@@ -140,17 +117,14 @@ async function performRefresh(refreshToken: string): Promise<string> {
     throw error;
   }
 
-  await writeClient
-    .patch(AUTH_DOC_ID)
-    .set({
-      accessToken: refreshed.access_token,
-      accessTokenExpiresAt: new Date(Date.now() + refreshed.expires_in * 1000).toISOString(),
-      // Constant Contact rotates this on every refresh — the old value stops
-      // working, so the new one MUST be saved or the next refresh fails.
-      refreshToken: refreshed.refresh_token,
-      updatedAt: new Date().toISOString(),
-    })
-    .commit();
+  await patchConstantContactAuth({
+    accessToken: refreshed.access_token,
+    accessTokenExpiresAt: new Date(Date.now() + refreshed.expires_in * 1000).toISOString(),
+    // Constant Contact rotates this on every refresh — the old value stops
+    // working, so the new one MUST be saved or the next refresh fails.
+    refreshToken: refreshed.refresh_token,
+    updatedAt: new Date().toISOString(),
+  });
 
   return refreshed.access_token;
 }
@@ -194,12 +168,12 @@ async function createList(accessToken: string): Promise<string> {
 // Cached on the auth doc after the first call so every later sign-up skips
 // the list lookup entirely.
 async function getListId(accessToken: string): Promise<string> {
-  const doc = await getAuthDoc();
+  const doc = await getConstantContactAuth();
   if (doc?.listId) return doc.listId;
 
   const listId = (await findExistingListId(accessToken)) ?? (await createList(accessToken));
 
-  await writeClient.patch(AUTH_DOC_ID).set({ listId }).commit();
+  await patchConstantContactAuth({ listId });
   return listId;
 }
 

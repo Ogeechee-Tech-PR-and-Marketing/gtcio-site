@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DESTINATIONS } from "@/sanity/lib/links";
+import { DESTINATIONS } from "@/lib/links";
 import NewsletterSignup from "./NewsletterSignup";
 import Year from "./Year";
 
@@ -33,37 +33,15 @@ const COLUMNS = [
   },
 ];
 
-type FooterProps = {
-  tagline?: string;
-  address?: string;
-  phone?: string;
-  newsletterEyebrow?: string;
-  newsletterTitle?: string;
-  newsletterBody?: string;
-  newsletterButtonLabel?: string;
-  newsletterConfirmation?: string;
-};
+const TAGLINE = "A Division of Ogeechee Technical College";
+const ADDRESS = "66 AJ Riggs Road, Statesboro, GA 30458";
+const PHONE = "(800) 646-1316";
 
-export default function Footer({
-  tagline = "A Division of Ogeechee Technical College",
-  address = "66 AJ Riggs Road, Statesboro, GA 30458",
-  phone = "(800) 646-1316",
-  newsletterEyebrow,
-  newsletterTitle,
-  newsletterBody,
-  newsletterButtonLabel,
-  newsletterConfirmation,
-}: FooterProps) {
+export default function Footer() {
   return (
     <footer className="bg-brand-black text-brand-white">
       <div className="border-b border-white/10">
-        <NewsletterSignup
-          eyebrow={newsletterEyebrow}
-          title={newsletterTitle}
-          body={newsletterBody}
-          buttonLabel={newsletterButtonLabel}
-          confirmation={newsletterConfirmation}
-        />
+        <NewsletterSignup />
       </div>
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 sm:px-10 lg:grid-cols-4">
@@ -75,7 +53,7 @@ export default function Footer({
             height={128}
             className="h-20 w-auto brightness-0 invert sm:h-24"
           />
-          <p className="mt-4 text-sm text-brand-silver">{tagline}</p>
+          <p className="mt-4 text-sm text-brand-silver">{TAGLINE}</p>
         </div>
 
         {COLUMNS.map((col) => (
@@ -104,8 +82,8 @@ export default function Footer({
         <div>
           <p className="font-display text-sm text-brand-gold">Contact</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm text-brand-silver">
-            <li>{address}</li>
-            <li>Phone: {phone}</li>
+            <li>{ADDRESS}</li>
+            <li>Phone: {PHONE}</li>
           </ul>
         </div>
       </div>

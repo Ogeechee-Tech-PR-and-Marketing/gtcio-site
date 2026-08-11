@@ -2,18 +2,15 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import LinkifyEmail from "@/components/LinkifyEmail";
-import { sanityFetch } from "@/sanity/lib/live";
-import { IOT_DIPLOMA_PROGRAM_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
-import { safeHref } from "@/sanity/lib/links";
+import { safeHref } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "IOT Diploma Program | GTCIO",
 };
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "IOT Diploma Program: Enrolling now for August 2026",
   heroTitle: "What is Industrial Operations Technology?",
@@ -112,38 +109,15 @@ const DEFAULTS = {
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
 };
 
-export default async function IotDiplomaProgramPage() {
-  const { data } = await sanityFetch({ query: IOT_DIPLOMA_PROGRAM_PAGE_QUERY });
-  const typed = data as (Partial<typeof DEFAULTS> & {
-    heroImage?: SanityImage;
-    heroImageAlt?: string;
-  }) | null;
-  const page = { ...DEFAULTS, ...typed };
-  const nonTraditionalResources = typed?.nonTraditionalResources?.length
-    ? typed.nonTraditionalResources
-    : DEFAULTS.nonTraditionalResources;
-  const curriculumStages = typed?.curriculumStages?.length ? typed.curriculumStages : DEFAULTS.curriculumStages;
-  const programOptions = typed?.programOptions?.length ? typed.programOptions : DEFAULTS.programOptions;
-  const careers = typed?.careers?.length ? typed.careers : DEFAULTS.careers;
-  const jobDuties = typed?.jobDuties?.length ? typed.jobDuties : DEFAULTS.jobDuties;
-  const payRanges = typed?.payRanges?.length ? typed.payRanges : DEFAULTS.payRanges;
-  const faqs = typed?.faqs?.length ? typed.faqs : DEFAULTS.faqs;
-
-  const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-iot-program.jpg",
-    fallbackAlt:
-      "Students gathered around automation equipment as an instructor explains it",
-    // Measured, not eyeballed. The hero is a wide band — at 1920 only ~27% of the
-    // photo's height is visible — and the seven faces span roughly 12%–33% of it.
-    // Centring on the faces (~22%) clips the front student's hairline; 12% clips
-    // the student in glasses. 18% is the one value that keeps every face in frame
-    // from 1280 through 1920, and mobile crops almost nothing (the box is ~1.47:1
-    // against the photo's 1.5:1). Re-check this if the hero copy length changes,
-    // since that changes the band height.
-    fallbackPosition: "50% 18%",
-  });
+export default function IotDiplomaProgramPage() {
+  const page = DEFAULTS;
+  const nonTraditionalResources = DEFAULTS.nonTraditionalResources;
+  const curriculumStages = DEFAULTS.curriculumStages;
+  const programOptions = DEFAULTS.programOptions;
+  const careers = DEFAULTS.careers;
+  const jobDuties = DEFAULTS.jobDuties;
+  const payRanges = DEFAULTS.payRanges;
+  const faqs = DEFAULTS.faqs;
 
   return (
     <>
@@ -151,9 +125,17 @@ export default async function IotDiplomaProgramPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image={hero.src}
-        imageAlt={hero.alt}
-        imagePosition={hero.position}
+        image="/images/hero-iot-program.jpg"
+        imageAlt="Students gathered around automation equipment as an instructor explains it"
+        // Measured, not eyeballed. The hero is a wide band — at 1920 only ~27% of
+        // the photo's height is visible — and the seven faces span roughly
+        // 12%–33% of it. Centring on the faces (~22%) clips the front student's
+        // hairline; 12% clips the student in glasses. 18% is the one value that
+        // keeps every face in frame from 1280 through 1920, and mobile crops
+        // almost nothing (the box is ~1.47:1 against the photo's 1.5:1).
+        // Re-check this if the hero copy length changes, since that changes the
+        // band height.
+        imagePosition="50% 18%"
         cta={
           // Three buttons: apply, read the brochure, save the brochure. They
           // wrap rather than shrink — at 375px each takes its own row, which

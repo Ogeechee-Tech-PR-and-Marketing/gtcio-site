@@ -3,10 +3,7 @@ import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import CtaButton from "@/components/CtaButton";
 import LinkifyEmail from "@/components/LinkifyEmail";
-import { sanityFetch } from "@/sanity/lib/live";
-import { TRAINING_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
-import { AFFILIATIONS, affiliationsFor, type Affiliation } from "@/lib/credentials";
+import { AFFILIATIONS, affiliationsFor } from "@/lib/credentials";
 
 export const metadata: Metadata = {
   title: "IOT Training Programs | GTCIO",
@@ -17,9 +14,9 @@ const CATALOG_URL = "https://online.fliphtml5.com/exygb/kvbr/#p=1";
 // The same catalog, as a downloadable PDF.
 const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program-3.pdf";
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "IOT Training Programs",
   heroTitle: "Students on one side, employers on the other: same goal",
@@ -55,10 +52,9 @@ const DEFAULTS = {
   ],
 };
 
-// Fallbacks only — the live copy for all of these lives in the CMS (IOT Training
-// Programs Page). Drawn from OTC's "Industrial Systems Training Program"
-// brochure (see CATALOG_URL) except the 460,000-hour figure, which is GTCIO's
-// own facility capacity.
+// Drawn from OTC's "Industrial Systems Training Program" brochure (see
+// CATALOG_URL) except the 460,000-hour figure, which is GTCIO's own facility
+// capacity.
 const STATS = [
   { value: "~460,000", label: "Hours of instruction GTCIO can deliver each year" },
   { value: "120+ years", label: "Combined in-field industrial systems experience on the training team" },
@@ -66,10 +62,9 @@ const STATS = [
   { value: "6,226", label: "Student certifications and credentials earned since 2024" },
 ];
 
-// Moved to src/lib/credentials.ts 2026-07-20 so this page and /credentials
-// render the same five accreditations from one place. The CMS override still
-// lives on THIS page's document (trainingPage.affiliations) — /credentials
-// reads that same field, so editors update it once.
+// AFFILIATIONS lives in src/lib/credentials.ts, shared with /credentials so
+// both pages render the same accreditations from one place — see
+// affiliationsFor() below.
 
 const SERVICES = [
   { title: "Standardized training", detail: "Short and comprehensive courses developed when several industries need the same training. Content is industry-wide, not specific to one company, and runs at basic, intermediate, and advanced levels." },
@@ -89,48 +84,23 @@ const COURSE_AREAS = [
   { area: "SCADA Systems", courses: ["Visual Communications (Industry 4.0)"] },
 ];
 
-type InfoCard = { _key?: string; title: string; detail: string };
-type CourseAreaItem = { _key?: string; area: string; courses: string[] };
-
-export default async function TrainingPage() {
-  const { data } = await sanityFetch({ query: TRAINING_PAGE_QUERY });
-  const typed = data as (Partial<typeof DEFAULTS> & {
-    heroImage?: SanityImage;
-    heroImageAlt?: string;
-    stats?: Array<{ _key?: string; value: string; label: string }>;
-    affiliations?: Affiliation[];
-    services?: InfoCard[];
-    courseAreas?: CourseAreaItem[];
-  }) | null;
-  const page = { ...DEFAULTS, ...typed };
-  const employerFaqs = typed?.employerFaqs?.length ? typed.employerFaqs : DEFAULTS.employerFaqs;
-  const stats = typed?.stats?.length ? typed.stats : STATS;
+export default function TrainingPage() {
+  const page = DEFAULTS;
+  const employerFaqs = DEFAULTS.employerFaqs;
+  const stats = STATS;
   // Filtered to this page's audience — see the matching filter on /credentials.
-  const affiliations = affiliationsFor(
-    typed?.affiliations?.length ? typed.affiliations : AFFILIATIONS,
-    "employer"
-  );
-  const services = typed?.services?.length ? typed.services : SERVICES;
-  const courseAreas: CourseAreaItem[] = typed?.courseAreas?.length
-    ? typed.courseAreas
-    : COURSE_AREAS;
-
-  const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-training.jpg",
-    fallbackAlt: "Technician performing PLC maintenance on an electrical control panel",
-    fallbackPosition: "61% 31%",
-  });
+  const affiliations = affiliationsFor(AFFILIATIONS, "employer");
+  const services = SERVICES;
+  const courseAreas = COURSE_AREAS;
 
   return (
     <>
       <PageHero
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
-        image={hero.src}
-        imageAlt={hero.alt}
-        imagePosition={hero.position}
+        image="/images/hero-training.jpg"
+        imageAlt="Technician performing PLC maintenance on an electrical control panel"
+        imagePosition="61% 31%"
         extra={
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat, i) => (

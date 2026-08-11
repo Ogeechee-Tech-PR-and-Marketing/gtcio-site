@@ -4,17 +4,19 @@ The website for the **Georgia Training Center for Industrial Operations**, a
 division of Ogeechee Technical College.
 
 - **Live:** https://gtcio-site.vercel.app
-- **Content editing:** https://gtcio-site.vercel.app/studio
+- **Content editing:** none right now — see [EDITING.md](./EDITING.md). The
+  Sanity CMS was removed 2026-08-11 ahead of handoff to a new agency, Third
+  Wave Digital, who will connect their own CMS.
 
-Next.js 16 (App Router) · React 19 · Tailwind v4 · Sanity CMS · Adobe Fonts
-(Trade Gothic Next) · deployed on Vercel.
+Next.js 16 (App Router) · React 19 · Tailwind v4 · Adobe Fonts (Trade Gothic
+Next) · deployed on Vercel.
 
 ## Documentation
 
 | File | Who it's for |
 | --- | --- |
-| **[PROJECT.md](./PROJECT.md)** | **Developers and AI agents. Start here.** Architecture, the CMS content model, how the forms work, environment variables, the confirmed facts behind the copy, and the non-obvious traps that will bite you. |
-| [EDITING.md](./EDITING.md) | Marketing staff. Plain-English guide to changing anything on the site — copy, photos, buttons, partners, news, the timeline — no code. |
+| **[PROJECT.md](./PROJECT.md)** | **Developers and AI agents. Start here.** Architecture, where content lives now that it's code-only, how the forms work, environment variables, the confirmed facts behind the copy, and the non-obvious traps that will bite you. |
+| [EDITING.md](./EDITING.md) | Where a copy change (text, photos, partners, news) lives in the code now that there's no CMS. |
 | [AGENTS.md](./AGENTS.md) | Warning that this is Next.js 16, not the version in your training data. |
 | [deploy/README.md](./deploy/README.md) | Whoever runs the (planned, not started) migration off Vercel onto an OTC server. |
 
@@ -22,7 +24,7 @@ Next.js 16 (App Router) · React 19 · Tailwind v4 · Sanity CMS · Adobe Fonts
 
 ```bash
 npm install
-npm run dev     # http://localhost:3000  ·  /studio for the CMS
+npm run dev     # http://localhost:3000
 ```
 
 Copy [`.env.example`](./.env.example) to `.env.local` and fill it in — it lists
@@ -30,9 +32,8 @@ every variable, where to get each value, and what breaks without it. Details in
 [PROJECT.md §6](./PROJECT.md#6-environment--config).
 
 **Access a new developer needs** (who to ask: PROJECT.md §12): the GitHub repo
-(`Ogeechee-Tech-PR-and-Marketing/gtcio-site`), the Vercel project
-(`jake-hallmans-projects/gtcio-site`), and an invite to the Sanity project
-(`kjz4q8d4`) to mint API tokens.
+(`Ogeechee-Tech-PR-and-Marketing/gtcio-site`) and the Vercel project
+(`jake-hallmans-projects/gtcio-site`).
 
 ## Checks
 
@@ -40,31 +41,21 @@ every variable, where to get each value, and what breaks without it. Details in
 npm run build              # production build
 npx tsc --noEmit           # typecheck
 npx eslint .               # lint
-npx sanity schema validate                                 # CMS schema
-npx sanity documents validate --dataset production --yes   # CMS content
 ```
-
-Note that CMS changes **cannot** be verified by looking at the rendered site — a
-page can render perfectly while the editing UI is broken. Use the two `sanity`
-commands above. [PROJECT.md §4](./PROJECT.md#4-the-cms--read-this-before-touching-content)
-explains why.
 
 ## Deploying
 
-Push to `main`. Vercel deploys automatically.
+Push to `main`. Vercel deploys automatically — this is now the only trigger;
+there's no CMS-publish rebuild path anymore.
 
 A migration to an OTC-hosted server is planned but **not started** —
 scaffolding and the runbook live in [`deploy/`](./deploy/README.md), status in
 PROJECT.md §8. The `Deploy GTCIO site` Actions workflow is parked
 (manual-trigger only) until that begins.
 
-Publishing in the Studio also redeploys the site on its own (a Sanity webhook →
-Vercel deploy hook chain, set up 2026-07-20 — see
-[PROJECT.md §8](./PROJECT.md#8-open-work)), so marketing edits go live without a
-developer.
-
-⚠️ **One integration still awaits one-time setup** (details in PROJECT.md §5):
-Microsoft Graph credentials aren't configured yet, so form submissions are
-saved to the Studio inbox but **email nobody**. Constant Contact (the
-newsletter sign-up, including the Contact form's opt-in checkbox — PROJECT.md
-§11) is fully connected and verified working.
+⚠️ **Two integrations await setup** (details in PROJECT.md §5/§8/§11):
+Microsoft Graph credentials aren't configured yet, so form submissions
+currently fail outright (there's no CMS inbox to fall back to anymore) — this
+is now urgent. And the newsletter's Constant Contact integration needs a
+Vercel KV store provisioned before it will reconnect (its old token store was
+the CMS, also removed).

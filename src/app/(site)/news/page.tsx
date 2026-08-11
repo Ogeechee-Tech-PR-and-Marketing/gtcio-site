@@ -2,18 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
-import { sanityFetch } from "@/sanity/lib/live";
-import { NEWS_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
-import { safeHref } from "@/sanity/lib/links";
+import { safeHref } from "@/lib/links";
+import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
 
 export const metadata: Metadata = {
   title: "News | GTCIO",
 };
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "News",
   heroTitle: "News from the GTCIO",
@@ -22,18 +20,6 @@ const DEFAULTS = {
   introText: "Announcements, milestones, and mentions as GTCIO gets underway.",
   pressTitle: "Press Releases",
   mediaTitle: "In the News",
-};
-
-type NewsItem = {
-  _id: string;
-  category?: "press" | "media";
-  title: string;
-  date?: string;
-  source?: string;
-  url?: string;
-  excerpt?: string;
-  image?: SanityImage;
-  imageAlt?: string;
 };
 
 function formatDate(date?: string) {
@@ -56,20 +42,16 @@ function NewsList({ items }: { items: NewsItem[] }) {
       {items.map((item) => {
         const meta = [formatDate(item.date), item.source].filter(Boolean).join("  ·  ");
         const url = safeHref(item.url);
-        const hotspot = item.image?.hotspot;
-        const position = hotspot
-          ? `${(hotspot.x * 100).toFixed(1)}% ${(hotspot.y * 100).toFixed(1)}%`
-          : "50% 50%";
         return (
-          <li key={item._id} className="flex flex-col gap-6 py-6 sm:flex-row">
-            {item.image?.asset && (
+          <li key={item.id} className="flex flex-col gap-6 py-6 sm:flex-row">
+            {item.image && (
               <div className="relative h-40 w-full shrink-0 sm:h-28 sm:w-44">
                 <Image
-                  src={urlForImage(item.image).width(480).height(320).fit("crop").auto("format").url()}
+                  src={item.image}
                   alt={item.imageAlt || item.title}
                   fill
                   sizes="176px"
-                  style={{ objectPosition: position }}
+                  style={{ objectPosition: item.imagePosition || "50% 50%" }}
                   className="object-cover"
                 />
               </div>
@@ -113,42 +95,16 @@ function NewsList({ items }: { items: NewsItem[] }) {
   );
 }
 
-export default async function NewsPage() {
-  const [{ data }, { data: settingsData }] = await Promise.all([
-    sanityFetch({ query: NEWS_PAGE_QUERY }),
-    sanityFetch({ query: SITE_SETTINGS_QUERY }),
-  ]);
-  const typed = data as {
-    page?: (Partial<typeof DEFAULTS> & {
-      heroImage?: SanityImage;
-      heroImageAlt?: string;
-    }) | null;
-    items?: NewsItem[];
-  } | null;
-  // `items` is queried independently of the newsPage singleton — see the note on
-  // NEWS_PAGE_QUERY. News renders even if that document was never created.
-  const cms = typed?.page ?? undefined;
-  const page = { ...DEFAULTS, ...cms };
-  const items = typed?.items ?? [];
+export default function NewsPage() {
+  const page = DEFAULTS;
+  const items = NEWS_ITEMS;
   const press = items.filter((i) => i.category !== "media");
   const media = items.filter((i) => i.category === "media");
 
-  // Media contact name/email is the same siteSettings.mediaContact record the
-  // Contact page shows (kept in sync there) — not re-entered here, just a
-  // shorter first-and-last-name link plus a mailto.
-  const settings = settingsData as {
-    mediaContact?: { name?: string; email?: string };
-  } | null;
-  const mediaContactName = settings?.mediaContact?.name?.split(",")[0]?.trim() || "Sean Payne";
-  const mediaContactEmail = settings?.mediaContact?.email || "spayne@ogeecheetech.edu";
-
-  const hero = resolveHeroImage({
-    image: cms?.heroImage,
-    alt: cms?.heroImageAlt,
-    fallbackSrc: "/images/hero-about.jpg",
-    fallbackAlt: "Engineer working with a robotic arm",
-    fallbackPosition: "61% 25%",
-  });
+  // Same media contact siteSettings.mediaContact used to supply — kept in
+  // sync with the Contact page's hardcoded default.
+  const mediaContactName = "Sean Payne";
+  const mediaContactEmail = "spayne@ogeecheetech.edu";
 
   return (
     <>
@@ -156,9 +112,9 @@ export default async function NewsPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image={hero.src}
-        imageAlt={hero.alt}
-        imagePosition={hero.position}
+        image="/images/hero-about.jpg"
+        imageAlt="Engineer working with a robotic arm"
+        imagePosition="61% 25%"
       />
 
       <section className="px-6 py-16 sm:px-10">

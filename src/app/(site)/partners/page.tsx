@@ -3,10 +3,8 @@ import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import InquiryForm from "@/components/InquiryForm";
-import { sanityFetch } from "@/sanity/lib/live";
-import { PARTNERS_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, urlForImage, type SanityImage } from "@/sanity/lib/image";
-import { safeHref } from "@/sanity/lib/links";
+import { safeHref } from "@/lib/links";
+import { PARTNERS } from "@/lib/partners";
 
 export const metadata: Metadata = {
   title: "Partners | GTCIO",
@@ -33,9 +31,9 @@ const EXTRA_FORM_OPTIONS = ["Facility Tour"];
 // PROJECT.md §8.
 const SHOW_PARTNER_DIRECTORY = false;
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "Partners",
   heroTitle: "Bridges to industry",
@@ -58,35 +56,20 @@ const DEFAULTS = {
     "GTCIO is actively growing its network of industry partners. Tell us a bit about your organization and which pathway interests you, and we'll follow up to talk next steps.",
 };
 
-export default async function PartnersPage() {
-  const { data } = await sanityFetch({ query: PARTNERS_PAGE_QUERY });
-  const typed = data as (Partial<typeof DEFAULTS> & {
-    heroImage?: SanityImage;
-    heroImageAlt?: string;
-    partners?: Array<{ _id: string; name: string; description: string; logo?: SanityImage; website?: string }>;
-  }) | null;
-  const page = { ...DEFAULTS, ...typed };
-  const pathways = typed?.pathways?.length ? typed.pathways : DEFAULTS.pathways;
-  const partners = typed?.partners ?? [];
+export default function PartnersPage() {
+  const page = DEFAULTS;
+  const pathways = DEFAULTS.pathways;
+  const partners = PARTNERS;
 
-  // The checkbox list is generated from the pathway cards shown above it, so
-  // editing a card in the CMS keeps the form in step with the page
-  // automatically — except FORM_LABEL_OVERRIDES (a card title that should read
-  // differently as a form choice) and EXTRA_FORM_OPTIONS (a form choice with
-  // no pathway card of its own).
+  // The checkbox list is generated from the pathway cards shown above it —
+  // except FORM_LABEL_OVERRIDES (a card title that should read differently as
+  // a form choice) and EXTRA_FORM_OPTIONS (a form choice with no pathway card
+  // of its own).
   const pathwayOptions = [
     ...pathways.map((p: { title: string }) => FORM_LABEL_OVERRIDES[p.title] ?? p.title),
     ...EXTRA_FORM_OPTIONS,
     "Something else / not sure yet",
   ];
-
-  const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-partners.jpg",
-    fallbackAlt: "Two technicians working together on robotic equipment",
-    fallbackPosition: "55% 17%",
-  });
 
   return (
     <>
@@ -94,9 +77,9 @@ export default async function PartnersPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image={hero.src}
-        imageAlt={hero.alt}
-        imagePosition={hero.position}
+        image="/images/hero-partners.jpg"
+        imageAlt="Two technicians working together on robotic equipment"
+        imagePosition="55% 17%"
       />
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
@@ -141,20 +124,18 @@ export default async function PartnersPage() {
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {partners.map((partner) => (
               <a
-                key={partner._id}
+                key={partner.id}
                 href={`#${partnerSlug(partner.name)}`}
                 className="group flex flex-col items-center gap-3 border border-brand-silver/20 bg-brand-white p-6 shadow-sm transition-colors hover:border-brand-red"
               >
                 <div className="relative h-16 w-full sm:h-20">
-                  {partner.logo?.asset && (
-                    <Image
-                      src={urlForImage(partner.logo).width(320).fit("max").url()}
-                      alt={`${partner.name} logo`}
-                      fill
-                      sizes="200px"
-                      className="object-contain"
-                    />
-                  )}
+                  <Image
+                    src={partner.logo}
+                    alt={`${partner.name} logo`}
+                    fill
+                    sizes="200px"
+                    className="object-contain"
+                  />
                 </div>
                 <span className="font-ui text-center text-xs font-bold tracking-wide text-brand-silver group-hover:text-brand-red">
                   {partner.name}
@@ -171,25 +152,19 @@ export default async function PartnersPage() {
               const website = safeHref(partner.website);
               return (
               <div
-                key={partner._id}
+                key={partner.id}
                 id={partnerSlug(partner.name)}
                 className="flex scroll-mt-40 flex-col border border-brand-silver/20 bg-brand-white shadow-sm sm:scroll-mt-56"
               >
                 <div className="flex flex-col gap-6 p-8 sm:flex-row sm:items-start sm:gap-10">
                   <div className="relative h-20 w-full shrink-0 sm:h-24 sm:w-44">
-                    {/* .asset check matters: a logo object with no upload yet
-                        (draft preview mid-edit) makes urlForImage() throw. */}
-                    {partner.logo?.asset && (
-                      <Image
-                        // Width only: passing a height too makes Sanity crop the
-                        // logo to that aspect ratio and clip wordmarks.
-                        src={urlForImage(partner.logo).width(480).fit("max").url()}
-                        alt={`${partner.name} logo`}
-                        fill
-                        sizes="176px"
-                        className="object-contain object-left"
-                      />
-                    )}
+                    <Image
+                      src={partner.logo}
+                      alt={`${partner.name} logo`}
+                      fill
+                      sizes="176px"
+                      className="object-contain object-left"
+                    />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-heading text-xl font-bold text-brand-black">{partner.name}</h3>

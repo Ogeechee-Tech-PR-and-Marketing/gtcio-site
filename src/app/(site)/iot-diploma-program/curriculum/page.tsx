@@ -11,7 +11,7 @@ import {
   TOTAL_CREDITS,
   CREDENTIALS_BY_CODE,
 } from "@/lib/iot-curriculum";
-import { DESTINATIONS } from "@/sanity/lib/links";
+import { DESTINATIONS } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "Courses & Credit Hours | IOT Diploma Program | GTCIO",

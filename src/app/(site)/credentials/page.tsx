@@ -3,9 +3,6 @@ import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import CtaButton from "@/components/CtaButton";
-import { sanityFetch } from "@/sanity/lib/live";
-import { CREDENTIALS_PAGE_QUERY } from "@/sanity/lib/queries";
-import { resolveHeroImage, type SanityImage } from "@/sanity/lib/image";
 import {
   CREDENTIALS,
   CREDENTIAL_FAMILIES,
@@ -18,9 +15,8 @@ import {
   OTHER_CREDENTIALS,
   AFFILIATIONS,
   affiliationsFor,
-  type Affiliation,
 } from "@/lib/credentials";
-import { DESTINATIONS } from "@/sanity/lib/links";
+import { DESTINATIONS } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "Credentials | GTCIO",
@@ -36,9 +32,9 @@ for (const course of PROGRAM_COURSES) {
   }
 }
 
-// ⚠️ CMS values override these defaults once a field is set on the Sanity doc —
-// editing this object alone does NOT change the live site. Patch the published
-// doc (and any draft of it) too. PROJECT.md §4, trap 6 has the how.
+// Content used to be CMS-editable (Sanity); it was exported to this static
+// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
+// handoff. See PROJECT.md §4.
 const DEFAULTS = {
   heroEyebrow: "Credentials",
   heroTitle: "Proof you can do the work",
@@ -71,35 +67,18 @@ const DEFAULTS = {
  * next.config.ts.
  *
  * Reference data comes from src/lib/credentials.ts and src/lib/iot-curriculum.ts;
- * read those headers before editing. Framing copy is CMS-editable
- * (credentialsPage singleton) and seeded.
+ * read those headers before editing. Framing copy used to be CMS-editable
+ * (credentialsPage singleton); see the DEFAULTS comment above.
  */
-export default async function CredentialsPage() {
-  const { data } = await sanityFetch({ query: CREDENTIALS_PAGE_QUERY });
-  const typed = data as
-    | (Partial<typeof DEFAULTS> & {
-        heroImage?: SanityImage;
-        heroImageAlt?: string;
-        affiliations?: Affiliation[];
-      })
-    | null;
-  const page = { ...DEFAULTS, ...typed };
-  // Affiliations are authored on the Training page's document — one field, two
-  // pages, so an editor never updates the same accreditation twice. Filtered
-  // to this page's audience — a card can be employer-training-only (Mitsubishi
-  // Electric, Rockwell) since the diploma only builds in FANUC and SACA.
-  const affiliations: Affiliation[] = affiliationsFor(
-    typed?.affiliations?.length ? typed.affiliations : AFFILIATIONS,
-    "student"
-  );
-
-  const hero = resolveHeroImage({
-    image: typed?.heroImage,
-    alt: typed?.heroImageAlt,
-    fallbackSrc: "/images/hero-credentials.jpg",
-    fallbackAlt: "Gloved hands testing wiring connections in an industrial control panel with a multimeter",
-    fallbackPosition: "40% 45%",
-  });
+export default function CredentialsPage() {
+  const page = DEFAULTS;
+  // Affiliations used to be authored on the Training page's Sanity document,
+  // shared by both pages so an editor never updated the same accreditation
+  // twice. Now that both pages are static, this page just filters the same
+  // AFFILIATIONS constant to its own audience — a card can be
+  // employer-training-only (Mitsubishi Electric, Rockwell) since the diploma
+  // only builds in FANUC and SACA.
+  const affiliations = affiliationsFor(AFFILIATIONS, "student");
 
   return (
     <>
@@ -107,9 +86,9 @@ export default async function CredentialsPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        image={hero.src}
-        imageAlt={hero.alt}
-        imagePosition={hero.position}
+        image="/images/hero-credentials.jpg"
+        imageAlt="Gloved hands testing wiring connections in an industrial control panel with a multimeter"
+        imagePosition="40% 45%"
         cta={
           <div className="flex flex-wrap gap-3">
             <CtaButton button={page.applyButton} variant="primary" />
