@@ -842,9 +842,8 @@ Smaller items:
     tied to "Ogeechee Technical College Local Board of Directors" had no name
     filled in, and Southeastern Technical College's President was listed as
     "TBD." Neither is on the published roster. **If either name is confirmed
-    later, add them to `advisoryMembers` in both `about/page.tsx`'s `DEFAULTS`
-    and the published Sanity doc** (same two-place pattern as every other
-    CMS-overrides-code field, §4).
+    later, add them to `advisoryMembers` in `about/page.tsx`'s `DEFAULTS`**
+    (the only place this content lives now — §4).
   - **Roster fact-checked 2026-08-06** (web research, all 15 people). 12 of 15
     checked out cleanly against current sources: Daniel Cox, Tramaine Melvin,
     Rob Lanham, Kent Powell, David Rogers, Jim Wall, Lori Durden, Billy
