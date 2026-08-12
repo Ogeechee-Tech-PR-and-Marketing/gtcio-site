@@ -24,7 +24,7 @@ export default function RootLayout({
       <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
       <link
         rel="stylesheet"
-        href="https://use.typekit.net/fgt0fkg.css"
+        href="https://use.typekit.net/jok5hww.css"
         precedence="default"
       />
       <body className="flex min-h-full flex-col">{children}</body>

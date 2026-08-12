@@ -93,8 +93,9 @@ workflow's own `push` trigger already covers once the runner is registered.)
 
 1. `SITE_URL` in `src/lib/site.ts` → the new origin (feeds metadata, robots,
    sitemap.xml).
-2. Adobe Fonts: add the new domain to web project `fgt0fkg` in Adobe's
-   dashboard, or Trade Gothic stops loading.
+2. Adobe Fonts: add the new domain to web project `jok5hww` (OTC's work Adobe
+   account as of 2026-08-12 — see PROJECT.md §7) in Adobe's dashboard, or
+   Trade Gothic stops loading.
 3. Constant Contact: the OAuth redirect URI on the Custom App points at
    `gtcio-site.vercel.app` (PROJECT.md §11). It only matters when re-running
    the one-time connect flow, but update it to the new origin anyway so a

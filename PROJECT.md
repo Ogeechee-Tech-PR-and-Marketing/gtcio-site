@@ -552,8 +552,18 @@ Logo: `public/images/gtcio-logo.png`.
 ### Type — real Trade Gothic Next, via Adobe Fonts
 
 The brand guide's actual faces are loaded from Adobe Fonts under OTC's Creative
-Cloud licence (kit `fgt0fkg`, linked in `src/app/layout.tsx`). Arial Narrow — the
+Cloud licence (kit `jok5hww`, linked in `src/app/layout.tsx`). Arial Narrow — the
 guide's own approved substitute — remains the fallback.
+
+**Moved to OTC's own Adobe account 2026-08-12** — until then this was actually
+running under Jake's personal Adobe account (kit `fgt0fkg`, now retired), not
+OTC's licence as this section previously (incorrectly) said. Jake got a proper
+work Adobe account, created a new web project there with the same three faces
+(`trade-gothic-next-compressed` 800, `trade-gothic-next-condensed` 700/400),
+set `font-display: Swap` on all three (verified via the same curl check
+below), and the kit ID was swapped in `layout.tsx`. If font licensing questions
+come up again, the account of record is the work Adobe ID, not Jake's personal
+one.
 
 | Class | Face | Used for |
 | --- | --- | --- |
@@ -573,10 +583,12 @@ guide's own approved substitute — remains the fallback.
 2. **`font-display` is set per font family in the Adobe web project, not per
    project.** A family left on `auto` renders its text *invisible* for up to ~3s
    on slow connections. Both families are currently on **Swap** (verified
-   2026-07-14) — but the setting lives in Adobe's dashboard, not in this repo, so
-   it can be changed out from under the code and won't show in a diff. If text
-   ever flashes invisible, check this first:
-   `curl -s https://use.typekit.net/fgt0fkg.css | grep -o 'font-display:[a-z]*' | sort | uniq -c`
+   2026-08-12, on the new work-account kit — the new web project defaulted to
+   `auto` on all three faces and had to be switched by hand before the kit ID
+   was put into the code) — but the setting lives in Adobe's dashboard, not in
+   this repo, so it can be changed out from under the code and won't show in a
+   diff. If text ever flashes invisible, check this first:
+   `curl -s https://use.typekit.net/jok5hww.css | grep -o 'font-display:[a-z]*' | sort | uniq -c`
    (all faces should read `swap`).
 
 Nav and buttons deliberately use Condensed Bold rather than Heavy Compressed: the
@@ -1795,7 +1807,7 @@ more about the handoff than what's stated here.
 | GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (private) | OTC PR & Marketing org (Jake: admin) | Source of truth; push to `main` deploys |
 | Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — **not yet migrated off**; self-hosting planned, see §8 + `deploy/README.md` | Hosting, env vars, deploy hooks, function logs |
 | Vercel KV | not yet provisioned | Jake — **not yet provisioned as of 2026-08-11**, see §6, §8, §11 | Constant Contact OAuth token store |
-| Adobe Fonts | web project kit `fgt0fkg` | OTC's Creative Cloud licence | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
+| Adobe Fonts | web project kit `jok5hww` | OTC's Creative Cloud licence (moved from Jake's personal Adobe account 2026-08-12 — see §7) | Trade Gothic Next (see §7 — settings live in Adobe's dashboard) |
 | Microsoft Graph | Azure AD app registration | the OTC Microsoft 365 tenant (§5; tenant admin required) | Form notification email (§5; not yet set up) |
 | Constant Contact | "Custom App" at developer.constantcontact.com | the OTC/GTCIO Constant Contact account (§11) | Newsletter list (§11; app connected since 2026-07-21, but its token store needs Vercel KV provisioned before it works again — §11) |
 
