@@ -915,7 +915,7 @@ Smaller items:
     hrs. Jake decided 2026-07-20 to **leave these as published** rather than
     annotate other outlets' headlines; the visible dates supply the context. The
     excerpts still deliberately avoid restating those numbers. **Do not harvest
-    figures out of these pieces** — current is 40,000 sq ft / $27M / ~460,000 hrs
+    figures out of these pieces** — current is 39,700 sq ft / $27M / ~460,000 hrs
     (see the PDF note in §10, same trap).
   - ⚠️ **Four items are not about GTCIO** and were included deliberately (Jake,
     2026-07-20): ACE Electric's gift (2025-10-08) does not mention GTCIO at all,
@@ -1360,6 +1360,10 @@ Sanity doc" phrasing as current instructions.
   Koyo Bearings.
 - Useful confirmed facts (from OTC's 2026-07-09 press release): $27M / 40,000 sq
   ft facility, ~460,000 instructional hours/year capacity, August 2026 launch.
+  **Square footage superseded 2026-08-17** — the CBAER economic-impact report
+  (see the dated note further down this section) gives a more precise 39,700
+  gross sq ft; the site now publishes that figure. $27M and ~460,000 hrs are
+  untouched by that report and still trace to this press release.
   Media contact: Sean Payne, spayne@ogeecheetech.edu. Applications:
   www.ogeecheetech.edu/admissions/next-steps (the `apply` destination in
   `src/lib/links.ts`, moved from `sanity/lib/links.ts` 2026-08-11 — changed
@@ -1374,9 +1378,10 @@ Sanity doc" phrasing as current instructions.
   Outlay FY24 Approved Projects 220901.pdf* (State Board approved list, 9/1/22 —
   corroborates the 9/22 "initial funding approved" milestone). They call the
   project **GISIRTC** and quote **37,307 GSF / $22.8–23.5M / 400–480k hours**.
-  **Do not put those numbers on the site** — the 2026 press release figures
-  already there (**40,000 sq ft / $27M / ~460,000 hrs**) are current. Use these
-  PDFs for the *why*, not the specs. (The docs also disagree with each other on
+  **Do not put those numbers on the site** — the current specs are
+  **39,700 sq ft / $27M / ~460,000 hrs** (sq ft from the CBAER report, the
+  other two still from the 2026 press release — see the dated note further
+  down this section). Use these PDFs for the *why*, not the specs. (The docs also disagree with each other on
   FY22 hours: 94,500 in the profile vs 104,000 in the 1-pager.)
   - Good, usable context from them (now on the site): the college sits **32 miles
     from the Bryan County mega site**, where the **Hyundai EV plant was projected
@@ -1595,19 +1600,27 @@ Sanity doc" phrasing as current instructions.
     "people for jobs in industrial automation" to **"people for jobs in
     industrial operations and automation"** (Jake, 2026-08-06) — a wording
     request independent of the report, patched the same way.
-  - **🔴 Not touched, flagged for Jake:** this report states the new GTCIO
-    building at **39,700 gross square feet** (p1, p8 — 6,500 office + 20,000
-    instructional + 13,200 common area), not the 40,000 sq ft already
-    published sitewide (`aboutPage.historyBody`, `facilityPage`, and
-    elsewhere — the figure this project has treated as current since the
-    2026-07 press release). The user's request this pass was scoped to the
-    economic-impact numbers and the mission-copy wording, not building specs,
-    so the existing 40,000 sq ft figure was left alone — **confirm with Jake
-    before changing it**, since it's used in several places and 39,700 could
-    be either a more precise architectural figure or a genuine revision.
-  - Also worth noting, not yet acted on: the report gives a total project
-    cost of $27M nowhere — it's silent on construction cost — so that figure's
-    sourcing is still just the 2026-07 press release, unchanged by this report.
+  - **✅ Square footage corrected to the report's figure, 2026-08-17** (Jake
+    asked directly to reconcile the site against this report). The report
+    states the new GTCIO building at **39,700 gross square feet** (p1, p8 —
+    6,500 office + 20,000 instructional + 13,200 common area) — supersedes
+    the 40,000 sq ft figure this project had treated as current since the
+    2026-07 press release. Changed in all five places it appeared:
+    `facilityPage.heroDescription` and `stats` in
+    `src/app/(site)/facility/page.tsx`, `aboutPage.historyBody` and the June
+    2025 "Construction begins" timeline entry in `src/app/(site)/about/page.tsx`,
+    and the Statesboro Magazine excerpt in `src/lib/news.ts` (the site's own
+    description of the article's content, not a quoted headline — unlike the
+    old news headlines discussed below, which stay untouched on purpose).
+    `public/SITEMAP.html`'s Facility card and colophon date were updated to
+    match. **Not changed:** the $27M cost figure — the report is silent on
+    construction cost (see below), so that's still sourced only from the
+    2026-07 press release, unaffected by this report. The ~460,000 hrs/yr
+    instructional-capacity figure is likewise untouched — this report doesn't
+    address it either.
+  - The report gives a total project cost of $27M nowhere — it's silent on
+    construction cost — so that figure's sourcing is still just the 2026-07
+    press release, unchanged by this report.
 - `EDITING.md` in this repo is the **plain-English guide written for marketing
   staff**, not for developers. If you change how editing works, update it — it is
   the thing a non-technical person actually reads.

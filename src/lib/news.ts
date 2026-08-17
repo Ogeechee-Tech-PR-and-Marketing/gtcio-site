@@ -38,7 +38,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     source: "Statesboro Magazine",
     url: "https://issuu.com/statesboromagazine/docs/statesboro_magazine_-_july_august_2026/39",
     excerpt:
-      "Statesboro Magazine's July/August education issue features the Georgia Training Center for Industrial Operations ahead of its fall opening, with OTC VP for Economic Development Jan Moore and Development Authority of Bulloch County CEO Benjy Thompson on what the 40,000-square-foot center means for the region.",
+      "Statesboro Magazine's July/August education issue features the Georgia Training Center for Industrial Operations ahead of its fall opening, with OTC VP for Economic Development Jan Moore and Development Authority of Bulloch County CEO Benjy Thompson on what the 39,700-square-foot center means for the region.",
   },
   {
     id: "newsItem-wsav-new-training-center-2026-03",

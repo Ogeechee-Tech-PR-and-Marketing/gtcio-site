@@ -31,7 +31,7 @@ const DEFAULTS = {
   bdaWebsite: "https://advantagebulloch.com/",
   historyTitle: "History",
   historyBody:
-    "GTCIO's home is a new $27 million, 40,000-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outpaced the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply. The GTCIO was designed to address that shortage.\n\nA Georgia Southern University economic-impact study projects the center will generate $13.21 million in regional economic output in its first year in the new building, growing to $16.64 million by FY2035, the study's final year of analysis. The GTCIO serves credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
+    "GTCIO's home is a new $27 million, 39,700-square-foot facility with capacity for nearly 460,000 hours of instruction a year. It exists because demand outpaced the room to meet it: Ogeechee Tech's industrial systems training was on pace to fill its existing building, and the college sits 32 miles from the Bryan County mega site, where the Hyundai electric-vehicle plant was projected to bring roughly 8,100 jobs to the region and nearby suppliers another 3,000. Skilled industrial systems and robotics technicians were already in shorter supply. The GTCIO was designed to address that shortage.\n\nA Georgia Southern University economic-impact study projects the center will generate $13.21 million in regional economic output in its first year in the new building, growing to $16.64 million by FY2035, the study's final year of analysis. The GTCIO serves credit students and incumbent workers alike, running customized workforce development for regional employers, and training and certifying instructors from across Georgia and the nation.",
   historyTimeline: [
     {
       date: "September 2021",
@@ -90,7 +90,7 @@ const DEFAULTS = {
     {
       date: "June 2025",
       title: "Construction begins",
-      detail: "Ground is broken on the 40,000-square-foot facility.",
+      detail: "Ground is broken on the 39,700-square-foot facility.",
     },
     {
       date: "December 2025",

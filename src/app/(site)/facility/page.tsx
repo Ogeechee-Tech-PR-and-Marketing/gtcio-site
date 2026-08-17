@@ -13,7 +13,7 @@ const DEFAULTS = {
   heroEyebrow: "Facility",
   heroTitle: "Built for hands-on training",
   heroDescription:
-    "A $27 million, 40,000-square-foot center built to train the industrial systems and robotics workforce southeast Georgia's manufacturers are short on.",
+    "A $27 million, 39,700-square-foot center built to train the industrial systems and robotics workforce southeast Georgia's manufacturers are short on.",
   overviewTitle: "Overview",
   overviewBody:
     "GTCIO's facility serves both credit students and incumbent workers. The building holds 12 industrial labs alongside classrooms, computer labs, and meeting space, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. It was planned as a regional center rather than a single college's building: Ogeechee Tech partnered with Southeastern Technical College to train manufacturers across their service areas once the center came online, which avoids duplicating facilities across the region. The space also trains and certifies instructors from across Georgia and the nation.",
@@ -51,7 +51,7 @@ const DEFAULTS = {
     },
   ],
   stats: [
-    { value: "40,000 sq ft", label: "Purpose-built training space" },
+    { value: "39,700 sq ft", label: "Purpose-built training space" },
     { value: "$27M", label: "Facility investment" },
     { value: "~460,000 hrs", label: "Instructional capacity per year" },
   ],
