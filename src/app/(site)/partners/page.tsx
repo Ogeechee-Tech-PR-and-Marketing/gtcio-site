@@ -87,6 +87,9 @@ export default function PartnersPage() {
           <p className="max-w-2xl text-brand-black">{page.introText}</p>
           <CtaButton button={page.introButton} variant="primary" className="shrink-0" />
         </div>
+        <p className="font-heading mx-auto mt-8 max-w-5xl text-2xl font-bold text-brand-red sm:text-3xl">
+          Have your company&apos;s logo here, along with a link to your opportunities for our graduates!
+        </p>
       </section>
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
