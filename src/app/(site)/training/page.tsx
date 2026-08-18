@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 // The public flipbook of "OTC Industrial Systems Training Program".
 const CATALOG_URL = "https://online.fliphtml5.com/exygb/kvbr/#p=1";
 // The same catalog, as a downloadable PDF.
-const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program-3.pdf";
+const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program-4.pdf";
 
 // Content used to be CMS-editable (Sanity); it was exported to this static
 // object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital

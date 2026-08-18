@@ -492,6 +492,29 @@ compounding edits on this one, and re-verify the content still matches the
 training catalog (not the diploma-program PDF) before pointing
 `CATALOG_PDF_URL` at it.
 
+**`otc-industrial-systems-training-program-4.pdf`** (swapped 2026-08-18,
+replacing `-3.pdf`) is another genuine content update Jake supplied directly
+as `OTC Industrial Systems Training Program.pdf` (22 pages, 4.77MB — Jake's
+own smaller export, not recompressed by this session). Diffed against `-3.pdf`
+via `pypdf` text extraction plus a page-by-page embedded-image hash compare
+(`PyMuPDF`) before wiring it up, since a text-only diff would have missed a
+photo swap: text changes are cosmetic (the "AT A GLANCE" stat block now reads
+"Training Hours in 2026" / 198,000, was "...2024" / 242,000 — not a figure
+this site displays, see the `242,000 hours in 2024` note further down this
+section) and every embedded image is byte-identical **except** two pages —
+p6's stock robot-arm close-up was replaced with a real instructor/student lab
+photo, and p9 lost a stray **`PRAXIS3` logo watermark** bleeding into its
+bottom-right corner (PRAXIS3 is the GTCIO building's architecture firm, §10 —
+unrelated to this brochure; its presence there was a leftover export artifact
+in `-3.pdf`, now fixed upstream). No page.tsx copy changes were needed. Copied
+byte-for-byte (checksum-verified) to both
+`public/documents/otc-industrial-systems-training-program-4.pdf` and
+`../media-originals/otc-industrial-systems-training-program-4-source.pdf`.
+**The old `-3.pdf` (5.85MB) was deleted from `public/`** — confirmed by grep
+it was referenced nowhere else besides `CATALOG_PDF_URL`, same cleanup
+pattern as prior swaps. If this file is swapped again, run the same
+image-hash diff (not just text) before assuming nothing but stats changed.
+
 **Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
 after the first pass looked visibly blocky in the (then-current) construction
 video's dark night sky — banding is the classic failure mode of a fast CRF
