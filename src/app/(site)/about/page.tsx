@@ -114,7 +114,7 @@ const DEFAULTS = {
     },
     {
       date: "October 15, 2026",
-      title: "Ribbon cutting",
+      title: "Grand opening",
       detail: "GTCIO officially opens its doors.",
       highlight: true,
     },
@@ -235,7 +235,7 @@ const DEFAULTS = {
     {
       question: "Where is GTCIO located?",
       answer:
-        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Until it opens — the ribbon cutting is October 15, 2026 — classes are held in the Industrial Technology Building on Ogeechee Tech's main campus. The Facility page has more about the building.",
+        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Until it opens — the grand opening is October 15, 2026 — classes are held in the Industrial Technology Building on Ogeechee Tech's main campus. The Facility page has more about the building.",
     },
   ],
 };

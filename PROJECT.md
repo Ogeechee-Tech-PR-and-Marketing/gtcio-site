@@ -851,8 +851,8 @@ Smaller items:
     credential, so it renders unlinked; and p4 carries a stray Amatrol paragraph
     that clearly bled in from another document — **not published**.
 - **⚠️ The brochure says "OPENING SEPTEMBER 2026"** (pp2, 14, 15), which
-  disagrees with the ribbon-cutting date the site uses. Jake decided 2026-07-20
-  to **keep the site's dates** (construction completes 9/26, ribbon cutting
+  disagrees with the grand-opening date the site uses. Jake decided 2026-07-20
+  to **keep the site's dates** (construction completes 9/26, grand opening
   10/15/26, tours from 10/26) — those came from Jan directly and are more
   specific. Don't publish "opening September 2026" anywhere.
 - **The brochure's back cover gives 1 Joe Kennedy Blvd** — that is OTC's main
@@ -1548,7 +1548,7 @@ Sanity doc" phrasing as current instructions.
   icbconstructiongroup.com — verified; a directory lists the legal name
   "International City Builders" but their own site doesn't, so the site doesn't
   claim it) · 9/23 design starts · 6/25 construction starts · 9/26 construction
-  targeted for completion · **ribbon cutting 10/15/26**.
+  targeted for completion · **grand opening 10/15/26**.
   - **Redesigned horizontal 2026-07-21** (Jake liked the "editorial" of three
     mockups pitched). `src/components/AboutTimeline.tsx` is a client component
     (needs the scroll-arrow `onClick` handlers) rendering a CSS
@@ -1563,7 +1563,7 @@ Sanity doc" phrasing as current instructions.
     carry it with them. `timelineEvent` objects gained a `highlight` boolean
     (default off) that draws a gold underline under a milestone's headline, for
     calling out the one or two stops that matter most to a visitor. Seeded
-    `true` on "First classes begin" and "Ribbon cutting" only, both in the code
+    `true` on "First classes begin" and "Grand opening" only, both in the code
     `DEFAULTS` **and** patched directly onto the published `aboutPage` doc
     (`historyTimeline[_key=="t6b"]`/`[_key=="t8"]`) via the write token — a
     brand-new field like this only needs the dataset patch when you want it
@@ -1580,7 +1580,7 @@ Sanity doc" phrasing as current instructions.
     program was projected to hit capacity in that building, which is *why* the new
     center exists. This is on the site as an About timeline milestone and an IOT
     Diploma Program FAQ ("Where will classes be held?"). Tour booking opening 10/26
-    is consistent with the 10/15 ribbon cutting.
+    is consistent with the 10/15 grand opening.
   - Jan's source note said "9/26 HOPEFULLY finished" — the site says "targeted for
     completion"/"scheduled" instead. Don't publish the hedge verbatim.
   - **Three wording corrections, Jake, 2026-08-06** (all patched in both the

@@ -22,7 +22,7 @@ const DEFAULTS = {
   // until autumn 2026, and an unlabelled render reads as a photo of something
   // that already exists.
   renderingCaption:
-    "Architectural rendering of the GTCIO facility on AJ Riggs Road. Construction is scheduled for completion in September 2026, with a ribbon cutting on October 15, 2026.",
+    "Architectural rendering of the GTCIO facility on AJ Riggs Road. Construction is scheduled for completion in September 2026, with a grand opening on October 15, 2026.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
   focusAreasTitle: "What the center is built around",
