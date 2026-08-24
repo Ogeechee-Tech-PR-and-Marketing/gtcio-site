@@ -93,7 +93,7 @@ export default function PageHero({
 
           `cta` and `extra` now render INSIDE this card (moved 2026-07-21),
           not after it — Jake wanted the scrim under the Training page's
-          stat row (~460,000 hrs / 120+ years / 80 years), which is passed
+          stat row (~460,000 hrs / 92+ years / 52 years), which is passed
           as `extra`. Since this card is `inline-block` and the halo below
           sizes off THIS wrapper via `inset-1`, nesting cta/extra here makes
           the halo grow to cover them automatically — no separate sizing

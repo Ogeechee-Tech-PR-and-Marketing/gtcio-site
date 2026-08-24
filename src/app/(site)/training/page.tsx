@@ -43,7 +43,7 @@ const DEFAULTS = {
   faqTitle: "Employer FAQ",
   employerFaqs: [
     { question: "What are employees trained in?", answer: "Electrical systems and industrial wiring, motor controls, PLCs (Allen-Bradley, Mitsubishi, and Siemens), robotics, process control, fluid power, mechanical drives, and industrial troubleshooting." },
-    { question: "What's the value proposition for my business?", answer: "A pipeline of work-ready technicians, plus custom training that upskills the staff you already have, delivered by a team with more than 120 years of combined in-field experience." },
+    { question: "What's the value proposition for my business?", answer: "A pipeline of work-ready technicians, plus custom training that upskills the staff you already have, delivered by a team with more than 92 years of combined in-field experience." },
     { question: "How long does training take?", answer: "Short courses run 16–40 hours each. The entry-level Industrial Systems Fast Track is 256 hours over 16 weeks, two 8-hour days a week. The DOL-registered apprenticeships add 384 hours of classroom and lab time, about one 8-hour day a week, alongside 4,000 hours of on-the-job training." },
     { question: "How much does it cost?", answer: "Short courses run about $575–$1,350 depending on length, and FANUC and CNC courses run $1,150–$2,250. Comprehensive programs are $4,750 for the 256-hour Industrial Systems Fast Track and $7,750 for each 384-hour apprenticeship program. Customized contract training is scoped and quoted with your company rather than sold at a flat rate." },
     { question: "What credentials can employees earn?", answer: "Ogeechee Tech is an approved SACA testing site (Silver and Gold), the only authorized FANUC satellite training site in Georgia, a Mitsubishi Electric Automation Training Provider, and a Rockwell Automation Academy of Advanced Manufacturing training site. Note that employees must pass the exam to earn a credential — finishing a course alone doesn't award one. Available credentials are listed below each course description in the training course catalog." },
@@ -55,10 +55,18 @@ const DEFAULTS = {
 // Drawn from OTC's "Industrial Systems Training Program" brochure (see
 // CATALOG_URL) except the 460,000-hour figure, which is GTCIO's own facility
 // capacity, and the credentials figure (see its own comment below).
+//
+// EXCEPT the two experience figures, which now DIVERGE from that brochure
+// on purpose (2026-08-24, per Jake). Travis Wright is no longer associated
+// with the IOT diploma program — he's still at OTC — so his 28 years come
+// out of both totals: in-field 120+ -> 92+, training 80 -> 52. The 2026
+// brochure still prints 120/80 and needs the same correction. Until it
+// does, the site is intentionally ahead of it: do NOT "fix" these back to
+// match the brochure.
 const STATS = [
   { value: "~460,000", label: "Hours of instruction GTCIO can deliver each year" },
-  { value: "120+ years", label: "Combined in-field industrial systems experience on the training team" },
-  { value: "80 years", label: "Combined industrial systems training experience" },
+  { value: "92+ years", label: "Combined in-field industrial systems experience on the training team" },
+  { value: "52 years", label: "Combined industrial systems training experience" },
   // 6,226 is per Justin Goodman, who oversees certifications for the
   // program — not from the brochure or any published source, which is why
   // it wasn't documented here when added 2026-07-30 (commit b19476a). Jake
