@@ -1034,8 +1034,19 @@ Smaller items:
   ⚠️ The brochure's other usable image is a **lab photo with identifiable
   students' faces**. Jake declined to publish it 2026-07-20 pending confirmation
   that photo releases exist — don't add it without asking.
-- **"What is Industrial Operations Technology?" video** (~3 min) is a placeholder
-  box on the IOT page. Not produced, not scoped.
+- **✅ "What is Industrial Operations Technology?" video is live** (Jake,
+  2026-08-24). Replaced the video-placeholder box on `/iot-diploma-program`
+  (`whatIsTitle` section, `src/app/(site)/iot-diploma-program/page.tsx`) with
+  an embedded YouTube iframe — video id `gCkUwZqdZMc`, 2:32, unlisted, on the
+  GTCIO channel, titled "What's IOT?". Embedded via
+  `youtube-nocookie.com/embed/<id>` (privacy-enhanced mode, no cookies until
+  playback starts) inside the same `aspect-video` box the placeholder used, so
+  no surrounding layout changed. Confirmed embeddable (200 from the embed
+  endpoint; unlisted videos embed fine, only "private" would block it) before
+  wiring it in. No CSP change needed — `next.config.ts`'s policy has no
+  `frame-src`/`default-src` restricting outbound iframes, only
+  `frame-ancestors` (which governs framing *this* site, not what this site
+  embeds).
 - **Nav and footer link columns** are code-only (`Header.tsx`, `Footer.tsx`) —
   deliberate even before the CMS removal, since a typo'd href there breaks
   navigation site-wide; as of 2026-08-11 the rest of the site's content is
@@ -1135,6 +1146,48 @@ no draft to check for. The individual bullets below are left in their
 original wording as a record of what happened; don't take their "patch the
 Sanity doc" phrasing as current instructions.
 
+- **✅ Training page's "student certifications and credentials" stat — sourcing
+  documented, 2026-08-18** (Jake asked for a full pass confirming every
+  number on the site is current). The value **"6,226 ... since 2024"**
+  (added 2026-07-30, commit `b19476a`) had no documented source anywhere in
+  this file or the commit message, and doesn't appear in the training
+  brochure's own AT A GLANCE page — which only ever gave a training-hours
+  figure, not a credentials count, so it was never going to be there. That
+  absence was wrongly read as "unverified" and the number was briefly
+  replaced with a different, real-but-lower figure (Durden's 1,300+
+  diploma-graduate figure, see the deck note below) before Jake caught it:
+  **6,226 is per Justin Goodman, who oversees certifications for the
+  program** — a direct internal source, not a published one, which is
+  exactly why nothing in the repo could confirm it. Jake confirmed it's
+  correct and likely an undercount now, since it hasn't been refreshed since
+  2026-07-30. **Restored to 6,226**, now with that sourcing documented in the
+  code comment so this doesn't happen again. `STATS` in
+  `src/app/(site)/training/page.tsx`. **Ask Justin Goodman for a current
+  number** before raising it further; verify any change locally via `npm run
+  dev` before pushing — `preview_start` throws `EPERM` in this directory (a
+  known sandboxing quirk, not a real error), so launch the dev server with a
+  background Bash command instead and point `preview_start` at the resulting
+  `localhost:3000` URL.
+  - **Not the same figure as the deck's "1,300+."** The GTCIO history deck
+    (`GTCIO_HISTORY_DOSSIER.md`) separately uses "1,300+ degrees and
+    certifications earned by 774 industrial technologies graduates in 2024,"
+    sourced to Durden's February 2025 report to city council — that's a
+    narrower population (diploma-track graduates only) for a specific year,
+    not a competing count against this page's broader "since 2024, all
+    certifications" figure. The two aren't in tension and neither needed to
+    change to match the other.
+  - Rest of the site checked the same pass and found current, no changes
+    needed: 39,700 sq ft / $27M / ~460,000 hrs (facility, about), 12
+    industrial labs, four semesters / $9,000 / 53 credit hours across 15
+    courses (IOT diploma program), 21 SACA credentials + 1 FANUC = 22 total
+    (credentials page). No county-served figure (8/9/11) appears anywhere on
+    the site, so that ambiguity — open in the deck's own question list —
+    doesn't surface here. The Amazon MRA "one of five colleges nationally"
+    line in `news.ts` was **not** changed — it's a dated (2021-05-24) excerpt
+    of what Grice Connect reported at the time, not a live claim, matching
+    this project's existing policy of leaving old news excerpts as published
+    rather than correcting them against current facts (see the "Several
+    headlines carry superseded specs" bullet further down this section).
 - **Site nav order** (as of 2026-07-20): About (Mission / History / Advisory Board
   / Development Authority of Bulloch County / FAQ) · IOT Training Programs · IOT
   Diploma Program · **Credentials** · Facility · Partners · News · Contact.
