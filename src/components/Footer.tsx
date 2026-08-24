@@ -46,12 +46,17 @@ export default function Footer() {
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 sm:px-10 lg:grid-cols-4">
         <div>
+          {/* Dedicated white asset, not the header's red/black logo forced
+              white via CSS filters — brightness-0 invert flattened every
+              opaque pixel to white regardless of color, so the OTC diamond
+              icon (drawn as color-on-color, not a transparency cutout)
+              disappeared into the surrounding Georgia shape. */}
           <Image
-            src="/images/gtcio-logo.png"
+            src="/images/gtcio-logo-white.png"
             alt="GTCIO — Georgia Training Center for Industrial Operations"
-            width={320}
-            height={128}
-            className="h-20 w-auto brightness-0 invert sm:h-24"
+            width={505}
+            height={200}
+            className="h-20 w-auto sm:h-24"
           />
           <p className="mt-4 text-sm text-brand-silver">{TAGLINE}</p>
         </div>

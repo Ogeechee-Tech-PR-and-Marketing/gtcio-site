@@ -570,7 +570,21 @@ Real OTC brand assets are in use. Don't substitute a generic palette.
 | `brand-gold` | `#F5BD16` (accent) |
 
 Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`).
-Logo: `public/images/gtcio-logo.png`.
+Logo: `public/images/gtcio-logo.png` (red/black, Header on the white banner) and
+`public/images/gtcio-logo-white.png` (Footer on `bg-brand-black`) — **two
+separate source files, not one file plus a CSS filter.** The white version was
+added 2026-08-24, replacing a `brightness-0 invert` filter applied to the
+red/black file: that filter flattens every opaque pixel to black then white
+regardless of its original color, and the OTC diamond icon in the middle of
+the Georgia shape is drawn as color-on-color (not a transparency cutout), so
+it disappeared into a solid white silhouette. The white file is a dedicated
+export from OTC's Design Hub
+(`** Design Hub/** Logos/**Econ Development/Georgia Training Center for
+Industrial Operations/GTCIO Logo - Final/GTCIO_Logo_White.png` on
+`/Volumes/PR_Marketing`) where the icon is a real transparency cutout, so it
+renders correctly with no filter. If the brand mark is ever swapped, update
+both files from the same Design Hub source rather than reintroducing a CSS
+filter on one of them.
 
 ### Type — real Trade Gothic Next, via Adobe Fonts
 
