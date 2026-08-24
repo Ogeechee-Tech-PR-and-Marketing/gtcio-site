@@ -54,11 +54,17 @@ const DEFAULTS = {
 
 // Drawn from OTC's "Industrial Systems Training Program" brochure (see
 // CATALOG_URL) except the 460,000-hour figure, which is GTCIO's own facility
-// capacity.
+// capacity, and the credentials figure (see its own comment below).
 const STATS = [
   { value: "~460,000", label: "Hours of instruction GTCIO can deliver each year" },
   { value: "120+ years", label: "Combined in-field industrial systems experience on the training team" },
   { value: "80 years", label: "Combined industrial systems training experience" },
+  // 6,226 is per Justin Goodman, who oversees certifications for the
+  // program — not from the brochure or any published source, which is why
+  // it wasn't documented here when added 2026-07-30 (commit b19476a). Jake
+  // confirmed 2026-08-18 this is correct and likely an undercount by now
+  // (it hasn't been refreshed since). Ask Justin for a current number before
+  // raising it further.
   { value: "6,226", label: "Student certifications and credentials earned since 2024" },
 ];
 
