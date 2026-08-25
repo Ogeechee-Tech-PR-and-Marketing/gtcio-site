@@ -2,7 +2,8 @@
  * The Industrial Operations Technology (IS32) curriculum, transcribed from
  * Ogeechee Tech's own "Industrial Operations Program" brochure (16pp, published
  * as a flipbook at https://online.fliphtml5.com/exygb/xhzf/ and mirrored at
- * /documents/industrial-operations-program.pdf).
+ * /documents/industrial-operations-program-2.pdf as of 2026-08-25 — see
+ * PROJECT.md §6's dated note on the swap).
  *
  * ── Why this is code and not CMS content ──────────────────────────────────────
  * Every other page's copy is CMS-first (see PROJECT.md §4). This file is the

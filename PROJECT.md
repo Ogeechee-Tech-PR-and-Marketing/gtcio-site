@@ -515,6 +515,33 @@ it was referenced nowhere else besides `CATALOG_PDF_URL`, same cleanup
 pattern as prior swaps. If this file is swapped again, run the same
 image-hash diff (not just text) before assuming nothing but stats changed.
 
+**`industrial-operations-program-2.pdf`** (swapped 2026-08-25, replacing
+`industrial-operations-program.pdf` — the diploma-program brochure behind the
+IOT Diploma Program page's "DOWNLOAD IOT PROGRAM" button, `DESTINATIONS.iotProgramPdf`
+in `src/lib/links.ts`) is the InDesign export of
+`2026-08-24_Industral-Operations-Diploma-Program_V01_jh.indd`, the same
+document this session corrected six defects in earlier the same day (C-301's
+title/description, the ISAT 3100/3101 → 2030/2040 matrix numbering, the
+"Programable" typo, and the "C212" missing-hyphen typo — see the file's own
+header comment and `PROJECT.md` git history for the original defects). All six
+fixes were confirmed present via `pypdf` text extraction before wiring the new
+file in, so this brochure now agrees with `src/lib/iot-curriculum.ts` (which
+already carried the corrected data — the old PDF was the thing lagging, not
+the site). 14 pages, 9.2MB. Copied byte-for-byte (checksum-verified) to both
+`public/documents/industrial-operations-program-2.pdf` and
+`../media-originals/industrial-operations-program-2-source.pdf`. **The old
+`industrial-operations-program.pdf` (3.0MB) was deleted from `public/`** —
+confirmed by grep it was referenced nowhere else besides `DESTINATIONS.iotProgramPdf`
+and a path comment in `iot-curriculum.ts` (both updated), same cleanup pattern
+as the training-catalog PDF swaps above.
+- **`DESTINATIONS.iotProgramFlipbook`** points at a separately-hosted
+  fliphtml5 flipbook (`https://online.fliphtml5.com/exygb/xhzf/#p=1`), not a
+  repo file, so this PDF swap didn't touch it — Jake refreshed the flipbook's
+  content on fliphtml5's side directly, same day, so "VIEW IOT PROGRAM" and
+  "DOWNLOAD IOT PROGRAM" should both be serving the corrected brochure as of
+  2026-08-25. If the flipbook is ever swapped again, that's still a manual
+  step on fliphtml5's side — nothing in this repo drives it.
+
 **Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
 after the first pass looked visibly blocky in the (then-current) construction
 video's dark night sky — banding is the classic failure mode of a fast CRF
