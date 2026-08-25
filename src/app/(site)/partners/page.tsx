@@ -3,6 +3,7 @@ import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import InquiryForm from "@/components/InquiryForm";
+import ScrollToHash from "@/components/ScrollToHash";
 import { safeHref } from "@/lib/links";
 import { PARTNERS } from "@/lib/partners";
 
@@ -73,6 +74,7 @@ export default function PartnersPage() {
 
   return (
     <>
+      <ScrollToHash />
       <PageHero
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}

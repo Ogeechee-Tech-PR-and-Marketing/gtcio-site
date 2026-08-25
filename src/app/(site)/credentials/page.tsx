@@ -54,7 +54,7 @@ const DEFAULTS = {
   glossaryBody:
     "Twenty-one SACA credentials — plus a FANUC robot-operator credential — are built into the program. Each is a separate hands-on and written assessment.",
   ctaHeading: "Graduate credentialed, not just qualified",
-  ctaBody: "Classes begin August 2026. Applications go through Ogeechee Technical College.",
+  ctaBody: "Enrolling now. Applications go through Ogeechee Technical College.",
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
 };
 

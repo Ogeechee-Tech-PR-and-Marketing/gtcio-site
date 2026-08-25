@@ -230,7 +230,7 @@ const DEFAULTS = {
     {
       question: "When does the Industrial Operations Technology program start?",
       answer:
-        "The diploma program launches in August 2026 and is open for enrollment now. The IOT Diploma Program page has the curriculum, the jobs it leads to, the pay to expect, and how to apply.",
+        "The diploma program is open for enrollment now, with new students starting each semester. The IOT Diploma Program page has the curriculum, the jobs it leads to, the pay to expect, and how to apply.",
     },
     {
       question: "Where is GTCIO located?",

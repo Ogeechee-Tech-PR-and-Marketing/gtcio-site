@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 // object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
 // handoff. See PROJECT.md §4.
 const DEFAULTS = {
-  heroEyebrow: "IOT Diploma Program: Enrolling now for August 2026",
+  heroEyebrow: "IOT Diploma Program: Enrolling Now",
   heroTitle: "What is Industrial Operations Technology?",
   heroDescription:
     "It's the training behind keeping manufacturing facilities, utilities, and logistics centers running. Make things work. Keep them working.",
@@ -94,7 +94,7 @@ const DEFAULTS = {
   // how do I apply → where/when → how long → how much → what do I get → what
   // will I earn.
   faqs: [
-    { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program launches in August 2026, and it's open for enrollment now." },
+    { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program is open for enrollment now, with new students starting each semester." },
     { question: "Do I need any experience to start?", answer: "No. The program is built for people coming into the field, whatever their background. You start with the fundamentals — mechanical, electrical, hydraulic, and pneumatic systems — and move on to robotics, PLCs, and automation controls from there." },
     { question: "How do I apply?", answer: "Applications go through Ogeechee Technical College — any of the Apply Now buttons on this page take you straight there. Admissions will walk you through what's needed. If you'd rather talk to a person first, Jan Moore is the program contact: jmoore@ogeecheetech.edu, 912-688-6026." },
     { question: "Where will classes be held?", answer: "Classes begin in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, and move into GTCIO's new building once it opens. The grand opening is scheduled for October 15, 2026." },

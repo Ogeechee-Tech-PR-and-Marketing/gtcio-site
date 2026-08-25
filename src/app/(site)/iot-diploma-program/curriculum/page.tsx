@@ -272,7 +272,7 @@ export default function CurriculumPage() {
       <section className="bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
         <h2 className="font-heading text-3xl font-bold">Ready to start?</h2>
         <p className="mx-auto mt-4 max-w-2xl text-brand-silver">
-          Classes begin August 2026. Applications go through Ogeechee Technical College.
+          Enrolling now. Applications go through Ogeechee Technical College.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button href={DESTINATIONS.apply} variant="primary" target="_blank" rel="noopener noreferrer">
