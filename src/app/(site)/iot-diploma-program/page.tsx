@@ -88,7 +88,7 @@ const DEFAULTS = {
     { value: "$75k – $100k+", label: "Automation and Controls Specialist and Supervisor" },
   ],
   timeToComplete: "Four semesters.",
-  approximateCost: "$9,000 before financial aid such as the HOPE Grant, HOPE Career Grant, and Pell Grant funds are applied.",
+  approximateCost: "$9,500 before financial aid such as the HOPE Grant, HOPE Career Grant, and Pell Grant funds are applied.",
   studentFaqTitle: "Student FAQ",
   // Ordered the way a prospective student actually asks: when → am I eligible →
   // how do I apply → where/when → how long → how much → what do I get → what
@@ -100,7 +100,7 @@ const DEFAULTS = {
     { question: "Where will classes be held?", answer: "Classes begin in the Industrial Technology Building on Ogeechee Tech's main campus, the college's existing robotics facility, and move into GTCIO's new building once it opens. The grand opening is scheduled for October 15, 2026." },
     { question: "Is this an online program?", answer: "Some lectures are available online, but labs are not. Skills are acquired through hands-on labs at Ogeechee Tech." },
     { question: "How long does it take to finish?", answer: "The entire program can be completed in four semesters." },
-    { question: "How much does the program cost?", answer: "The program costs approximately $9,000 before financial aid — such as the HOPE Grant, HOPE Career Grant, and Pell Grant — is applied." },
+    { question: "How much does the program cost?", answer: "The program costs approximately $9,500 before financial aid — such as the HOPE Grant, HOPE Career Grant, and Pell Grant — is applied." },
     { question: "What credential do I earn?", answer: "Every student who completes the diploma earns micro-credentials through SACA (the Smart Automation Certification Alliance). Four SACA credentials are built into the program for all graduates, and they are recognized industry-wide, not just in Georgia." },
     { question: "Should I do the diploma or one of the certificates?", answer: "The diploma is the full program, and every diploma graduate is credentialed through SACA. The three certificates — Electrical/Mechanical, PLC, and Robotics — break the same curriculum into smaller pieces, so you can start smaller or focus on just the part of the job you're after. All four options are listed under \"More than one way in\" above." },
     { question: "How much can I expect to earn after graduating?", answer: "Most graduates start in entry-level or operator roles and grow from there. The pay ranges are listed above: mid-$30ks to low-$40ks starting out, $55k–$75k for an experienced maintenance and operations technician, and $75k–$100k+ for an automation and controls specialist and supervisor." },

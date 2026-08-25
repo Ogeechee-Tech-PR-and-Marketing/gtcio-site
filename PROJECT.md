@@ -903,6 +903,12 @@ Smaller items:
   `0317_001.pdf`, 2026-07-21 — supersedes the earlier 45-across-12 figure from
   the brochure alone) remain a separate fact from tuition/length and were never
   used to derive either.
+  - **✅ Approximate cost updated to $9,500, 2026-08-25** (Jake). Same two
+    spots in code — `approximateCost` and the `faqs[_key=="f4"]` answer in
+    `iot-diploma-program/page.tsx` — plus `public/SITEMAP.html`'s Curriculum &
+    credentials section row. No source/reasoning was given for the new figure;
+    if it needs re-verifying later, ask Jake rather than assume a specific
+    cause (tuition increase, added fee, etc.).
 - **✅ Advisory Board section (About page) is populated** (Jake, 2026-08-06),
   from a photo of the GTCIO Advisory Board roster sheet. New object type
   `boardMember` (`sanity/schemaTypes/objects/boardMember.ts` — name, title,
