@@ -542,6 +542,30 @@ as the training-catalog PDF swaps above.
   2026-08-25. If the flipbook is ever swapped again, that's still a manual
   step on fliphtml5's side — nothing in this repo drives it.
 
+**`industrial-operations-program-3.pdf`** (swapped 2026-08-25, replacing
+`-2.pdf` — same day, same document) fixed a real defect in `-2.pdf`: page 2's
+bottom half (the aerial construction-site photo under "VISIT US ONLINE OR
+IN-PERSON") had gone blank — an image dropped out of the InDesign layout,
+leaving just the gray tool-icon background with nothing on it. Caught by a
+page-by-page text+image diff against the live `-2.pdf` before publishing
+(`pypdf`/`PyMuPDF`, same method as the training-catalog swaps) — text was
+byte-identical on every page and only 3 pages carried image changes; p2's
+image count dropped from 2 to 1, confirming the photo was gone rather than
+just re-compressed. Jake was asked before publishing and confirmed it was
+unintentional; the fixed re-export restores that image (verified visually)
+and also carries two more legitimate photo swaps on pages 8 and 9 (new
+student-lab photos, same as documented for `-2.pdf`). All six previously-fixed
+text defects (C-301, the ISAT matrix numbering, the two typos) were
+re-confirmed present — this was a pure image fix, no text regressed. 14 pages,
+9.5MB. Copied byte-for-byte (checksum-verified) to both
+`public/documents/industrial-operations-program-3.pdf` and
+`../media-originals/industrial-operations-program-3-source.pdf`. **`-2.pdf`
+(9.2MB) was deleted from `public/`** — confirmed by grep it was referenced
+nowhere else besides `DESTINATIONS.iotProgramPdf` and the path comment in
+`iot-curriculum.ts` (both updated). If this file is swapped again, run the
+same image-diff check (not just text) before publishing — this exact defect
+(an image silently dropped from a page) is easy to miss on a text-only diff.
+
 **Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
 after the first pass looked visibly blocky in the (then-current) construction
 video's dark night sky — banding is the classic failure mode of a fast CRF

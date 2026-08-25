@@ -31,7 +31,7 @@ export const DESTINATIONS = {
   // offers it — the same pairing the Training page uses for the employer
   // catalog. The flipbook lives in the same fliphtml5 account (`exygb`).
   iotProgramFlipbook: "https://online.fliphtml5.com/exygb/xhzf/#p=1",
-  iotProgramPdf: "/documents/industrial-operations-program-2.pdf",
+  iotProgramPdf: "/documents/industrial-operations-program-3.pdf",
 } as const;
 
 /**
