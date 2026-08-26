@@ -107,6 +107,25 @@
  * swaps above), which is unambiguous prose, not a matrix that could get
  * mis-transcribed.
  *
+ * ✅ RESOLVED 2026-08-27 — the Sensors (ISAT 1130) `objectives` list was
+ * *also* wrong, and stayed wrong through the two fixes above: it never got
+ * touched when 1130's credential swapped C-206 → C-205, so it kept printing
+ * C-206 "electrical panel installation" content ("Install wires and
+ * terminal blocks in electrical panels," "Install electrical panel wiring
+ * to electric motors," etc.) — Electrical System Installation work, not
+ * sensor work. Found while transcribing the corrected curriculum into the
+ * print brochure (PROJECT.md §6) and cross-checking every course against
+ * it. Fixed by swapping in the brochure's own genuine sensor-connect-and-
+ * test bullets, which — same defect pattern as Motor Controls — were
+ * sitting misfiled under the brochure's old "Motor Controls" section the
+ * whole time. Moved rather than rewritten, since they're accurate C-205
+ * content once relocated. The displaced C-206 bullets aren't reused
+ * anywhere — ISAT 1102 Electrical Systems (which now carries C-206) already
+ * has its own correct C-201-only list, and `objectives` arrays elsewhere in
+ * this file don't attempt to cover every attached credential (e.g. ISAT
+ * 1104's list only covers C-207, not C-212 too), so leaving C-206 unrepresented
+ * in bullet form isn't a gap — its SACA glossary entry still carries the detail.
+ *
  * OSHA 10 is a mapping listed in the matrix, not a SACA credential, so it has
  * no glossary entry.
  */
@@ -224,15 +243,23 @@ export const COURSES: Course[] = [
     // description (2026-08-26); C-203 kept per Jake's call the same day —
     // see the file header.
     credentials: ["C-205", "C-203", "C-213"],
+    // Replaced 2026-08-27 — the previous list was C-206 "electrical panel
+    // installation" content, misplaced here from the brochure the same way
+    // Motor Controls' list was (see the file header). This list is the
+    // brochure's own genuine sensor-connect-and-test bullets, which were
+    // misfiled under the old "Motor Controls" section — moved here rather
+    // than rewritten, since they're accurate C-205 content.
     objectives: [
-      "Apply industrial electrical wiring safety procedures",
-      "Interpret electrical prints for wiring installation",
-      "Install wires and terminal blocks in electrical panels",
-      "Install grounding in an electrical panel",
-      "Size and install circuit protection for an industrial electrical panel",
-      "Install wires between electrical panels",
-      "Install electrical panel wiring to external control devices",
-      "Install electrical panel wiring to electric motors",
+      "Identify and select an electronic sensor for an application",
+      "Connect and test an inductive proximity sensor",
+      "Connect and test a capacitive proximity sensor",
+      "Connect and test a magnetic reed switch",
+      "Connect and test a hall-effect sensor",
+      "Connect and test a photoelectric sensor",
+      "Interpret basic electrical control schematics",
+      "Connect and test electro-pneumatic power circuits",
+      "Connect and test electric relay sequence control circuits",
+      "Connect and test a relay sequence circuit that uses electronic sensors",
     ],
   },
   {

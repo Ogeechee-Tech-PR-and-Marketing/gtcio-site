@@ -566,6 +566,69 @@ nowhere else besides `DESTINATIONS.iotProgramPdf` and the path comment in
 same image-diff check (not just text) before publishing — this exact defect
 (an image silently dropped from a page) is easy to miss on a text-only diff.
 
+**🟡 The InDesign source file has a corrected draft (V02) awaiting Jake's
+review in InDesign — not yet re-exported to a new PDF.** After the 2026-08-26
+website fixes above (course numbers, credential mappings, objectives), Jake
+asked for the same corrections carried into the print/flipbook version, whose
+InDesign source lives outside this repo on the shared drive: `/Volumes/PR_Marketing/*
+Academic Affairs/Academic Programs/Industrial Operations/2026-08-24_Industral-Operations-Diploma-Program_V01_jh.idml`
+(an IDML export of the sibling `.indd`, current as of 2026-08-26 — both files
+carry the same 6 already-fixed defects `industrial-operations-program-3.pdf`
+documents above them). No InDesign is available in this environment, so the
+fix was done by editing the IDML package directly — it's a zip of XML story
+files, editable as plain text/XML without InDesign. Applied, matching the
+website exactly (see `src/lib/iot-curriculum.ts`'s header for the full
+before/after): the ISAT 1103/1104/1105 renumbering, "Smart" restored to the
+Sensors title, the curriculum matrix table's course numbers/titles/credential
+codes, the C-205/C-206 swap between the Electrical Systems and Sensors course
+blocks (heading + SACA description, moved verbatim between the two stories,
+not reworded), the C-102/C-104 swap between the two Operations Technology
+course blocks (same verbatim-move approach), and — this is the one fix with
+**no equivalent in the website's git history**, since it was caught only
+while doing this transcription — the Motor Controls and Sensors objectives
+bullet lists, which were the exact same misplaced-content defect the website
+already had for Motor Controls (see `iot-curriculum.ts`'s header): the
+brochure's genuine sensor-connect-and-test bullets were sitting under "Motor
+Controls," and Motor Controls got the new 11-item list built from the
+catalog (same content as the website). Every edit was verified by re-reading
+each modified story's full text back out afterward and diffing it against
+the corrected data field-by-field, and every modified file was checked for
+XML well-formedness before repackaging.
+- Saved as a **new file, `2026-08-24_Industral-Operations-Diploma-Program_V02_jh.idml`**,
+  in the same folder — `V01`'s `.idml`/`.indd`/`.pdf` were left untouched.
+  Editing an IDML's XML doesn't round-trip losslessly through InDesign the
+  way saving in the app does (and this session has no way to open InDesign
+  and confirm it), so overwriting Jake's working file without him reviewing
+  the result first was too risky — see the AGENTS.md-adjacent judgment call
+  documented here for future reference. He can open `V02` in InDesign to
+  continue working from it (InDesign converts an `.idml` to an editable
+  document on open); if it looks right, `File > Save As` to a new `.indd` and
+  re-export the PDF from there.
+- **🔴 Needs a layout check in InDesign that this session couldn't do.** Two
+  of the objectives bullet lists changed length — Sensors went from 8 items
+  to 10, Motor Controls from 10 to 11 — inside what was a fixed print layout,
+  not a responsive web page. If either course's text frame doesn't auto-grow,
+  the extra lines could overflow or overlap adjacent content. Check both
+  before treating `V02` as final.
+- **Once `V02` is approved and re-exported to PDF**, that new PDF needs the
+  same swap-in treatment as the `industrial-operations-program-3.pdf` note
+  above (byte-for-byte to `public/documents/`, checksum-verified, mirrored to
+  `../media-originals/`, old file grepped for other references before
+  deleting, `DESTINATIONS.iotProgramPdf` re-pointed if the filename changes)
+  — not done as part of this pass, since there's no new PDF yet to swap in.
+  The separately-hosted fliphtml5 flipbook (`DESTINATIONS.iotProgramFlipbook`)
+  would also need Jake to refresh its content on fliphtml5's side directly,
+  same as the 2026-08-25 pass noted above.
+- **Not touched, out of this task's scope:** the brochure's C-102 SACA
+  description still reads "basic **factory** floor controls" — this project's
+  sitewide "factory" → "manufacturing facility" terminology change (§10)
+  predates this session and was never applied to this specific verbatim SACA
+  credential description on the website either (`iot-curriculum.ts`'s
+  `CREDENTIALS` glossary entry for C-102 already says "manufacturing facility
+  floor controls," so the two disagreed before today, not something
+  introduced by this swap). Worth a look in a future pass, not part of this
+  one.
+
 **Hero video encode settings** (re-encoded 2026-07-21, requantized 2026-07-22
 after the first pass looked visibly blocky in the (then-current) construction
 video's dark night sky — banding is the classic failure mode of a fast CRF
@@ -908,6 +971,19 @@ Smaller items:
     `src/lib/iot-curriculum.ts` (11 items, same style/granularity as every
     other course's `objectives` array). See the file header for the source
     URL and reasoning.
+  - **✅ Sensors (ISAT 1130) `objectives` fixed 2026-08-27** — found while
+    transcribing this whole curriculum into the print brochure (see the
+    brochure section below) and cross-checking every course's content
+    against it. This list never got touched when 1130's credential swapped
+    C-206 → C-205 the day before, so it was still printing C-206 "electrical
+    panel installation" content, not sensor work — the exact same
+    misplaced-objectives defect as Motor Controls, just not caught in that
+    pass. Fixed by swapping in the brochure's own genuine sensor-connect-
+    and-test bullets, which had been sitting misfiled under the brochure's
+    old "Motor Controls" section this whole time (moved, not rewritten — see
+    the file header for detail). The displaced C-206 bullets aren't reused
+    anywhere; ISAT 1102 Electrical Systems (which carries C-206) already has
+    its own correct C-201-only list.
 - **🟡 Possible unstated selling point: graduates may earn a full SACA Specialist
   certification, not just micro-credentials** (noticed 2026-07-20 while building
   `/credentials`). Mapping the program's 22 credentials against SACA's published
