@@ -852,37 +852,62 @@ Smaller items:
   - The interim safeguard that used to sit under the course table —
     "Course numbers and sequence are being finalised ahead of the August 2026
     launch" — has been **removed**, since two independent sources now agree.
-  - **🔴 The rest of the brochure/catalog conflict is still open** — found
-    2026-07-20 while chasing the objectives defect, and `0317_001.pdf` didn't
-    touch it (it only lists 1102/1103/1104/1105/1130 the same way the
-    brochure already has them). Per the **2025-2026** catalog
-    (`ogeecheetech.smartcatalogiq.com`, prefix "ISAT — Industrial Operations
-    Technology"):
+  - **✅ The three course-number/title mismatches are resolved 2026-08-26.**
+    Found 2026-07-20 while chasing the objectives defect; `0317_001.pdf`
+    didn't touch it (it only listed 1102/1103/1104/1105/1130 the same way the
+    brochure already had them), and at the time the **2026-2027 catalog
+    didn't exist yet**, so the site deliberately kept publishing the
+    brochure's numbers pending a real 2026-2027 source. That catalog now
+    exists and still disagrees with the brochure the same way the 2025-2026
+    edition did, so Jake directed a direct match against it
+    (ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/industrial-operations-technology/industrial-operations-technology-diploma-is32):
 
-    | Catalog | Brochure |
+    | Brochure (old) | Catalog (now applied) |
     | --- | --- |
-    | ISAT **1103** Programmable Logic Control I | ISAT 1104 |
-    | ISAT **1104** Programmable Logic Control II | ISAT 1105 |
-    | ISAT **1105** Motor Control Systems & Troubleshooting | ISAT 1103 |
-    | ISAT 1130 Sensors in Industrial **Smart** Automation | drops "Smart" |
-    | ISAT 1102 → C-201 + **C-206** | → C-201 + C-205 |
-    | ISAT 1130 → **C-205** + C-213 | → C-206 + C-203 + C-213 |
+    | ISAT 1104 Programmable Logic Control I | ISAT **1103** |
+    | ISAT 1105 Programmable Logic Control II | ISAT **1104** |
+    | ISAT 1103 Motor Control Systems & Troubleshooting | ISAT **1105** |
+    | ISAT 1130 Sensors in Industrial Automation (drops "Smart") | ISAT 1130 Sensors in Industrial **Smart** Automation |
 
-    That last pair **explains the misplaced objective bullets**: the brochure
-    prints *electrical panel installation* objectives (C-206 work) under 1130
-    "Sensors", and *sensor connect-and-test* objectives (C-205 work) under its
-    1103 "Motor Controls" — the two blocks are swapped relative to the catalog.
-  - **The site deliberately still publishes the brochure's version of these
-    three numbers.** The catalog is the 2025-2026 edition; this program
-    starts August 2026, in a **2026-2027 catalog that doesn't exist yet**, and
-    the brochure may reflect an approved revision that lands in it. Nothing
-    GTCIO has handed over resolves this half of the conflict. **Don't
-    renumber these three off the catalog alone.**
-  - `objectives` stays omitted for the Motor Controls course — its bullets are
-    wrong under *either* reading. Its two credential descriptions carry the
-    detail, so the page reads complete. Restore once GTCIO confirms.
-  - **Ask Jan specifically:** whether C-205/C-206 sit on 1102 or 1130, and
-    whether the 1103/1104/1105 sequence follows the catalog or the brochure.
+    Applied in `src/lib/iot-curriculum.ts` — the three course `code` fields
+    swapped, "Smart" restored to the Sensors title, `ENGL 1010`'s title
+    matched to the catalog's "Fundamentals of English I". Array order
+    (the college's teaching sequence, not a numeric sort) was left
+    unchanged. Anchors on `/iot-diploma-program/curriculum` and the
+    `/credentials` cross-links are derived from `code` at render time, so
+    they followed automatically — nothing else needed a manual anchor fix.
+  - **✅ The C-205/C-206 credential mapping is resolved 2026-08-26**, same
+    session, once Jake pulled up individual course description pages from
+    the catalog (not the program page — each course has its own page at
+    `.../courses/isat-industrial-operations-technology/isat-XXXX`, with
+    prose stating exactly which SACA exam(s) it prepares a student for).
+    Confirmed directly, no inference needed: ISAT 1102 Electrical Systems
+    preps for C-201 + C-206 (was C-201 + C-205); ISAT 1130 Sensors preps for
+    C-205 + C-213 (was C-206 + C-203 + C-213). Same pass also surfaced a
+    second swap the program page never hinted at: ISAT 2030 Operations
+    Technology I preps for C-101 + **C-104** + OSHA-10 (was C-101 + C-102);
+    ISAT 2040 Operations Technology II preps for **C-102** (was C-104). All
+    four applied in `src/lib/iot-curriculum.ts` (see the file header for the
+    full before/after).
+  - **✅ Resolved 2026-08-26, same day: keep all five brochure-only
+    credentials as published.** The same course-page pull surfaced five
+    credentials the site attaches to a course whose own catalog description
+    page never names them — C-212 on ISAT 1103, C-204 on ISAT 1105, C-209 on
+    ISAT 1120, C-203 on ISAT 1130, C-103 on ISAT 2010. All five came from the
+    brochure's matrix, not the catalog. Jake's call: keep them — no code
+    change needed, they were already left in place pending this decision.
+    Unlike the four swaps above this wasn't a clean reassignment the catalog
+    contradicted; its course descriptions likely just weren't exhaustive.
+  - **✅ Motor Controls `objectives` restored 2026-08-26, same day.** Its
+    printed brochure bullets read like they actually belonged to the swapped
+    Sensors/Electrical Systems pair (a content mix-up independent of the
+    credential-code question above), so rather than guess which brochure
+    block was misplaced, Jake asked for a fresh objectives list built
+    straight from this course's own catalog description page — unambiguous
+    prose, not a matrix that could get mis-transcribed. Added to
+    `src/lib/iot-curriculum.ts` (11 items, same style/granularity as every
+    other course's `objectives` array). See the file header for the source
+    URL and reasoning.
 - **🟡 Possible unstated selling point: graduates may earn a full SACA Specialist
   certification, not just micro-credentials** (noticed 2026-07-20 while building
   `/credentials`). Mapping the program's 22 credentials against SACA's published
@@ -897,8 +922,9 @@ Smaller items:
   confirms it, "graduate a certified SACA Specialist" is a strong recruiting
   line worth stating outright (see `SACA_TIERS` comment in
   `src/lib/credentials.ts`).
-  - Not defects, just noted: the brochure's matrix runs 1105 → 1130 → 1110 (the
-    college's sequence, preserved); OSHA 10 is listed as a mapping, not a SACA
+  - Not defects, just noted: the matrix runs 1102 → 1105 → 1103 → 1104 → 1130
+    → 1110 in catalog numbering (the college's teaching sequence, preserved
+    through the 2026-08-26 renumbering above); OSHA 10 is listed as a mapping, not a SACA
     credential, so it renders unlinked; and p4 carries a stray Amatrol paragraph
     that clearly bled in from another document — **not published**.
 - **⚠️ The brochure says "OPENING SEPTEMBER 2026"** (pp2, 14, 15), which
