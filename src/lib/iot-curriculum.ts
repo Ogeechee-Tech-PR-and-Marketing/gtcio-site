@@ -475,7 +475,7 @@ export const CREDENTIALS: Credential[] = [
   },
   {
     code: "C-255",
-    title: "Hydraulic Maintenance 1",
+    title: "Hydraulic Systems 1",
     family: "Systems & Controls",
     description:
       "Install and maintain hydraulic systems: replacing o-rings, cartridge and threaded components, hoses, steel tubing, filters, and fittings; inspecting hydraulic fluid for water, contaminants, temperature, and lubricity; taking oil samples; using a filter cart; interpreting oil specifications; and bleeding hydraulic cylinders.",
