@@ -20,11 +20,11 @@ export const metadata: Metadata = {
 
 /**
  * Course-by-course detail for the IOT diploma. Content comes from
- * src/lib/iot-curriculum.ts — read the note at the top of that file before
- * changing anything here; it explains why this page's data is code and not CMS
- * content, and documents two known defects in the source brochure.
+ * src/lib/iot-curriculum.ts — read that file's header before changing
+ * anything here; it explains the data's sourcing and the deliberate
+ * deviations from the course catalog.
  *
- * Not in the top navigation (Jake, 2026-07-20). Students reach it from the
+ * Deliberately not in the top navigation — students reach it from the
  * "Every course, in detail" band on /iot-diploma-program.
  */
 export default function CurriculumPage() {
@@ -50,7 +50,7 @@ export default function CurriculumPage() {
       />
 
       {/* Light band directly under the hero — a dark one here makes the hero
-          photo read as fading to black early (PROJECT.md §10). */}
+          photo read as fading to black early (PROJECT.md §11). */}
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">

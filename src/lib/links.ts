@@ -1,10 +1,7 @@
 /**
- * Maps a page's `destination` key to a real href.
- *
- * Originally driven by an editor's dropdown choice in the Sanity Studio
- * (removed 2026-08-11); now every CtaButton in the DEFAULTS objects picks one
- * of these keys directly. If a route ever moves, change it HERE and every
- * button across the site follows.
+ * Maps a page's `destination` key to a real href. Every CtaButton in the
+ * DEFAULTS objects picks one of these keys. If a route ever moves, change it
+ * HERE and every button across the site follows.
  */
 export const DESTINATIONS = {
   home: "/",
@@ -12,16 +9,14 @@ export const DESTINATIONS = {
   training: "/training",
   iot: "/iot-diploma-program",
   curriculum: "/iot-diploma-program/curriculum",
-  // Key kept as `certifications` on purpose. The page moved to a top-level
-  // /credentials route on 2026-07-20, and this is exactly what DESTINATIONS is
-  // for — the URL changed here and every button followed, with no dataset
-  // patch. Renaming the key would have orphaned the already-seeded
-  // `certificationsButton` on the IOT page.
+  // Key deliberately still `certifications` — it predates the page's move to
+  // /credentials, and renaming it would orphan every button that references
+  // it. The whole point of this indirection is that only the href changes.
   certifications: "/credentials",
   facility: "/facility",
-  // "tour" removed 2026-07-20 — tour booking is off the site until
-  // 2026-10-26. Restore as `tour: "/facility#book-a-tour"` once the Book a
-  // Tour section is back in facility/page.tsx.
+  // No `tour` key while Book a Tour is off the site (returns 2026-10-26).
+  // Restore as `tour: "/facility#book-a-tour"` alongside the section in
+  // facility/page.tsx — see PROJECT.md §10.
   partners: "/partners",
   becomePartner: "/partners#become-a-partner",
   news: "/news",

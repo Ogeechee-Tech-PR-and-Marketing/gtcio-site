@@ -6,17 +6,15 @@ export const metadata: Metadata = {
   title: "Contact | GTCIO",
 };
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "Contact",
   heroTitle: "Get in touch",
   // The chosen reason becomes the notification email's subject line, and
   // "Media inquiry" is string-matched (case-insensitive) by MEDIA_REASON in
-  // src/app/api/inquiry/route.ts to route that email to the media contact
-  // instead — renaming that option (here or in the Studio) without updating
-  // MEDIA_REASON silently breaks the routing.
+  // src/app/api/inquiry/route.ts to route that email to the media contact —
+  // renaming that option without updating MEDIA_REASON silently breaks the
+  // routing.
   contactReasons: [
     "Prospective student / program question",
     "Employer training inquiry",

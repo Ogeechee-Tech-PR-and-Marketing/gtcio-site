@@ -1,12 +1,10 @@
 # How to edit the GTCIO website
 
-The Studio-based editing described in earlier versions of this file no longer
-applies — the Sanity CMS was removed from this site 2026-08-11 ahead of its
-handoff to Third Wave Digital, who will connect their own CMS.
+There is no CMS or editing screen. The site is being handed off to Third Wave
+Digital, who will connect their own CMS.
 
 **Until that CMS is wired up, every word, photo, partner logo, and news item on
-the site lives directly in the source code**, not in an editing screen. Changes
-require a developer:
+the site lives directly in the source code.** Changes require a developer:
 
 - Page copy: each page's `DEFAULTS` object in its `src/app/(site)/<page>/page.tsx`
   file.

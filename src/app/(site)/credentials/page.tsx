@@ -32,9 +32,7 @@ for (const course of PROGRAM_COURSES) {
   }
 }
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "Credentials",
   heroTitle: "Proof you can do the work",
@@ -59,25 +57,20 @@ const DEFAULTS = {
 };
 
 /**
- * The site's single home for credential information, combining what was on
- * /iot-diploma-program/certifications (the SACA glossary) with the
- * accreditations that had only appeared on the IOT Training Programs page.
- * Added to the top nav between IOT Diploma Program and Facility (Jake,
- * 2026-07-20). The old certifications URL 308-redirects here — see
+ * The site's single home for credential information: the SACA glossary plus
+ * the accreditations shared with the IOT Training Programs page. The old
+ * /iot-diploma-program/certifications URL 308-redirects here — see
  * next.config.ts.
  *
  * Reference data comes from src/lib/credentials.ts and src/lib/iot-curriculum.ts;
- * read those headers before editing. Framing copy used to be CMS-editable
- * (credentialsPage singleton); see the DEFAULTS comment above.
+ * read those headers before editing.
  */
 export default function CredentialsPage() {
   const page = DEFAULTS;
-  // Affiliations used to be authored on the Training page's Sanity document,
-  // shared by both pages so an editor never updated the same accreditation
-  // twice. Now that both pages are static, this page just filters the same
-  // AFFILIATIONS constant to its own audience — a card can be
-  // employer-training-only (Mitsubishi Electric, Rockwell) since the diploma
-  // only builds in FANUC and SACA.
+  // Both this page and /training filter the same AFFILIATIONS constant to
+  // their own audience, so an accreditation is never maintained twice — a
+  // card can be employer-training-only (Mitsubishi Electric, Rockwell)
+  // since the diploma only builds in FANUC and SACA credentials.
   const affiliations = affiliationsFor(AFFILIATIONS, "student");
 
   return (
@@ -100,7 +93,7 @@ export default function CredentialsPage() {
       />
 
       {/* Light band under the hero — a dark one makes the hero photo read as
-          fading to black early (PROJECT.md §10). */}
+          fading to black early (PROJECT.md §11). */}
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.earnTitle}</h2>
@@ -161,7 +154,7 @@ export default function CredentialsPage() {
             ))}
           </div>
           {/* Stated on the IOT Diploma page too — completing a course does not
-              by itself award a credential (PROJECT.md §10). */}
+              by itself award a credential (PROJECT.md §11). */}
           <p className="mt-6 max-w-3xl border-l-4 border-brand-gold pl-5 text-sm text-brand-silver">
             Credentials are awarded on passing the SACA exam — completing the coursework alone does
             not award one. Ogeechee Tech is an approved SACA testing site at Silver and Gold level,

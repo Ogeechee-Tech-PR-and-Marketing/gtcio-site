@@ -3,7 +3,7 @@ import "server-only";
 /**
  * Sends notification emails via Microsoft Graph, using an Azure AD app
  * registration's client-credentials grant (an OTC Microsoft 365 tenant admin
- * has to register the app and grant it Mail.Send once — see PROJECT.md §11
+ * has to register the app and grant it Mail.Send once — see PROJECT.md §5
  * for the exact steps). Unlike Constant Contact's OAuth (src/lib/constantContact.ts),
  * client-credentials tokens aren't rotated on use, so there's no refresh
  * token to persist anywhere — an in-memory cache that just re-fetches on

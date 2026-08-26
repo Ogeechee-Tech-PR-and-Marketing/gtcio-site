@@ -5,14 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Code-only by design (a typo'd href here breaks navigation site-wide — see
- * PROJECT.md §8). Two constraints before adding an item:
- * - 9 items fit the desktop nav at the xl breakpoint with no overflow handling
- *   (measured 2026-07-20, ~21px to spare). A 10th item or longer labels need
- *   re-measuring — the nav just gets tighter, then collides with the logo.
+ * Two constraints before adding an item:
+ * - 9 items fit the desktop nav at the xl breakpoint with only ~21px to
+ *   spare and no overflow handling — a 10th item or longer labels need
+ *   re-measuring, or the nav collides with the logo.
  * - A new route must ALSO go in src/app/sitemap.ts, Footer.tsx,
- *   src/lib/links.ts, and public/SITEMAP.html (the add-a-page runbook in
- *   PROJECT.md §12 lists every step).
+ *   src/lib/links.ts, and public/SITEMAP.html (the add-a-page checklist in
+ *   PROJECT.md §13 lists every step).
  */
 const NAV_ITEMS = [
   { label: "Home", href: "/" },

@@ -14,9 +14,7 @@ const CATALOG_URL = "https://online.fliphtml5.com/exygb/kvbr/#p=1";
 // The same catalog, as a downloadable PDF.
 const CATALOG_PDF_URL = "/documents/otc-industrial-systems-training-program-4.pdf";
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "IOT Training Programs",
   heroTitle: "Students on one side, employers on the other: same goal",
@@ -56,23 +54,21 @@ const DEFAULTS = {
 // CATALOG_URL) except the 460,000-hour figure, which is GTCIO's own facility
 // capacity, and the credentials figure (see its own comment below).
 //
-// EXCEPT the two experience figures, which now DIVERGE from that brochure
-// on purpose (2026-08-24, per Jake). Travis Wright is no longer associated
-// with the IOT diploma program — he's still at OTC — so his 28 years come
-// out of both totals: in-field 120+ -> 92+, training 80 -> 52. The 2026
-// brochure still prints 120/80 and needs the same correction. Until it
-// does, the site is intentionally ahead of it: do NOT "fix" these back to
+// EXCEPT the two experience figures, which DIVERGE from that brochure on
+// purpose: Travis Wright is no longer associated with the IOT diploma
+// program (he's still at OTC), so his 28 years come out of both totals —
+// in-field 120+ -> 92+, training 80 -> 52. The brochure still prints 120/80
+// and the site is intentionally ahead of it: do NOT "fix" these back to
 // match the brochure.
 const STATS = [
   { value: "~460,000", label: "Hours of instruction GTCIO can deliver each year" },
   { value: "92+ years", label: "Combined in-field industrial systems experience on the training team" },
   { value: "52 years", label: "Combined industrial systems training experience" },
-  // 6,226 is per Justin Goodman, who oversees certifications for the
-  // program — not from the brochure or any published source, which is why
-  // it wasn't documented here when added 2026-07-30 (commit b19476a). Jake
-  // confirmed 2026-08-18 this is correct and likely an undercount by now
-  // (it hasn't been refreshed since). Ask Justin for a current number before
-  // raising it further.
+  // 6,226 is sourced internally from Justin Goodman, who oversees
+  // certifications for the program — it appears in no published document, so
+  // nothing in this repo can confirm it. Confirmed correct (and likely an
+  // undercount) by the site owner; ask Justin for a current number before
+  // changing it.
   { value: "6,226", label: "Student certifications and credentials earned since 2024" },
 ];
 

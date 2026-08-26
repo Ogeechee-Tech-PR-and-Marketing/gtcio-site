@@ -59,72 +59,44 @@ export default function PageHero({
       )}
       <div className="relative mx-auto max-w-5xl">
         {/*
-          One rectangle behind the eyebrow/title/description as a group
-          (Jake: per-line chips read as "gross"/segmented), fitted to just
-          the text via `inline-block` (a plain block div fills this column's
-          full width regardless of text length, which over-sized every
-          earlier single-rectangle attempt), with soft, faded edges instead
-          of a hard boundary.
+          One rectangle behind the eyebrow/title/description as a group —
+          per-line "highlighter chip" backgrounds were rejected by the site
+          owner as segmented-looking; don't reintroduce them.
 
-          The fade is a BLURRED rectangle behind the text, not a radial
-          gradient — tried the gradient first and it measurably failed even
-          worse than expected: a radial gradient's opacity falls off from
-          the CARD'S CENTER, but eyebrow/title/description stack vertically,
-          so only the middle line sits anywhere near that center — the
-          eyebrow (top) and description (bottom) landed in the faded outer
-          region and measured 1.96:1 / 1.14:1 against the Facility hero, far
-          below even the already-known-risky flat .55 (2.46:1). A blurred
-          rectangle doesn't have that problem: its opacity stays FLAT and
-          uniform across its whole interior (blur only softens the boundary,
-          it doesn't gradient the center), so every line gets the same
-          protection regardless of where it sits in the stack, and the
-          visible "fade" is confined to the blurred edge band.
+          The fade is a BLURRED rectangle, not a radial gradient. A radial
+          gradient's opacity falls off from the card's CENTER, but the text
+          stacks vertically, so the eyebrow (top) and description (bottom)
+          land in the faded outer region — measured 1.96:1 / 1.14:1 on the
+          Facility hero, far below usable. A blurred rectangle stays flat
+          and uniform across its interior (blur only softens the boundary),
+          so every line gets the same protection.
 
-          Opacity is .65 at Jake's explicit request, overriding the .70
-          floor measured earlier (git history on this file has the full
-          bisection). At .65 the brand-gold eyebrow measurably fails in
-          real spots: exactly 4.5:1 (zero margin) on one frame of the About
-          video, and 4.37:1 (outright fail) on mobile Facility. Jake saw
-          those numbers and asked for .65 anyway to evaluate visually — this
-          is a known, deliberate acceptance of that risk, not an oversight.
-          If contrast complaints come back on the eyebrow specifically,
-          this paragraph is why, and .70 is the last value that measured
-          clean everywhere tested.
+          ⚠️ Opacity is .65 at the site owner's explicit request, a known,
+          deliberate acceptance of measured contrast risk — NOT an
+          oversight. At .65 the brand-gold eyebrow fails in real spots
+          (4.5:1 zero-margin on an About video frame; 4.37:1 on mobile
+          Facility). The owner saw the numbers and chose .65 anyway; .70 is
+          the last value that measured clean everywhere tested. If contrast
+          complaints come back on the eyebrow, this is why.
 
-          `cta` and `extra` now render INSIDE this card (moved 2026-07-21),
-          not after it — Jake wanted the scrim under the Training page's
-          stat row (~460,000 hrs / 92+ years / 52 years), which is passed
-          as `extra`. Since this card is `inline-block` and the halo below
-          sizes off THIS wrapper via `inset-1`, nesting cta/extra here makes
-          the halo grow to cover them automatically — no separate sizing
-          logic needed. Order (description, then cta, then extra) matches
-          the prop docs above ("rendered under the description/cta").
-          `cta` buttons (Button/CtaButton) already carry an opaque red
-          background regardless of what's behind them, so moving them here
-          is cosmetically neutral.
+          `cta` and `extra` render INSIDE this card so the halo (sized off
+          this wrapper via `inset-1`) covers them automatically — the
+          Training page's stat row passes in as `extra`. Buttons carry
+          their own opaque red background, so nesting them is cosmetically
+          neutral.
 
-          ⚠️ `extra` is NOT fully safe at this opacity: Training's stat
-          captions still render in brand-silver (the same weak-contrast
-          color the description used to fight with before it moved to
-          white). Measured at .70: two of three captions passed (4.9–5.6:1)
-          but "Hours of instruction GTCIO can deliver each year" failed
-          outright (2.99:1 desktop, 3.91:1 mobile) — it sits over a
-          brighter patch of the Training photo. Jake was shown this and
-          said the captions are fine as brand-silver — a deliberate call,
-          not an oversight, so don't "fix" this by recoloring them without
-          asking again. At .65 (current) that caption fails by more, not
-          less.
+          ⚠️ `extra` is not fully safe at this opacity: Training's
+          brand-silver stat captions measured as low as 2.99:1 over a
+          bright patch of that page's photo. The owner was shown this and
+          kept brand-silver deliberately — don't recolor without asking.
 
           This card is a <HeroCard>, not a plain `inline-block` div — a
           shrink-to-fit box's auto width resolves to the full *available*
-          width the moment its content wraps to more than one line, not to
-          the (narrower) width the wrapped lines actually render at (same
-          with `display:table` — not an inline-block quirk, just how CSS
-          auto-width works). Usually invisible here since interior titles
-          are short, but the same card shape is shared with the Home hero,
-          where a wrapped headline exposed it clearly (2026-07-30).
-          HeroCard measures the actual rendered text and sets an explicit
-          width instead of trusting shrink-to-fit.
+          width the moment its content wraps to a second line (same with
+          `display:table`; it's how CSS auto-width works). Interior titles
+          are usually short enough to hide it, but the shared Home hero
+          exposes it on wrapped headlines. HeroCard measures the rendered
+          text and sets an explicit width.
         */}
         <HeroCard>
           {eyebrow && (

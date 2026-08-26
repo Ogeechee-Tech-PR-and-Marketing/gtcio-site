@@ -3,9 +3,7 @@ import CtaButton from "@/components/CtaButton";
 import HeroCard from "@/components/HeroCard";
 import type { CtaButton as CtaButtonData } from "@/lib/links";
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "",
   heroTitle: "Building a workforce ready for industry transformation.",
@@ -66,35 +64,25 @@ export default function Home() {
         />
         <div className="relative mx-auto max-w-7xl">
           {/*
-            Matches PageHero.tsx's hero scrim (kept in sync 2026-07-21 — this
-            page predates PageHero and had its own flat bg-brand-black/70
-            overlay, which is why it was still dark after every other hero was
-            lightened): a blurred rectangle behind the text, opacity .65,
-            isolate + -z-10 so it sandwiches between the video/photo and the
-            text without a stacking bug (see PageHero.tsx's comment for why
-            `isolate` is load-bearing), blur-xl for a soft edge. Description is
-            brand-white, not brand-silver, for the same contrast-headroom
-            reason documented in PageHero.tsx.
+            Kept in sync with PageHero.tsx's hero scrim: a blurred rectangle
+            behind the text, opacity .65, isolate + -z-10 so it sandwiches
+            between the video and the text (see PageHero.tsx for why
+            `isolate` is load-bearing), blur-xl edge, brand-white description
+            for contrast headroom.
 
-            TWO separate cards here, not one — this page's headline is a
-            special case PageHero's interior titles aren't: it's deliberately
-            sized to almost fill the full container on one line (see the
-            measured-font-size comment below), which made it far wider than
-            the description (max-w-2xl) and the button row. Splitting into
-            eyebrow+title / description+buttons lets each card fit its own
-            content instead of inheriting the headline's unusual width.
+            TWO separate cards, not one — this headline is deliberately sized
+            to almost fill the container on one line (see the measured-font-
+            size comment below), far wider than the description and buttons;
+            splitting eyebrow+title from description+buttons lets each card
+            fit its own content.
 
             Each card is a <HeroCard>, not a plain `inline-block` div — a
             shrink-to-fit box's auto width resolves to the full *available*
-            width the moment its content wraps to more than one line, not to
-            the (narrower) width the wrapped lines actually render at. Bit
-            for bit the same with `display:table`, so it's not an
-            inline-block quirk, just how CSS auto-width works. Reported
-            2026-07-30: on viewports too narrow for the one-line headline but
-            still fairly wide, the card visibly extended well past
-            "...industry" because "transformation." alone on line two is much
-            shorter than line one. HeroCard measures the actual rendered text
-            and sets an explicit width instead of trusting shrink-to-fit.
+            width the moment its content wraps to a second line, not to the
+            width the wrapped lines actually render at (same with
+            `display:table`; it's how CSS auto-width works). On mid-width
+            viewports the card would visibly overshoot a wrapped headline.
+            HeroCard measures the rendered text and sets an explicit width.
           */}
           <HeroCard>
             {page.heroEyebrow && <p className="font-display mb-4 text-sm text-brand-gold">{page.heroEyebrow}</p>}

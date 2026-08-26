@@ -10,35 +10,28 @@
  *     earned here is worth anything.
  *
  * Same code-not-CMS reasoning as `iot-curriculum.ts`: these are third-party
- * certification facts, not marketing copy. The framing around them is CMS-
- * editable via the `credentialsPage` singleton.
+ * certification facts, not marketing copy (PROJECT.md §4).
  */
 
 /**
- * Researched 2026-07-20 against saca.org and the Tech-Labs / TechEd Products
- * micro-credential listings, re-verified 2026-07-27 directly against
- * saca.org's Associate and Specialist Certifications pages. SACA runs three
- * tiers (Associate, Specialist, Professional) — the diploma's credentials sit
- * in the first two, and the Professional tier was dropped from this page
- * entirely (Jake, 2026-07-27) since the diploma doesn't touch it.
+ * Verified against saca.org's own Associate and Specialist Certifications
+ * pages. SACA runs three categories (Associate, Specialist, Professional) —
+ * the diploma's credentials sit in the first two, so the Professional tier
+ * is deliberately not shown.
  *
- * ⚠️ SACA's own site does not rank Associate/Specialist/Professional
- * hierarchically — it describes them as three stackable categories, not a
- * ladder with an official order. The "Tier 1"/"Tier 2" numbering below (and
- * on the page) is this site's own presentation choice, not an SACA number —
- * Specialist is shown first here (2026-07-27, Jake's call) because the
- * page's "Every credential in the diploma" glossary walks the micro-
- * credentials before circling back to how they roll up.
+ * ⚠️ SACA does not rank the categories hierarchically — it calls them
+ * stackable, with no official order. The "Tier 1"/"Tier 2" numbering on the
+ * page is this site's own presentation choice (array order below), not an
+ * SACA number.
  *
  * ⚠️ Deliberately does NOT name which Specialist certification a graduate
- * completes. Mapping the program's 22 credentials against SACA's published
- * core requirements suggests **Electrical Systems Specialist** is fully covered
- * (C-101, C-201, C-202, C-204, C-206 — all in the program) and that several
- * others sit one credential short, usually C-211. But that mapping comes from a
- * third-party mirror, SACA grants a Specialist only once the *exams* are
- * passed, and GTCIO has never claimed it. Telling a student they'll graduate a
- * Specialist would be an over-claim. See PROJECT.md §8 — worth GTCIO confirming,
- * because if it holds it is a real selling point.
+ * completes. Mapping the program's credentials against SACA's published core
+ * requirements suggests **Electrical Systems Specialist** is fully covered
+ * (C-101, C-201, C-202, C-204, C-206 — all in the program) and several other
+ * tracks sit one credential short, usually C-211. But that mapping comes
+ * from a third-party mirror, SACA grants a Specialist only once the *exams*
+ * are passed, and GTCIO has never claimed it. Telling a student they'll
+ * graduate a Specialist would be an over-claim — see PROJECT.md §9.
  */
 export type CredentialTier = {
   name: string;
@@ -46,7 +39,7 @@ export type CredentialTier = {
   detail: string;
   /** True for the tiers this diploma actually covers. */
   inProgram: boolean;
-  /** SACA's own page for this tier — verified 2026-07-27, see the note above. */
+  /** SACA's own page for this tier. */
   url: string;
 };
 
@@ -88,37 +81,30 @@ export const OTHER_CREDENTIALS = [
 /**
  * Ogeechee Tech's own accreditations — the reason a credential earned here
  * carries weight. Sourced from OTC's "Industrial Systems Training Program"
- * brochure (see PROJECT.md §10), except the Rockwell Automation entry below.
+ * brochure, except the Rockwell Automation entry below.
  *
  * ⚠️ These are **equipment vendors and certification bodies OTC is
- * accredited BY** — not employers who hire graduates, and not GTCIO partners.
- * Deliberately kept off the Partners page (PROJECT.md §10); don't conflate them.
+ * accredited BY** — not employers who hire graduates, and not GTCIO
+ * partners. Deliberately kept off the Partners page; don't conflate them.
  *
- * This is the fallback for BOTH the Credentials page and the IOT Training
- * Programs page. The live copy is CMS-editable in one place only —
- * IOT Training Programs Page → "Credentials & affiliations" — and both pages
- * read it, so an editor never has to update the same fact twice. Each item's
- * `showOn` scopes it to one page or both: the diploma only builds in FANUC
- * and SACA credentials, so Mitsubishi Electric and Rockwell — employer-
- * training-only — are marked `"employer"` and filtered out on /credentials
- * (PROJECT.md §4/§10 — the split was added 2026-07-27 alongside removing
- * Amatrol as an affiliation entirely, at Jake's request).
+ * One array feeds BOTH the Credentials page and the IOT Training Programs
+ * page, so a fact is never maintained twice. Each item's `showOn` scopes it:
+ * the diploma only builds in FANUC and SACA credentials, so Mitsubishi
+ * Electric and Rockwell — employer-training-only — are marked `"employer"`
+ * and filtered off /credentials, where they'd overstate what a student
+ * leaves with.
  *
- * ⚠️ Amatrol was removed 2026-07-27 as an *affiliation card* only — it's
- * still the LMS/curriculum platform behind several employer short courses
- * (`SERVICES` in the Training page, e.g. "Amatrol's e-learning curriculum"),
- * which is a delivery-method fact, not a credential/accreditation claim, and
- * was deliberately left alone.
+ * ⚠️ Amatrol is deliberately absent as an *affiliation card* but still
+ * appears in the Training page's `SERVICES` (e.g. "Amatrol's e-learning
+ * curriculum") — that's a delivery-method fact, not an accreditation claim.
+ * Don't "fix" the apparent inconsistency in either direction.
  *
- * ⚠️ "Rockwell Automation" (Academy of Advanced Manufacturing) replaces what
- * the brochure called "Advanced Manufacturing Academy Training Center" — note
- * the brochure's word order doesn't match Rockwell's actual program name
- * ("Academy of Advanced Manufacturing", not "Advanced Manufacturing
- * Academy"). Web research 2026-07-27 found no public confirmation (not on
- * Rockwell's own AAM page, its press coverage, or OTC's site) that GTCIO is
- * an AAM partner site — Jake confirmed it directly, so it's published as
- * Rockwell here, but if that ever needs re-verifying, this is why the
- * brochure's own wording doesn't quite match.
+ * ⚠️ The Rockwell entry ("Academy of Advanced Manufacturing") is published
+ * on the site owner's direct confirmation. The source brochure's wording
+ * ("Advanced Manufacturing Academy Training Center") reverses Rockwell's
+ * actual program name, and no public source confirms GTCIO as an AAM
+ * partner site — if this ever needs re-verifying, that's why the brochure
+ * doesn't quite match.
  */
 export type Affiliation = {
   _key?: string;

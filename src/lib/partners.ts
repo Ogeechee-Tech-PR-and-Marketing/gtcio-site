@@ -1,9 +1,7 @@
-// Partner directory — exported from Sanity's `partner` documents 2026-08-11
-// when the Sanity CMS was removed from this site ahead of the Third Wave
-// Digital handoff. This replaces what used to be a live PARTNERS_PAGE_QUERY
-// fetch; there is no CMS fallback anymore, so this array IS the content.
-// Logo images live in public/images/partner-<slug>.<ext>, downloaded
-// byte-for-byte from Sanity's CDN at the same time.
+// Partner directory — this array IS the content (no CMS; see PROJECT.md §4).
+// Logo images live in public/images/partner-<slug>.<ext>. All five
+// partnerships are confirmed real and their logos authorized; before adding
+// a new partner, confirm authorization first (PROJECT.md §7).
 export type Partner = {
   id: string;
   name: string;

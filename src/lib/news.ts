@@ -1,11 +1,10 @@
-// News items — exported from Sanity's `newsItem` documents 2026-08-11 when
-// the Sanity CMS was removed from this site ahead of the Third Wave Digital
-// handoff. This replaces what used to be a live NEWS_PAGE_QUERY fetch; there
-// is no CMS fallback anymore, so this array IS the content. Thumbnails live
-// in public/images/news/<slug>.<ext>, downloaded byte-for-byte from Sanity's
-// CDN at the same time. `imagePosition` is the CSS object-position string
-// derived from each item's Sanity image hotspot, same focal-point convention
-// PROJECT.md §4 documents for hero images.
+// News items — this array IS the content (no CMS; see PROJECT.md §4).
+// Thumbnails live in public/images/news/<slug>.<ext>. `imagePosition` is a
+// CSS object-position string naming the image's true focal point.
+//
+// Old items' headlines/excerpts deliberately preserve what each outlet
+// published at the time, including since-superseded figures — don't "correct"
+// them, and don't harvest numbers from them (PROJECT.md §11).
 export type NewsItem = {
   id: string;
   category: "press" | "media";

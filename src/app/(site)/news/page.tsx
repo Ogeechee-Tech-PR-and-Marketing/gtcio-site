@@ -9,9 +9,7 @@ export const metadata: Metadata = {
   title: "News | GTCIO",
 };
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "News",
   heroTitle: "News from the GTCIO",
@@ -138,8 +136,6 @@ export default function NewsPage() {
           {items.length === 0 ? (
             <div className="font-heading mt-10 border border-dashed border-brand-silver/60 px-6 py-16 text-center text-sm font-bold tracking-wide text-brand-silver">
               PRESS &amp; MEDIA ITEMS COMING SOON
-              <br />
-              Add news items in the Studio to populate this page.
             </div>
           ) : (
             <div className="mt-12 flex flex-col gap-16">

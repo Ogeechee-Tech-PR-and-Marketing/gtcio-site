@@ -4,9 +4,9 @@ The website for the **Georgia Training Center for Industrial Operations**, a
 division of Ogeechee Technical College.
 
 - **Live:** https://gtcio-site.vercel.app
-- **Content editing:** none right now — see [EDITING.md](./EDITING.md). The
-  Sanity CMS was removed 2026-08-11 ahead of handoff to a new agency, Third
-  Wave Digital, who will connect their own CMS.
+- **Content editing:** none — content lives in code, see
+  [EDITING.md](./EDITING.md). The site is being handed off to Third Wave
+  Digital, who will connect their own CMS.
 
 Next.js 16 (App Router) · React 19 · Tailwind v4 · Adobe Fonts (Trade Gothic
 Next) · deployed on Vercel.
@@ -18,7 +18,6 @@ Next) · deployed on Vercel.
 | **[PROJECT.md](./PROJECT.md)** | **Developers and AI agents. Start here.** Architecture, where content lives now that it's code-only, how the forms work, environment variables, the confirmed facts behind the copy, and the non-obvious traps that will bite you. |
 | [EDITING.md](./EDITING.md) | Where a copy change (text, photos, partners, news) lives in the code now that there's no CMS. |
 | [AGENTS.md](./AGENTS.md) | Warning that this is Next.js 16, not the version in your training data. |
-| [deploy/README.md](./deploy/README.md) | Whoever runs the (planned, not started) migration off Vercel onto an OTC server. |
 
 ## Getting started
 
@@ -31,7 +30,7 @@ Copy [`.env.example`](./.env.example) to `.env.local` and fill it in — it list
 every variable, where to get each value, and what breaks without it. Details in
 [PROJECT.md §6](./PROJECT.md#6-environment--config).
 
-**Access a new developer needs** (who to ask: PROJECT.md §12): the GitHub repo
+**Access a new developer needs** (who to ask: PROJECT.md §13): the GitHub repo
 (`Ogeechee-Tech-PR-and-Marketing/gtcio-site`) and the Vercel project
 (`jake-hallmans-projects/gtcio-site`).
 
@@ -45,15 +44,12 @@ npx eslint .               # lint
 
 ## Deploying
 
-Push to `main`. Vercel deploys automatically — this is now the only trigger;
-there's no CMS-publish rebuild path anymore.
+Push to `main`. Vercel deploys automatically — this is the only trigger;
+there's no CMS-publish rebuild path anymore. Hosting is expected to move as
+part of the Third Wave Digital handoff (PROJECT.md §1, §13); there is no
+OTC self-hosting plan.
 
-A migration to an OTC-hosted server is planned but **not started** —
-scaffolding and the runbook live in [`deploy/`](./deploy/README.md), status in
-PROJECT.md §8. The `Deploy GTCIO site` Actions workflow is parked
-(manual-trigger only) until that begins.
-
-⚠️ **Two integrations await setup** (details in PROJECT.md §5/§8/§11):
+⚠️ **Two integrations await setup** (details in PROJECT.md §5/§8/§9):
 Microsoft Graph credentials aren't configured yet, so form submissions
 currently fail outright (there's no CMS inbox to fall back to anymore) — this
 is now urgent. And the newsletter's Constant Contact integration needs a

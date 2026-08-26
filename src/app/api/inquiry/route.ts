@@ -37,9 +37,9 @@ const MAX_BODY_BYTES = 20_000;
 const MAX_REASONS = 20; // the real checkbox list only has a handful; this just bounds a direct POST
 
 /**
- * The exact label of the Contact form checkbox (contactPage.contactReasons in
- * the Studio) that routes the notification to Sean Payne instead of Jan Moore.
- * Renaming that checkbox in the Studio silently breaks this — update it here too.
+ * The exact label of the Contact form option (DEFAULTS.contactReasons in
+ * contact/page.tsx) that routes the notification to Sean Payne instead of
+ * Jan Moore. Renaming that option there silently breaks this — update both.
  */
 const MEDIA_REASON = "media inquiry";
 
@@ -137,7 +137,7 @@ export async function POST(request: Request) {
   // Contact form's "sign me up for the newsletter" checkbox. Best-effort and
   // independent of the rest of this handler — a failure here shouldn't turn a
   // successful inquiry into an error response, so it's caught and logged only.
-  // No formSubmission field records the opt-in (see PROJECT.md §11: Constant
+  // No formSubmission field records the opt-in (see PROJECT.md §8: Constant
   // Contact's own list is the record of truth for subscriptions, same as the
   // footer sign-up form).
   if (formType === "contact" && body.newsletterOptIn) {
@@ -194,10 +194,10 @@ export async function POST(request: Request) {
   // manual follow-up.
   const emailDelivered = anyRecipientConfigured && allDelivered;
 
-  // Email is the only record of a submission now (the Sanity inbox that used
-  // to save every inquiry as a backup was removed with the CMS). If it wasn't
-  // delivered, the inquiry is genuinely lost — say so rather than showing a
-  // thank-you for something that vanished.
+  // Email is the ONLY record of a submission — there is no inbox, queue, or
+  // database behind this route. If it wasn't delivered, the inquiry is
+  // genuinely lost — say so rather than showing a thank-you for something
+  // that vanished.
   if (!emailDelivered) {
     return NextResponse.json(
       { error: "Something went wrong on our end. Please email us directly." },

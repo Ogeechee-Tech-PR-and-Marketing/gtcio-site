@@ -1,160 +1,70 @@
 /**
- * The Industrial Operations Technology (IS32) curriculum, transcribed from
- * Ogeechee Tech's own "Industrial Operations Program" brochure (16pp, published
- * as a flipbook at https://online.fliphtml5.com/exygb/xhzf/ and mirrored at
- * /documents/industrial-operations-program-3.pdf as of 2026-08-25 — see
- * PROJECT.md §6's dated note on the swap).
+ * The Industrial Operations Technology (IS32) curriculum and the SACA
+ * credential glossary — the reference data behind
+ * /iot-diploma-program/curriculum and /credentials.
  *
- * ── Why this is code and not CMS content ──────────────────────────────────────
- * Every other page's copy is CMS-first (see PROJECT.md §4). This file is the
- * deliberate exception. It is a faithful transcription of an *accredited*
- * course catalog: course codes, credit hours, and SACA credential mappings are
- * matters of record, not marketing copy. Letting them be freely edited in the
- * Studio would risk misstating the program to prospective students, and a
- * 12-course × ~200-bullet editing surface would be hostile to the non-technical
- * editors the CMS exists to serve. When the curriculum changes it arrives as a
- * new brochure, and a developer updates this file deliberately.
+ * ── Why this is code, not CMS content ────────────────────────────────────────
+ * Course codes, credit hours, and SACA credential mappings are matters of
+ * accredited record, not marketing copy — a wrong edit misstates the program
+ * to prospective students. When the curriculum changes, a developer updates
+ * this file deliberately against the sources below. Keep it out of any CMS.
  *
- * The *framing* around this data (headings, intros, buttons) IS CMS-editable.
+ * ── Sources, in order of authority ───────────────────────────────────────────
+ * 1. OTC's live course catalog — the program page
+ *    (ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/
+ *    industrial-operations-technology/industrial-operations-technology-diploma-is32)
+ *    for codes/titles/credit hours, and each course's own description page
+ *    (…/catalog/courses/isat-industrial-operations-technology/isat-XXXX),
+ *    which states in prose which SACA exam(s) the course prepares for.
+ *    Where the catalog and the brochure disagree, the catalog wins.
+ * 2. The "Industrial Operations Program" brochure (flipbook
+ *    online.fliphtml5.com/exygb/xhzf, PDF in public/documents/) — the origin
+ *    of the credential matrix, the objectives bullets, and the display order.
+ *    Its print/InDesign source must be kept in sync when this file changes.
+ * 3. SACA's own registry (saca.org) — authoritative for credential titles
+ *    and descriptions where the brochure was defective or ambiguous.
  *
- * ── Defects in the source brochure (researched 2026-07-20) ───────────────────
+ * ── Deliberate deviations — don't "fix" these without asking ────────────────
+ * Five credentials appear in the matrix below but NOT in their course's
+ * catalog description page: C-212 (ISAT 1103), C-204 (ISAT 1105), C-209
+ * (ISAT 1120), C-203 (ISAT 1130), C-103 (ISAT 2010). All five come from the
+ * brochure and are kept on the site owner's explicit decision — the
+ * catalog's prose likely names only the exam a course centers on, not every
+ * one its content touches. Don't strip them on the catalog's text alone;
+ * confirm with GTCIO first.
  *
- * ✅ RESOLVED — C-301 had no title in the brochure, and the description printed
- * under it was about Ethernet communications while sitting on the Mechanical
- * Systems course. SACA's own registry settles it: **C-301 is "Mechanical Power
- * Systems 2"**, the level-2 companion to C-210 Mechanical Power Systems 1.
- * That is precisely why the brochure attaches both to ISAT 1110 — the code and
- * its placement were correct; only the pasted prose was wrong. Corrected above
- * from SACA, the credentialing authority, so this needed no guesswork about
- * OTC's curriculum.
- *
- * ✅ RESOLVED 2026-07-21 — the brochure vs. catalog numbering conflict on
- * Operations Technology I/II. An email confirmed two course-number changes
- * (ISAT 3100 → ISAT 2030, ISAT 3101 → ISAT 2040), and Ogeechee Tech's own
- * official course sheet for the program ("Industrial Operations Technology
- * Diploma (Start - Fall Semester 2026)", 0317_001.pdf) corroborates both new
- * numbers and confirms the rest of the 12-course program matrix unchanged
- * (titles, credits, and SACA credential mappings all match the brochure).
- * That same document also supplied a Required General Education block the
- * brochure never mentioned — ENGL 1010 (or ENGL 1101) 3 cr, MATH 1111 3 cr,
- * EMPL 1000 2 cr, 8 credits total, bringing the program to 53 credits across
- * 15 courses. Added below as `generalEducation: true` entries. See
- * PROJECT.md §8 for the full history of this conflict.
- *
- * ✅ RESOLVED 2026-08-26 — the three course-number/title mismatches against
- * Ogeechee Tech's own course catalog. Jake directed a direct match against
- * the live 2026-2027 catalog
- * (ogeecheetech.smartcatalogiq.com/current/catalog/programs-of-study/industrial-operations-technology/industrial-operations-technology-diploma-is32),
- * which now exists (it didn't yet when this was first flagged 2026-07-20,
- * back when the program's catalog year was still the 2025-2026 edition — see
- * PROJECT.md §8 for that history) and still disagrees with the brochure the
- * same way the 2025-2026 edition did:
- *
- *      brochure (old)                              catalog (now applied)
- *      ISAT 1104  Programmable Logic Control I   →  ISAT 1103
- *      ISAT 1105  Programmable Logic Control II  →  ISAT 1104
- *      ISAT 1103  Motor Control Systems & Tblsh. →  ISAT 1105
- *      ISAT 1130  Sensors in Industrial Automation → ISAT 1130 Sensors in
- *                 (brochure drops "Smart")           Industrial **Smart** Automation
- *
- * Applied below: codes swapped among the three PLC/Motor Control courses, and
- * "Smart" restored to the Sensors course title. Array *order* is unchanged
- * (still the college's teaching sequence, not a numeric sort — see the
- * comment on `COURSES` below).
- *
- * ✅ RESOLVED 2026-08-26 — the C-205/C-206 credential swap on ISAT 1102/1130,
- * and a second, previously-unknown swap on Operations Technology I/II. Not
- * from the program catalog page itself (it lists codes/titles/credit hours
- * only) but from each course's own individual catalog description page
- * (ogeecheetech.smartcatalogiq.com/current/catalog/courses/isat-industrial-operations-technology/isat-XXXX),
- * which states in plain prose which SACA exam(s) that course prepares a
- * student for. Two clean reassignments, no information lost — read directly
- * off those pages, not inferred:
- *
- *      course                    site had                catalog course page says
- *      ISAT 1102 Electrical Sys.  C-201 + C-205         →  C-201 + C-206
- *      ISAT 1130 Sensors          C-206 + C-203 + C-213 →  C-205 + C-203 + C-213
- *      ISAT 2030 Operations I     C-101 + C-102 + OSHA10→  C-101 + C-104 + OSHA10
- *      ISAT 2040 Operations II    C-104                 →  C-102
- *
- * (C-203 and OSHA 10 aren't swapped, just carried through unchanged.)
- *
- * ✅ RESOLVED 2026-08-26 — five credentials the site attaches to a course
- * that course's own catalog description page never names:
- *
- *      ISAT 1103 Programmable Logic Control I   — site adds C-212 (catalog page names only C-207)
- *      ISAT 1105 Motor Control Sys. & Tblsh.    — site adds C-204 (catalog page names only C-202)
- *      ISAT 1120 Hydraulic & Pneumatic Systems  — site adds C-209 (catalog page names only C-255, C-304)
- *      ISAT 1130 Sensors                        — site adds C-203 (catalog page names only C-205, C-213)
- *      ISAT 2010 Industrial Robotics I          — site adds C-103 (catalog page names only C-215)
- *
- * Each of these came from the brochure's matrix, not the catalog. Jake's
- * call, same day: **keep all five as the brochure has them.** No code change
- * needed — they were left in place pending this decision and stay exactly as
- * they were. Rationale on file: unlike the four swaps above, this isn't a
- * clean reassignment the catalog contradicts — its course-description prose
- * likely just names the exam a course centers on, not every one its content
- * touches, so the brochure's fuller list isn't necessarily wrong.
- *
- * ✅ RESOLVED 2026-08-26 — the Motor Controls `objectives` omission. Separate
- * question from the five credentials above: the brochure's own printed
- * objective bullets for this course read like they actually belong to the
- * swapped Sensors/Electrical Systems pair (C-205/C-206 content — see the
- * swap above), a content mix-up independent of which C-codes attach to which
- * course, so those bullets were never trustworthy. Rather than guess which
- * brochure block was misplaced, `objectives` was built fresh from this
- * course's own catalog description page (same source and method as the
- * swaps above), which is unambiguous prose, not a matrix that could get
- * mis-transcribed.
- *
- * ✅ RESOLVED 2026-08-27 — the Sensors (ISAT 1130) `objectives` list was
- * *also* wrong, and stayed wrong through the two fixes above: it never got
- * touched when 1130's credential swapped C-206 → C-205, so it kept printing
- * C-206 "electrical panel installation" content ("Install wires and
- * terminal blocks in electrical panels," "Install electrical panel wiring
- * to electric motors," etc.) — Electrical System Installation work, not
- * sensor work. Found while transcribing the corrected curriculum into the
- * print brochure (PROJECT.md §6) and cross-checking every course against
- * it. Fixed by swapping in the brochure's own genuine sensor-connect-and-
- * test bullets, which — same defect pattern as Motor Controls — were
- * sitting misfiled under the brochure's old "Motor Controls" section the
- * whole time. Moved rather than rewritten, since they're accurate C-205
- * content once relocated. The displaced C-206 bullets aren't reused
- * anywhere — ISAT 1102 Electrical Systems (which now carries C-206) already
- * has its own correct C-201-only list, and `objectives` arrays elsewhere in
- * this file don't attempt to cover every attached credential (e.g. ISAT
- * 1104's list only covers C-207, not C-212 too), so leaving C-206 unrepresented
- * in bullet form isn't a gap — its SACA glossary entry still carries the detail.
- *
- * OSHA 10 is a mapping listed in the matrix, not a SACA credential, so it has
- * no glossary entry.
+ * ── Conventions ──────────────────────────────────────────────────────────────
+ * - Array order is the college's teaching sequence, not a numeric sort.
+ * - An `objectives` list describes the course; it does not try to cover
+ *   every attached credential (the glossary entries carry that detail).
+ * - Credential codes use SACA's arabic numbering ("…Systems 1", never "…I"),
+ *   normalizing the brochure's occasional roman numerals.
+ * - OSHA 10 appears in the matrix but is not a SACA credential, so it has
+ *   no glossary entry and renders unlinked.
  */
 
 export type Course = {
   code: string;
   title: string;
   credits: number;
-  /** SACA credential codes, in the order the brochure's matrix lists them. */
+  /** SACA credential codes, in the order the source matrix lists them. */
   credentials: string[];
-  /** Omitted where the source document's objective list is unreliable. */
+  /** What the course teaches; not exhaustive per credential (see header). */
   objectives?: string[];
-  /** Prose description, for courses the brochure describes rather than bullets. */
+  /** Prose description, for courses described rather than bulleted. */
   summary?: string;
   /**
-   * True for the three Required General Education courses (0317_001.pdf,
-   * added 2026-07-21) rather than the IS32-specific program courses. They
-   * carry no SACA credentials by design, not by omission.
+   * True for the three Required General Education courses, which carry no
+   * SACA credentials by design, not by omission.
    */
   generalEducation?: boolean;
 };
 
 /**
- * Listed in the brochure's own order — note it runs 1102 → 1105 → 1103 → 1104
- * → 1130 → 1110 (catalog numbering, applied 2026-08-26 — see the file header),
- * which is the college's teaching sequence, not a numeric sort. The 12
- * program courses sum to 45
- * credits; the 3 general education courses appended after them (0317_001.pdf)
- * add 8 more, for 53 total.
+ * Listed in the college's teaching sequence (1102 → 1105 → 1103 → 1104 →
+ * 1130 → 1110 …), not a numeric sort. The 12 program courses sum to 45
+ * credits; the 3 general education courses appended after them add 8 more,
+ * for 53 total.
  */
 export const COURSES: Course[] = [
   {
@@ -181,10 +91,8 @@ export const COURSES: Course[] = [
     title: "Motor Control Systems and Troubleshooting",
     credits: 4,
     credentials: ["C-202", "C-204"],
-    // Built 2026-08-26 from this course's own catalog description page
-    // (ogeecheetech.smartcatalogiq.com/current/catalog/courses/isat-industrial-operations-technology/isat-1105)
-    // rather than the brochure — see the file header for why the brochure's
-    // printed bullets for this course couldn't be trusted.
+    // Objectives come from this course's catalog description page, not the
+    // brochure — the brochure prints another course's bullets here.
     objectives: [
       "Apply motor control safety procedures",
       "Connect and operate motor control circuits using 3-phase AC motors",
@@ -239,16 +147,11 @@ export const COURSES: Course[] = [
     code: "ISAT 1130",
     title: "Sensors in Industrial Smart Automation",
     credits: 4,
-    // C-206 → C-205 swap confirmed against the catalog's own course
-    // description (2026-08-26); C-203 kept per Jake's call the same day —
-    // see the file header.
+    // C-203 is a deliberate keep beyond the catalog page — see the header's
+    // "Deliberate deviations" note.
     credentials: ["C-205", "C-203", "C-213"],
-    // Replaced 2026-08-27 — the previous list was C-206 "electrical panel
-    // installation" content, misplaced here from the brochure the same way
-    // Motor Controls' list was (see the file header). This list is the
-    // brochure's own genuine sensor-connect-and-test bullets, which were
-    // misfiled under the old "Motor Controls" section — moved here rather
-    // than rewritten, since they're accurate C-205 content.
+    // The brochure misfiles these bullets under another course; they're
+    // C-205 sensor content and belong here.
     objectives: [
       "Identify and select an electronic sensor for an application",
       "Connect and test an inductive proximity sensor",
@@ -361,8 +264,8 @@ export const COURSES: Course[] = [
     code: "ISAT 2030",
     title: "Operations Technology I",
     credits: 4,
-    // C-102 → C-104 swap confirmed against the catalog's own course
-    // description (2026-08-26) — see the file header.
+    // C-104 (not C-102) per this course's catalog description page — the
+    // brochure has the Operations Technology I/II pair swapped.
     credentials: ["C-101", "C-104", "OSHA 10"],
     objectives: [
       "Concepts and terminology of smart manufacturing",
@@ -386,8 +289,8 @@ export const COURSES: Course[] = [
     code: "ISAT 2040",
     title: "Operations Technology II",
     credits: 4,
-    // C-104 → C-102 swap confirmed against the catalog's own course
-    // description (2026-08-26) — see the file header.
+    // C-102 (not C-104) per this course's catalog description page — the
+    // brochure has the Operations Technology I/II pair swapped.
     credentials: ["C-102"],
     objectives: [
       "Concepts of the Industrial Internet of Things (IIoT)",
@@ -431,7 +334,7 @@ export const COURSES: Course[] = [
 /** The 12 IS32 program courses — everything except general education. */
 export const PROGRAM_COURSES = COURSES.filter((c) => !c.generalEducation);
 
-/** The 3 Required General Education courses (0317_001.pdf, added 2026-07-21). */
+/** The 3 Required General Education courses. */
 export const GENERAL_EDUCATION_COURSES = COURSES.filter((c) => c.generalEducation);
 
 /** 45. Derived rather than hardcoded so it can never drift from the table. */
@@ -542,10 +445,8 @@ export const CREDENTIALS: Credential[] = [
   },
   {
     code: "C-209",
-    // SACA numbers its credentials with arabic digits. The brochure styles a
-    // few as roman numerals ("Pneumatic Systems I"); normalised here to SACA's
-    // own form, verified 2026-07-20 — otherwise C-210 would render as
-    // "Mechanical Power Systems I" directly beside "Mechanical Power Systems 2".
+    // Arabic numbering per SACA's own style (see the header's conventions) —
+    // the brochure writes a few of these as roman numerals.
     title: "Pneumatic Systems 1",
     family: "Systems & Controls",
     description:
@@ -581,15 +482,10 @@ export const CREDENTIALS: Credential[] = [
   },
   {
     code: "C-301",
-    // Title and description corrected 2026-07-20 against SACA's own registry,
-    // which is the credentialing authority (saca.org; corroborated by
-    // portal.saca.org certificate records and the Tech-Labs micro-credential
-    // list). The brochure left C-301 untitled and printed an Ethernet
-    // networking description under it — that description belongs to a
-    // higher-level Ethernet credential that is NOT part of this program.
-    // C-301 is the level-2 companion to C-210 Mechanical Power Systems 1,
-    // which is exactly why the brochure attaches both to ISAT 1110 Mechanical
-    // Systems. The placement was right all along; only the prose was wrong.
+    // Title and description come from SACA's own registry — the brochure
+    // left C-301 untitled with a wrong (Ethernet) description pasted under
+    // it. C-301 is the level-2 companion to C-210 Mechanical Power Systems 1,
+    // which is why both attach to ISAT 1110.
     title: "Mechanical Power Systems 2",
     family: "Systems & Controls",
     description:

@@ -6,9 +6,7 @@ export const metadata: Metadata = {
   title: "Facility | GTCIO",
 };
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "Facility",
   heroTitle: "Built for hands-on training",

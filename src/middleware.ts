@@ -6,7 +6,7 @@ import { SITE_PIN_COOKIE } from "@/lib/site-pin";
 
 // Requests these paths must reach with no cookie at all, or the gate can
 // never be passed (the form itself) or a third party's redirect breaks
-// (Constant Contact's OAuth callback — see PROJECT.md §11).
+// (Constant Contact's OAuth callback — see PROJECT.md §8).
 const BYPASS_PATHS = new Set([
   "/site-pin",
   "/api/site-pin",
@@ -16,7 +16,7 @@ const BYPASS_PATHS = new Set([
 export function middleware(request: NextRequest) {
   const pin = process.env.SITE_ACCESS_PIN;
   // Unset = gate not configured yet. Fail OPEN so forgetting to set the env
-  // var in Vercel doesn't lock everyone, including Jake, out of the site.
+  // var in Vercel doesn't lock everyone — site owner included — out.
   if (!pin) return NextResponse.next();
 
   const { pathname } = request.nextUrl;

@@ -28,13 +28,10 @@ const FORM_LABEL_OVERRIDES: Record<string, string> = {
 const EXTRA_FORM_OPTIONS = ["Facility Tour"];
 
 // Temporarily hides the "Our Partners" section (logo collage + per-partner
-// cards) at Jake's request, 2026-08-06. Flip back to true to restore — see
-// PROJECT.md §8.
+// cards). Flip back to true to restore — see PROJECT.md §10.
 const SHOW_PARTNER_DIRECTORY = false;
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "Partners",
   heroTitle: "Bridges to industry",

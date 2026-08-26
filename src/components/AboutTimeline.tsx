@@ -12,8 +12,7 @@ type TimelineEvent = {
 };
 
 // "July 2022" -> { year: "2022", rest: "July" }. "October 15, 2026" -> { year: "2026", rest: "October 15" }.
-// `date` can be missing mid-edit: required-validation only blocks Publish, and
-// the Studio's draft preview renders a freshly-added milestone immediately.
+// Tolerates a missing `date` so a half-filled milestone renders instead of crashing.
 function splitDate(date: string | undefined) {
   const parts = (date ?? "").trim().split(" ");
   const year = parts[parts.length - 1]?.replace(",", "") ?? date;

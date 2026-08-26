@@ -8,9 +8,7 @@ export const metadata: Metadata = {
   title: "IOT Diploma Program | GTCIO",
 };
 
-// Content used to be CMS-editable (Sanity); it was exported to this static
-// object 2026-08-11 when the CMS was removed ahead of the Third Wave Digital
-// handoff. See PROJECT.md §4.
+// DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "IOT Diploma Program: Enrolling Now",
   heroTitle: "What is Industrial Operations Technology?",
@@ -177,8 +175,8 @@ export default function IotDiplomaProgramPage() {
             ))}
           </div>
 
-          {/* Gateway to the two detail pages. Kept out of the top nav (Jake,
-              2026-07-20) — a prospective student reaches them from here. */}
+          {/* Gateway to the two detail pages, which are deliberately out of
+              the top nav — a prospective student reaches them from here. */}
           <div className="mt-10 border-l-4 border-brand-teal bg-brand-black/[0.03] p-6 sm:p-8">
             <h3 className="font-heading text-xl font-bold text-brand-black">
               {page.courseDetailHeading}

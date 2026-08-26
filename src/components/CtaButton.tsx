@@ -13,9 +13,9 @@ type Props = {
 };
 
 /**
- * Renders a button configured in the Studio. Returns null if the editor hasn't
- * finished setting it up (no label, or "Somewhere else" with no address yet), so
- * a half-filled field never ships a dead button to the live site.
+ * Renders a `ctaButton`-shaped value from a page's DEFAULTS. Returns null if
+ * it's incomplete (no label, or a custom destination with no address), so a
+ * half-filled value never ships a dead button to the live site.
  */
 export default function CtaButton({ button, variant = "primary", className }: Props) {
   const href = resolveHref(button);
