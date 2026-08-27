@@ -304,14 +304,17 @@ the same URL.
   §8's OAuth step must be re-run once to populate the new store. Until then
   every signup fails. (KV is explicitly an interim home — Third Wave may
   relocate this integration along with the forms.)
-- **🟡 Flipbook lags the print brochure.** Print brochure sync is otherwise
-  **done** (2026-08-27): the `V03` export landed as
-  `industrial-operations-program-4.pdf` and its credential matrix now agrees
-  with `iot-curriculum.ts` row for row, so the PDF no longer lags the site.
-  What's left is `DESTINATIONS.iotProgramFlipbook` — the fliphtml5 flipbook
-  is hosted outside this repo and must be refreshed on fliphtml5's side, or
-  "VIEW IOT PROGRAM" keeps serving the superseded brochure while "DOWNLOAD
-  IOT PROGRAM" serves the current one.
+- **Print/flipbook sync is done** (2026-08-27). Both brochures and both
+  flipbooks now carry the same content as the site: the diploma PDF is
+  `industrial-operations-program-5.pdf` and the catalog is
+  `otc-industrial-systems-training-program-5.pdf`, and both fliphtml5 books
+  (`exygb/xhzf` and `exygb/kvbr`) were refreshed by hand on fliphtml5's side —
+  verified by loading them, not just by the URLs still resolving. **Their URLs
+  survived the refresh**, so `DESTINATIONS.iotProgramFlipbook` and the Training
+  page's `CATALOG_URL` did not change; a future re-upload that creates a new
+  book ID would require editing both. Nothing in this repo drives fliphtml5, so
+  a PDF swap always needs that manual step or the "VIEW …" buttons silently
+  serve a stale brochure.
 - **🟡 Possible unstated selling point:** mapping the program's credentials
   against SACA's published Specialist requirements suggests graduates may
   complete a full **Electrical Systems Specialist** certification, not just
