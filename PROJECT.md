@@ -20,7 +20,7 @@ launches an Industrial Operations Technology (IOT) diploma program in
 **August 2026**.
 
 - **Live:** https://gtcio-site.vercel.app
-- **Repo:** https://github.com/Ogeechee-Tech-PR-and-Marketing/gtcio-site (private)
+- **Repo:** https://github.com/Ogeechee-Tech-PR-and-Marketing/gtcio-site (**public** — see §12; Vercel Hobby cannot auto-deploy a private org-owned repo)
 - **Editing UI:** none. Content lives in code (§4). The site is being handed
   off to **Third Wave Digital**, who will connect their own CMS and are
   expected to take over hosting.
@@ -41,7 +41,7 @@ redesign it without being asked.
 | Email | Microsoft Graph / Azure AD app (§5) |
 | Fonts | Adobe Fonts — Trade Gothic Next (§7) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
-| Deploys | **Auto-deploy on push to `main`.** No manual step, no other trigger. |
+| Deploys | **Auto-deploy on push to `main`** — requires the repo stay **public** on the Hobby plan (§12). |
 
 > ⚠️ Next.js 16 post-dates most AI training data. `AGENTS.md` says it too:
 > read the bundled docs in `node_modules/next/dist/docs/` before writing
@@ -418,7 +418,10 @@ curl -s -X POST http://localhost:3000/api/inquiry \
 # 500 with Graph unconfigured is expected (§5), not a bug.
 ```
 
-Push to `main` → Vercel deploys automatically.
+Push to `main` → Vercel deploys automatically. (The repo is public as of
+2026-08-27 — Vercel’s Hobby plan cannot auto-deploy a **private** org-owned
+repo, which is what silently broke this before. Keep it public, or move the
+project to a Pro team, or push-to-deploy stops working again.)
 
 ## 13. Accounts & handoff
 
