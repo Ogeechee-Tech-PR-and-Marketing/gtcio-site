@@ -304,14 +304,14 @@ the same URL.
   §8's OAuth step must be re-run once to populate the new store. Until then
   every signup fails. (KV is explicitly an interim home — Third Wave may
   relocate this integration along with the forms.)
-- **🟡 Print brochure sync:** a corrected InDesign draft
-  (`2026-08-24_Industral-Operations-Diploma-Program_V02_jh.idml`, on the
-  PR_Marketing share) carries the same curriculum fixes as
-  `iot-curriculum.ts` but awaits review in InDesign (two objectives lists
-  changed length — check the text frames) and a fresh PDF export. When that
-  exists, swap it into `public/documents/` under a **new filename** (§6's
-  immutable-cache rule) and update `DESTINATIONS.iotProgramPdf`; the
-  fliphtml5 flipbook is refreshed separately on fliphtml5's side.
+- **🟡 Flipbook lags the print brochure.** Print brochure sync is otherwise
+  **done** (2026-08-27): the `V03` export landed as
+  `industrial-operations-program-4.pdf` and its credential matrix now agrees
+  with `iot-curriculum.ts` row for row, so the PDF no longer lags the site.
+  What's left is `DESTINATIONS.iotProgramFlipbook` — the fliphtml5 flipbook
+  is hosted outside this repo and must be refreshed on fliphtml5's side, or
+  "VIEW IOT PROGRAM" keeps serving the superseded brochure while "DOWNLOAD
+  IOT PROGRAM" serves the current one.
 - **🟡 Possible unstated selling point:** mapping the program's credentials
   against SACA's published Specialist requirements suggests graduates may
   complete a full **Electrical Systems Specialist** certification, not just
