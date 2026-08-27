@@ -35,6 +35,12 @@
  *
  * ── Conventions ──────────────────────────────────────────────────────────────
  * - Array order is the college's teaching sequence, not a numeric sort.
+ *   ⚠️ The brochure re-export of 2026-08-27 re-sorted its page-3 matrix into
+ *   ascending course number (1102, 1103, 1104, 1105, 1110, 1120, 1130 …) and
+ *   moved EMPL 1000 above ENGL 1010. This file deliberately does NOT follow
+ *   it: the catalog still lists the teaching sequence used here, and source 1
+ *   outranks source 2. Don't "sync" the order to the brochure — verify
+ *   against the catalog first, and expect the two to keep disagreeing.
  * - An `objectives` list describes the course; it does not try to cover
  *   every attached credential (the glossary entries carry that detail).
  * - Credential codes use SACA's arabic numbering ("…Systems 1", never "…I"),
