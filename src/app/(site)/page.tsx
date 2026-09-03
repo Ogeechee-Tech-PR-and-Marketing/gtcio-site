@@ -52,8 +52,8 @@ export default function Home() {
         {/* No CMS hero photo override anymore — the banner always plays the
             looping construction video. */}
         <video
-          src="/videos/hero-construction-6.mp4"
-          poster="/images/hero-construction-poster-5.jpg"
+          src="/videos/hero-construction-7.mp4"
+          poster="/images/hero-construction-poster-6.jpg"
           autoPlay
           loop
           muted
