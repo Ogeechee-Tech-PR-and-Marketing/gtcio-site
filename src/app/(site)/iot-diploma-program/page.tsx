@@ -146,21 +146,10 @@ export default function IotDiplomaProgramPage() {
         }
       />
 
-      <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.whatIsTitle}</h2>
-          <div className="mt-6 aspect-video overflow-hidden">
-            <iframe
-              className="h-full w-full"
-              src="https://www.youtube-nocookie.com/embed/gCkUwZqdZMc"
-              title="What's Industrial Operations Technology? — GTCIO"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-          <p className="mt-6 max-w-3xl text-brand-silver">{page.whatIsBody}</p>
-        </div>
-      </section>
+      {/* "What is Industrial Operations Technology" video section — removed
+          2026-09-03 pending a re-shot video (the current YouTube embed is
+          being replaced). DEFAULTS.whatIsTitle/whatIsBody are left intact
+          below; re-add this section with the new embed URL when it's ready. */}
 
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
