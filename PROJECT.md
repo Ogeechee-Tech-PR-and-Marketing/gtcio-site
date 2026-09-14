@@ -183,7 +183,7 @@ of them:
 ```
 MS_GRAPH_TENANT_ID / _CLIENT_ID / _CLIENT_SECRET / _SENDER_EMAIL   (§5)
 CONSTANT_CONTACT_CLIENT_ID / _CLIENT_SECRET / _SETUP_SECRET        (§8)
-KV_REST_API_URL / KV_REST_API_TOKEN     auto-injected by Vercel KV (§8, §9)
+KV_REST_API_URL / KV_REST_API_TOKEN     auto-injected by the Upstash store (§8)
 SITE_ACCESS_PIN                          optional site gate; unset = off
 ```
 
@@ -213,8 +213,7 @@ callback, and all static assets.
   (an old published URL).
 
 **The canonical origin is `SITE_URL` in `src/lib/site.ts`** — feeds
-`metadataBase`, `robots.ts`, `sitemap.ts`. On a domain move change it there,
-plus the Adobe Fonts project (§7).
+`metadataBase`, `robots.ts`, `sitemap.ts`. On a domain move change it there.
 
 ## 7. Brand
 
@@ -255,8 +254,8 @@ Two traps that cost real time:
    All faces should read `swap`:
    `curl -s https://use.typekit.net/jok5hww.css | grep -o 'font-display:[a-z]*' | sort | uniq -c`
 
-Adobe's files cannot be self-hosted (no `next/font`). **On a domain move, add
-the new domain to the Adobe Fonts web project** or fonts stop loading.
+Adobe's files cannot be self-hosted (no `next/font`). Web projects have no
+domain allowlist — the kit works on any domain (confirmed on www.gtcio.org).
 
 **Partner logos are third-party trademarks.** All five current partners are
 confirmed authorized. Before adding a new company's logo, confirm
@@ -299,11 +298,12 @@ the same URL.
   no fallback record (§5). Every Partner/Contact submission disappears until
   an OTC tenant admin completes §5's setup. Urgent, and email delivery has
   never been tested end-to-end.
-- **🔴 Vercel KV is not provisioned — the newsletter is dead.** Vercel →
-  gtcio-site → Storage → Create Database auto-injects the two KV vars; then
-  §8's OAuth step must be re-run once to populate the new store. Until then
-  every signup fails. (KV is explicitly an interim home — Third Wave may
-  relocate this integration along with the forms.)
+- **Constant Contact token store restored 2026-09-14.** The first Upstash
+  store (`upstash-kv-citrine-lamp`) was uninstalled but its `KV_*` vars stayed
+  in Vercel pointing at a dead host, so signups failed silently. Replaced by
+  `upstash-kv-coffee-yacht`; §8's OAuth step re-run on www.gtcio.org. If the
+  store is ever removed, delete the stale `KV_*`/`REDIS_URL` vars before
+  connecting a new one. (Still an interim home — Third Wave may relocate it.)
 - **Print/flipbook sync is done** (2026-08-27). Both brochures and both
   flipbooks now carry the same content as the site: the diploma PDF is
   `industrial-operations-program-5.pdf` and the catalog is
@@ -432,7 +432,7 @@ project to a Pro team, or push-to-deploy stops working again.)
 | --- | --- | --- | --- |
 | GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (private) | OTC PR & Marketing org (Jake Hallman: admin) | Source of truth; push to `main` deploys |
 | Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — expected to move with the Third Wave Digital handoff | Hosting, env vars, function logs |
-| Vercel KV | not yet provisioned (§9) | Jake | Constant Contact token store |
+| Upstash for Redis (Vercel Marketplace) | `upstash-kv-coffee-yacht` | Jake | Constant Contact token store (§8) |
 | Adobe Fonts | web project kit `jok5hww` | OTC Creative Cloud licence | Trade Gothic Next (§7 — settings live in Adobe's dashboard) |
 | Microsoft Graph | Azure AD app — not yet registered (§5, §9) | OTC Microsoft 365 tenant | Form notification email |
 | Constant Contact | Custom App at developer.constantcontact.com | OTC/GTCIO Constant Contact account | Newsletter list (§8) |
