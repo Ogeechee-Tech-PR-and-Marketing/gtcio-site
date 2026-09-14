@@ -153,7 +153,7 @@ async function createList(accessToken: string): Promise<string> {
     },
     body: JSON.stringify({
       name: LIST_NAME,
-      description: "Sign-ups from the gtcio-site.vercel.app footer newsletter form.",
+      description: "Sign-ups from the gtcio.org footer newsletter form.",
     }),
   });
   if (!response.ok) {

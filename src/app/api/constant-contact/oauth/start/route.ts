@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 
 /**
  * One-time, human-run step: visit
- * https://gtcio-site.vercel.app/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>
+ * https://www.gtcio.org/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>
  * while logged into the Constant Contact account GTCIO signups should land
  * in. Redirects to Constant Contact's own login/consent screen; approving it
  * lands back on the callback route, which stores a refresh token that

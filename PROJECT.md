@@ -19,7 +19,7 @@ trains people for industrial maintenance / automation / controls work, and
 launches an Industrial Operations Technology (IOT) diploma program in
 **August 2026**.
 
-- **Live:** https://gtcio-site.vercel.app
+- **Live:** https://www.gtcio.org (GoDaddy DNS → Vercel; apex 308s to www; `gtcio-site.vercel.app` still serves)
 - **Repo:** https://github.com/Ogeechee-Tech-PR-and-Marketing/gtcio-site (**public** — see §12; Vercel Hobby cannot auto-deploy a private org-owned repo)
 - **Editing UI:** none. Content lives in code (§4). The site is being handed
   off to **Third Wave Digital**, who will connect their own CMS and are
@@ -283,7 +283,7 @@ the same call.
 **Setup/reconnect** (the app-side config exists; the token store is empty
 until §9's KV item is done): set the three `CONSTANT_CONTACT_*` vars in
 Vercel, redeploy, then visit
-`https://gtcio-site.vercel.app/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>`
+`https://www.gtcio.org/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>`
 while logged into the Constant Contact account that should own the list, and
 approve. "Constant Contact is connected." = tokens saved. The callback
 overwrites cleanly, so re-running is always safe. If the form errors with
