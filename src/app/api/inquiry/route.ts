@@ -30,6 +30,13 @@ type Payload = {
 const NOTIFY_EMAIL = "jmoore@ogeecheetech.edu"; // general inquiries — Jan Moore
 const NOTIFY_EMAIL_MEDIA = "spayne@ogeecheetech.edu"; // media inquiries — Sean Payne
 
+// Test hook: when set, EVERY notification goes to this address instead of the
+// staff above, with the intended recipient named in the subject. Meant for a
+// preview deployment (`vercel deploy -e NOTIFY_EMAIL_OVERRIDE=you@…`) so the
+// real send path can be exercised without emailing Jan or Sean. Never set it
+// in Production.
+const NOTIFY_EMAIL_OVERRIDE = process.env.NOTIFY_EMAIL_OVERRIDE?.trim() || null;
+
 // Field length caps. Generous for real people, tight enough that nobody can
 // stuff megabytes into the dataset or the notification email.
 const MAX_SHORT = 200; // names, phone, organization, reason, date
@@ -197,8 +204,8 @@ export async function POST(request: Request) {
 
     try {
       await sendMail({
-        to: recipient.to,
-        subject,
+        to: NOTIFY_EMAIL_OVERRIDE ?? recipient.to,
+        subject: NOTIFY_EMAIL_OVERRIDE ? `[TEST → ${recipient.to}] ${subject}` : subject,
         text: bodyText,
         replyTo: email, // so staff can just hit Reply
       });
