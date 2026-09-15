@@ -25,7 +25,7 @@ type InquiryFormProps = {
 };
 
 const FIELD_CLASSES =
-  "w-full border border-brand-silver bg-brand-white px-3 py-2 text-brand-black focus:border-brand-red focus:outline-none";
+  "w-full border border-brand-silver bg-brand-white px-3 py-2 text-brand-black focus-visible:border-brand-red";
 
 // Mirror the server's caps in /api/inquiry/route.ts (MAX_SHORT / MAX_EMAIL /
 // MAX_MESSAGE). The server silently truncates anything longer, so without a
@@ -101,7 +101,7 @@ export default function InquiryForm({
     return (
       <div className="border-2 border-brand-red bg-brand-white px-6 py-8 text-brand-black">
         <p className="font-heading text-lg font-bold">Message received</p>
-        <p className="mt-2 text-brand-silver">{confirmationMessage}</p>
+        <p className="mt-2 text-brand-gray">{confirmationMessage}</p>
       </div>
     );
   }

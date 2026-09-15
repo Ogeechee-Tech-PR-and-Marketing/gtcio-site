@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 /**
  * Two constraints before adding an item:
@@ -40,7 +41,19 @@ const BANNER_PARENT_TEXT = "A DIVISION OF OGEECHEE TECHNICAL COLLEGE";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Escape closes the mobile menu, the way any disclosure should.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  const current = (href: string) => (href === pathname ? "page" : undefined);
 
   return (
     // The header is sticky, so in-page anchor targets need a scroll margin
@@ -70,39 +83,37 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="hidden items-center gap-4 xl:flex xl:gap-6">
+          <nav aria-label="Main" className="hidden items-center gap-4 xl:flex xl:gap-6">
             {NAV_ITEMS.map((item) =>
               item.children ? (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setAboutOpen(true)}
-                  onMouseLeave={() => setAboutOpen(false)}
-                >
+                // The dropdown is CSS-driven (group-hover + group-focus-within)
+                // rather than mouse-event state, so keyboard users tabbing
+                // through the About link reach its sub-links too.
+                <div key={item.label} className="group relative">
                   <Link
                     href={item.href}
+                    aria-current={current(item.href)}
                     className="font-ui text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
                   >
                     {item.label}
                   </Link>
-                  {aboutOpen && (
-                    <div className="absolute left-0 top-full w-72 border-t-2 border-brand-red bg-brand-white shadow-lg">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className="font-ui block px-4 py-3 text-xs font-bold tracking-wide text-brand-black hover:bg-brand-black hover:text-brand-white"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <div className="absolute left-0 top-full hidden w-72 border-t-2 border-brand-red bg-brand-white shadow-lg group-hover:block group-focus-within:block">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.label}
+                        href={child.href}
+                        className="font-ui block px-4 py-3 text-xs font-bold tracking-wide text-brand-black hover:bg-brand-black hover:text-brand-white focus-visible:bg-brand-black focus-visible:text-brand-white"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <Link
                   key={item.label}
                   href={item.href}
+                  aria-current={current(item.href)}
                   className="font-ui text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
                 >
                   {item.label}
@@ -115,18 +126,21 @@ export default function Header() {
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
             className="font-ui text-sm font-bold tracking-wide text-brand-black xl:hidden"
-            aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
             {mobileOpen ? "CLOSE" : "MENU"}
           </button>
         </div>
 
         {mobileOpen && (
-          <nav className="flex flex-col gap-1 pb-4 xl:hidden">
+          <nav id="mobile-nav" aria-label="Main" className="flex flex-col gap-1 pb-4 xl:hidden">
             {NAV_ITEMS.map((item) => (
               <div key={item.label}>
                 <Link
                   href={item.href}
+                  aria-current={current(item.href)}
                   onClick={() => setMobileOpen(false)}
                   className="font-ui block py-2 text-sm font-bold tracking-wide text-brand-black"
                 >
@@ -139,7 +153,7 @@ export default function Header() {
                         key={child.label}
                         href={child.href}
                         onClick={() => setMobileOpen(false)}
-                        className="font-ui py-1 text-xs font-bold tracking-wide text-brand-silver"
+                        className="font-ui py-1 text-xs font-bold tracking-wide text-brand-gray"
                       >
                         {child.label}
                       </Link>

@@ -72,7 +72,7 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
                     {item.title}
                   </span>
                 </h3>
-                {item.detail && <p className="max-w-[30ch] text-sm text-brand-silver">{item.detail}</p>}
+                {item.detail && <p className="max-w-[30ch] text-sm text-brand-gray">{item.detail}</p>}
                 {item.sourceUrl && (
                   <a
                     href={item.sourceUrl}
@@ -80,7 +80,7 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
                     rel="noopener noreferrer"
                     className="font-heading mt-2 inline-block text-xs font-bold tracking-wide text-brand-red hover:text-brand-black"
                   >
-                    Read more &rarr;
+                    Read more<span className="sr-only"> about {item.title}</span> &rarr;
                   </a>
                 )}
               </div>

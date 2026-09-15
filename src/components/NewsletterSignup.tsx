@@ -97,7 +97,7 @@ export default function NewsletterSignup() {
                   maxLength={100}
                   placeholder="First name"
                   autoComplete="given-name"
-                  className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
+                  className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-gray focus-visible:border-brand-gold"
                 />
               </div>
               <div>
@@ -113,7 +113,7 @@ export default function NewsletterSignup() {
                   maxLength={100}
                   placeholder="Last name"
                   autoComplete="family-name"
-                  className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
+                  className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-gray focus-visible:border-brand-gold"
                 />
               </div>
             </div>
@@ -130,7 +130,9 @@ export default function NewsletterSignup() {
                 maxLength={254}
                 placeholder="you@example.com"
                 autoComplete="email"
-                className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-silver focus:border-brand-gold focus:outline-none"
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? "newsletter-error" : undefined}
+                className="w-full border border-brand-silver/50 bg-brand-white px-4 py-3 text-brand-black placeholder:text-brand-gray focus-visible:border-brand-gold"
               />
               <button
                 type="submit"
@@ -140,7 +142,11 @@ export default function NewsletterSignup() {
                 {submitting ? "SIGNING UP…" : BUTTON_LABEL}
               </button>
             </div>
-            {error && <p className="mt-2 text-sm text-brand-gold">{error}</p>}
+            {error && (
+              <p id="newsletter-error" role="alert" className="mt-2 text-sm text-brand-gold">
+                {error}
+              </p>
+            )}
           </form>
         )}
       </div>

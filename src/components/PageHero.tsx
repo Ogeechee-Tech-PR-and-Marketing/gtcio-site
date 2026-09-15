@@ -1,5 +1,6 @@
 import Image from "next/image";
 import HeroCard from "@/components/HeroCard";
+import HeroVideo from "@/components/HeroVideo";
 
 type PageHeroProps = {
   eyebrow?: string;
@@ -33,16 +34,9 @@ export default function PageHero({
   return (
     <section className="relative overflow-hidden bg-brand-black px-6 py-16 text-brand-white sm:px-10 sm:py-24">
       {video ? (
-        <video
+        <HeroVideo
           src={video}
           poster={videoPoster}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
           style={imagePosition ? { objectPosition: imagePosition } : undefined}
         />
       ) : (

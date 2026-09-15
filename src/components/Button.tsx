@@ -18,15 +18,30 @@ const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
 };
 
 export default function Button({ href, children, variant = "primary", className = "", target, rel, download }: ButtonProps) {
-  return (
-    <Link
-      href={href}
-      target={target}
-      rel={rel}
-      download={download}
-      className={`font-ui inline-block px-7 py-3 text-sm transition-colors ${variants[variant]} ${className}`}
-    >
+  const classes = `font-ui inline-block px-7 py-3 text-sm transition-colors ${variants[variant]} ${className}`;
+  const newTab = target === "_blank";
+  const label = (
+    <>
       {children}
+      {newTab && <span className="sr-only"> (opens in a new tab)</span>}
+    </>
+  );
+
+  // Files and off-site URLs get a plain <a>. next/link treats any relative
+  // href as a route and prefetches it when the link scrolls into view — for
+  // the two brochure PDFs that meant silently downloading 4–8 MB per page
+  // view. Nothing here needs client-side navigation.
+  if (download || /^(https?:|mailto:|tel:)/i.test(href)) {
+    return (
+      <a href={href} target={target} rel={rel} download={download || undefined} className={classes}>
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} target={target} rel={rel} className={classes}>
+      {label}
     </Link>
   );
 }

@@ -7,6 +7,13 @@
   --color-brand-silver: #898b8e;
   --color-brand-teal: #007586;
   --color-brand-gold: #f5bd16;
+  /* Brand silver darkened ~14% for TEXT ON LIGHT BACKGROUNDS. #898B8E measures
+     3.4:1 on white — below WCAG AA's 4.5:1 for body copy, which a public
+     college's site must meet (ADA Title II → WCAG 2.1 AA). This tint keeps
+     the silver's hue and reads 5.2:1 on white, 4.7:1 on the site's lightest
+     tinted cards (black/3%, silver/10%). Keep brand-silver itself for rules,
+     borders, and text on the black footer/bands, where it passes at 6:1. */
+  --color-brand-gray: #6b6d70;
 }
 
 @theme inline {
@@ -14,6 +21,7 @@
   --color-brand-black: var(--color-brand-black);
   --color-brand-white: var(--color-brand-white);
   --color-brand-silver: var(--color-brand-silver);
+  --color-brand-gray: var(--color-brand-gray);
   --color-brand-teal: var(--color-brand-teal);
   --color-brand-gold: var(--color-brand-gold);
   /* Trade Gothic Next Condensed is the brand guide's primary face. Arial Narrow
@@ -26,6 +34,26 @@ body {
   background: var(--color-brand-white);
   color: var(--color-brand-black);
   font-family: var(--font-condensed);
+}
+
+/* One visible keyboard-focus style everywhere. Brand red clears 3:1 against
+   both white (6:1) and black (3.5:1); the offset keeps it outside red buttons. */
+:focus-visible {
+  outline: 3px solid var(--color-brand-red);
+  outline-offset: 2px;
+}
+
+/* Users who ask for less motion get none: no smooth scrolling, no transitions.
+   (The hero video pauses itself via HeroVideo.tsx.) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* OTC brand guide "Header" treatment: Trade Gothic Next Heavy Compressed,
