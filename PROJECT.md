@@ -341,11 +341,12 @@ the same URL.
 
 ## 9. Open work
 
-- **🔴 Form email: Resend is wired in code but the integration/domain step
-  (§5) is in progress as of 2026-09-15.** Until `RESEND_API_KEY` exists AND
-  gtcio.org shows Verified in Resend, submissions park in KV — run
-  `npm run inquiries` daily. Once it works end-to-end, delete this item.
-  Graph remains available as the alternate if OTC ever registers the app.
+- **Form email via Resend — verified 2026-09-15 on a preview deployment**
+  (both forms, both recipients' routing, Reply-To, DKIM/SPF/DMARC all pass
+  into Gmail; nothing fell back to KV). Not yet exercised on production:
+  after the next production deploy, submit each form once for real and
+  confirm Jan/Sean receive it, then delete this item. Graph remains the
+  alternate if OTC ever registers the app.
 - **Launch checklist:** remove `SITE_ACCESS_PIN` (§6) · confirm
   `https://gtcio-site.vercel.app/` 308s to www · submit each form once and
   confirm it lands (email or `npm run inquiries`) · run
@@ -482,7 +483,8 @@ npm run inquiries          # print form submissions parked in KV (§5)
 curl -s -X POST http://localhost:3000/api/inquiry \
   -H "Content-Type: application/json" \
   -d '{"formType":"contact","reason":"Media inquiry","firstName":"A","lastName":"B","email":"a@b.com","message":"hi"}'
-# 500 with Graph unconfigured is expected (§5), not a bug.
+# With no provider configured locally this returns 500 and the visitor-facing
+# error (§5); on Vercel it sends via Resend, or parks in KV if that fails.
 ```
 
 Push to `main` → Vercel deploys automatically. (The repo is public as of
