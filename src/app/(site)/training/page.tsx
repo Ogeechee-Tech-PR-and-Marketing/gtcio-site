@@ -7,6 +7,9 @@ import { AFFILIATIONS, affiliationsFor } from "@/lib/credentials";
 
 export const metadata: Metadata = {
   title: "IOT Training Programs | GTCIO",
+  description:
+    "Hands-on industrial systems training for employers: short courses, customized contract training, skills assessments, and DOL-registered apprenticeships at GTCIO.",
+  alternates: { canonical: "/training" },
 };
 
 // The public flipbook of "OTC Industrial Systems Training Program".
@@ -126,9 +129,9 @@ export default function TrainingPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.employersTitle}</h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.employersBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.employersBody}</p>
           {page.employersBody2 && (
-            <p className="mt-4 max-w-3xl text-brand-silver">{page.employersBody2}</p>
+            <p className="mt-4 max-w-3xl text-brand-gray">{page.employersBody2}</p>
           )}
           <div className="mt-8 flex flex-wrap gap-4">
             <CtaButton button={page.employersButton} variant="primary" />
@@ -165,7 +168,7 @@ export default function TrainingPage() {
             {affiliations.map((a, i) => (
               <div key={i} className="border border-brand-silver/40 p-6">
                 <p className="font-heading text-lg font-bold text-brand-red">{a.title}</p>
-                <p className="mt-2 text-sm text-brand-silver">{a.detail}</p>
+                <p className="mt-2 text-sm text-brand-gray">{a.detail}</p>
               </div>
             ))}
           </div>
@@ -179,7 +182,7 @@ export default function TrainingPage() {
             {services.map((s, i) => (
               <div key={i} className="border border-brand-silver/40 p-6">
                 <h3 className="font-heading text-lg font-bold text-brand-red">{s.title}</h3>
-                <p className="mt-2 text-sm text-brand-silver">{s.detail}</p>
+                <p className="mt-2 text-sm text-brand-gray">{s.detail}</p>
               </div>
             ))}
           </div>
@@ -190,7 +193,7 @@ export default function TrainingPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.courseAreasTitle}</h2>
           {page.courseAreasIntro && (
-            <p className="mt-3 max-w-3xl text-brand-silver">{page.courseAreasIntro}</p>
+            <p className="mt-3 max-w-3xl text-brand-gray">{page.courseAreasIntro}</p>
           )}
           <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {courseAreas.map((c, i) => (
@@ -198,7 +201,7 @@ export default function TrainingPage() {
                 <h3 className="font-heading text-lg font-bold text-brand-black">{c.area}</h3>
                 <ul className="mt-3 flex flex-col gap-2">
                   {c.courses.map((course, j) => (
-                    <li key={j} className="text-sm text-brand-silver">
+                    <li key={j} className="text-sm text-brand-gray">
                       {course}
                     </li>
                   ))}
@@ -216,7 +219,7 @@ export default function TrainingPage() {
             {employerFaqs.map((item: { question: string; answer: string }, i: number) => (
               <div key={i} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
-                <p className="mt-1 text-brand-silver"><LinkifyEmail text={item.answer} /></p>
+                <p className="mt-1 text-brand-gray"><LinkifyEmail text={item.answer} /></p>
               </div>
             ))}
           </div>

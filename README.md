@@ -49,9 +49,7 @@ there's no CMS-publish rebuild path anymore. Hosting is expected to move as
 part of the Third Wave Digital handoff (PROJECT.md §1, §13); there is no
 OTC self-hosting plan.
 
-⚠️ **Two integrations await setup** (details in PROJECT.md §5/§8/§9):
-Microsoft Graph credentials aren't configured yet, so form submissions
-currently fail outright (there's no CMS inbox to fall back to anymore) — this
-is now urgent. And the newsletter's Constant Contact integration needs a
-Vercel KV store provisioned before it will reconnect (its old token store was
-the CMS, also removed).
+⚠️ **Microsoft Graph credentials are not configured** (PROJECT.md §5/§9), so
+form submissions are parked in the KV store instead of emailed — run
+`npm run inquiries` to read them until an OTC tenant admin finishes the Azure
+setup. The newsletter's Constant Contact integration is connected (§8).

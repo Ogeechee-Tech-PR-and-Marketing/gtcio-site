@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   title: "Credentials | GTCIO",
   description:
     "Every industry credential built into GTCIO's training — SACA credentials, FANUC, and OSHA 10 — and the accreditations Ogeechee Tech holds that make them count.",
+  alternates: { canonical: "/credentials" },
 };
 
 /** Which courses lead to a given credential — the inverse of the course table. */
@@ -97,20 +98,20 @@ export default function CredentialsPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.earnTitle}</h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.earnBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.earnBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="border-l-4 border-brand-red bg-brand-black/[0.03] p-6">
               <p className="font-display text-3xl text-brand-red">{SACA_CREDENTIALS.length}</p>
               <p className="font-heading mt-2 font-bold text-brand-black">SACA credentials</p>
-              <p className="mt-2 text-sm text-brand-silver">
+              <p className="mt-2 text-sm text-brand-gray">
                 Built into the diploma&apos;s program courses.
               </p>
             </div>
             {OTHER_CREDENTIALS.map((credential) => (
               <div key={credential.name} className="border-l-4 border-brand-teal bg-brand-black/[0.03] p-6">
-                <p className="font-display text-sm text-brand-gold">{credential.issuer}</p>
+                <p className="font-display text-sm text-brand-red">{credential.issuer}</p>
                 <p className="font-heading mt-2 font-bold text-brand-black">{credential.name}</p>
-                <p className="mt-2 text-sm text-brand-silver">{credential.detail}</p>
+                <p className="mt-2 text-sm text-brand-gray">{credential.detail}</p>
               </div>
             ))}
           </div>
@@ -122,18 +123,18 @@ export default function CredentialsPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">
             {page.affiliationsTitle}
           </h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.affiliationsBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.affiliationsBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {affiliations.map((affiliation, i) => (
               <div key={affiliation._key ?? i} className="border-l-4 border-brand-red pl-5">
                 <h3 className="font-heading text-lg font-bold text-brand-black">
                   {affiliation.title}
                 </h3>
-                <p className="mt-1 text-sm text-brand-silver">{affiliation.detail}</p>
+                <p className="mt-1 text-sm text-brand-gray">{affiliation.detail}</p>
               </div>
             ))}
           </div>
-          <p className="mt-8 max-w-3xl text-sm text-brand-silver">
+          <p className="mt-8 max-w-3xl text-sm text-brand-gray">
             Employers can also put current staff through these credentials, plus a few more —{" "}
             <Link href={DESTINATIONS.training} className="font-bold text-brand-red underline hover:text-brand-black">
               see the training we run for industry
@@ -148,14 +149,14 @@ export default function CredentialsPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.sacaTitle}</h2>
           <div className="mt-6 flex max-w-3xl flex-col gap-4">
             {SACA_INTRO.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="text-brand-silver">
+              <p key={paragraph.slice(0, 40)} className="text-brand-gray">
                 {paragraph}
               </p>
             ))}
           </div>
           {/* Stated on the IOT Diploma page too — completing a course does not
               by itself award a credential (PROJECT.md §11). */}
-          <p className="mt-6 max-w-3xl border-l-4 border-brand-gold pl-5 text-sm text-brand-silver">
+          <p className="mt-6 max-w-3xl border-l-4 border-brand-gold pl-5 text-sm text-brand-gray">
             Credentials are awarded on passing the SACA exam — completing the coursework alone does
             not award one. Ogeechee Tech is an approved SACA testing site at Silver and Gold level,
             so students test where they train.
@@ -166,7 +167,7 @@ export default function CredentialsPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.ladderTitle}</h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.ladderBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.ladderBody}</p>
           <ol className="mt-8 flex flex-col gap-4">
             {SACA_TIERS.map((tier, i) => (
               <li
@@ -176,16 +177,16 @@ export default function CredentialsPage() {
                 }`}
               >
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <p className="font-display text-sm text-brand-gold">Tier {i + 1}</p>
+                  <p className="font-display text-sm text-brand-red">Tier {i + 1}</p>
                   <h3 className="font-heading text-lg font-bold text-brand-black">{tier.name}</h3>
-                  <p className="text-sm text-brand-silver">{tier.codes}</p>
+                  <p className="text-sm text-brand-gray">{tier.codes}</p>
                   {tier.inProgram && (
                     <span className="font-heading border border-brand-red px-2 py-0.5 text-xs font-bold tracking-wide text-brand-red">
                       IN THIS DIPLOMA
                     </span>
                   )}
                 </div>
-                <p className="mt-3 text-sm text-brand-silver">{tier.detail}</p>
+                <p className="mt-3 text-sm text-brand-gray">{tier.detail}</p>
                 <a
                   href={tier.url}
                   target="_blank"
@@ -203,7 +204,7 @@ export default function CredentialsPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.glossaryTitle}</h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.glossaryBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.glossaryBody}</p>
           {CREDENTIAL_FAMILIES.map((family) => {
             const inFamily = CREDENTIALS.filter((c) => c.family === family);
             if (!inFamily.length) return null;
@@ -218,7 +219,7 @@ export default function CredentialsPage() {
                     <h3 className="font-heading text-xl font-bold text-brand-black">
                       Micro-credentials included in Specialist Certification
                     </h3>
-                    <p className="mt-3 max-w-3xl text-brand-silver">
+                    <p className="mt-3 max-w-3xl text-brand-gray">
                       Each credential below is a separate SACA exam. Passing the required core set
                       for a track earns the Specialist certification — see &quot;How SACA
                       credentials stack&quot; above. (The FANUC credential further down is issued
@@ -238,15 +239,15 @@ export default function CredentialsPage() {
                         id={credential.code.toLowerCase()}
                         className="scroll-mt-40 sm:scroll-mt-56 border border-brand-silver/40 p-6"
                       >
-                        <p className="font-display text-sm text-brand-gold">
+                        <p className="font-display text-sm text-brand-red">
                           {credential.code.startsWith("C-") ? `SACA ${credential.code}` : credential.code}
                         </p>
                         <h4 className="font-heading mt-1 text-lg font-bold text-brand-black">
                           {credential.title ?? credential.code}
                         </h4>
-                        <p className="mt-3 text-brand-silver">{credential.description}</p>
+                        <p className="mt-3 text-brand-gray">{credential.description}</p>
                         {courses.length > 0 && (
-                          <p className="mt-4 text-sm text-brand-silver">
+                          <p className="mt-4 text-sm text-brand-gray">
                             <span className="font-heading font-bold text-brand-black">
                               Earned in:{" "}
                             </span>

@@ -7,6 +7,9 @@ import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
 
 export const metadata: Metadata = {
   title: "News | GTCIO",
+  description:
+    "Press releases and media coverage of the Georgia Training Center for Industrial Operations, a division of Ogeechee Technical College.",
+  alternates: { canonical: "/news" },
 };
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
@@ -56,7 +59,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
             )}
             <div className="min-w-0 flex-1">
               {meta && (
-                <p className="font-heading text-xs font-bold uppercase tracking-widest text-brand-silver">
+                <p className="font-heading text-xs font-bold uppercase tracking-widest text-brand-gray">
                   {meta}
                 </p>
               )}
@@ -74,7 +77,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
                   item.title
                 )}
               </h3>
-              {item.excerpt && <p className="mt-2 max-w-3xl text-brand-silver">{item.excerpt}</p>}
+              {item.excerpt && <p className="mt-2 max-w-3xl text-brand-gray">{item.excerpt}</p>}
               {url && (
                 <a
                   href={url}
@@ -82,7 +85,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
                   rel="noopener noreferrer"
                   className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
                 >
-                  Read more →
+                  Read more<span className="sr-only">: {item.title}</span> →
                 </a>
               )}
             </div>
@@ -134,7 +137,7 @@ export default function NewsPage() {
           </p>
 
           {items.length === 0 ? (
-            <div className="font-heading mt-10 border border-dashed border-brand-silver/60 px-6 py-16 text-center text-sm font-bold tracking-wide text-brand-silver">
+            <div className="font-heading mt-10 border border-dashed border-brand-silver/60 px-6 py-16 text-center text-sm font-bold tracking-wide text-brand-gray">
               PRESS &amp; MEDIA ITEMS COMING SOON
             </div>
           ) : (

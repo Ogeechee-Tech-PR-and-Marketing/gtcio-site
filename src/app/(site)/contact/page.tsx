@@ -4,6 +4,9 @@ import InquiryForm from "@/components/InquiryForm";
 
 export const metadata: Metadata = {
   title: "Contact | GTCIO",
+  description:
+    "Contact GTCIO at Ogeechee Technical College: program questions, employer training, partnerships, and media inquiries.",
+  alternates: { canonical: "/contact" },
 };
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
@@ -42,7 +45,7 @@ export default function ContactPage() {
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2">
           <div>
             <h2 className="font-heading text-xl font-bold text-brand-black">GTCIO</h2>
-            <p className="mt-1 text-brand-silver">A Division of Ogeechee Technical College</p>
+            <p className="mt-1 text-brand-gray">A Division of Ogeechee Technical College</p>
             <div className="mt-6 flex flex-col gap-2 text-brand-black">
               <p>66 AJ Riggs Road, Statesboro, GA 30458</p>
               <p>Phone: (800) 646-1316</p>

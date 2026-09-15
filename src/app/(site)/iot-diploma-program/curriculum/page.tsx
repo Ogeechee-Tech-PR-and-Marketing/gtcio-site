@@ -16,6 +16,7 @@ import { DESTINATIONS } from "@/lib/links";
 export const metadata: Metadata = {
   title: "Courses & Credit Hours | IOT Diploma Program | GTCIO",
   description: `Every course in Ogeechee Tech's Industrial Operations Technology diploma — ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and the SACA credential each program course prepares you for.`,
+  alternates: { canonical: "/iot-diploma-program/curriculum" },
 };
 
 /**
@@ -64,7 +65,7 @@ export default function CurriculumPage() {
             ].map((stat) => (
               <div key={stat.label} className="border border-brand-silver/40 p-6">
                 <p className="font-display text-4xl text-brand-red">{stat.value}</p>
-                <p className="font-heading mt-2 text-sm font-bold tracking-wide text-brand-silver">
+                <p className="font-heading mt-2 text-sm font-bold tracking-wide text-brand-gray">
                   {stat.label}
                 </p>
               </div>
@@ -105,7 +106,7 @@ export default function CurriculumPage() {
                     </td>
                     <td className="py-3 pr-4 text-brand-black">{course.title}</td>
                     <td className="py-3 pr-4 text-right tabular-nums text-brand-black">{course.credits}</td>
-                    <td className="py-3 text-sm text-brand-silver">
+                    <td className="py-3 text-sm text-brand-gray">
                       {course.credentials.length
                         ? course.credentials
                             .map((code) => (code.startsWith("C-") ? `SACA ${code}` : code))
@@ -127,7 +128,7 @@ export default function CurriculumPage() {
             </table>
           </div>
 
-          <p className="mt-6 max-w-3xl text-sm text-brand-silver">
+          <p className="mt-6 max-w-3xl text-sm text-brand-gray">
             Credential codes beginning with <span className="font-bold">C-</span> are issued by
             the Smart Automation Certification Alliance (SACA).{" "}
             <Link href={DESTINATIONS.certifications} className="font-bold text-brand-red underline hover:text-brand-black">
@@ -201,14 +202,14 @@ export default function CurriculumPage() {
                 id={course.code.replace(/\s+/g, "-").toLowerCase()}
                 className="scroll-mt-40 sm:scroll-mt-56 border-l-4 border-brand-red pl-6"
               >
-                <p className="font-display text-sm text-brand-gold">
+                <p className="font-display text-sm text-brand-red">
                   {course.code} · {course.credits} credit hours
                 </p>
                 <h3 className="font-heading mt-1 text-xl font-bold text-brand-black">
                   {course.title}
                 </h3>
 
-                {course.summary && <p className="mt-3 max-w-3xl text-brand-silver">{course.summary}</p>}
+                {course.summary && <p className="mt-3 max-w-3xl text-brand-gray">{course.summary}</p>}
 
                 {course.objectives && (
                   <>
@@ -217,7 +218,7 @@ export default function CurriculumPage() {
                     </p>
                     <ul className="mt-3 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
                       {course.objectives.map((objective) => (
-                        <li key={objective} className="flex gap-2 text-sm text-brand-silver">
+                        <li key={objective} className="flex gap-2 text-sm text-brand-gray">
                           <span aria-hidden className="text-brand-red">&#8250;</span>
                           <span>{objective}</span>
                         </li>
@@ -239,7 +240,7 @@ export default function CurriculumPage() {
                         const label = code.startsWith("C-") ? `SACA ${code}` : code;
                         if (!credential) {
                           return (
-                            <p key={code} className="text-sm text-brand-silver">
+                            <p key={code} className="text-sm text-brand-gray">
                               <span className="font-bold text-brand-black">{label}</span>
                             </p>
                           );
@@ -253,10 +254,10 @@ export default function CurriculumPage() {
                             <p className="font-heading font-bold text-brand-black group-hover:text-brand-red">
                               {label}
                               {credential.title && (
-                                <span className="font-normal text-brand-silver"> — {credential.title}</span>
+                                <span className="font-normal text-brand-gray"> — {credential.title}</span>
                               )}
                             </p>
-                            <p className="mt-1 text-sm text-brand-silver">{credential.description}</p>
+                            <p className="mt-1 text-sm text-brand-gray">{credential.description}</p>
                           </Link>
                         );
                       })}

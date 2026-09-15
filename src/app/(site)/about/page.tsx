@@ -5,6 +5,9 @@ import { safeHref } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "About | GTCIO",
+  description:
+    "Who GTCIO is: the mission, the history of the $27M training center in Statesboro, GA, its advisory board, and answers to common questions.",
+  alternates: { canonical: "/about" },
 };
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
@@ -285,10 +288,10 @@ export default function AboutPage() {
             </p>
           )}
           <p className="mt-6 text-brand-black">{page.missionBody}</p>
-          {page.missionNote && <p className="mt-4 text-sm text-brand-silver">{page.missionNote}</p>}
+          {page.missionNote && <p className="mt-4 text-sm text-brand-gray">{page.missionNote}</p>}
           <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
             <p className="text-lg italic text-brand-black">&ldquo;{page.missionQuote}&rdquo;</p>
-            <p className="mt-3 text-sm text-brand-silver">{page.missionQuoteAttribution}</p>
+            <p className="mt-3 text-sm text-brand-gray">{page.missionQuoteAttribution}</p>
           </blockquote>
         </div>
       </section>
@@ -302,7 +305,7 @@ export default function AboutPage() {
 
           {timeline.length > 0 && <AboutTimeline items={timeline} />}
 
-          {page.historyNote && <p className="mt-8 text-sm text-brand-silver">{page.historyNote}</p>}
+          {page.historyNote && <p className="mt-8 text-sm text-brand-gray">{page.historyNote}</p>}
         </div>
       </section>
 
@@ -313,15 +316,15 @@ export default function AboutPage() {
 
           {boardMembers.length > 0 && (
             <div className="mt-10">
-              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-silver uppercase">
+              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-gray uppercase">
                 Board Members
               </h3>
               <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 {boardMembers.map((member, i) => (
                   <div key={member._key ?? i} className="border-l-4 border-brand-red pl-4">
                     <p className="font-heading font-bold text-brand-black">{member.name}</p>
-                    <p className="text-sm text-brand-silver">{member.title}</p>
-                    <p className="text-sm text-brand-silver">{member.organization}</p>
+                    <p className="text-sm text-brand-gray">{member.title}</p>
+                    <p className="text-sm text-brand-gray">{member.organization}</p>
                   </div>
                 ))}
               </div>
@@ -330,22 +333,22 @@ export default function AboutPage() {
 
           {exOfficioMembers.length > 0 && (
             <div className="mt-10">
-              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-silver uppercase">
+              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-gray uppercase">
                 Ex Officio
               </h3>
               <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 {exOfficioMembers.map((member, i) => (
                   <div key={member._key ?? i} className="border-l-4 border-brand-black pl-4">
                     <p className="font-heading font-bold text-brand-black">{member.name}</p>
-                    <p className="text-sm text-brand-silver">{member.title}</p>
-                    <p className="text-sm text-brand-silver">{member.organization}</p>
+                    <p className="text-sm text-brand-gray">{member.title}</p>
+                    <p className="text-sm text-brand-gray">{member.organization}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {page.advisoryNote && <p className="mt-8 text-sm text-brand-silver">{page.advisoryNote}</p>}
+          {page.advisoryNote && <p className="mt-8 text-sm text-brand-gray">{page.advisoryNote}</p>}
         </div>
       </section>
 
@@ -355,7 +358,7 @@ export default function AboutPage() {
           <p className="mt-4 text-brand-black">{page.bdaBody}</p>
           <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
             <p className="text-lg italic text-brand-black">&ldquo;{page.bdaQuote}&rdquo;</p>
-            <p className="mt-3 text-sm text-brand-silver">{page.bdaQuoteAttribution}</p>
+            <p className="mt-3 text-sm text-brand-gray">{page.bdaQuoteAttribution}</p>
           </blockquote>
           {bdaWebsite && (
             <a
@@ -377,7 +380,7 @@ export default function AboutPage() {
             {faqs.map((item: { question: string; answer: string }, i: number) => (
               <div key={i} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
-                <p className="mt-1 text-brand-silver">{item.answer}</p>
+                <p className="mt-1 text-brand-gray">{item.answer}</p>
               </div>
             ))}
           </div>

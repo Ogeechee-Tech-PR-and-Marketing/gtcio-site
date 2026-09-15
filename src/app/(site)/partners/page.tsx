@@ -9,6 +9,9 @@ import { PARTNERS } from "@/lib/partners";
 
 export const metadata: Metadata = {
   title: "Partners | GTCIO",
+  description:
+    "Partner with GTCIO: hire our graduates, sponsor equipment, or build a training partnership. Tell us how your organization wants to get involved.",
+  alternates: { canonical: "/partners" },
 };
 
 // Anchor id for a partner's directory card below, e.g. "Ajin Georgia" → "ajin-georgia".
@@ -99,7 +102,7 @@ export default function PartnersPage() {
               <div key={i} className="flex flex-col justify-between border border-brand-silver/40 p-6">
                 <div>
                   <h3 className="font-heading text-lg font-bold text-brand-red">{p.title}</h3>
-                  <p className="mt-2 text-sm text-brand-silver">{p.description}</p>
+                  <p className="mt-2 text-sm text-brand-gray">{p.description}</p>
                 </div>
                 <a
                   href="#become-a-partner"
@@ -117,7 +120,7 @@ export default function PartnersPage() {
       <section className="border-b border-brand-silver/30 bg-brand-silver/10 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.directoryTitle}</h2>
-          <p className="mt-3 max-w-2xl text-brand-silver">{page.directoryIntro}</p>
+          <p className="mt-3 max-w-2xl text-brand-gray">{page.directoryIntro}</p>
 
           {/* Logo collage: a clickable wall of every partner's logo, each
               jumping to its full card (logo, description, Learn More) in the
@@ -139,7 +142,7 @@ export default function PartnersPage() {
                     className="object-contain"
                   />
                 </div>
-                <span className="font-ui text-center text-xs font-bold tracking-wide text-brand-silver group-hover:text-brand-red">
+                <span className="font-ui text-center text-xs font-bold tracking-wide text-brand-gray group-hover:text-brand-red">
                   {partner.name}
                 </span>
               </a>
@@ -170,7 +173,7 @@ export default function PartnersPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-heading text-xl font-bold text-brand-black">{partner.name}</h3>
-                    <p className="mt-2 text-brand-silver">{partner.description}</p>
+                    <p className="mt-2 text-brand-gray">{partner.description}</p>
                   </div>
                 </div>
                 {website && (
@@ -196,7 +199,7 @@ export default function PartnersPage() {
       <section id="become-a-partner" className="scroll-mt-40 sm:scroll-mt-56 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.becomePartnerTitle}</h2>
-          <p className="mt-3 text-brand-silver">{page.becomePartnerIntro}</p>
+          <p className="mt-3 text-brand-gray">{page.becomePartnerIntro}</p>
           <div className="mt-8">
             <InquiryForm
               formType="partner"

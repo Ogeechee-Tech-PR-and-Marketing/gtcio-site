@@ -4,7 +4,15 @@ import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
   title: "Facility | GTCIO",
+  description:
+    "GTCIO's $27 million, 39,700-square-foot training center on AJ Riggs Road in Statesboro, GA: 12 industrial labs built around maintenance, robotics, IoT, and CNC.",
+  alternates: { canonical: "/facility" },
 };
+
+// Hides the Equipment Gallery until real photos replace its placeholder tiles.
+// Flip to true (and swap the labels for <Image>s) when photography exists —
+// see PROJECT.md §10.
+const SHOW_EQUIPMENT_GALLERY = false;
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
@@ -74,7 +82,7 @@ export default function FacilityPage() {
           {page.stats.map((stat, i) => (
             <div key={i} className="border-l-4 border-brand-red pl-5">
               <p className="font-heading text-3xl font-bold text-brand-black">{stat.value}</p>
-              <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
+              <p className="mt-1 text-sm text-brand-gray">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -83,7 +91,7 @@ export default function FacilityPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.overviewTitle}</h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.overviewBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.overviewBody}</p>
         </div>
       </section>
 
@@ -104,7 +112,7 @@ export default function FacilityPage() {
                 className="object-cover"
               />
             </div>
-            <figcaption className="mt-3 text-sm text-brand-silver">
+            <figcaption className="mt-3 text-sm text-brand-gray">
               {page.renderingCaption}
             </figcaption>
           </figure>
@@ -115,19 +123,20 @@ export default function FacilityPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.focusAreasTitle}</h2>
           {page.focusAreasIntro && (
-            <p className="mt-3 max-w-3xl text-brand-silver">{page.focusAreasIntro}</p>
+            <p className="mt-3 max-w-3xl text-brand-gray">{page.focusAreasIntro}</p>
           )}
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {page.focusAreas.map((area, i) => (
               <div key={i} className="border-l-4 border-brand-red pl-5">
                 <h3 className="font-heading text-lg font-bold text-brand-black">{area.title}</h3>
-                <p className="mt-1 text-sm text-brand-silver">{area.detail}</p>
+                <p className="mt-1 text-sm text-brand-gray">{area.detail}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {SHOW_EQUIPMENT_GALLERY && (
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.galleryTitle}</h2>
@@ -135,7 +144,7 @@ export default function FacilityPage() {
             {page.galleryLabels.map((label) => (
               <div
                 key={label}
-                className="font-heading flex aspect-square items-center justify-center border border-dashed border-brand-silver/60 text-center text-xs font-bold tracking-wide text-brand-silver"
+                className="font-heading flex aspect-square items-center justify-center border border-dashed border-brand-silver/60 text-center text-xs font-bold tracking-wide text-brand-gray"
               >
                 {label}
                 <br />
@@ -145,6 +154,7 @@ export default function FacilityPage() {
           </div>
         </div>
       </section>
+      )}
     </>
   );
 }

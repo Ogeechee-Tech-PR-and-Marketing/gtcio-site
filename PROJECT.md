@@ -1,6 +1,6 @@
 # GTCIO website — project brief
 
-What a developer needs to pick this project up cold. Last updated 2026-08-27.
+What a developer needs to pick this project up cold. Last updated 2026-09-15.
 Check claims against the code before trusting them.
 
 > The long-form history behind this file (dated decisions, resolved defects,
@@ -50,7 +50,7 @@ redesign it without being asked.
 ## 3. Layout of the code
 
 ```
-src/middleware.ts         site-wide PIN gate (§6)
+src/proxy.ts              canonical-host redirect + site-wide PIN gate (§6)
 src/app/
   layout.tsx              root: <html>/<body> only, no chrome
   site-pin/               /site-pin — PIN entry screen (outside (site): no Header/Footer)
@@ -72,7 +72,9 @@ src/app/
     constant-contact/oauth/{start,callback}/   one-time OAuth grant (§8)
 src/lib/
   site.ts                 SITE_URL — the canonical origin
-  site-pin.ts             cookie name shared by middleware + api/site-pin
+  site-pin.ts             cookie name + safeNextPath() shared by proxy, api/site-pin, site-pin page
+  rateLimit.ts            per-IP fixed-window limiter on the POST routes, KV-backed, fails open (§5)
+  inquiryStore.ts         KV list of form submissions the email couldn't carry (§5)
   links.ts                DESTINATIONS: button destination keys → hrefs, plus
                           safeHref/resolveHref/isExternal. If a route moves,
                           change it here and every button follows.
@@ -123,8 +125,10 @@ Two live forms — **Become a Partner** (Partners) and **Contact** — render
 through `InquiryForm.tsx` and POST JSON to `src/app/api/inquiry/route.ts`,
 which:
 
-1. Rejects oversized payloads (>20 KB) and drops bots via a `botcheck`
-   honeypot (returns fake success so they don't retry).
+1. Rejects oversized payloads (>20 KB), rate-limits to 5 submissions per IP
+   per 10 minutes (`rateLimit.ts` — KV-backed, fails open if KV is down),
+   and drops bots via a `botcheck` honeypot (returns fake success so they
+   don't retry).
 2. Validates form type + email, caps field lengths, strips control characters
    from anything that reaches an email header.
 3. If Contact's newsletter checkbox is checked, adds the submitter to
@@ -132,9 +136,13 @@ which:
 4. Emails staff via Microsoft Graph `sendMail`, subject built from the chosen
    reason(s), Reply-To set to the submitter.
 
-**🔴 The email is the only record of a submission.** If Graph delivery fails
-(or isn't configured — see §9), the route returns 500 and the inquiry is
-gone. There is no inbox, queue, or database behind it.
+**The email is the primary record of a submission.** If Graph delivery fails
+(or isn't configured — see §9), the route parks the full inquiry on a capped
+Redis list in the KV store (`inquiryStore.ts`, key `inquiries:undelivered`)
+and still shows the visitor a success message. **Someone must collect those:**
+`npx vercel env pull .env.local && npm run inquiries` prints them, newest
+first. Delivered inquiries are not stored. Only if KV is also unavailable
+does the visitor see a 500 with Jan's address to email directly.
 
 Recipients are fixed constants in the route file: `NOTIFY_EMAIL`
 (jmoore@ogeecheetech.edu — everything) and `NOTIFY_EMAIL_MEDIA`
@@ -187,20 +195,35 @@ KV_REST_API_URL / KV_REST_API_TOKEN     auto-injected by the Upstash store (§8)
 SITE_ACCESS_PIN                          optional site gate; unset = off
 ```
 
-**Site-wide PIN gate** (`src/middleware.ts`): if `SITE_ACCESS_PIN` is set,
+**Canonical host** (`src/proxy.ts`): when `VERCEL_ENV=production`, any request
+whose `Host` isn't `www.gtcio.org` (i.e. `gtcio-site.vercel.app`) is 308'd to
+the canonical URL. Preview deployments are unaffected. Every page also emits a
+`<link rel="canonical">` and per-page description/Open Graph tags.
+
+**Site-wide PIN gate** (same file): if `SITE_ACCESS_PIN` is set,
 visitors without the cookie are redirected to `/site-pin`; a correct entry
 sets a 30-day httpOnly cookie. A shared-PIN deterrent, **not** auth — no rate
 limiting, PIN stored plaintext in the holder's own cookie. **Unset = fails
 open** (site fully public), deliberately, so a missing env var can't lock
 everyone out. Bypassed: `/site-pin`, its API, the Constant Contact OAuth
-callback, and all static assets.
+callback, and all static assets. The post-PIN `next` path goes through
+`safeNextPath()`, which rejects `//host` and `/\host` forms (both resolve to
+a foreign origin under WHATWG URL parsing) — keep using it.
+
+**To launch:** remove `SITE_ACCESS_PIN` from Vercel (Production + Preview)
+and redeploy — `npx vercel env rm SITE_ACCESS_PIN production` then
+`npx vercel redeploy --prod` (or push any commit).
 
 **`next.config.ts`:**
 
-- Security headers on every route: `X-Frame-Options: DENY`,
-  `frame-ancestors 'none'`, `nosniff`, Referrer-Policy, Permissions-Policy,
-  a baseline CSP (`object-src 'none'; base-uri 'self'` — deliberately not a
-  full `default-src`, which Adobe Fonts would make fragile), HSTS.
+- Security headers on every route: `X-Frame-Options: DENY`, `nosniff`,
+  Referrer-Policy, Permissions-Policy, HSTS, and a full CSP
+  (`default-src 'self'` plus the two Adobe Fonts hosts; `'unsafe-inline'` on
+  script/style is required by Next's hydration payload and React inline
+  styles — nonces would force every page dynamic). Adding any new third
+  party (analytics, embeds, a YouTube iframe) means adding its origin to the
+  CSP in `next.config.ts` or it is silently blocked. Dev gets
+  `'unsafe-eval'`; preview deployments get `vercel.live` for the toolbar.
 - ⚠️ **`public/videos|images|documents` are served immutable, cached one
   year. Never change one of those files in place** — rename it (bump a
   version suffix) and update references, or prior visitors see the stale
@@ -224,6 +247,7 @@ Real OTC brand assets. Don't substitute a generic palette.
 | `brand-red` | `#C4122F` (primary) |
 | `brand-black` / `brand-white` | `#000000` / `#FFFFFF` |
 | `brand-silver` | `#898B8E` |
+| `brand-gray` | `#6B6D70` — **text on light backgrounds only.** Brand silver is 3.4:1 on white, under WCAG AA's 4.5:1; this darker tint of it reads 5.2:1 on white and 4.7:1 on the lightest tinted cards. Silver stays for rules, borders, and text on black (6:1). Gold is never used as text on a light background (1.7:1). |
 | `brand-teal` | `#007586` (accent) |
 | `brand-gold` | `#F5BD16` (accent) |
 
@@ -293,11 +317,16 @@ the same URL.
 
 ## 9. Open work
 
-- **🔴 Microsoft Graph is not configured — form submissions are currently
-  LOST.** None of the four `MS_GRAPH_*` vars are set in Vercel, and there is
-  no fallback record (§5). Every Partner/Contact submission disappears until
-  an OTC tenant admin completes §5's setup. Urgent, and email delivery has
-  never been tested end-to-end.
+- **🔴 Microsoft Graph is not configured — no notification emails go out.**
+  None of the four `MS_GRAPH_*` vars are set in Vercel. Since 2026-09-15
+  submissions are parked in KV instead of lost (§5), but nobody is notified —
+  **run `npm run inquiries` daily until an OTC tenant admin completes §5's
+  setup.** Email delivery has never been tested end-to-end.
+- **Launch checklist:** remove `SITE_ACCESS_PIN` (§6) · confirm
+  `https://gtcio-site.vercel.app/` 308s to www · submit each form once and
+  confirm it lands (email or `npm run inquiries`) · run
+  `curl -sI https://www.gtcio.org | grep -i content-security` and load every
+  page with DevTools open to catch CSP violations.
 - **Constant Contact token store restored 2026-09-14.** The first Upstash
   store (`upstash-kv-citrine-lamp`) was uninstalled but its `KV_*` vars stayed
   in Vercel pointing at a dead host, so signups failed silently. Replaced by
@@ -323,9 +352,9 @@ the same URL.
   confirms, it's a strong recruiting line (see `SACA_TIERS` comment).
 - **Facility photo gallery** shows placeholders until real photos exist
   (gallery array in `facility/page.tsx`).
-- **No rate limiting** on `/api/inquiry` or `/api/newsletter` — honeypots and
-  payload caps only. If spam appears, add a Vercel WAF rate-limit rule
-  (available on Hobby) before reaching for CAPTCHAs.
+- **Rate limiting** on `/api/inquiry` and `/api/newsletter` is 5/IP/10 min
+  via KV (`rateLimit.ts`); it fails open if KV is down. If spam still
+  appears, add a Vercel WAF rule before reaching for CAPTCHAs.
 - If Vercel's Git connection is ever disconnected/reconnected, re-check the
   project's `deployHooks` afterward — reconnecting has silently dropped them
   before.
@@ -341,6 +370,10 @@ the same URL.
   partner cards) is hidden** — `SHOW_PARTNER_DIRECTORY = false` in
   `partners/page.tsx`. Flip to `true` to restore; all data is still in
   `partners.ts`. No return date set.
+- **The Facility page's Equipment Gallery is hidden** (2026-09-15) —
+  `SHOW_EQUIPMENT_GALLERY = false` in `facility/page.tsx`. It only ever
+  showed four "PHOTO PLACEHOLDER" tiles. Flip to `true` once the labels are
+  replaced with real `<Image>`s.
 
 ## 11. Standing content rules
 
@@ -388,6 +421,12 @@ directly; don't relitigate them in new copy.
   context. Excerpts avoid restating stale numbers.
 - **Credentials require passing the SACA exam** — completing a course alone
   does not award one, and the site says so explicitly. Don't soften that.
+- **Accessibility floor is WCAG 2.1 AA** (OTC is a public college; ADA Title
+  II applies). Body text on white uses `text-brand-gray`, not
+  `text-brand-silver`; no gold text on light backgrounds; every hero video has
+  the pause control `HeroVideo.tsx` provides; keep the skip link, `aria-current`
+  nav, and `role="alert"` on form errors. Check new pages with axe before
+  shipping.
 - **The section directly under any PageHero must stay light.** A dark band
   there makes the hero photo read as fading to black early — a real
   stakeholder complaint, fixed once already. Follow the hero → white-section
@@ -413,6 +452,7 @@ npm run dev                # dev server (localhost:3000)
 npm run build              # production build
 npx tsc --noEmit           # typecheck
 npx eslint .               # lint
+npm run inquiries          # print form submissions parked in KV (§5)
 
 # Exercise the form endpoint without a browser:
 curl -s -X POST http://localhost:3000/api/inquiry \
@@ -430,7 +470,7 @@ project to a Pro team, or push-to-deploy stops working again.)
 
 | Service | Identifier | Owner | Used for |
 | --- | --- | --- | --- |
-| GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (private) | OTC PR & Marketing org (Jake Hallman: admin) | Source of truth; push to `main` deploys |
+| GitHub | `Ogeechee-Tech-PR-and-Marketing/gtcio-site` (**public**, §12) | OTC PR & Marketing org (Jake Hallman: admin) | Source of truth; push to `main` deploys |
 | Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — expected to move with the Third Wave Digital handoff | Hosting, env vars, function logs |
 | Upstash for Redis (Vercel Marketplace) | `upstash-kv-coffee-yacht` | Jake | Constant Contact token store (§8) |
 | Adobe Fonts | web project kit `jok5hww` | OTC Creative Cloud licence | Trade Gothic Next (§7 — settings live in Adobe's dashboard) |

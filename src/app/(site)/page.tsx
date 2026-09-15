@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import CtaButton from "@/components/CtaButton";
 import HeroCard from "@/components/HeroCard";
+import HeroVideo from "@/components/HeroVideo";
 import type { CtaButton as CtaButtonData } from "@/lib/links";
+
+// Title/description come from the root layout; the home page only needs its
+// own canonical URL so the *.vercel.app alias never competes with www.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
@@ -51,16 +59,10 @@ export default function Home() {
       <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
         {/* No CMS hero photo override anymore — the banner always plays the
             looping construction video. */}
-        <video
+        <HeroVideo
           src="/videos/hero-construction-7.mp4"
           poster="/images/hero-construction-poster-6.jpg"
-          autoPlay
-          loop
-          muted
-          playsInline
           preload="auto"
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="relative mx-auto max-w-7xl">
           {/*
@@ -117,14 +119,14 @@ export default function Home() {
       <section className="px-6 py-20 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.sectionTitle}</h2>
-          <p className="mt-4 max-w-3xl text-brand-silver">{page.sectionBody}</p>
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.sectionBody}</p>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {pathways.map((p, i) => (
               <div key={i} className="flex flex-col justify-between border border-brand-silver/40 p-6">
                 <div>
                   <h3 className="font-heading text-xl font-bold text-brand-black">{p.title}</h3>
-                  <p className="mt-2 text-sm text-brand-silver">{p.description}</p>
+                  <p className="mt-2 text-sm text-brand-gray">{p.description}</p>
                 </div>
                 <Link
                   href={p.href}

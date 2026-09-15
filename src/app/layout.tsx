@@ -2,11 +2,30 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
+const DESCRIPTION =
+  "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology: maintenance, automation, and controls. A division of Ogeechee Technical College.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "GTCIO | Georgia Training Center for Industrial Operations",
-  description:
-    "GTCIO trains Georgia's workforce for careers in Industrial Operations Technology: maintenance, automation, and controls. A division of Ogeechee Technical College.",
+  description: DESCRIPTION,
+  // Link previews (LinkedIn, Facebook, iMessage, Slack…). Title and
+  // description are left out so each page's own resolve into og:title /
+  // og:description; the image is the one thing every page shares.
+  openGraph: {
+    type: "website",
+    siteName: "GTCIO",
+    locale: "en_US",
+    images: [
+      {
+        url: "/images/facility-rendering.jpg",
+        width: 2400,
+        height: 1350,
+        alt: "Architectural rendering of the GTCIO facility on AJ Riggs Road, Statesboro, Georgia",
+      },
+    ],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
