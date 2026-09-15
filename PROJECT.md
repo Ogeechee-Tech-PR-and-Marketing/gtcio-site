@@ -38,7 +38,7 @@ redesign it without being asked.
 | Framework | Next.js **16.2.10**, App Router, Turbopack |
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
-| Email | Microsoft Graph / Azure AD app (§5) |
+| Email | Resend (Vercel Marketplace) — Microsoft Graph kept as the alternate provider (§5) |
 | Fonts | Adobe Fonts — Trade Gothic Next (§7) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
 | Deploys | **Auto-deploy on push to `main`** — requires the repo stay **public** on the Hobby plan (§12). |
@@ -86,7 +86,9 @@ src/lib/
                           /credentials and /training via a showOn tag (§4)
   constantContact.ts      newsletter API client, server-only (§8)
   constantContactStore.ts Vercel KV wrapper for the OAuth tokens (§8)
-  graphMail.ts            Microsoft Graph sendMail client (§5)
+  mail.ts                 picks the email provider: Resend, then Graph, else none (§5)
+  resendMail.ts           Resend REST client — sends as website@gtcio.org (§5)
+  graphMail.ts            Microsoft Graph sendMail client — alternate provider (§5)
 src/components/           Header, Footer, PageHero, HeroCard, InquiryForm,
                           NewsletterSignup, Button/CtaButton, AboutTimeline, …
 ```
@@ -133,10 +135,12 @@ which:
    from anything that reaches an email header.
 3. If Contact's newsletter checkbox is checked, adds the submitter to
    Constant Contact (best-effort; a failure is logged, never surfaced).
-4. Emails staff via Microsoft Graph `sendMail`, subject built from the chosen
-   reason(s), Reply-To set to the submitter.
+4. Emails staff through `src/lib/mail.ts`, which uses the first configured
+   provider — **Resend** (`RESEND_API_KEY`) or Microsoft Graph (`MS_GRAPH_*`).
+   Subject is built from the chosen reason(s); Reply-To is the submitter, so
+   staff just hit Reply.
 
-**The email is the primary record of a submission.** If Graph delivery fails
+**The email is the primary record of a submission.** If delivery fails
 (or isn't configured — see §9), the route parks the full inquiry on a capped
 Redis list in the KV store (`inquiryStore.ts`, key `inquiries:undelivered`)
 and still shows the visitor a success message. **Someone must collect those:**
@@ -159,9 +163,28 @@ the pathway cards on purpose. Don't "fix" the mismatch. Contact's dropdown is
 A third form type, `tour`, is fully supported by the route and `InquiryForm`
 but has no UI — see Book a Tour in §10.
 
-### Microsoft Graph one-time setup (still not done — see §9)
+### Resend setup (the live provider)
 
-Needs an OTC Microsoft 365 tenant admin:
+Installed 2026-09-15 as the way around the Graph dependency below. Sends as
+`GTCIO Website <website@gtcio.org>` (override with `MAIL_FROM`), free tier
+(3,000/month). No OTC admin involved.
+
+1. Vercel → gtcio-site → Integrations → Marketplace → **Resend** → install on
+   this project. Vercel injects `RESEND_API_KEY` (all environments) and
+   redeploys.
+2. Resend dashboard → Domains → add `gtcio.org` → add the DNS records it
+   lists (DKIM TXT + the bounce subdomain's MX/TXT) at GoDaddy → wait for
+   "Verified". Until then every send 403s and submissions fall back to KV.
+3. Test both forms once; Jan's first message may land in Junk until
+   Microsoft 365 has seen the DKIM signature once.
+
+Reconnect/rotate: Resend dashboard → API Keys. The Vercel integration owns
+the key; removing the integration removes the var and the route falls back
+to KV silently — check `npm run inquiries` after any change here.
+
+### Microsoft Graph one-time setup (alternate provider — not done)
+
+Only used if `RESEND_API_KEY` is absent. Needs an OTC Microsoft 365 tenant admin:
 
 1. Pick a sending mailbox (a shared one like gtcio-website@ogeecheetech.edu
    survives staff turnover) → `MS_GRAPH_SENDER_EMAIL`.
@@ -189,7 +212,8 @@ isn't a real mailbox.
 of them:
 
 ```
-MS_GRAPH_TENANT_ID / _CLIENT_ID / _CLIENT_SECRET / _SENDER_EMAIL   (§5)
+RESEND_API_KEY / MAIL_FROM (optional)                              (§5)
+MS_GRAPH_TENANT_ID / _CLIENT_ID / _CLIENT_SECRET / _SENDER_EMAIL   (§5, alternate)
 CONSTANT_CONTACT_CLIENT_ID / _CLIENT_SECRET / _SETUP_SECRET        (§8)
 KV_REST_API_URL / KV_REST_API_TOKEN     auto-injected by the Upstash store (§8)
 SITE_ACCESS_PIN                          optional site gate; unset = off
@@ -317,11 +341,11 @@ the same URL.
 
 ## 9. Open work
 
-- **🔴 Microsoft Graph is not configured — no notification emails go out.**
-  None of the four `MS_GRAPH_*` vars are set in Vercel. Since 2026-09-15
-  submissions are parked in KV instead of lost (§5), but nobody is notified —
-  **run `npm run inquiries` daily until an OTC tenant admin completes §5's
-  setup.** Email delivery has never been tested end-to-end.
+- **🔴 Form email: Resend is wired in code but the integration/domain step
+  (§5) is in progress as of 2026-09-15.** Until `RESEND_API_KEY` exists AND
+  gtcio.org shows Verified in Resend, submissions park in KV — run
+  `npm run inquiries` daily. Once it works end-to-end, delete this item.
+  Graph remains available as the alternate if OTC ever registers the app.
 - **Launch checklist:** remove `SITE_ACCESS_PIN` (§6) · confirm
   `https://gtcio-site.vercel.app/` 308s to www · submit each form once and
   confirm it lands (email or `npm run inquiries`) · run
@@ -474,7 +498,8 @@ project to a Pro team, or push-to-deploy stops working again.)
 | Vercel | `jake-hallmans-projects/gtcio-site` | Jake Hallman — expected to move with the Third Wave Digital handoff | Hosting, env vars, function logs |
 | Upstash for Redis (Vercel Marketplace) | `upstash-kv-coffee-yacht` | Jake | Constant Contact token store (§8) |
 | Adobe Fonts | web project kit `jok5hww` | OTC Creative Cloud licence | Trade Gothic Next (§7 — settings live in Adobe's dashboard) |
-| Microsoft Graph | Azure AD app — not yet registered (§5, §9) | OTC Microsoft 365 tenant | Form notification email |
+| Resend (Vercel Marketplace) | domain `gtcio.org` | Jake — moves with the Vercel project | Form notification email (§5) |
+| Microsoft Graph | Azure AD app — not registered (§5) | OTC Microsoft 365 tenant | Alternate email provider, unused |
 | Constant Contact | Custom App at developer.constantcontact.com | OTC/GTCIO Constant Contact account | Newsletter list (§8) |
 
 (A dormant Sanity project, `kjz4q8d4`, holds the pre-removal CMS content as a

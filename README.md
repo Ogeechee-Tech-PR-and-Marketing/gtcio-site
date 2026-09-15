@@ -49,7 +49,7 @@ there's no CMS-publish rebuild path anymore. Hosting is expected to move as
 part of the Third Wave Digital handoff (PROJECT.md §1, §13); there is no
 OTC self-hosting plan.
 
-⚠️ **Microsoft Graph credentials are not configured** (PROJECT.md §5/§9), so
-form submissions are parked in the KV store instead of emailed — run
-`npm run inquiries` to read them until an OTC tenant admin finishes the Azure
-setup. The newsletter's Constant Contact integration is connected (§8).
+⚠️ **Form email runs through Resend** (PROJECT.md §5). Until the Vercel
+integration is installed and `gtcio.org` is verified in Resend, submissions
+are parked in the KV store instead — run `npm run inquiries` to read them.
+The newsletter's Constant Contact integration is connected (§8).
