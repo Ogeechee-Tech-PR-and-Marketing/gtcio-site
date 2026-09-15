@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addNewsletterSignup } from "@/lib/constantContact";
+import { clientIp, rateLimit } from "@/lib/rateLimit";
 
 type Payload = {
   firstName?: string;
@@ -11,6 +12,7 @@ type Payload = {
 const MAX_EMAIL = 254; // RFC 5321 upper bound
 const MAX_NAME = 100;
 const MAX_BODY_BYTES = 5_000; // three short fields; same guard as /api/inquiry
+const RATE_LIMIT = { limit: 5, windowSeconds: 10 * 60 }; // per IP
 
 // Matches api/inquiry/route.ts's clean(): strip control characters, trim, cap
 // length. Built via `new RegExp` (not a /.../ literal) so the \u escapes stay
@@ -26,6 +28,13 @@ export async function POST(request: Request) {
   const contentLength = Number(request.headers.get("content-length") ?? 0);
   if (contentLength > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Request too large." }, { status: 413 });
+  }
+
+  if (!(await rateLimit({ key: "newsletter", ip: clientIp(request), ...RATE_LIMIT }))) {
+    return NextResponse.json(
+      { error: "Too many sign-up attempts. Please try again in a few minutes." },
+      { status: 429 }
+    );
   }
 
   let body: Payload;

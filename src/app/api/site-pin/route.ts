@@ -1,17 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SITE_PIN_COOKIE } from "@/lib/site-pin";
+import { SITE_PIN_COOKIE, safeNextPath } from "@/lib/site-pin";
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
-
-function safeNext(next: string | null): string {
-  if (next && next.startsWith("/") && !next.startsWith("//")) return next;
-  return "/";
-}
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const submitted = String(formData.get("pin") ?? "").trim();
-  const next = safeNext(String(formData.get("next") ?? ""));
+  const next = safeNextPath(String(formData.get("next") ?? ""));
   const pin = process.env.SITE_ACCESS_PIN;
 
   if (!pin || submitted !== pin) {

@@ -1,5 +1,37 @@
 import type { NextConfig } from "next";
 
+// Content-Security-Policy. The site renders no user-authored HTML and loads
+// exactly one third party — Adobe Fonts (use.typekit.net for the CSS + font
+// files, p.typekit.net for its usage beacon). Everything else is same-origin.
+//
+// 'unsafe-inline' is unavoidable for both scripts and styles without moving
+// to per-request nonces, which would force every page to render dynamically
+// (Next's hydration payload is an inline script; React inline `style={}`
+// attributes are inline styles). The policy still blocks foreign script
+// hosts, framing, plugins, form exfiltration and any connection or image
+// from an unlisted origin.
+//
+// Dev needs 'unsafe-eval' (Turbopack source maps); preview deployments need
+// vercel.live for the Vercel toolbar. Both are added only in that
+// environment so production stays strict.
+const isDev = process.env.NODE_ENV === "development";
+const isPreview = process.env.VERCEL_ENV === "preview";
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}${isPreview ? " https://vercel.live" : ""}`,
+  "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
+  "font-src 'self' data: https://use.typekit.net",
+  "img-src 'self' data: blob: https://p.typekit.net",
+  "media-src 'self'",
+  `connect-src 'self' https://use.typekit.net https://p.typekit.net${isPreview ? " https://vercel.live wss://ws-us3.pusher.com" : ""}`,
+  `frame-src ${isPreview ? "https://vercel.live" : "'none'"}`,
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+].join("; ");
+
 const nextConfig: NextConfig = {
   async redirects() {
     return [
@@ -20,15 +52,7 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: [
           { key: "X-Frame-Options", value: "DENY" },
-          // Baseline CSP (added 2026-07-21). Deliberately NOT a full
-          // default-src policy: Adobe Fonts' script/connect needs make a
-          // strict script/connect policy fragile, and the site renders no
-          // user-authored HTML. object-src and base-uri close off legacy
-          // injection vectors.
-          {
-            key: "Content-Security-Policy",
-            value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
-          },
+          { key: "Content-Security-Policy", value: csp },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
