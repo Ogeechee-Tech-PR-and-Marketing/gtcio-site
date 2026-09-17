@@ -9,8 +9,8 @@ type FormType = (typeof FORM_TYPES)[number];
 
 type Payload = {
   formType?: string;
-  // The Contact form's reason checkboxes submit an array (one or more can be
-  // checked); the Partner form's reason dropdown submits a single string.
+  // The Partner form's reason checkboxes submit an array (one or more can be
+  // checked); the Contact form's reason dropdown submits a single string.
   reason?: string | string[];
   firstName?: string;
   lastName?: string;
@@ -24,9 +24,8 @@ type Payload = {
   botcheck?: string;
 };
 
-// Fixed recipients — no per-request "to" field is needed the way Web3Forms
-// needed a separate access key per address, since Microsoft Graph's sendMail
-// takes an arbitrary recipient on every call from one shared credential.
+// Fixed recipients. Every provider in src/lib/mail.ts sends to any address
+// from one credential, so there's no per-recipient config.
 const NOTIFY_EMAIL = "jmoore@ogeecheetech.edu"; // general inquiries — Jan Moore
 const NOTIFY_EMAIL_MEDIA = "spayne@ogeecheetech.edu"; // media inquiries — Sean Payne
 

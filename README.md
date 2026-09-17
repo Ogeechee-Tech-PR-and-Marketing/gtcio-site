@@ -49,7 +49,10 @@ there's no CMS-publish rebuild path anymore. Hosting is expected to move as
 part of the Third Wave Digital handoff (PROJECT.md §1, §13); there is no
 OTC self-hosting plan.
 
-⚠️ **Form email runs through Resend** (PROJECT.md §5). Until the Vercel
-integration is installed and `gtcio.org` is verified in Resend, submissions
-are parked in the KV store instead — run `npm run inquiries` to read them.
-The newsletter's Constant Contact integration is connected (§8).
+⚠️ **Form email runs through Resend, for now** (PROJECT.md §5) — an interim
+provider, installed via the Vercel Marketplace and sending as
+`website@gtcio.org`. The key only exists on Vercel (Production + Preview), so
+local dev can't send; test on a preview deploy with `NOTIFY_EMAIL_OVERRIDE`.
+Any submission that can't be emailed is parked in the KV store — run
+`npm run inquiries` to read them. The newsletter's Constant Contact
+integration is connected (§8).

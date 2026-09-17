@@ -1,6 +1,6 @@
 # GTCIO website — project brief
 
-What a developer needs to pick this project up cold. Last updated 2026-09-15.
+What a developer needs to pick this project up cold. Last updated 2026-09-17.
 Check claims against the code before trusting them.
 
 > The long-form history behind this file (dated decisions, resolved defects,
@@ -35,10 +35,10 @@ redesign it without being asked.
 
 | | |
 | --- | --- |
-| Framework | Next.js **16.2.10**, App Router, Turbopack |
+| Framework | Next.js **16.3.5**, App Router, Turbopack |
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
-| Email | Resend (Vercel Marketplace) — Microsoft Graph kept as the alternate provider (§5) |
+| Email | Resend (Vercel Marketplace) — **interim**; Microsoft Graph wired up as the alternate provider (§5) |
 | Fonts | Adobe Fonts — Trade Gothic Next (§7) |
 | Hosting | Vercel — project `jake-hallmans-projects/gtcio-site` |
 | Deploys | **Auto-deploy on push to `main`** — requires the repo stay **public** on the Hobby plan (§12). |
@@ -87,7 +87,7 @@ src/lib/
   constantContact.ts      newsletter API client, server-only (§8)
   constantContactStore.ts Vercel KV wrapper for the OAuth tokens (§8)
   mail.ts                 picks the email provider: Resend, then Graph, else none (§5)
-  resendMail.ts           Resend REST client — sends as website@gtcio.org (§5)
+  resendMail.ts           Resend REST client — sends as website@gtcio.org, the live provider for now (§5)
   graphMail.ts            Microsoft Graph sendMail client — alternate provider (§5)
 src/components/           Header, Footer, PageHero, HeroCard, InquiryForm,
                           NewsletterSignup, Button/CtaButton, AboutTimeline, …
@@ -138,10 +138,11 @@ which:
 4. Emails staff through `src/lib/mail.ts`, which uses the first configured
    provider — **Resend** (`RESEND_API_KEY`) or Microsoft Graph (`MS_GRAPH_*`).
    Subject is built from the chosen reason(s); Reply-To is the submitter, so
-   staff just hit Reply.
+   staff just hit Reply. A Contact submission with "Media inquiry" goes to
+   Sean; everything else goes to Jan.
 
 **The email is the primary record of a submission.** If delivery fails
-(or isn't configured — see §9), the route parks the full inquiry on a capped
+(or no provider is configured), the route parks the full inquiry on a capped
 Redis list in the KV store (`inquiryStore.ts`, key `inquiries:undelivered`)
 and still shows the visitor a success message. **Someone must collect those:**
 `npx vercel env pull .env.local && npm run inquiries` prints them, newest
@@ -157,34 +158,58 @@ label exactly — renaming one without the other silently breaks the routing.
 **Form options:** Partner form checkboxes are generated from
 `DEFAULTS.pathways` in `partners/page.tsx`, **deliberately not 1:1** —
 `FORM_LABEL_OVERRIDES` / `EXTRA_FORM_OPTIONS` let form choices diverge from
-the pathway cards on purpose. Don't "fix" the mismatch. Contact's dropdown is
-`DEFAULTS.contactReasons` in `contact/page.tsx`, single-select by choice.
+the pathway cards on purpose. Don't "fix" the mismatch. Contact's reason is a
+single-select dropdown from `DEFAULTS.contactReasons` in `contact/page.tsx`,
+by choice.
 
 A third form type, `tour`, is fully supported by the route and `InquiryForm`
 but has no UI — see Book a Tour in §10.
 
-### Resend setup (the live provider)
+### Resend (the live provider — interim)
 
-Installed 2026-09-15 as the way around the Graph dependency below. Sends as
-`GTCIO Website <website@gtcio.org>` (override with `MAIL_FROM`), free tier
-(3,000/month). No OTC admin involved.
+**Live since 2026-09-15.** Resend is a stopgap, not the settled answer: it
+got the forms delivering at launch without waiting on an OTC Microsoft 365
+admin. Whether it stays, moves to Graph (below), or is replaced by whatever
+Third Wave Digital brings is undecided. Because `mail.ts` picks the provider,
+switching is an env-var change, not a code change.
 
-1. Vercel → gtcio-site → Integrations → Marketplace → **Resend** → install on
-   this project. Vercel injects `RESEND_API_KEY` (all environments) and
-   redeploys.
-2. Resend dashboard → Domains → add `gtcio.org` → add the DNS records it
-   lists (DKIM TXT + the bounce subdomain's MX/TXT) at GoDaddy → wait for
-   "Verified". Until then every send 403s and submissions fall back to KV.
-3. Test both forms once; Jan's first message may land in Junk until
-   Microsoft 365 has seen the DKIM signature once.
+- Sends as `GTCIO Website <website@gtcio.org>` (override with `MAIL_FROM`;
+  must stay on the verified domain). Free tier: 3,000/month, 100/day.
+- Vercel → gtcio-site → Integrations → **Resend** (Marketplace) injects
+  `RESEND_API_KEY` into **Production and Preview only** — not Development, so
+  `npm run dev` has no provider. It also injects `RESEND_EMAIL_DOMAIN`, which
+  the code doesn't read.
+- `gtcio.org` is verified in the Resend dashboard (DKIM TXT + the bounce
+  subdomain's MX/TXT, at GoDaddy). If those records are removed every send
+  403s and submissions silently fall back to KV.
+- Verified 2026-09-15 on a preview deployment: both forms, both recipient
+  routes, Reply-To, and DKIM/SPF/DMARC all pass. Jan's first real message may
+  land in Junk at ogeecheetech.edu until Microsoft 365 has seen the sender.
 
-Reconnect/rotate: Resend dashboard → API Keys. The Vercel integration owns
+**Testing email without emailing Jan or Sean.** `RESEND_API_KEY` is a
+*sensitive* Vercel var — `vercel env pull` gives a blank placeholder, so
+real sends can't be tested locally. Deploy a preview with the test hook
+instead:
+
+```bash
+npx vercel deploy -e NOTIFY_EMAIL_OVERRIDE=you@example.com
+```
+
+Every notification then goes to that address, subject prefixed
+`[TEST → <intended recipient>]`. Preview URLs sit behind Vercel
+Authentication, so submit from a browser signed in to Vercel. **Never set
+`NOTIFY_EMAIL_OVERRIDE` on Production** — real inquiries would stop reaching
+staff.
+
+Rotate/reconnect: Resend dashboard → API Keys. The Vercel integration owns
 the key; removing the integration removes the var and the route falls back
 to KV silently — check `npm run inquiries` after any change here.
 
 ### Microsoft Graph one-time setup (alternate provider — not done)
 
-Only used if `RESEND_API_KEY` is absent. Needs an OTC Microsoft 365 tenant admin:
+Code is written and dormant (`graphMail.ts`); only used if `RESEND_API_KEY`
+is absent, so switching means setting these vars **and removing the Resend
+integration**. Needs an OTC Microsoft 365 tenant admin:
 
 1. Pick a sending mailbox (a shared one like gtcio-website@ogeecheetech.edu
    survives staff turnover) → `MS_GRAPH_SENDER_EMAIL`.
@@ -197,9 +222,10 @@ Only used if `RESEND_API_KEY` is absent. Needs an OTC Microsoft 365 tenant admin
    permission can otherwise send as *any* mailbox in the tenant:
    `New-ApplicationAccessPolicy -AppId <client-id> -PolicyScopeGroupId <mailbox> -AccessRight RestrictAccess`
    in Exchange Online PowerShell, then `Test-ApplicationAccessPolicy`.
-6. Set all four `MS_GRAPH_*` vars in Vercel (Production) and redeploy.
-7. Test for real: submit Contact twice — once with only "Media inquiry"
-   checked, once with anything else — confirm Sean/Jan each get the right
+6. Set all four `MS_GRAPH_*` vars in Vercel (Production + Preview), remove
+   the Resend integration, and redeploy.
+7. Test for real: submit Contact twice — once with "Media inquiry" selected,
+   once with anything else — confirm Sean/Jan each get the right
    one, with Reply-To set.
 
 Troubleshooting: 401/403 = missing admin consent (step 4) or access policy
@@ -212,11 +238,12 @@ isn't a real mailbox.
 of them:
 
 ```
-RESEND_API_KEY / MAIL_FROM (optional)                              (§5)
+RESEND_API_KEY / MAIL_FROM (optional)    injected by the Resend integration (§5)
+NOTIFY_EMAIL_OVERRIDE                    preview-only test hook — never Production (§5)
 MS_GRAPH_TENANT_ID / _CLIENT_ID / _CLIENT_SECRET / _SENDER_EMAIL   (§5, alternate)
 CONSTANT_CONTACT_CLIENT_ID / _CLIENT_SECRET / _SETUP_SECRET        (§8)
 KV_REST_API_URL / KV_REST_API_TOKEN     auto-injected by the Upstash store (§8)
-SITE_ACCESS_PIN                          optional site gate; unset = off
+SITE_ACCESS_PIN                          optional site gate; unset = off (unset since launch)
 ```
 
 **Canonical host** (`src/proxy.ts`): when `VERCEL_ENV=production`, any request
@@ -234,9 +261,10 @@ callback, and all static assets. The post-PIN `next` path goes through
 `safeNextPath()`, which rejects `//host` and `/\host` forms (both resolve to
 a foreign origin under WHATWG URL parsing) — keep using it.
 
-**To launch:** remove `SITE_ACCESS_PIN` from Vercel (Production + Preview)
-and redeploy — `npx vercel env rm SITE_ACCESS_PIN production` then
-`npx vercel redeploy --prod` (or push any commit).
+**Removed at launch (2026-09-15)** — the site is public. The gate code stays
+in case a future pre-release needs it: set `SITE_ACCESS_PIN` in Vercel and
+redeploy; `npx vercel env rm SITE_ACCESS_PIN production` + redeploy turns it
+off again.
 
 **`next.config.ts`:**
 
@@ -327,8 +355,7 @@ the same call.
   re-signup never blanks an existing contact's name.
 - Constant Contact's list is the only record — by design.
 
-**Setup/reconnect** (the app-side config exists; the token store is empty
-until §9's KV item is done): set the three `CONSTANT_CONTACT_*` vars in
+**Setup/reconnect** (connected — last run 2026-09-14, see §9): set the three `CONSTANT_CONTACT_*` vars in
 Vercel, redeploy, then visit
 `https://www.gtcio.org/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>`
 while logged into the Constant Contact account that should own the list, and
@@ -341,17 +368,15 @@ the same URL.
 
 ## 9. Open work
 
-- **Form email via Resend — verified 2026-09-15 on a preview deployment**
-  (both forms, both recipients' routing, Reply-To, DKIM/SPF/DMARC all pass
-  into Gmail; nothing fell back to KV). Not yet exercised on production:
-  after the next production deploy, submit each form once for real and
-  confirm Jan/Sean receive it, then delete this item. Graph remains the
-  alternate if OTC ever registers the app.
-- **Launch checklist:** remove `SITE_ACCESS_PIN` (§6) · confirm
-  `https://gtcio-site.vercel.app/` 308s to www · submit each form once and
-  confirm it lands (email or `npm run inquiries`) · run
-  `curl -sI https://www.gtcio.org | grep -i content-security` and load every
-  page with DevTools open to catch CSP violations.
+- **Confirm form email reaches staff on production.** Resend is deployed to
+  Production and verified on a preview (§5), and the rest of the launch
+  checklist is done (PIN removed, vercel.app 308s to www, CSP live — all
+  2026-09-15). Remaining: submit each live form once for real, confirm Jan
+  (and Sean, for a media inquiry) receive it, have them mark it Not Junk if
+  needed, and check `npm run inquiries` is empty. Then delete this item.
+- **Decide Resend's long-term status.** It's interim (§5). Options: keep it
+  (move the Resend account/integration to OTC or Third Wave with the Vercel
+  project), have OTC register the Graph app, or adopt Third Wave's provider.
 - **Constant Contact token store restored 2026-09-14.** The first Upstash
   store (`upstash-kv-citrine-lamp`) was uninstalled but its `KV_*` vars stayed
   in Vercel pointing at a dead host, so signups failed silently. Replaced by

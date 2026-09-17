@@ -4,7 +4,7 @@ import { kv } from "@vercel/kv";
 
 /**
  * Safety net for form submissions the notification email could not carry —
- * Microsoft Graph unconfigured (PROJECT.md §9) or a sendMail failure. Each
+ * no email provider configured or a send failure (PROJECT.md §5). Each
  * undelivered inquiry is pushed onto a capped Redis list in the same KV
  * store as the Constant Contact tokens, so nothing a visitor typed is lost.
  *
