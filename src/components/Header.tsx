@@ -57,9 +57,10 @@ export default function Header() {
 
   return (
     // The header is sticky, so in-page anchor targets need a scroll margin
-    // matching its real height (~152px mobile / ~205px from sm up). That's the
-    // scroll-mt-40 sm:scroll-mt-56 on every id'd section — if the banner, logo
-    // size, or padding here changes, those margins must change with it.
+    // matching its real height (~186px mobile / ~221px from sm up, measured
+    // with the "A division of..." caption under the logo). That's the
+    // scroll-mt-52 sm:scroll-mt-60 on every id'd section — if the banner,
+    // logo size, or padding here changes, those margins must change with it.
     <header className="sticky top-0 z-50 bg-brand-white">
       <div className="bg-brand-black px-4 py-2 text-center">
         <p className="font-ui text-xs font-bold tracking-widest text-brand-white sm:text-sm">
@@ -69,7 +70,7 @@ export default function Header() {
 
       <div className="border-b border-brand-silver/40 px-4 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between py-3">
-          <Link href="/" className="flex shrink-0 items-center">
+          <Link href="/" className="flex shrink-0 flex-col items-start">
             <Image
               src="/images/gtcio-logo.png"
               alt="GTCIO — Georgia Training Center for Industrial Operations"
@@ -81,6 +82,14 @@ export default function Header() {
               className="h-24 w-auto sm:h-36"
               priority
             />
+            {/* Logo PNG has transparent padding baked in on every edge
+                (~18% top, ~13% bottom) — the negative margin pulls the
+                caption up against the visible mark. Left offset is a
+                deliberate indent past the "G", not a measurement off the
+                source file — adjust freely. */}
+            <p className="-mt-2.5 ml-2 text-[11px] text-brand-gray sm:-mt-4 sm:ml-2.5 sm:text-xs">
+              A division of Ogeechee Technical College
+            </p>
           </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-4 xl:flex xl:gap-6">

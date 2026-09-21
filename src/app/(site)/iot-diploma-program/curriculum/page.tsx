@@ -200,7 +200,7 @@ export default function CurriculumPage() {
               <article
                 key={course.code}
                 id={course.code.replace(/\s+/g, "-").toLowerCase()}
-                className="scroll-mt-40 sm:scroll-mt-56 border-l-4 border-brand-red pl-6"
+                className="scroll-mt-52 sm:scroll-mt-60 border-l-4 border-brand-red pl-6"
               >
                 <p className="font-display text-sm text-brand-red">
                   {course.code} · {course.credits} credit hours

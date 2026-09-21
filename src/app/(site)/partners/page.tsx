@@ -159,7 +159,7 @@ export default function PartnersPage() {
               <div
                 key={partner.id}
                 id={partnerSlug(partner.name)}
-                className="flex scroll-mt-40 flex-col border border-brand-silver/20 bg-brand-white shadow-sm sm:scroll-mt-56"
+                className="flex scroll-mt-52 flex-col border border-brand-silver/20 bg-brand-white shadow-sm sm:scroll-mt-60"
               >
                 <div className="flex flex-col gap-6 p-8 sm:flex-row sm:items-start sm:gap-10">
                   <div className="relative h-20 w-full shrink-0 sm:h-24 sm:w-44">
@@ -196,7 +196,7 @@ export default function PartnersPage() {
       </section>
       )}
 
-      <section id="become-a-partner" className="scroll-mt-40 sm:scroll-mt-56 px-6 py-16 sm:px-10">
+      <section id="become-a-partner" className="scroll-mt-52 sm:scroll-mt-60 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.becomePartnerTitle}</h2>
           <p className="mt-3 text-brand-gray">{page.becomePartnerIntro}</p>

@@ -280,7 +280,7 @@ export default function IotDiplomaProgramPage() {
         </div>
       </section>
 
-      <section id="apply" className="scroll-mt-40 sm:scroll-mt-56 bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
+      <section id="apply" className="scroll-mt-52 sm:scroll-mt-60 bg-brand-black px-6 py-20 text-center text-brand-white sm:px-10">
         <h2 className="font-heading text-3xl font-bold">{page.applyHeading}</h2>
         <div className="mt-8">
           <CtaButton button={page.applyButton} variant="primary" />

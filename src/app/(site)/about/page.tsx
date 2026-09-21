@@ -279,7 +279,7 @@ export default function AboutPage() {
         videoPoster="/images/hero-about-poster.jpg"
       />
 
-      <section id="mission" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="mission" className="scroll-mt-52 sm:scroll-mt-60 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">Mission</h2>
           {page.missionStatement && (
@@ -296,7 +296,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="history" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="history" className="scroll-mt-52 sm:scroll-mt-60 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
           {page.historyBody.split("\n\n").map((paragraph: string, i: number) => (
@@ -309,7 +309,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="advisory-board" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="advisory-board" className="scroll-mt-52 sm:scroll-mt-60 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.advisoryTitle}</h2>
           <p className="mt-4 text-brand-black">{page.advisoryBody}</p>
@@ -352,7 +352,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="bulloch-development-authority" className="scroll-mt-40 sm:scroll-mt-56 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+      <section id="bulloch-development-authority" className="scroll-mt-52 sm:scroll-mt-60 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.bdaTitle}</h2>
           <p className="mt-4 text-brand-black">{page.bdaBody}</p>
@@ -373,7 +373,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section id="faq" className="scroll-mt-40 sm:scroll-mt-56 px-6 py-16 sm:px-10">
+      <section id="faq" className="scroll-mt-52 sm:scroll-mt-60 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">FAQ</h2>
           <div className="mt-6 flex flex-col gap-6">

@@ -237,7 +237,7 @@ export default function CredentialsPage() {
                       <article
                         key={credential.code}
                         id={credential.code.toLowerCase()}
-                        className="scroll-mt-40 sm:scroll-mt-56 border border-brand-silver/40 p-6"
+                        className="scroll-mt-52 sm:scroll-mt-60 border border-brand-silver/40 p-6"
                       >
                         <p className="font-display text-sm text-brand-red">
                           {credential.code.startsWith("C-") ? `SACA ${credential.code}` : credential.code}
