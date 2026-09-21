@@ -19,7 +19,13 @@ trains people for industrial maintenance / automation / controls work, and
 launches an Industrial Operations Technology (IOT) diploma program in
 **August 2026**.
 
-- **Live:** https://www.gtcio.org (GoDaddy DNS → Vercel; apex 308s to www; `gtcio-site.vercel.app` still serves)
+- **Live:** https://gtcio.ogeecheetech.edu (canonical, `SITE_URL` in
+  `src/lib/site.ts`) — DNS is OTC's own Azure DNS zone → Vercel, a CNAME on
+  the `gtcio` subdomain, added 2026-09-15. `www.gtcio.org`/`gtcio.org`
+  (GoDaddy DNS) and `gtcio-site.vercel.app` all still resolve and 308 to the
+  canonical host (`src/proxy.ts`). Flipped canonical from www.gtcio.org to
+  gtcio.ogeecheetech.edu on 2026-09-21 for branding — OTC wanted the
+  address bar to read their own `.edu` domain.
 - **Repo:** https://github.com/Ogeechee-Tech-PR-and-Marketing/gtcio-site (**public** — see §12; Vercel Hobby cannot auto-deploy a private org-owned repo)
 - **Editing UI:** none. Content lives in code (§4). The site is being handed
   off to **Third Wave Digital**, who will connect their own CMS and are
@@ -247,9 +253,10 @@ SITE_ACCESS_PIN                          optional site gate; unset = off (unset 
 ```
 
 **Canonical host** (`src/proxy.ts`): when `VERCEL_ENV=production`, any request
-whose `Host` isn't `www.gtcio.org` (i.e. `gtcio-site.vercel.app`) is 308'd to
-the canonical URL. Preview deployments are unaffected. Every page also emits a
-`<link rel="canonical">` and per-page description/Open Graph tags.
+whose `Host` isn't `gtcio.ogeecheetech.edu` (i.e. `www.gtcio.org`, `gtcio.org`,
+`gtcio-site.vercel.app`) is 308'd to the canonical URL (`SITE_URL` in
+`src/lib/site.ts`). Preview deployments are unaffected. Every page also emits
+a `<link rel="canonical">` and per-page description/Open Graph tags.
 
 **Site-wide PIN gate** (same file): if `SITE_ACCESS_PIN` is set,
 visitors without the cookie are redirected to `/site-pin`; a correct entry
@@ -357,7 +364,7 @@ the same call.
 
 **Setup/reconnect** (connected — last run 2026-09-14, see §9): set the three `CONSTANT_CONTACT_*` vars in
 Vercel, redeploy, then visit
-`https://www.gtcio.org/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>`
+`https://gtcio.ogeecheetech.edu/api/constant-contact/oauth/start?secret=<CONSTANT_CONTACT_SETUP_SECRET>`
 while logged into the Constant Contact account that should own the list, and
 approve. "Constant Contact is connected." = tokens saved. The callback
 overwrites cleanly, so re-running is always safe. If the form errors with

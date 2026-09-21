@@ -5,9 +5,10 @@ import { SITE_URL } from "@/lib/site";
 // Next.js 16 renamed Middleware to Proxy (same behaviour, same matcher API).
 // Two jobs here:
 //   1. Canonical host — in production, any non-canonical host that reaches
-//      the app (gtcio-site.vercel.app) is 308'd to www.gtcio.org so search
-//      engines see one origin. Gated on VERCEL_ENV so preview deployments,
-//      which are also *.vercel.app, keep working.
+//      the app (gtcio-site.vercel.app, www.gtcio.org, ...) is 308'd to
+//      SITE_URL (src/lib/site.ts) so search engines see one origin. Gated on
+//      VERCEL_ENV so preview deployments, which are also *.vercel.app, keep
+//      working.
 //   2. The "coming soon" PIN gate — a shared PIN to keep casual visitors off
 //      the site before launch, not a real auth system. See PROJECT.md §6.
 

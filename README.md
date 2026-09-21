@@ -3,7 +3,8 @@
 The website for the **Georgia Training Center for Industrial Operations**, a
 division of Ogeechee Technical College.
 
-- **Live:** https://www.gtcio.org
+- **Live:** https://gtcio.ogeecheetech.edu (canonical; www.gtcio.org also
+  resolves and 308s here)
 - **Content editing:** none — content lives in code, see
   [EDITING.md](./EDITING.md). The site is being handed off to Third Wave
   Digital, who will connect their own CMS.
