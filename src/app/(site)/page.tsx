@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <>
       <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
-        <HeroVideo src="/videos/hero-construction-7.mp4" poster="/images/hero-construction-poster-6.jpg" />
+        <HeroVideo src="/videos/hero-construction-8.mp4" poster="/images/hero-construction-poster-6.jpg" />
         <div className="relative mx-auto max-w-7xl">
           {/*
             Kept in sync with PageHero.tsx's hero scrim: a blurred rectangle

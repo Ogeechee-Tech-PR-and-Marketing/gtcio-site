@@ -256,7 +256,7 @@ export default function AboutPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        video="/videos/hero-about-2.mp4"
+        video="/videos/hero-about-3.mp4"
         videoPoster="/images/hero-about-poster.jpg"
       />
 
