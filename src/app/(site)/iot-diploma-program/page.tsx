@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import LinkifyEmail from "@/components/LinkifyEmail";
-import { safeHref } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "IOT Diploma Program | GTCIO",
+  title: "IOT Diploma Program",
   description:
     "Ogeechee Tech's Industrial Operations Technology diploma: four semesters of hands-on training in mechanical, electrical, robotics, and PLC systems, with SACA credentials built in.",
   alternates: { canonical: "/iot-diploma-program" },
 };
+
+// Only the diploma carries a program code; the map below widens the union.
+type ProgramOption = { name: string; code?: string; detail: string; url: string };
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
@@ -112,13 +114,6 @@ const DEFAULTS = {
 
 export default function IotDiplomaProgramPage() {
   const page = DEFAULTS;
-  const nonTraditionalResources = DEFAULTS.nonTraditionalResources;
-  const curriculumStages = DEFAULTS.curriculumStages;
-  const programOptions = DEFAULTS.programOptions;
-  const careers = DEFAULTS.careers;
-  const jobDuties = DEFAULTS.jobDuties;
-  const payRanges = DEFAULTS.payRanges;
-  const faqs = DEFAULTS.faqs;
 
   return (
     <>
@@ -158,8 +153,8 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.curriculumTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {curriculumStages.map((stage: { stage: string; detail: string }, i: number) => (
-              <div key={i} className="border border-brand-silver/40 p-6">
+            {page.curriculumStages.map((stage, i) => (
+              <div key={stage.stage} className="border border-brand-silver/40 p-6">
                 <p className="font-display text-sm text-brand-red">Stage {i + 1}</p>
                 <h3 className="font-heading mt-2 text-lg font-bold text-brand-black">{stage.stage}</h3>
                 <p className="mt-2 text-sm text-brand-gray">{stage.detail}</p>
@@ -187,28 +182,23 @@ export default function IotDiplomaProgramPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.moreWaysTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-gray">{page.moreWaysBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {programOptions.map((option: { name: string; code?: string; detail: string; url?: string }, i: number) => {
-              const catalogUrl = safeHref(option.url);
-              return (
-              <div key={i} className="border border-brand-silver/40 p-5">
+            {page.programOptions.map((option: ProgramOption) => (
+              <div key={option.name} className="border border-brand-silver/40 p-5">
                 <p className="font-bold text-brand-black">
                   {option.name}
                   {option.code && <span className="text-brand-gray"> ({option.code})</span>}
                 </p>
                 <p className="mt-1 text-sm text-brand-gray">{option.detail}</p>
-                {catalogUrl && (
-                  <a
-                    href={catalogUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
-                  >
-                    View OTC catalog page →
-                  </a>
-                )}
+                <a
+                  href={option.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
+                >
+                  View OTC catalog page →
+                </a>
               </div>
-              );
-            })}
+            ))}
           </div>
           <div className="mt-10 text-center">
             <CtaButton button={page.applyButton} variant="primary" />
@@ -220,9 +210,9 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.careersTitle}</h2>
           <div className="mt-6 flex flex-wrap gap-3">
-            {careers.map((career: string, i: number) => (
+            {page.careers.map((career) => (
               <span
-                key={i}
+                key={career}
                 className="font-heading border-2 border-brand-red px-4 py-2 text-sm font-bold tracking-wide text-brand-red"
               >
                 {career}
@@ -232,8 +222,8 @@ export default function IotDiplomaProgramPage() {
           <p className="mt-4 text-sm text-brand-gray">{page.careersNote}</p>
           <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">{page.jobDutiesTitle}</h3>
           <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {jobDuties.map((duty: { label: string; detail: string }, i: number) => (
-              <li key={i} className="border-l-4 border-brand-red pl-5">
+            {page.jobDuties.map((duty) => (
+              <li key={duty.label} className="border-l-4 border-brand-red pl-5">
                 <p className="font-bold text-brand-black">{duty.label}</p>
                 <p className="mt-1 text-sm text-brand-gray">{duty.detail}</p>
               </li>
@@ -246,8 +236,8 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.payTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {payRanges.map((tier: { value: string; label: string }, i: number) => (
-              <div key={i} className="border border-brand-silver/40 p-6">
+            {page.payRanges.map((tier) => (
+              <div key={tier.label} className="border border-brand-silver/40 p-6">
                 <p className="font-heading text-2xl font-bold text-brand-red">{tier.value}</p>
                 <p className="mt-2 text-sm text-brand-gray">{tier.label}</p>
               </div>
@@ -270,8 +260,8 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.studentFaqTitle}</h2>
           <div className="mt-6 flex flex-col gap-6">
-            {faqs.map((item: { question: string; answer: string }, i: number) => (
-              <div key={i} className="border-l-4 border-brand-black pl-5">
+            {page.faqs.map((item) => (
+              <div key={item.question} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
                 <p className="mt-1 text-brand-gray"><LinkifyEmail text={item.answer} /></p>
               </div>
@@ -287,43 +277,28 @@ export default function IotDiplomaProgramPage() {
         </div>
       </section>
 
-      {page.nonTraditionalHeading && (
-        <section className="px-6 py-16 sm:px-10">
-          <div className="mx-auto max-w-5xl">
-            <div className="max-w-3xl border border-brand-silver/40 p-6">
-              <p className="font-heading font-bold text-brand-black">{page.nonTraditionalHeading}</p>
-              {page.nonTraditionalBody && (
-                <p className="mt-2 text-sm text-brand-gray">{page.nonTraditionalBody}</p>
-              )}
-              {nonTraditionalResources.length > 0 && (
-                <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-                  {/* safeHref: same render-time backstop as news/partner URLs —
-                      these are CMS-authored links. filter(Boolean) drops any
-                      that don't survive it rather than rendering a dead <a>. */}
-                  {nonTraditionalResources
-                    .map((resource: { label: string; url: string }) => ({
-                      ...resource,
-                      url: safeHref(resource.url),
-                    }))
-                    .filter((resource: { url: string | null }) => resource.url)
-                    .map((resource: { label: string; url: string | null }, i: number) => (
-                    <li key={i}>
-                      <a
-                        href={resource.url!}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-bold text-brand-red underline hover:text-brand-black"
-                      >
-                        {resource.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+      <section className="px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-5xl">
+          <div className="max-w-3xl border border-brand-silver/40 p-6">
+            <p className="font-heading font-bold text-brand-black">{page.nonTraditionalHeading}</p>
+            <p className="mt-2 text-sm text-brand-gray">{page.nonTraditionalBody}</p>
+            <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+              {page.nonTraditionalResources.map((resource) => (
+                <li key={resource.url}>
+                  <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-bold text-brand-red underline hover:text-brand-black"
+                  >
+                    {resource.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </>
   );
 }

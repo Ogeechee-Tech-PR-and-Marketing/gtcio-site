@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { safeNextPath } from "@/lib/site-pin";
 
 export const metadata: Metadata = {
-  title: "Enter access code | GTCIO",
+  title: "Enter access code",
   robots: { index: false, follow: false },
 };
 

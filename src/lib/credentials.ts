@@ -110,7 +110,6 @@ export const OTHER_CREDENTIALS = [
  * doesn't quite match.
  */
 export type Affiliation = {
-  _key?: string;
   title: string;
   detail: string;
   showOn?: "both" | "employer" | "student";

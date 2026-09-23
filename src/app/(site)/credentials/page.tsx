@@ -19,7 +19,7 @@ import {
 import { DESTINATIONS } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "Credentials | GTCIO",
+  title: "Credentials",
   description:
     "Every industry credential built into GTCIO's training — SACA credentials, FANUC, and OSHA 10 — and the accreditations Ogeechee Tech holds that make them count.",
   alternates: { canonical: "/credentials" },
@@ -125,8 +125,8 @@ export default function CredentialsPage() {
           </h2>
           <p className="mt-4 max-w-3xl text-brand-gray">{page.affiliationsBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {affiliations.map((affiliation, i) => (
-              <div key={affiliation._key ?? i} className="border-l-4 border-brand-red pl-5">
+            {affiliations.map((affiliation) => (
+              <div key={affiliation.title} className="border-l-4 border-brand-red pl-5">
                 <h3 className="font-heading text-lg font-bold text-brand-black">
                   {affiliation.title}
                 </h3>

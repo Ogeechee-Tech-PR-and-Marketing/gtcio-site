@@ -33,6 +33,7 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   async redirects() {
     return [
       {

@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
-import { safeHref } from "@/lib/links";
 import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
+import { CONTACTS } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "News | GTCIO",
+  title: "News",
   description:
     "Press releases and media coverage of the Georgia Training Center for Industrial Operations, a division of Ogeechee Technical College.",
   alternates: { canonical: "/news" },
@@ -23,8 +23,7 @@ const DEFAULTS = {
   mediaTitle: "In the News",
 };
 
-function formatDate(date?: string) {
-  if (!date) return "";
+function formatDate(date: string) {
   // Date-only strings ("2026-07-09") parse as UTC midnight; format in UTC so the
   // day never slips backward in a US timezone.
   const parsed = new Date(`${date}T00:00:00Z`);
@@ -41,8 +40,8 @@ function NewsList({ items }: { items: NewsItem[] }) {
   return (
     <ul className="mt-8 flex flex-col divide-y divide-brand-silver/30 border-y border-brand-silver/30">
       {items.map((item) => {
-        const meta = [formatDate(item.date), item.source].filter(Boolean).join("  ·  ");
-        const url = safeHref(item.url);
+        const meta = `${formatDate(item.date)}  ·  ${item.source}`;
+        const url = item.url;
         return (
           <li key={item.id} className="flex flex-col gap-6 py-6 sm:flex-row">
             {item.image && (
@@ -58,11 +57,9 @@ function NewsList({ items }: { items: NewsItem[] }) {
               </div>
             )}
             <div className="min-w-0 flex-1">
-              {meta && (
-                <p className="font-heading text-xs font-bold uppercase tracking-widest text-brand-gray">
-                  {meta}
-                </p>
-              )}
+              <p className="font-heading text-xs font-bold uppercase tracking-widest text-brand-gray">
+                {meta}
+              </p>
               <h3 className="font-heading mt-2 text-xl font-bold text-brand-black">
                 {url ? (
                   <a
@@ -77,7 +74,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
                   item.title
                 )}
               </h3>
-              {item.excerpt && <p className="mt-2 max-w-3xl text-brand-gray">{item.excerpt}</p>}
+              <p className="mt-2 max-w-3xl text-brand-gray">{item.excerpt}</p>
               {url && (
                 <a
                   href={url}
@@ -98,14 +95,8 @@ function NewsList({ items }: { items: NewsItem[] }) {
 
 export default function NewsPage() {
   const page = DEFAULTS;
-  const items = NEWS_ITEMS;
-  const press = items.filter((i) => i.category !== "media");
-  const media = items.filter((i) => i.category === "media");
-
-  // Same media contact siteSettings.mediaContact used to supply — kept in
-  // sync with the Contact page's hardcoded default.
-  const mediaContactName = "Sean Payne";
-  const mediaContactEmail = "spayne@ogeecheetech.edu";
+  const press = NEWS_ITEMS.filter((i) => i.category !== "media");
+  const media = NEWS_ITEMS.filter((i) => i.category === "media");
 
   return (
     <>
@@ -124,10 +115,10 @@ export default function NewsPage() {
             {page.introText}{" "}
             For media inquiries, contact{" "}
             <a
-              href={`mailto:${mediaContactEmail}`}
+              href={`mailto:${CONTACTS.media.email}`}
               className="font-bold text-brand-red hover:text-brand-black"
             >
-              {mediaContactName}
+              {CONTACTS.media.name}
             </a>
             , or see our{" "}
             <Link href="/contact" className="font-bold text-brand-red hover:text-brand-black">
@@ -136,26 +127,16 @@ export default function NewsPage() {
             .
           </p>
 
-          {items.length === 0 ? (
-            <div className="font-heading mt-10 border border-dashed border-brand-silver/60 px-6 py-16 text-center text-sm font-bold tracking-wide text-brand-gray">
-              PRESS &amp; MEDIA ITEMS COMING SOON
+          <div className="mt-12 flex flex-col gap-16">
+            <div>
+              <h2 className="font-heading text-3xl font-bold text-brand-black">{page.pressTitle}</h2>
+              <NewsList items={press} />
             </div>
-          ) : (
-            <div className="mt-12 flex flex-col gap-16">
-              {press.length > 0 && (
-                <div>
-                  <h2 className="font-heading text-3xl font-bold text-brand-black">{page.pressTitle}</h2>
-                  <NewsList items={press} />
-                </div>
-              )}
-              {media.length > 0 && (
-                <div>
-                  <h2 className="font-heading text-3xl font-bold text-brand-black">{page.mediaTitle}</h2>
-                  <NewsList items={media} />
-                </div>
-              )}
+            <div>
+              <h2 className="font-heading text-3xl font-bold text-brand-black">{page.mediaTitle}</h2>
+              <NewsList items={media} />
             </div>
-          )}
+          </div>
         </div>
       </section>
     </>

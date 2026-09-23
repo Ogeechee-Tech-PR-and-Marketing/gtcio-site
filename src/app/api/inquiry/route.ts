@@ -3,6 +3,8 @@ import { isConfigured as mailConfigured, mailProvider, sendMail } from "@/lib/ma
 import { addNewsletterSignup } from "@/lib/constantContact";
 import { inquiryStoreConfigured, storeUndeliveredInquiry } from "@/lib/inquiryStore";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
+import { clean, isEmail, readJsonBody } from "@/lib/sanitize";
+import { CONTACTS } from "@/lib/site";
 
 const FORM_TYPES = ["partner", "contact", "tour"] as const;
 type FormType = (typeof FORM_TYPES)[number];
@@ -24,10 +26,11 @@ type Payload = {
   botcheck?: string;
 };
 
-// Fixed recipients. Every provider in src/lib/mail.ts sends to any address
-// from one credential, so there's no per-recipient config.
-const NOTIFY_EMAIL = "jmoore@ogeecheetech.edu"; // general inquiries — Jan Moore
-const NOTIFY_EMAIL_MEDIA = "spayne@ogeecheetech.edu"; // media inquiries — Sean Payne
+// Fixed recipients (src/lib/site.ts — the same two people Contact prints).
+// Every provider in src/lib/mail.ts sends to any address from one credential,
+// so there's no per-recipient config.
+const NOTIFY_EMAIL = CONTACTS.general.email;
+const NOTIFY_EMAIL_MEDIA = CONTACTS.media.email;
 
 // Test hook: when set, EVERY notification goes to this address instead of the
 // staff above, with the intended recipient named in the subject. Meant for a
@@ -60,23 +63,6 @@ function isFormType(v: unknown): v is FormType {
   return typeof v === "string" && (FORM_TYPES as readonly string[]).includes(v);
 }
 
-// Built via `new RegExp` (not a /.../ literal) so the \u escapes stay as
-// literal source text through any tool that JSON-decodes file contents —
-// a /.../ literal here once ended up holding raw NUL/0x1f/0x7f bytes.
-const CONTROL_CHARS = new RegExp("[\\u0000-\\u001f\\u007f]+", "g");
-
-/**
- * Trim, cap length, and collapse newlines/control characters. Several of these
- * values end up in the notification email's subject line — never let a
- * submitted value smuggle CR/LF toward anything that builds email headers.
- */
-function clean(value: string | undefined, max: number): string {
-  return (value ?? "")
-    .replace(CONTROL_CHARS, " ")
-    .trim()
-    .slice(0, max);
-}
-
 function cleanReasons(value: string | string[] | undefined): string[] {
   const values = Array.isArray(value) ? value : value ? [value] : [];
   return values
@@ -96,9 +82,9 @@ function buildSubject(formType: FormType, reason: string, who: string) {
 }
 
 export async function POST(request: Request) {
-  // Reject oversized payloads before parsing them.
-  const contentLength = Number(request.headers.get("content-length") ?? 0);
-  if (contentLength > MAX_BODY_BYTES) {
+  // Reject oversized payloads before spending a rate-limit call on them; the
+  // real cap is enforced on the bytes read below.
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Request too large." }, { status: 413 });
   }
 
@@ -109,12 +95,14 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: Payload;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+  const parsed = await readJsonBody<Payload>(request, MAX_BODY_BYTES);
+  if (!parsed.ok) {
+    return NextResponse.json(
+      { error: parsed.status === 413 ? "Request too large." : "Invalid request." },
+      { status: parsed.status }
+    );
   }
+  const { body } = parsed;
 
   // Honeypot: real people never fill this in. Pretend it worked so bots don't retry.
   if (body.botcheck) {
@@ -127,7 +115,7 @@ export async function POST(request: Request) {
   }
 
   const email = clean(body.email, MAX_EMAIL);
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isEmail(email)) {
     return NextResponse.json(
       { error: "Please enter a valid email address." },
       { status: 400 }

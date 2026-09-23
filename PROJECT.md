@@ -1,6 +1,6 @@
 # GTCIO website — project brief
 
-What a developer needs to pick this project up cold. Last updated 2026-09-17.
+What a developer needs to pick this project up cold. Last updated 2026-09-23.
 Check claims against the code before trusting them.
 
 > The long-form history behind this file (dated decisions, resolved defects,
@@ -41,7 +41,7 @@ redesign it without being asked.
 
 | | |
 | --- | --- |
-| Framework | Next.js **16.3.5**, App Router, Turbopack |
+| Framework | Next.js **16.3.6**, App Router, Turbopack |
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
 | Email | Resend (Vercel Marketplace) — **interim**; Microsoft Graph wired up as the alternate provider (§5) |
@@ -59,6 +59,7 @@ redesign it without being asked.
 src/proxy.ts              canonical-host redirect + site-wide PIN gate (§6)
 src/app/
   layout.tsx              root: <html>/<body> only, no chrome
+  not-found.tsx           branded 404 for unmatched URLs — outside (site), so it wears SiteChrome itself
   site-pin/               /site-pin — PIN entry screen (outside (site): no Header/Footer)
   (site)/                 every public page; route group adds Header + Footer
     page.tsx              /            (home)
@@ -77,7 +78,12 @@ src/app/
     newsletter/           POST target for the footer sign-up (§8)
     constant-contact/oauth/{start,callback}/   one-time OAuth grant (§8)
 src/lib/
-  site.ts                 SITE_URL — the canonical origin
+  site.ts                 SITE_URL (canonical origin), ORG (name, tagline,
+                          address, phone) and CONTACTS (Jan / Sean) — the
+                          facts the footer, Contact, News and the inquiry
+                          route all read
+  nav.ts                  NAV_ITEMS — the page list behind the header nav,
+                          footer Explore column and sitemap.xml
   site-pin.ts             cookie name + safeNextPath() shared by proxy, api/site-pin, site-pin page
   rateLimit.ts            per-IP fixed-window limiter on the POST routes, KV-backed, fails open (§5)
   inquiryStore.ts         KV list of form submissions the email couldn't carry (§5)
@@ -91,17 +97,23 @@ src/lib/
   credentials.ts          SACA tier ladder + OTC accreditations; feeds both
                           /credentials and /training via a showOn tag (§4)
   constantContact.ts      newsletter API client, server-only (§8)
-  constantContactStore.ts Vercel KV wrapper for the OAuth tokens (§8)
+  kv.ts                   the Upstash Redis client (the store Vercel calls "KV"); rateLimit,
+                          inquiryStore and constantContactStore all go through it
+  constantContactStore.ts OAuth token record in the KV store (§8)
+  sanitize.ts             clean() / isEmail() / readJsonBody() shared by the two POST routes (§5)
   mail.ts                 picks the email provider: Resend, then Graph, else none (§5)
   resendMail.ts           Resend REST client — sends as website@gtcio.org, the live provider for now (§5)
   graphMail.ts            Microsoft Graph sendMail client — alternate provider (§5)
-src/components/           Header, Footer, PageHero, HeroCard, InquiryForm,
+src/components/           SiteChrome (skip link + Header + <main> + Footer),
+                          PageHero, HeroCard, HeroVideo, InquiryForm,
                           NewsletterSignup, Button/CtaButton, AboutTimeline, …
 ```
 
 **Why the `(site)` route group exists:** so chrome-free routes (`/site-pin`)
 don't inherit Header/Footer. New routes that shouldn't carry the nav belong
-outside `(site)` too.
+outside `(site)` too. (`not-found.tsx` is outside the group by necessity —
+Next renders the root not-found for unmatched URLs — and opts back into
+the chrome by rendering `SiteChrome` itself.)
 
 ## 4. Content model — everything is code
 
@@ -110,9 +122,9 @@ directly. `DEFAULTS` **is** the content. Page components are plain synchronous
 functions — no fetches. A copy change = edit the file, push to `main`,
 auto-deploy. `EDITING.md` maps common edits to files.
 
-Shared content lives in `src/lib/`: `partners.ts`, `news.ts`, `links.ts`
-(see §3). Site-wide strings (banner, address, footer, newsletter copy) are
-constants in `Header.tsx`, `Footer.tsx`, and `NewsletterSignup.tsx`.
+Shared content lives in `src/lib/`: `partners.ts`, `news.ts`, `links.ts`,
+`site.ts` (address, phone, staff contacts — see §3). Banner and newsletter
+copy are constants in `Header.tsx` and `NewsletterSignup.tsx`.
 
 **`iot-curriculum.ts` and `credentials.ts` are matters of record, not
 marketing copy.** Course codes, credit hours, and SACA credential mappings
@@ -155,9 +167,11 @@ and still shows the visitor a success message. **Someone must collect those:**
 first. Delivered inquiries are not stored. Only if KV is also unavailable
 does the visitor see a 500 with Jan's address to email directly.
 
-Recipients are fixed constants in the route file: `NOTIFY_EMAIL`
+Recipients come from `CONTACTS` in `src/lib/site.ts` — the same two people
+the Contact page prints — bound in the route as `NOTIFY_EMAIL`
 (jmoore@ogeecheetech.edu — everything) and `NOTIFY_EMAIL_MEDIA`
-(spayne@ogeecheetech.edu — fires when "Media inquiry" is checked).
+(spayne@ogeecheetech.edu — fires when "Media inquiry" is checked). Changing
+an address there changes both what visitors see and where forms deliver.
 ⚠️ `MEDIA_REASON` in the route must match the Contact form's "Media inquiry"
 label exactly — renaming one without the other silently breaks the routing.
 
@@ -256,7 +270,9 @@ SITE_ACCESS_PIN                          optional site gate; unset = off (unset 
 whose `Host` isn't `gtcio.ogeecheetech.edu` (i.e. `www.gtcio.org`, `gtcio.org`,
 `gtcio-site.vercel.app`) is 308'd to the canonical URL (`SITE_URL` in
 `src/lib/site.ts`). Preview deployments are unaffected. Every page also emits
-a `<link rel="canonical">` and per-page description/Open Graph tags.
+a `<link rel="canonical">` and per-page description/Open Graph tags, and the
+root layout emits one `EducationalOrganization` JSON-LD block (name, address,
+phone, parent college) built from `ORG` in `src/lib/site.ts`.
 
 **Site-wide PIN gate** (same file): if `SITE_ACCESS_PIN` is set,
 visitors without the cookie are redirected to `/site-pin`; a correct entry
@@ -377,7 +393,7 @@ the same URL.
 
 - **Confirm form email reaches staff on production.** Resend is deployed to
   Production and verified on a preview (§5), and the rest of the launch
-  checklist is done (PIN removed, vercel.app 308s to www, CSP live — all
+  checklist is done (PIN removed, vercel.app 308s to the canonical host, CSP live — all
   2026-09-15). Remaining: submit each live form once for real, confirm Jan
   (and Sean, for a media inquiry) receive it, have them mark it Not Junk if
   needed, and check `npm run inquiries` is empty. Then delete this item.
@@ -459,8 +475,8 @@ directly; don't relitigate them in new copy.
   site). Never publish "opening September 2026" (an old brochure's claim).
 - **Address: 66 AJ Riggs Road, Statesboro, GA 30458.** "1 Joe Kennedy Blvd"
   is OTC's main campus, not GTCIO — it appears in old source documents;
-  don't harvest it. The address lives in `Footer.tsx`, `contact/page.tsx`,
-  and the About FAQ — change all together.
+  don't harvest it. The address is `ORG.address` in `src/lib/site.ts`
+  (footer + Contact) and repeated in prose in the About FAQ — change both.
 - **The mission statement and the Home hero headline are the same sentence
   on purpose** ("Building a workforce ready for industry transformation.") —
   if one changes, change both (`about/page.tsx` + `(site)/page.tsx`), and
@@ -497,8 +513,8 @@ directly; don't relitigate them in new copy.
 - **`public/SITEMAP.html` is a stakeholder deliverable** (goes to the VP for
   sign-off, served publicly, noindex). Keep it in sync when routes,
   sections, or §9/§10 status change. Not to be confused with
-  `src/app/sitemap.ts` (the machine `sitemap.xml`) — a new route updates
-  both, plus `Header.tsx` and `links.ts`.
+  `src/app/sitemap.ts` (the machine `sitemap.xml`, derived from `nav.ts`) —
+  a new route updates `SITEMAP.html` by hand, plus `nav.ts` and `links.ts`.
 - **`EDITING.md`** is the plain-English "where does this copy live" guide —
   update it if the content layout changes.
 
@@ -546,6 +562,6 @@ with no env vars — they only gate the forms (§5) and newsletter (§8). Read
 
 **Adding a page:** create `src/app/(site)/<slug>/page.tsx` (inside `(site)`
 or it loses the chrome) with a `DEFAULTS` object; add it to `NAV_ITEMS` in
-`Header.tsx` (⚠️ re-measure the nav) and the Footer's Explore column; add a
-`DESTINATIONS` key in `links.ts` if buttons should target it; update **both**
-sitemaps (§11).
+`src/lib/nav.ts` (⚠️ re-measure the nav — the header, the Footer's Explore
+column and `sitemap.xml` all follow); add a `DESTINATIONS` key in `links.ts`
+if buttons should target it; update `public/SITEMAP.html` (§11).

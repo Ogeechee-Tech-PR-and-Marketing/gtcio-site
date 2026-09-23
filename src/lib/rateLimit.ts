@@ -1,6 +1,6 @@
 import "server-only";
 
-import { kv } from "@vercel/kv";
+import { kv, kvConfigured } from "./kv";
 
 /**
  * Fixed-window, per-IP rate limit for the public POST endpoints, backed by
@@ -23,12 +23,12 @@ export async function rateLimit({
   limit: number;
   windowSeconds: number;
 }): Promise<boolean> {
-  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return true;
+  if (!kvConfigured()) return true;
   try {
     const bucket = Math.floor(Date.now() / 1000 / windowSeconds);
     const bucketKey = `ratelimit:${key}:${ip}:${bucket}`;
-    const count = await kv.incr(bucketKey);
-    if (count === 1) await kv.expire(bucketKey, windowSeconds + 1);
+    const count = await kv().incr(bucketKey);
+    if (count === 1) await kv().expire(bucketKey, windowSeconds + 1);
     return count <= limit;
   } catch (error) {
     console.warn(`[rateLimit] store unavailable, allowing request (${key})`, error);

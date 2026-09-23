@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/site";
+import { ORG, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const DESCRIPTION =
@@ -7,7 +7,11 @@ const DESCRIPTION =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "GTCIO | Georgia Training Center for Industrial Operations",
+  // Pages set a bare title ("About") and the template adds the suffix.
+  title: {
+    default: "GTCIO | Georgia Training Center for Industrial Operations",
+    template: "%s | GTCIO",
+  },
   description: DESCRIPTION,
   // Link previews (LinkedIn, Facebook, iMessage, Slack…). Title and
   // description are left out so each page's own resolve into og:title /
@@ -28,6 +32,32 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
+// Structured data for search engines: who runs the site, where it is, and
+// its parent institution — the same facts the footer prints (src/lib/site.ts).
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: ORG.name,
+  alternateName: ORG.shortName,
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/gtcio-logo.png`,
+  description: DESCRIPTION,
+  telephone: ORG.phone,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: ORG.postal.street,
+    addressLocality: ORG.postal.city,
+    addressRegion: ORG.postal.state,
+    postalCode: ORG.postal.zip,
+    addressCountry: "US",
+  },
+  parentOrganization: {
+    "@type": "CollegeOrUniversity",
+    name: ORG.parent.name,
+    url: ORG.parent.url,
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,7 +76,15 @@ export default function RootLayout({
         href="https://use.typekit.net/jok5hww.css"
         precedence="default"
       />
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {/* JSON.stringify doesn't escape "<"; the replace keeps a "</script>" in
+            any future value from closing the tag (Next's JSON-LD guide). */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c") }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

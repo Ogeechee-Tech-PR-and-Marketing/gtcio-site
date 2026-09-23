@@ -1,28 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DESTINATIONS } from "@/lib/links";
+import { DESTINATIONS, isExternal } from "@/lib/links";
+import { NAV_ITEMS } from "@/lib/nav";
+import { ORG } from "@/lib/site";
 import NewsletterSignup from "./NewsletterSignup";
 import Year from "./Year";
 
-/**
- * Code-only by design, like the header nav — a typo'd href here breaks
- * navigation on every page (PROJECT.md §8). The Explore column mirrors the
- * top nav's page list; when a route is added or renamed, update both (plus
- * sitemap.ts, links.ts, SITEMAP.html — PROJECT.md §12's runbook).
- */
 const COLUMNS = [
   {
     heading: "Explore",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "IOT Training Programs", href: "/training" },
-      { label: "IOT Diploma Program", href: "/iot-diploma-program" },
-      { label: "Credentials", href: "/credentials" },
-      { label: "Facility", href: "/facility" },
-      { label: "Partners", href: "/partners" },
-      { label: "News", href: "/news" },
-      { label: "Contact", href: "/contact" },
-    ],
+    // The header nav's pages, minus Home (the logo already links there).
+    links: NAV_ITEMS.filter((item) => item.href !== "/").map(({ label, href }) => ({ label, href })),
   },
   {
     heading: "Get Involved",
@@ -32,10 +20,6 @@ const COLUMNS = [
     ],
   },
 ];
-
-const TAGLINE = "A Division of Ogeechee Technical College";
-const ADDRESS = "66 AJ Riggs Road, Statesboro, GA 30458";
-const PHONE = "(800) 646-1316";
 
 export default function Footer() {
   return (
@@ -58,7 +42,7 @@ export default function Footer() {
             height={200}
             className="h-20 w-auto sm:h-24"
           />
-          <p className="mt-4 text-sm text-brand-silver">{TAGLINE}</p>
+          <p className="mt-4 text-sm text-brand-silver">{ORG.tagline}</p>
         </div>
 
         {COLUMNS.map((col) => (
@@ -66,7 +50,7 @@ export default function Footer() {
             <p className="font-display text-sm text-brand-gold">{col.heading}</p>
             <ul className="mt-4 flex flex-col gap-2">
               {col.links.map((link) => {
-                const external = link.href.startsWith("http");
+                const external = isExternal(link.href);
                 return (
                   <li key={link.label}>
                     <Link
@@ -87,8 +71,8 @@ export default function Footer() {
         <div>
           <p className="font-display text-sm text-brand-gold">Contact</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm text-brand-silver">
-            <li>{ADDRESS}</li>
-            <li>Phone: {PHONE}</li>
+            <li>{ORG.address}</li>
+            <li>{`Phone: ${ORG.phone}`}</li>
           </ul>
         </div>
       </div>
@@ -96,7 +80,7 @@ export default function Footer() {
       <div className="border-t border-white/10 px-6 py-5 sm:px-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 text-xs text-brand-silver sm:flex-row sm:justify-between">
           <p>
-            © <Year /> Georgia Training Center for Industrial Operations. All rights reserved.
+            © <Year />{` ${ORG.name}. All rights reserved.`}
           </p>
           {/* Red pipe separator matches the utility banner at the top of the page. */}
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center sm:justify-end sm:text-right">

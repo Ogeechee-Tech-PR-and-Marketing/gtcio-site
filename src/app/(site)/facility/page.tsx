@@ -3,7 +3,7 @@ import Image from "next/image";
 import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
-  title: "Facility | GTCIO",
+  title: "Facility",
   description:
     "GTCIO's $27 million, 39,700-square-foot training center on AJ Riggs Road in Statesboro, GA: 12 industrial labs built around maintenance, robotics, IoT, and CNC.",
   alternates: { canonical: "/facility" },
@@ -79,8 +79,8 @@ export default function FacilityPage() {
 
       <section className="border-b border-brand-silver/30 bg-brand-white px-6 py-14 sm:px-10">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
-          {page.stats.map((stat, i) => (
-            <div key={i} className="border-l-4 border-brand-red pl-5">
+          {page.stats.map((stat) => (
+            <div key={stat.label} className="border-l-4 border-brand-red pl-5">
               <p className="font-heading text-3xl font-bold text-brand-black">{stat.value}</p>
               <p className="mt-1 text-sm text-brand-gray">{stat.label}</p>
             </div>
@@ -122,12 +122,10 @@ export default function FacilityPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.focusAreasTitle}</h2>
-          {page.focusAreasIntro && (
-            <p className="mt-3 max-w-3xl text-brand-gray">{page.focusAreasIntro}</p>
-          )}
+          <p className="mt-3 max-w-3xl text-brand-gray">{page.focusAreasIntro}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {page.focusAreas.map((area, i) => (
-              <div key={i} className="border-l-4 border-brand-red pl-5">
+            {page.focusAreas.map((area) => (
+              <div key={area.title} className="border-l-4 border-brand-red pl-5">
                 <h3 className="font-heading text-lg font-bold text-brand-black">{area.title}</h3>
                 <p className="mt-1 text-sm text-brand-gray">{area.detail}</p>
               </div>

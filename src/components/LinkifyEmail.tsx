@@ -1,9 +1,8 @@
 const EMAIL_PATTERN = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 
 /**
- * Renders plain text (CMS FAQ answers, etc.) with any email address turned
- * into a mailto: link, so editors can write "contact X at y@z.edu" without
- * needing rich text just to get a working link.
+ * Renders plain text with any email address turned into a mailto: link, so an
+ * FAQ answer can name a contact without needing markup.
  */
 export default function LinkifyEmail({ text }: { text: string }) {
   const parts = text.split(EMAIL_PATTERN);

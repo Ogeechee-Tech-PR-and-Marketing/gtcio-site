@@ -4,37 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-/**
- * Two constraints before adding an item:
- * - 9 items fit the desktop nav at the xl breakpoint with only ~21px to
- *   spare and no overflow handling — a 10th item or longer labels need
- *   re-measuring, or the nav collides with the logo.
- * - A new route must ALSO go in src/app/sitemap.ts, Footer.tsx,
- *   src/lib/links.ts, and public/SITEMAP.html (the add-a-page checklist in
- *   PROJECT.md §13 lists every step).
- */
-const NAV_ITEMS = [
-  { label: "Home", href: "/" },
-  {
-    label: "About",
-    href: "/about",
-    children: [
-      { label: "Mission", href: "/about#mission" },
-      { label: "History", href: "/about#history" },
-      { label: "Advisory Board", href: "/about#advisory-board" },
-      { label: "Development Authority of Bulloch County", href: "/about#bulloch-development-authority" },
-      { label: "FAQ", href: "/about#faq" },
-    ],
-  },
-  { label: "IOT Training Programs", href: "/training" },
-  { label: "IOT Diploma Program", href: "/iot-diploma-program" },
-  { label: "Credentials", href: "/credentials" },
-  { label: "Facility", href: "/facility" },
-  { label: "Partners", href: "/partners" },
-  { label: "News", href: "/news" },
-  { label: "Contact", href: "/contact" },
-];
+import { NAV_ITEMS } from "@/lib/nav";
 
 const BANNER_ORG_TEXT = "WELCOME TO THE GTCIO";
 const BANNER_PARENT_TEXT = "A DIVISION OF OGEECHEE TECHNICAL COLLEGE";

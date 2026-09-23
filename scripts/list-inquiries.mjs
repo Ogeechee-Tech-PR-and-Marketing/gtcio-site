@@ -4,7 +4,7 @@
 // KV_REST_API_TOKEN from .env.local — run `npx vercel env pull .env.local`
 // first if those are blank. Read-only; nothing is deleted.
 import { existsSync, readFileSync } from "node:fs";
-import { createClient } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 
 const envPath = new URL("../.env.local", import.meta.url);
 const env = existsSync(envPath)
@@ -26,7 +26,7 @@ if (!url || !token) {
   process.exit(1);
 }
 
-const kv = createClient({ url, token });
+const kv = new Redis({ url, token });
 const items = await kv.lrange("inquiries:undelivered", 0, -1);
 if (!items.length) {
   console.log("No undelivered inquiries.");

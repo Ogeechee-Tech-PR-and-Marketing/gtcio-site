@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { preload as preloadResource } from "react-dom";
 
 /**
  * The muted, looping background video behind a hero, plus the one control
@@ -29,6 +30,10 @@ export default function HeroVideo({
 }: HeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(true);
+
+  // The poster is the hero's largest paint. A `poster` attribute is only
+  // discovered when the <video> parses, so hint it from the document head.
+  if (poster) preloadResource(poster, { as: "image", fetchPriority: "high" });
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
