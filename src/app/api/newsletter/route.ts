@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { addNewsletterSignup } from "@/lib/constantContact";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
+import { clean, isEmail, readJsonBody } from "@/lib/sanitize";
 
 type Payload = {
   firstName?: string;
@@ -14,19 +15,9 @@ const MAX_NAME = 100;
 const MAX_BODY_BYTES = 5_000; // three short fields; same guard as /api/inquiry
 const RATE_LIMIT = { limit: 5, windowSeconds: 10 * 60 }; // per IP
 
-// Matches api/inquiry/route.ts's clean(): strip control characters, trim, cap
-// length. Built via `new RegExp` (not a /.../ literal) so the \u escapes stay
-// as literal source text through this file's write path.
-const CONTROL_CHARS = new RegExp("[\\u0000-\\u001f\\u007f]+", "g");
-
-function clean(value: string | undefined, max: number): string {
-  return (value ?? "").replace(CONTROL_CHARS, " ").trim().slice(0, max);
-}
-
 export async function POST(request: Request) {
-  // Reject oversized payloads before parsing them.
-  const contentLength = Number(request.headers.get("content-length") ?? 0);
-  if (contentLength > MAX_BODY_BYTES) {
+  // Cheap pre-check; the real cap is enforced on the bytes read below.
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Request too large." }, { status: 413 });
   }
 
@@ -37,12 +28,14 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: Payload;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+  const parsed = await readJsonBody<Payload>(request, MAX_BODY_BYTES);
+  if (!parsed.ok) {
+    return NextResponse.json(
+      { error: parsed.status === 413 ? "Request too large." : "Invalid request." },
+      { status: parsed.status }
+    );
   }
+  const { body } = parsed;
 
   // Honeypot: real people never fill this in. Pretend it worked so bots don't retry.
   if (body.botcheck) {
@@ -50,7 +43,7 @@ export async function POST(request: Request) {
   }
 
   const email = clean(body.email, MAX_EMAIL);
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isEmail(email)) {
     return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
   }
   const firstName = clean(body.firstName, MAX_NAME);
