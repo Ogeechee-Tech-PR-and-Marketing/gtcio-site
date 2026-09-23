@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/iot-diploma-program" },
 };
 
+// Only the diploma carries a program code; the map below widens the union.
+type ProgramOption = { name: string; code?: string; detail: string; url: string };
+
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "IOT Diploma Program: Enrolling Now",
@@ -111,13 +114,6 @@ const DEFAULTS = {
 
 export default function IotDiplomaProgramPage() {
   const page = DEFAULTS;
-  const nonTraditionalResources = DEFAULTS.nonTraditionalResources;
-  const curriculumStages = DEFAULTS.curriculumStages;
-  const programOptions = DEFAULTS.programOptions;
-  const careers = DEFAULTS.careers;
-  const jobDuties = DEFAULTS.jobDuties;
-  const payRanges = DEFAULTS.payRanges;
-  const faqs = DEFAULTS.faqs;
 
   return (
     <>
@@ -157,8 +153,8 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.curriculumTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {curriculumStages.map((stage: { stage: string; detail: string }, i: number) => (
-              <div key={i} className="border border-brand-silver/40 p-6">
+            {page.curriculumStages.map((stage, i) => (
+              <div key={stage.stage} className="border border-brand-silver/40 p-6">
                 <p className="font-display text-sm text-brand-red">Stage {i + 1}</p>
                 <h3 className="font-heading mt-2 text-lg font-bold text-brand-black">{stage.stage}</h3>
                 <p className="mt-2 text-sm text-brand-gray">{stage.detail}</p>
@@ -186,7 +182,7 @@ export default function IotDiplomaProgramPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.moreWaysTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-gray">{page.moreWaysBody}</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {programOptions.map((option) => (
+            {page.programOptions.map((option: ProgramOption) => (
               <div key={option.name} className="border border-brand-silver/40 p-5">
                 <p className="font-bold text-brand-black">
                   {option.name}
@@ -214,9 +210,9 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.careersTitle}</h2>
           <div className="mt-6 flex flex-wrap gap-3">
-            {careers.map((career: string, i: number) => (
+            {page.careers.map((career) => (
               <span
-                key={i}
+                key={career}
                 className="font-heading border-2 border-brand-red px-4 py-2 text-sm font-bold tracking-wide text-brand-red"
               >
                 {career}
@@ -226,8 +222,8 @@ export default function IotDiplomaProgramPage() {
           <p className="mt-4 text-sm text-brand-gray">{page.careersNote}</p>
           <h3 className="font-heading mt-10 text-xl font-bold text-brand-black">{page.jobDutiesTitle}</h3>
           <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {jobDuties.map((duty: { label: string; detail: string }, i: number) => (
-              <li key={i} className="border-l-4 border-brand-red pl-5">
+            {page.jobDuties.map((duty) => (
+              <li key={duty.label} className="border-l-4 border-brand-red pl-5">
                 <p className="font-bold text-brand-black">{duty.label}</p>
                 <p className="mt-1 text-sm text-brand-gray">{duty.detail}</p>
               </li>
@@ -240,8 +236,8 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.payTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {payRanges.map((tier: { value: string; label: string }, i: number) => (
-              <div key={i} className="border border-brand-silver/40 p-6">
+            {page.payRanges.map((tier) => (
+              <div key={tier.label} className="border border-brand-silver/40 p-6">
                 <p className="font-heading text-2xl font-bold text-brand-red">{tier.value}</p>
                 <p className="mt-2 text-sm text-brand-gray">{tier.label}</p>
               </div>
@@ -264,8 +260,8 @@ export default function IotDiplomaProgramPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.studentFaqTitle}</h2>
           <div className="mt-6 flex flex-col gap-6">
-            {faqs.map((item: { question: string; answer: string }, i: number) => (
-              <div key={i} className="border-l-4 border-brand-black pl-5">
+            {page.faqs.map((item) => (
+              <div key={item.question} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
                 <p className="mt-1 text-brand-gray"><LinkifyEmail text={item.answer} /></p>
               </div>
@@ -287,7 +283,7 @@ export default function IotDiplomaProgramPage() {
             <p className="font-heading font-bold text-brand-black">{page.nonTraditionalHeading}</p>
             <p className="mt-2 text-sm text-brand-gray">{page.nonTraditionalBody}</p>
             <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-              {nonTraditionalResources.map((resource) => (
+              {page.nonTraditionalResources.map((resource) => (
                 <li key={resource.url}>
                   <a
                     href={resource.url}

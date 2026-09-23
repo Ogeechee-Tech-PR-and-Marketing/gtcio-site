@@ -99,12 +99,8 @@ const COURSE_AREAS = [
 
 export default function TrainingPage() {
   const page = DEFAULTS;
-  const employerFaqs = DEFAULTS.employerFaqs;
-  const stats = STATS;
   // Filtered to this page's audience — see the matching filter on /credentials.
   const affiliations = affiliationsFor(AFFILIATIONS, "employer");
-  const services = SERVICES;
-  const courseAreas = COURSE_AREAS;
 
   return (
     <>
@@ -116,8 +112,8 @@ export default function TrainingPage() {
         imagePosition="61% 31%"
         extra={
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat, i) => (
-              <div key={i} className="border-l-4 border-brand-red pl-5">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="border-l-4 border-brand-red pl-5">
                 <p className="font-heading text-3xl font-bold text-brand-white">{stat.value}</p>
                 <p className="mt-1 text-sm text-brand-silver">{stat.label}</p>
               </div>
@@ -161,8 +157,8 @@ export default function TrainingPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.affiliationsTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {affiliations.map((a, i) => (
-              <div key={i} className="border border-brand-silver/40 p-6">
+            {affiliations.map((a) => (
+              <div key={a.title} className="border border-brand-silver/40 p-6">
                 <p className="font-heading text-lg font-bold text-brand-red">{a.title}</p>
                 <p className="mt-2 text-sm text-brand-gray">{a.detail}</p>
               </div>
@@ -175,8 +171,8 @@ export default function TrainingPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.servicesTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((s, i) => (
-              <div key={i} className="border border-brand-silver/40 p-6">
+            {SERVICES.map((s) => (
+              <div key={s.title} className="border border-brand-silver/40 p-6">
                 <h3 className="font-heading text-lg font-bold text-brand-red">{s.title}</h3>
                 <p className="mt-2 text-sm text-brand-gray">{s.detail}</p>
               </div>
@@ -190,12 +186,12 @@ export default function TrainingPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.courseAreasTitle}</h2>
           <p className="mt-3 max-w-3xl text-brand-gray">{page.courseAreasIntro}</p>
           <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {courseAreas.map((c, i) => (
-              <div key={i} className="border-t-2 border-brand-red pt-4">
+            {COURSE_AREAS.map((c) => (
+              <div key={c.area} className="border-t-2 border-brand-red pt-4">
                 <h3 className="font-heading text-lg font-bold text-brand-black">{c.area}</h3>
                 <ul className="mt-3 flex flex-col gap-2">
-                  {c.courses.map((course, j) => (
-                    <li key={j} className="text-sm text-brand-gray">
+                  {c.courses.map((course) => (
+                    <li key={course} className="text-sm text-brand-gray">
                       {course}
                     </li>
                   ))}
@@ -210,8 +206,8 @@ export default function TrainingPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.faqTitle}</h2>
           <div className="mt-6 flex flex-col gap-6">
-            {employerFaqs.map((item: { question: string; answer: string }, i: number) => (
-              <div key={i} className="border-l-4 border-brand-black pl-5">
+            {page.employerFaqs.map((item) => (
+              <div key={item.question} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
                 <p className="mt-1 text-brand-gray"><LinkifyEmail text={item.answer} /></p>
               </div>

@@ -62,10 +62,7 @@ export default function InquiryForm({
     payload.botcheck = formData.get("botcheck") ?? "";
 
     const missingRequiredCheckboxes = fields.find(
-      (field) =>
-        field.type === "checkboxes" &&
-        field.required &&
-        (payload[field.name] as FormDataEntryValue[]).length === 0
+      (field) => field.type === "checkboxes" && field.required && formData.getAll(field.name).length === 0
     );
     if (missingRequiredCheckboxes) {
       setError(`Please select at least one option for "${missingRequiredCheckboxes.label}".`);

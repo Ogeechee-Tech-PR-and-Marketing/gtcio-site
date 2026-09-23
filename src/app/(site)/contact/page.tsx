@@ -29,7 +29,6 @@ const DEFAULTS = {
 
 export default function ContactPage() {
   const page = DEFAULTS;
-  const contactReasons = DEFAULTS.contactReasons;
 
   return (
     <>
@@ -76,7 +75,7 @@ export default function ContactPage() {
                   type: "select",
                   required: true,
                   halfWidth: false,
-                  options: contactReasons,
+                  options: page.contactReasons,
                   placeholder: "Select a reason…",
                 },
                 { name: "firstName", label: "First Name", required: true },

@@ -94,9 +94,8 @@ function NewsList({ items }: { items: NewsItem[] }) {
 
 export default function NewsPage() {
   const page = DEFAULTS;
-  const items = NEWS_ITEMS;
-  const press = items.filter((i) => i.category !== "media");
-  const media = items.filter((i) => i.category === "media");
+  const press = NEWS_ITEMS.filter((i) => i.category !== "media");
+  const media = NEWS_ITEMS.filter((i) => i.category === "media");
 
   const mediaContactName = "Sean Payne";
   const mediaContactEmail = "spayne@ogeecheetech.edu";

@@ -35,17 +35,15 @@ const DEFAULTS = {
     { label: "IOT TRAINING PROGRAMS", destination: "training" },
     { label: "IOT DIPLOMA PROGRAM", destination: "iot" },
     { label: "BECOME A PARTNER", destination: "becomePartner" },
-  ] as CtaButtonData[],
+  ] satisfies CtaButtonData[],
   partnerBandTitle: "Become a GTCIO Partner",
   partnerBandBody:
     "GTCIO is built alongside the employers who hire our graduates. Provide internships and apprenticeships; there's more than one way to get involved. We're actively growing our partner network – come be a part!",
-  partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } as CtaButtonData,
+  partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } satisfies CtaButtonData,
 };
 
 export default function Home() {
   const page = DEFAULTS;
-  const heroButtons = DEFAULTS.heroButtons;
-  const heroTitle = DEFAULTS.heroTitle;
 
   const pathways = [
     { ...DEFAULTS.employersCard, href: "/training", cta: "See Training for Employers" },
@@ -93,13 +91,13 @@ export default function Home() {
                 Arial Narrow fallback if Adobe Fonts fails) would be clipped rather
                 than wrapped. Keep the headline short and it stays on one line. */}
             <h1 className="font-display text-4xl leading-tight sm:text-5xl xl:text-[3.25rem] 2xl:text-[3.5rem]">
-              {heroTitle}
+              {page.heroTitle}
             </h1>
           </HeroCard>
           <HeroCard className="mt-6">
             <p className="max-w-2xl text-lg text-brand-white">{page.heroDescription}</p>
             <div className="mt-9 flex flex-wrap gap-4">
-              {heroButtons.map((button) => (
+              {page.heroButtons.map((button) => (
                 <CtaButton key={button.destination} button={button} variant="primary" />
               ))}
             </div>
@@ -113,8 +111,8 @@ export default function Home() {
           <p className="mt-4 max-w-3xl text-brand-gray">{page.sectionBody}</p>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {pathways.map((p, i) => (
-              <div key={i} className="flex flex-col justify-between border border-brand-silver/40 p-6">
+            {pathways.map((p) => (
+              <div key={p.href} className="flex flex-col justify-between border border-brand-silver/40 p-6">
                 <div>
                   <h3 className="font-heading text-xl font-bold text-brand-black">{p.title}</h3>
                   <p className="mt-2 text-sm text-brand-gray">{p.description}</p>

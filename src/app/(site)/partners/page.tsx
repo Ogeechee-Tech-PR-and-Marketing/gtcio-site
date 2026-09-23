@@ -58,15 +58,13 @@ const DEFAULTS = {
 
 export default function PartnersPage() {
   const page = DEFAULTS;
-  const pathways = DEFAULTS.pathways;
-  const partners = PARTNERS;
 
   // The checkbox list is generated from the pathway cards shown above it —
   // except FORM_LABEL_OVERRIDES (a card title that should read differently as
   // a form choice) and EXTRA_FORM_OPTIONS (a form choice with no pathway card
   // of its own).
   const pathwayOptions = [
-    ...pathways.map((p: { title: string }) => FORM_LABEL_OVERRIDES[p.title] ?? p.title),
+    ...page.pathways.map((p) => FORM_LABEL_OVERRIDES[p.title] ?? p.title),
     ...EXTRA_FORM_OPTIONS,
     "Something else / not sure yet",
   ];
@@ -97,8 +95,8 @@ export default function PartnersPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-3xl font-bold text-brand-black">{page.pathwaysTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pathways.map((p: { title: string; description: string }, i: number) => (
-              <div key={i} className="flex flex-col justify-between border border-brand-silver/40 p-6">
+            {page.pathways.map((p) => (
+              <div key={p.title} className="flex flex-col justify-between border border-brand-silver/40 p-6">
                 <div>
                   <h3 className="font-heading text-lg font-bold text-brand-red">{p.title}</h3>
                   <p className="mt-2 text-sm text-brand-gray">{p.description}</p>
@@ -126,7 +124,7 @@ export default function PartnersPage() {
               directory list below. Uniform white tiles keep very different
               logo shapes/colors (wordmarks vs. icons) reading as one set. */}
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {partners.map((partner) => (
+            {PARTNERS.map((partner) => (
               <a
                 key={partner.id}
                 href={`#${partnerSlug(partner.name)}`}
@@ -152,7 +150,7 @@ export default function PartnersPage() {
               right — the layout of the Georgia Cyber Center partners directory
               this page is modelled on. */}
           <div className="mt-8 flex flex-col gap-6">
-            {partners.map((partner) => (
+            {PARTNERS.map((partner) => (
               <div
                 key={partner.id}
                 id={partnerSlug(partner.name)}

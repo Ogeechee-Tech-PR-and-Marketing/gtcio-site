@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
+type BoardMember = {
+  name: string;
+  title: string;
+  organization: string;
+  category: "board" | "exOfficio";
+};
+
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
   heroEyebrow: "About GTCIO",
@@ -118,7 +125,7 @@ const DEFAULTS = {
       detail: "GTCIO officially opens its doors.",
       highlight: true,
     },
-  ],
+  ] satisfies TimelineEvent[],
   advisoryTitle: "Advisory Board",
   advisoryBody:
     "GTCIO's curriculum is shaped by an advisory board of regional employers and industry leaders, so what we teach stays aligned with the equipment and skills the workforce actually needs.",
@@ -213,7 +220,7 @@ const DEFAULTS = {
       organization: "Development Authority of Bulloch County",
       category: "exOfficio",
     },
-  ],
+  ] satisfies BoardMember[],
   faqs: [
     {
       question: "Who runs GTCIO?",
@@ -238,20 +245,10 @@ const DEFAULTS = {
   ],
 };
 
-type BoardMember = {
-  name: string;
-  title: string;
-  organization: string;
-  category: "board" | "exOfficio";
-};
-
 export default function AboutPage() {
   const page = DEFAULTS;
-  const faqs = DEFAULTS.faqs;
-  const timeline: TimelineEvent[] = DEFAULTS.historyTimeline;
-  const advisoryMembers: BoardMember[] = DEFAULTS.advisoryMembers as BoardMember[];
-  const boardMembers = advisoryMembers.filter((m) => m.category !== "exOfficio");
-  const exOfficioMembers = advisoryMembers.filter((m) => m.category === "exOfficio");
+  const boardMembers = page.advisoryMembers.filter((m) => m.category !== "exOfficio");
+  const exOfficioMembers = page.advisoryMembers.filter((m) => m.category === "exOfficio");
 
   return (
     <>
@@ -282,11 +279,11 @@ export default function AboutPage() {
       <section id="history" className="scroll-mt-52 sm:scroll-mt-60 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.historyTitle}</h2>
-          {page.historyBody.split("\n\n").map((paragraph: string, i: number) => (
+          {page.historyBody.split("\n\n").map((paragraph, i) => (
             <p key={i} className="mt-4 text-brand-black">{paragraph}</p>
           ))}
 
-          <AboutTimeline items={timeline} />
+          <AboutTimeline items={page.historyTimeline} />
         </div>
       </section>
 
@@ -350,8 +347,8 @@ export default function AboutPage() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-heading text-2xl font-bold text-brand-red">FAQ</h2>
           <div className="mt-6 flex flex-col gap-6">
-            {faqs.map((item: { question: string; answer: string }, i: number) => (
-              <div key={i} className="border-l-4 border-brand-black pl-5">
+            {page.faqs.map((item) => (
+              <div key={item.question} className="border-l-4 border-brand-black pl-5">
                 <p className="font-heading font-bold text-brand-black">{item.question}</p>
                 <p className="mt-1 text-brand-gray">{item.answer}</p>
               </div>
