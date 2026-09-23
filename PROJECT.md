@@ -1,6 +1,6 @@
 # GTCIO website — project brief
 
-What a developer needs to pick this project up cold. Last updated 2026-09-17.
+What a developer needs to pick this project up cold. Last updated 2026-09-23.
 Check claims against the code before trusting them.
 
 > The long-form history behind this file (dated decisions, resolved defects,
@@ -59,6 +59,7 @@ redesign it without being asked.
 src/proxy.ts              canonical-host redirect + site-wide PIN gate (§6)
 src/app/
   layout.tsx              root: <html>/<body> only, no chrome
+  not-found.tsx           branded 404 for unmatched URLs — outside (site), so it wears SiteChrome itself
   site-pin/               /site-pin — PIN entry screen (outside (site): no Header/Footer)
   (site)/                 every public page; route group adds Header + Footer
     page.tsx              /            (home)
@@ -97,16 +98,20 @@ src/lib/
                           /credentials and /training via a showOn tag (§4)
   constantContact.ts      newsletter API client, server-only (§8)
   constantContactStore.ts Vercel KV wrapper for the OAuth tokens (§8)
+  sanitize.ts             clean() / isEmail() / readJsonBody() shared by the two POST routes (§5)
   mail.ts                 picks the email provider: Resend, then Graph, else none (§5)
   resendMail.ts           Resend REST client — sends as website@gtcio.org, the live provider for now (§5)
   graphMail.ts            Microsoft Graph sendMail client — alternate provider (§5)
-src/components/           Header, Footer, PageHero, HeroCard, InquiryForm,
+src/components/           SiteChrome (skip link + Header + <main> + Footer),
+                          PageHero, HeroCard, HeroVideo, InquiryForm,
                           NewsletterSignup, Button/CtaButton, AboutTimeline, …
 ```
 
 **Why the `(site)` route group exists:** so chrome-free routes (`/site-pin`)
 don't inherit Header/Footer. New routes that shouldn't carry the nav belong
-outside `(site)` too.
+outside `(site)` too. (`not-found.tsx` is outside the group by necessity —
+Next renders the root not-found for unmatched URLs — and opts back into
+the chrome by rendering `SiteChrome` itself.)
 
 ## 4. Content model — everything is code
 
@@ -384,7 +389,7 @@ the same URL.
 
 - **Confirm form email reaches staff on production.** Resend is deployed to
   Production and verified on a preview (§5), and the rest of the launch
-  checklist is done (PIN removed, vercel.app 308s to www, CSP live — all
+  checklist is done (PIN removed, vercel.app 308s to the canonical host, CSP live — all
   2026-09-15). Remaining: submit each live form once for real, confirm Jan
   (and Sean, for a media inquiry) receive it, have them mark it Not Junk if
   needed, and check `npm run inquiries` is empty. Then delete this item.
