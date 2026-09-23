@@ -5,15 +5,23 @@
 export const SITE_URL = "https://gtcio.ogeecheetech.edu";
 
 /**
- * The organisation as the footer and Contact page state it. The address is a
- * confirmed fact (PROJECT.md §11) — the About FAQ repeats it in prose, so a
- * change here needs that sentence updated too.
+ * The organisation as the footer, Contact page and the root layout's JSON-LD
+ * state it. The address is a confirmed fact (PROJECT.md §11) — the About FAQ
+ * repeats it in prose, so a change here needs that sentence updated too.
  */
+const STREET = "66 AJ Riggs Road";
+const CITY = "Statesboro";
+const STATE = "GA";
+const ZIP = "30458";
+
 export const ORG = {
   name: "Georgia Training Center for Industrial Operations",
+  shortName: "GTCIO",
   tagline: "A Division of Ogeechee Technical College",
-  address: "66 AJ Riggs Road, Statesboro, GA 30458",
+  address: `${STREET}, ${CITY}, ${STATE} ${ZIP}`,
+  postal: { street: STREET, city: CITY, state: STATE, zip: ZIP },
   phone: "(800) 646-1316",
+  parent: { name: "Ogeechee Technical College", url: "https://www.ogeecheetech.edu" },
 };
 
 /**

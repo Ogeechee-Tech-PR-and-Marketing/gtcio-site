@@ -270,7 +270,9 @@ SITE_ACCESS_PIN                          optional site gate; unset = off (unset 
 whose `Host` isn't `gtcio.ogeecheetech.edu` (i.e. `www.gtcio.org`, `gtcio.org`,
 `gtcio-site.vercel.app`) is 308'd to the canonical URL (`SITE_URL` in
 `src/lib/site.ts`). Preview deployments are unaffected. Every page also emits
-a `<link rel="canonical">` and per-page description/Open Graph tags.
+a `<link rel="canonical">` and per-page description/Open Graph tags, and the
+root layout emits one `EducationalOrganization` JSON-LD block (name, address,
+phone, parent college) built from `ORG` in `src/lib/site.ts`.
 
 **Site-wide PIN gate** (same file): if `SITE_ACCESS_PIN` is set,
 visitors without the cookie are redirected to `/site-pin`; a correct entry
