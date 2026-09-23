@@ -6,7 +6,7 @@ import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
 import { CONTACTS } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "News | GTCIO",
+  title: "News",
   description:
     "Press releases and media coverage of the Georgia Training Center for Industrial Operations, a division of Ogeechee Technical College.",
   alternates: { canonical: "/news" },

@@ -4,7 +4,7 @@ import AboutTimeline from "@/components/AboutTimeline";
 import type { TimelineEvent } from "@/components/AboutTimeline";
 
 export const metadata: Metadata = {
-  title: "About | GTCIO",
+  title: "About",
   description:
     "Who GTCIO is: the mission, the history of the $27M training center in Statesboro, GA, its advisory board, and answers to common questions.",
   alternates: { canonical: "/about" },

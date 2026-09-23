@@ -6,7 +6,7 @@ import LinkifyEmail from "@/components/LinkifyEmail";
 import { AFFILIATIONS, affiliationsFor } from "@/lib/credentials";
 
 export const metadata: Metadata = {
-  title: "IOT Training Programs | GTCIO",
+  title: "IOT Training Programs",
   description:
     "Hands-on industrial systems training for employers: short courses, customized contract training, skills assessments, and DOL-registered apprenticeships at GTCIO.",
   alternates: { canonical: "/training" },

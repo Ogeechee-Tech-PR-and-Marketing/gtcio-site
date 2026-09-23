@@ -4,7 +4,7 @@ import CtaButton from "@/components/CtaButton";
 import LinkifyEmail from "@/components/LinkifyEmail";
 
 export const metadata: Metadata = {
-  title: "IOT Diploma Program | GTCIO",
+  title: "IOT Diploma Program",
   description:
     "Ogeechee Tech's Industrial Operations Technology diploma: four semesters of hands-on training in mechanical, electrical, robotics, and PLC systems, with SACA credentials built in.",
   alternates: { canonical: "/iot-diploma-program" },

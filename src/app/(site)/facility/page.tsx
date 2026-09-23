@@ -3,7 +3,7 @@ import Image from "next/image";
 import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
-  title: "Facility | GTCIO",
+  title: "Facility",
   description:
     "GTCIO's $27 million, 39,700-square-foot training center on AJ Riggs Road in Statesboro, GA: 12 industrial labs built around maintenance, robotics, IoT, and CNC.",
   alternates: { canonical: "/facility" },

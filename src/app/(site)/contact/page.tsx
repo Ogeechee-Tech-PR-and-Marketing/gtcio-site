@@ -4,7 +4,7 @@ import InquiryForm from "@/components/InquiryForm";
 import { CONTACTS, ORG } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact | GTCIO",
+  title: "Contact",
   description:
     "Contact GTCIO at Ogeechee Technical College: program questions, employer training, partnerships, and media inquiries.",
   alternates: { canonical: "/contact" },

@@ -19,7 +19,7 @@ import {
 import { DESTINATIONS } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "Credentials | GTCIO",
+  title: "Credentials",
   description:
     "Every industry credential built into GTCIO's training — SACA credentials, FANUC, and OSHA 10 — and the accreditations Ogeechee Tech holds that make them count.",
   alternates: { canonical: "/credentials" },

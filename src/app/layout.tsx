@@ -7,7 +7,11 @@ const DESCRIPTION =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "GTCIO | Georgia Training Center for Industrial Operations",
+  // Pages set a bare title ("About") and the template adds the suffix.
+  title: {
+    default: "GTCIO | Georgia Training Center for Industrial Operations",
+    template: "%s | GTCIO",
+  },
   description: DESCRIPTION,
   // Link previews (LinkedIn, Facebook, iMessage, Slack…). Title and
   // description are left out so each page's own resolve into og:title /

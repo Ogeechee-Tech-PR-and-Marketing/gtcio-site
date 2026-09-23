@@ -48,7 +48,7 @@ export type CtaButton = {
  * Accepts only site-relative or http(s) URLs; anything else (javascript:,
  * data:, vbscript:…) comes back null and simply doesn't render.
  */
-export function safeHref(url: string | null | undefined): string | null {
+function safeHref(url: string | null | undefined): string | null {
   if (!url) return null;
   if (url.startsWith("/") || /^https?:\/\//i.test(url)) return url;
   return null;

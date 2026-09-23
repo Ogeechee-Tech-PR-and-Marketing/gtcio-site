@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export type InquiryField = {
+type InquiryField = {
   name: string;
   label: string;
   /**

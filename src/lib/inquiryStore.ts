@@ -33,7 +33,3 @@ export async function storeUndeliveredInquiry(record: StoredInquiry): Promise<vo
   await kv.lpush(KEY, record);
   await kv.ltrim(KEY, 0, MAX_STORED - 1);
 }
-
-export async function listUndeliveredInquiries(): Promise<StoredInquiry[]> {
-  return kv.lrange<StoredInquiry>(KEY, 0, -1);
-}

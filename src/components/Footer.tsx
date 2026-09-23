@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DESTINATIONS } from "@/lib/links";
+import { DESTINATIONS, isExternal } from "@/lib/links";
 import { NAV_ITEMS } from "@/lib/nav";
 import { ORG } from "@/lib/site";
 import NewsletterSignup from "./NewsletterSignup";
@@ -50,7 +50,7 @@ export default function Footer() {
             <p className="font-display text-sm text-brand-gold">{col.heading}</p>
             <ul className="mt-4 flex flex-col gap-2">
               {col.links.map((link) => {
-                const external = link.href.startsWith("http");
+                const external = isExternal(link.href);
                 return (
                   <li key={link.label}>
                     <Link

@@ -7,7 +7,7 @@ import ScrollToHash from "@/components/ScrollToHash";
 import { PARTNERS } from "@/lib/partners";
 
 export const metadata: Metadata = {
-  title: "Partners | GTCIO",
+  title: "Partners",
   description:
     "Partner with GTCIO: hire our graduates, sponsor equipment, or build a training partnership. Tell us how your organization wants to get involved.",
   alternates: { canonical: "/partners" },
