@@ -156,10 +156,11 @@ export default function TrainingPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.affiliationsTitle}</h2>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Four cards, so four columns from lg up — three left one orphaned on a second row. */}
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {affiliations.map((a) => (
               <div key={a.title} className="border border-brand-silver/40 p-6">
-                <p className="font-heading text-lg font-bold text-brand-red">{a.title}</p>
+                <h3 className="font-heading text-lg font-bold text-brand-red">{a.title}</h3>
                 <p className="mt-2 text-sm text-brand-gray">{a.detail}</p>
               </div>
             ))}
