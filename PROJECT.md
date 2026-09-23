@@ -41,7 +41,7 @@ redesign it without being asked.
 
 | | |
 | --- | --- |
-| Framework | Next.js **16.3.5**, App Router, Turbopack |
+| Framework | Next.js **16.3.6**, App Router, Turbopack |
 | UI | React 19.2, Tailwind **v4** (CSS-first config, no `tailwind.config.js`) |
 | Language | TypeScript, strict |
 | Email | Resend (Vercel Marketplace) — **interim**; Microsoft Graph wired up as the alternate provider (§5) |
