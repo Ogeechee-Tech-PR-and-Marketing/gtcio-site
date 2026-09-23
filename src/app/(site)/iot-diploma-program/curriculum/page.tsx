@@ -3,7 +3,6 @@ import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import Button from "@/components/Button";
 import {
-  COURSES,
   PROGRAM_COURSES,
   GENERAL_EDUCATION_COURSES,
   PROGRAM_CREDITS,
@@ -27,7 +26,15 @@ export const metadata: Metadata = {
  *
  * Deliberately not in the top navigation — students reach it from the
  * "Every course, in detail" band on /iot-diploma-program.
+ *
+ * Courses display in ascending course-number order (site owner's call,
+ * 2026-09-23). The data file keeps the catalog's teaching sequence; the sort
+ * happens only here.
  */
+const byCourseNumber = (a: { code: string }, b: { code: string }) =>
+  a.code.split(" ")[1].localeCompare(b.code.split(" ")[1], undefined, { numeric: true });
+const programCourses = [...PROGRAM_COURSES].sort(byCourseNumber);
+const generalEducationCourses = [...GENERAL_EDUCATION_COURSES].sort(byCourseNumber);
 export default function CurriculumPage() {
   return (
     <>
@@ -97,7 +104,7 @@ export default function CurriculumPage() {
                 </tr>
               </thead>
               <tbody>
-                {PROGRAM_COURSES.map((course) => (
+                {programCourses.map((course) => (
                   <tr key={course.code} className="border-b border-brand-silver/30 align-top">
                     <td className="py-3 pr-4 whitespace-nowrap font-bold text-brand-black">
                       <a href={`#${course.code.replace(/\s+/g, "-").toLowerCase()}`} className="hover:text-brand-red">
@@ -159,7 +166,7 @@ export default function CurriculumPage() {
                 </tr>
               </thead>
               <tbody>
-                {GENERAL_EDUCATION_COURSES.map((course) => (
+                {generalEducationCourses.map((course) => (
                   <tr key={course.code} className="border-b border-brand-silver/30 align-top">
                     <td className="py-3 pr-4 whitespace-nowrap font-bold text-brand-black">
                       <a href={`#${course.code.replace(/\s+/g, "-").toLowerCase()}`} className="hover:text-brand-red">
@@ -196,7 +203,7 @@ export default function CurriculumPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">Course by course</h2>
           <div className="mt-10 flex flex-col gap-12">
-            {COURSES.map((course) => (
+            {[...programCourses, ...generalEducationCourses].map((course) => (
               <article
                 key={course.code}
                 id={course.code.replace(/\s+/g, "-").toLowerCase()}

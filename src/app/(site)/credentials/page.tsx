@@ -35,7 +35,7 @@ for (const course of PROGRAM_COURSES) {
 
 // DEFAULTS is this page's content — code-only, no CMS (PROJECT.md §4).
 const DEFAULTS = {
-  heroEyebrow: "Credentials",
+  heroEyebrow: "IOT Diploma Program Credentials",
   heroTitle: "Proof you can do the work",
   heroDescription:
     "A diploma says you finished. A credential says an industry body tested you and agreed.",
@@ -44,7 +44,7 @@ const DEFAULTS = {
     "Every graduate of the Industrial Operations Technology diploma is credentialed through SACA, and the program builds in two more credentials employers ask for by name.",
   affiliationsTitle: "Why a credential from here counts",
   affiliationsBody:
-    "Ogeechee Tech is accredited by the equipment makers and credentialing bodies whose credentials it awards — so students test on the same platforms the industry runs, at a site those organisations authorised.",
+    "Ogeechee Tech is accredited by the equipment makers and credentialing bodies whose credentials it awards — so students test on the same platforms the industry runs, at a site those organizations authorized.",
   sacaTitle: "What SACA is, and why it matters",
   ladderTitle: "How SACA credentials stack",
   ladderBody:
@@ -178,7 +178,9 @@ export default function CredentialsPage() {
               >
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                   <p className="font-display text-sm text-brand-red">Tier {i + 1}</p>
-                  <h3 className="font-heading text-lg font-bold text-brand-black">{tier.name}</h3>
+                  {!tier.hideName && (
+                    <h3 className="font-heading text-lg font-bold text-brand-black">{tier.name}</h3>
+                  )}
                   <p className="text-sm text-brand-gray">{tier.codes}</p>
                   {tier.inProgram && (
                     <span className="font-heading border border-brand-red px-2 py-0.5 text-xs font-bold tracking-wide text-brand-red">
@@ -217,13 +219,11 @@ export default function CredentialsPage() {
                 {family === "Systems & Controls" && (
                   <div className="mb-10 border-t-2 border-brand-gold pt-8">
                     <h3 className="font-heading text-xl font-bold text-brand-black">
-                      Micro-credentials included in Specialist Certification
+                      Micro-credentials included
                     </h3>
                     <p className="mt-3 max-w-3xl text-brand-gray">
-                      Each credential below is a separate SACA exam. Passing the required core set
-                      for a track earns the Specialist certification — see &quot;How SACA
-                      credentials stack&quot; above. (The FANUC credential further down is issued
-                      directly by FANUC America, not SACA, and isn&apos;t part of that bundle.)
+                      Each credential below is a separate SACA exam. (The FANUC credential further
+                      down is issued directly by FANUC America, not SACA.)
                     </p>
                   </div>
                 )}

@@ -39,7 +39,7 @@ const DEFAULTS = {
   ] as CtaButtonData[],
   partnerBandTitle: "Become a GTCIO Partner",
   partnerBandBody:
-    "GTCIO is built alongside the employers who hire our graduates. Hire our technicians, provide internships and apprenticeships; there is more than one way to get involved. We are actively growing our partner network – come be a part!",
+    "GTCIO is built alongside the employers who hire our graduates. Provide internships and apprenticeships; there's more than one way to get involved. We're actively growing our partner network – come be a part!",
   partnerBandButton: { label: "BECOME A PARTNER", destination: "becomePartner" } as CtaButtonData,
 };
 

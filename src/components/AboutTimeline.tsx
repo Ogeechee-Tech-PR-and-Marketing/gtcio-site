@@ -54,7 +54,10 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
           ref={trackRef}
           role="list"
           aria-label="GTCIO project timeline"
-          className="flex snap-x snap-mandatory gap-0 overflow-x-auto scroll-smooth pb-2"
+          // `relative` makes the track the containing block for the links'
+          // absolutely-positioned sr-only text; otherwise it escapes the
+          // overflow clip and widens the whole page on mobile.
+          className="relative flex snap-x snap-mandatory gap-0 overflow-x-auto scroll-smooth pb-2"
         >
           {items.map((item, i) => {
             const { year, rest } = splitDate(item.date);

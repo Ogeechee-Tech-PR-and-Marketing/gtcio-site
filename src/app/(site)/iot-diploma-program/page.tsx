@@ -28,8 +28,8 @@ const DEFAULTS = {
     { label: "Women's Manufacturing Network", url: "https://www.wmnorg.com" },
     { label: "WIM Georgia", url: "https://www.womeninmanufacturing.org/georgia" },
   ],
-  viewProgramButton: { label: "VIEW IOT PROGRAM", destination: "iotProgramFlipbook" as const },
-  downloadProgramButton: { label: "DOWNLOAD IOT PROGRAM", destination: "iotProgramPdf" as const },
+  viewProgramButton: { label: "VIEW IOT PROGRAM CATALOG (FLIP)", destination: "iotProgramFlipbook" as const },
+  downloadProgramButton: { label: "DOWNLOAD IOT PROGRAM (PDF)", destination: "iotProgramPdf" as const },
   curriculumTitle: "Curriculum & credentials",
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
@@ -75,8 +75,8 @@ const DEFAULTS = {
   // controls the visual columns: odd positions (1st, 3rd, 5th) fall in the
   // left column, even positions (2nd, 4th, 6th) in the right column.
   jobDuties: [
-    { label: "Keeping things moving", detail: "Installs, troubleshoots, and repairs manufacturing machinery, equipment, and controls." },
-    { label: "Fixing what breaks", detail: "Diagnosing a problem by watching a machine run, then replacing the bad part: motors, conveyors, transmissions, pumps, hydraulic and pneumatic systems." },
+    { label: "Keeping things moving", detail: "Running the line day to day: setting up new machinery, maintaining the equipment and controls already on the floor, and getting production back up fast when something stops." },
+    { label: "Tracking down the problems", detail: "Figuring out what's wrong by watching and listening to a machine run, then getting it fixed, whether that's a motor, a conveyor, a pump, or a hydraulic or pneumatic system." },
     { label: "Electrical and controls work", detail: "AC/DC circuit troubleshooting, industrial wiring, motor controls, and programming/troubleshooting PLCs, the \"brains\" behind automated equipment." },
     { label: "Reading blueprints and schematics", detail: "Understanding how a machine goes together or how a system is wired." },
     { label: "Preventive maintenance", detail: "Scheduled inspections, lubrication, and adjustments make up a huge share of the actual job, not just emergency repairs." },
@@ -102,9 +102,9 @@ const DEFAULTS = {
     { question: "Is this an online program?", answer: "Some lectures are available online, but labs are not. Skills are acquired through hands-on labs at Ogeechee Tech." },
     { question: "How long does it take to finish?", answer: "The entire program can be completed in four semesters." },
     { question: "How much does the program cost?", answer: "The program costs approximately $9,500 before financial aid — such as the HOPE Grant, HOPE Career Grant, and Pell Grant — is applied." },
-    { question: "What credential do I earn?", answer: "Every student who completes the diploma earns micro-credentials through SACA (the Smart Automation Certification Alliance). Four SACA credentials are built into the program for all graduates, and they are recognized industry-wide, not just in Georgia." },
+    { question: "What credential do I earn?", answer: "Every student who completes the diploma earns micro-credentials through SACA (the Smart Automation Certification Alliance). Twenty-one SACA credentials are built into the program for all graduates, and they are recognized industry-wide, not just in Georgia." },
     { question: "Should I do the diploma or one of the certificates?", answer: "The diploma is the full program, and every diploma graduate is credentialed through SACA. The three certificates — Electrical/Mechanical, PLC, and Robotics — break the same curriculum into smaller pieces, so you can start smaller or focus on just the part of the job you're after. All four options are listed under \"More than one way in\" above." },
-    { question: "How much can I expect to earn after graduating?", answer: "Most graduates start in entry-level or operator roles and grow from there. The pay ranges are listed above: mid-$30ks to low-$40ks starting out, $55k–$75k for an experienced maintenance and operations technician, and $75k–$100k+ for an automation and controls specialist and supervisor." },
+    { question: "How much can I expect to earn after graduating with the full diploma?", answer: "Most graduates start in entry-level or operator roles and grow from there. The pay ranges are listed above: mid-$30ks to low-$40ks starting out, $55k–$75k for an experienced maintenance and operations technician, and $75k–$100k+ for an automation and controls specialist and supervisor." },
   ],
   applyHeading: "Sign up today, and we'll see you here!",
   applyButton: { label: "APPLY NOW", destination: "apply" as const },
@@ -140,7 +140,7 @@ export default function IotDiplomaProgramPage() {
         cta={
           // Three buttons: apply, read the brochure, save the brochure. They
           // wrap rather than shrink — at 375px each takes its own row, which
-          // keeps the long "DOWNLOAD IOT PROGRAM" label on one line.
+          // keeps the long "VIEW IOT PROGRAM CATALOG (FLIP)" label on one line.
           <div className="flex flex-wrap gap-3">
             <CtaButton button={page.applyButton} variant="primary" />
             <CtaButton button={page.viewProgramButton} variant="primary" />
@@ -203,7 +203,7 @@ export default function IotDiplomaProgramPage() {
                     rel="noopener noreferrer"
                     className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
                   >
-                    View catalog page →
+                    View OTC catalog page →
                   </a>
                 )}
               </div>

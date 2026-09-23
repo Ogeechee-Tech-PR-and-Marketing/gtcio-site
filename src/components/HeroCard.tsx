@@ -58,10 +58,17 @@ export default function HeroCard({
     let node: Node | null;
     while ((node = walker.nextNode())) {
       if (!node.textContent?.trim()) continue;
+      // Screen-reader-only text (e.g. Button's "(opens in a new tab)") is
+      // clipped, but its rects still report where it would have rendered.
+      if (node.parentElement?.closest(".sr-only")) continue;
       range.selectNodeContents(node);
       for (const rect of range.getClientRects()) {
         maxRight = Math.max(maxRight, rect.right);
       }
+    }
+    // Buttons extend past their text by their own padding.
+    for (const el of content.querySelectorAll("a, button")) {
+      maxRight = Math.max(maxRight, el.getBoundingClientRect().right);
     }
     if (maxRight > 0) {
       // +1px guards against sub-pixel rounding pushing the last word

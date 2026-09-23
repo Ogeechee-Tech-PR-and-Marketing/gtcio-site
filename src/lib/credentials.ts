@@ -41,6 +41,8 @@ export type CredentialTier = {
   inProgram: boolean;
   /** SACA's own page for this tier. */
   url: string;
+  /** Omit the name from the tier heading (the saca.org link still uses it). */
+  hideName?: boolean;
 };
 
 export const SACA_TIERS: CredentialTier[] = [
@@ -48,6 +50,7 @@ export const SACA_TIERS: CredentialTier[] = [
     name: "Specialist",
     codes: "C-2xx and C-3xx micro-credentials",
     inProgram: true,
+    hideName: true,
     detail:
       "Each Specialist credential is modular — a set of core micro-credentials that apply everywhere, plus electives matched to a region or employer. Earn the core set and SACA grants the Specialist credential. The diploma's C-2xx and C-3xx credentials are these building blocks, and they stack toward several Specialist tracks including electrical, control, mechanical, and robotics systems.",
     url: "https://www.saca.org/smart-automation-certifications/specialist-certifications/",
