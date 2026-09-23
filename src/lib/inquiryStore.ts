@@ -1,6 +1,6 @@
 import "server-only";
 
-import { kv } from "@vercel/kv";
+import { kv, kvConfigured } from "./kv";
 
 /**
  * Safety net for form submissions the notification email could not carry —
@@ -25,11 +25,9 @@ export type StoredInquiry = {
   body: string;
 };
 
-export function inquiryStoreConfigured(): boolean {
-  return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
-}
+export const inquiryStoreConfigured = kvConfigured;
 
 export async function storeUndeliveredInquiry(record: StoredInquiry): Promise<void> {
-  await kv.lpush(KEY, record);
-  await kv.ltrim(KEY, 0, MAX_STORED - 1);
+  await kv().lpush(KEY, record);
+  await kv().ltrim(KEY, 0, MAX_STORED - 1);
 }

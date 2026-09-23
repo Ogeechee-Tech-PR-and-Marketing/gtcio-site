@@ -97,7 +97,9 @@ src/lib/
   credentials.ts          SACA tier ladder + OTC accreditations; feeds both
                           /credentials and /training via a showOn tag (§4)
   constantContact.ts      newsletter API client, server-only (§8)
-  constantContactStore.ts Vercel KV wrapper for the OAuth tokens (§8)
+  kv.ts                   the Upstash Redis client (the store Vercel calls "KV"); rateLimit,
+                          inquiryStore and constantContactStore all go through it
+  constantContactStore.ts OAuth token record in the KV store (§8)
   sanitize.ts             clean() / isEmail() / readJsonBody() shared by the two POST routes (§5)
   mail.ts                 picks the email provider: Resend, then Graph, else none (§5)
   resendMail.ts           Resend REST client — sends as website@gtcio.org, the live provider for now (§5)
