@@ -1,28 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DESTINATIONS } from "@/lib/links";
+import { NAV_ITEMS } from "@/lib/nav";
 import NewsletterSignup from "./NewsletterSignup";
 import Year from "./Year";
 
-/**
- * Code-only by design, like the header nav — a typo'd href here breaks
- * navigation on every page (PROJECT.md §8). The Explore column mirrors the
- * top nav's page list; when a route is added or renamed, update both (plus
- * sitemap.ts, links.ts, SITEMAP.html — PROJECT.md §12's runbook).
- */
 const COLUMNS = [
   {
     heading: "Explore",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "IOT Training Programs", href: "/training" },
-      { label: "IOT Diploma Program", href: "/iot-diploma-program" },
-      { label: "Credentials", href: "/credentials" },
-      { label: "Facility", href: "/facility" },
-      { label: "Partners", href: "/partners" },
-      { label: "News", href: "/news" },
-      { label: "Contact", href: "/contact" },
-    ],
+    // The header nav's pages, minus Home (the logo already links there).
+    links: NAV_ITEMS.filter((item) => item.href !== "/").map(({ label, href }) => ({ label, href })),
   },
   {
     heading: "Get Involved",

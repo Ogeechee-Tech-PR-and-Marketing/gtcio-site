@@ -13,6 +13,7 @@ the site lives directly in the source code.** Changes require a developer:
 - Site-wide banner/footer text, address, phone, contacts: constants at the top
   of `src/components/Header.tsx`, `src/components/Footer.tsx`,
   `src/components/NewsletterSignup.tsx`, and `src/app/(site)/contact/page.tsx`.
+- The page list in the header, footer and `sitemap.xml`: `src/lib/nav.ts`.
 
 A change goes live the same way any code change does: edit the file, commit,
 push to `main` — Vercel auto-deploys. See `PROJECT.md` for the full layout of

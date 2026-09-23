@@ -78,6 +78,8 @@ src/app/
     constant-contact/oauth/{start,callback}/   one-time OAuth grant (§8)
 src/lib/
   site.ts                 SITE_URL — the canonical origin
+  nav.ts                  NAV_ITEMS — the page list behind the header nav,
+                          footer Explore column and sitemap.xml
   site-pin.ts             cookie name + safeNextPath() shared by proxy, api/site-pin, site-pin page
   rateLimit.ts            per-IP fixed-window limiter on the POST routes, KV-backed, fails open (§5)
   inquiryStore.ts         KV list of form submissions the email couldn't carry (§5)
@@ -497,8 +499,8 @@ directly; don't relitigate them in new copy.
 - **`public/SITEMAP.html` is a stakeholder deliverable** (goes to the VP for
   sign-off, served publicly, noindex). Keep it in sync when routes,
   sections, or §9/§10 status change. Not to be confused with
-  `src/app/sitemap.ts` (the machine `sitemap.xml`) — a new route updates
-  both, plus `Header.tsx` and `links.ts`.
+  `src/app/sitemap.ts` (the machine `sitemap.xml`, derived from `nav.ts`) —
+  a new route updates `SITEMAP.html` by hand, plus `nav.ts` and `links.ts`.
 - **`EDITING.md`** is the plain-English "where does this copy live" guide —
   update it if the content layout changes.
 
@@ -546,6 +548,6 @@ with no env vars — they only gate the forms (§5) and newsletter (§8). Read
 
 **Adding a page:** create `src/app/(site)/<slug>/page.tsx` (inside `(site)`
 or it loses the chrome) with a `DEFAULTS` object; add it to `NAV_ITEMS` in
-`Header.tsx` (⚠️ re-measure the nav) and the Footer's Explore column; add a
-`DESTINATIONS` key in `links.ts` if buttons should target it; update **both**
-sitemaps (§11).
+`src/lib/nav.ts` (⚠️ re-measure the nav — the header, the Footer's Explore
+column and `sitemap.xml` all follow); add a `DESTINATIONS` key in `links.ts`
+if buttons should target it; update `public/SITEMAP.html` (§11).

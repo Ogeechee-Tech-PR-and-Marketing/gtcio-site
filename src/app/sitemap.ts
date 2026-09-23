@@ -1,23 +1,11 @@
 import type { MetadataRoute } from "next";
+import { DESTINATIONS } from "@/lib/links";
+import { NAV_ITEMS } from "@/lib/nav";
 import { SITE_URL } from "@/lib/site";
 
-// Every public route in the (site) group. Keep in step with the nav
-// (Header.tsx) and with src/lib/links.ts when routes are added or moved.
-const ROUTES = [
-  "/",
-  "/about",
-  "/training",
-  "/iot-diploma-program",
-  // Course detail page. Deliberately not in the nav (PROJECT.md §10), but it is
-  // public and should be indexed. Its sibling certifications page became the
-  // top-level /credentials route below and 308-redirects there.
-  "/iot-diploma-program/curriculum",
-  "/credentials",
-  "/facility",
-  "/partners",
-  "/news",
-  "/contact",
-];
+// Every public route: the nav's pages plus the course detail page, which is
+// deliberately not in the nav (PROJECT.md §10) but public and indexable.
+const ROUTES = [...NAV_ITEMS.map((item) => item.href), DESTINATIONS.curriculum];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return ROUTES.map((route) => ({
