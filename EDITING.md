@@ -10,9 +10,11 @@ the site lives directly in the source code.** Changes require a developer:
   file.
 - Partner logos and info: `src/lib/partners.ts` (images in `public/images/`).
 - News items: `src/lib/news.ts` (images in `public/images/news/`).
-- Site-wide banner/footer text, address, phone, contacts: constants at the top
-  of `src/components/Header.tsx`, `src/components/Footer.tsx`,
-  `src/components/NewsletterSignup.tsx`, and `src/app/(site)/contact/page.tsx`.
+- Address, phone, and the two staff contacts (name, title, email, phone):
+  `src/lib/site.ts` — used by the footer, the Contact page, the News page and
+  the form-notification emails.
+- Banner text and newsletter copy: constants at the top of
+  `src/components/Header.tsx` and `src/components/NewsletterSignup.tsx`.
 - The page list in the header, footer and `sitemap.xml`: `src/lib/nav.ts`.
 
 A change goes live the same way any code change does: edit the file, commit,

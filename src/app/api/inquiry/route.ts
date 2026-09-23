@@ -3,6 +3,7 @@ import { isConfigured as mailConfigured, mailProvider, sendMail } from "@/lib/ma
 import { addNewsletterSignup } from "@/lib/constantContact";
 import { inquiryStoreConfigured, storeUndeliveredInquiry } from "@/lib/inquiryStore";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
+import { CONTACTS } from "@/lib/site";
 
 const FORM_TYPES = ["partner", "contact", "tour"] as const;
 type FormType = (typeof FORM_TYPES)[number];
@@ -24,10 +25,11 @@ type Payload = {
   botcheck?: string;
 };
 
-// Fixed recipients. Every provider in src/lib/mail.ts sends to any address
-// from one credential, so there's no per-recipient config.
-const NOTIFY_EMAIL = "jmoore@ogeecheetech.edu"; // general inquiries — Jan Moore
-const NOTIFY_EMAIL_MEDIA = "spayne@ogeecheetech.edu"; // media inquiries — Sean Payne
+// Fixed recipients (src/lib/site.ts — the same two people Contact prints).
+// Every provider in src/lib/mail.ts sends to any address from one credential,
+// so there's no per-recipient config.
+const NOTIFY_EMAIL = CONTACTS.general.email;
+const NOTIFY_EMAIL_MEDIA = CONTACTS.media.email;
 
 // Test hook: when set, EVERY notification goes to this address instead of the
 // staff above, with the intended recipient named in the subject. Meant for a

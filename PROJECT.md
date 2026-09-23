@@ -77,7 +77,10 @@ src/app/
     newsletter/           POST target for the footer sign-up (§8)
     constant-contact/oauth/{start,callback}/   one-time OAuth grant (§8)
 src/lib/
-  site.ts                 SITE_URL — the canonical origin
+  site.ts                 SITE_URL (canonical origin), ORG (name, tagline,
+                          address, phone) and CONTACTS (Jan / Sean) — the
+                          facts the footer, Contact, News and the inquiry
+                          route all read
   nav.ts                  NAV_ITEMS — the page list behind the header nav,
                           footer Explore column and sitemap.xml
   site-pin.ts             cookie name + safeNextPath() shared by proxy, api/site-pin, site-pin page
@@ -112,9 +115,9 @@ directly. `DEFAULTS` **is** the content. Page components are plain synchronous
 functions — no fetches. A copy change = edit the file, push to `main`,
 auto-deploy. `EDITING.md` maps common edits to files.
 
-Shared content lives in `src/lib/`: `partners.ts`, `news.ts`, `links.ts`
-(see §3). Site-wide strings (banner, address, footer, newsletter copy) are
-constants in `Header.tsx`, `Footer.tsx`, and `NewsletterSignup.tsx`.
+Shared content lives in `src/lib/`: `partners.ts`, `news.ts`, `links.ts`,
+`site.ts` (address, phone, staff contacts — see §3). Banner and newsletter
+copy are constants in `Header.tsx` and `NewsletterSignup.tsx`.
 
 **`iot-curriculum.ts` and `credentials.ts` are matters of record, not
 marketing copy.** Course codes, credit hours, and SACA credential mappings
@@ -157,9 +160,11 @@ and still shows the visitor a success message. **Someone must collect those:**
 first. Delivered inquiries are not stored. Only if KV is also unavailable
 does the visitor see a 500 with Jan's address to email directly.
 
-Recipients are fixed constants in the route file: `NOTIFY_EMAIL`
+Recipients come from `CONTACTS` in `src/lib/site.ts` — the same two people
+the Contact page prints — bound in the route as `NOTIFY_EMAIL`
 (jmoore@ogeecheetech.edu — everything) and `NOTIFY_EMAIL_MEDIA`
-(spayne@ogeecheetech.edu — fires when "Media inquiry" is checked).
+(spayne@ogeecheetech.edu — fires when "Media inquiry" is checked). Changing
+an address there changes both what visitors see and where forms deliver.
 ⚠️ `MEDIA_REASON` in the route must match the Contact form's "Media inquiry"
 label exactly — renaming one without the other silently breaks the routing.
 
@@ -461,8 +466,8 @@ directly; don't relitigate them in new copy.
   site). Never publish "opening September 2026" (an old brochure's claim).
 - **Address: 66 AJ Riggs Road, Statesboro, GA 30458.** "1 Joe Kennedy Blvd"
   is OTC's main campus, not GTCIO — it appears in old source documents;
-  don't harvest it. The address lives in `Footer.tsx`, `contact/page.tsx`,
-  and the About FAQ — change all together.
+  don't harvest it. The address is `ORG.address` in `src/lib/site.ts`
+  (footer + Contact) and repeated in prose in the About FAQ — change both.
 - **The mission statement and the Home hero headline are the same sentence
   on purpose** ("Building a workforce ready for industry transformation.") —
   if one changes, change both (`about/page.tsx` + `(site)/page.tsx`), and

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
+import { CONTACTS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "News | GTCIO",
@@ -97,9 +98,6 @@ export default function NewsPage() {
   const press = NEWS_ITEMS.filter((i) => i.category !== "media");
   const media = NEWS_ITEMS.filter((i) => i.category === "media");
 
-  const mediaContactName = "Sean Payne";
-  const mediaContactEmail = "spayne@ogeecheetech.edu";
-
   return (
     <>
       <PageHero
@@ -117,10 +115,10 @@ export default function NewsPage() {
             {page.introText}{" "}
             For media inquiries, contact{" "}
             <a
-              href={`mailto:${mediaContactEmail}`}
+              href={`mailto:${CONTACTS.media.email}`}
               className="font-bold text-brand-red hover:text-brand-black"
             >
-              {mediaContactName}
+              {CONTACTS.media.name}
             </a>
             , or see our{" "}
             <Link href="/contact" className="font-bold text-brand-red hover:text-brand-black">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import InquiryForm from "@/components/InquiryForm";
+import { CONTACTS, ORG } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact | GTCIO",
@@ -44,25 +45,25 @@ export default function ContactPage() {
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2">
           <div>
             <h2 className="font-heading text-xl font-bold text-brand-black">GTCIO</h2>
-            <p className="mt-1 text-brand-gray">A Division of Ogeechee Technical College</p>
+            <p className="mt-1 text-brand-gray">{ORG.tagline}</p>
             <div className="mt-6 flex flex-col gap-2 text-brand-black">
-              <p>66 AJ Riggs Road, Statesboro, GA 30458</p>
-              <p>Phone: (800) 646-1316</p>
+              <p>{ORG.address}</p>
+              <p>{`Phone: ${ORG.phone}`}</p>
             </div>
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Program Questions</h2>
             <div className="mt-3 flex flex-col gap-2 text-brand-black">
-              <p>Jan Moore, Vice President for Economic Development</p>
+              <p>{`${CONTACTS.general.name}, ${CONTACTS.general.title}`}</p>
               <p>Office 1110, Jack Hill Building</p>
-              <p>912-688-6026</p>
-              <p><a href="mailto:jmoore@ogeecheetech.edu" className="font-bold text-brand-red hover:text-brand-black">jmoore@ogeecheetech.edu</a></p>
+              <p>{CONTACTS.general.phone}</p>
+              <p><a href={`mailto:${CONTACTS.general.email}`} className="font-bold text-brand-red hover:text-brand-black">{CONTACTS.general.email}</a></p>
             </div>
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Media Inquiries</h2>
             <div className="mt-3 flex flex-col gap-2 text-brand-black">
-              <p>Sean Payne, Executive Director for Public Relations &amp; Marketing</p>
-              <p>912-871-8559</p>
-              <p><a href="mailto:spayne@ogeecheetech.edu" className="font-bold text-brand-red hover:text-brand-black">spayne@ogeecheetech.edu</a></p>
+              <p>{`${CONTACTS.media.name}, ${CONTACTS.media.title}`}</p>
+              <p>{CONTACTS.media.phone}</p>
+              <p><a href={`mailto:${CONTACTS.media.email}`} className="font-bold text-brand-red hover:text-brand-black">{CONTACTS.media.email}</a></p>
             </div>
           </div>
           <div>

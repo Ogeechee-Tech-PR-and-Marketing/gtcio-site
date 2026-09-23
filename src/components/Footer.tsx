@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DESTINATIONS } from "@/lib/links";
 import { NAV_ITEMS } from "@/lib/nav";
+import { ORG } from "@/lib/site";
 import NewsletterSignup from "./NewsletterSignup";
 import Year from "./Year";
 
@@ -19,10 +20,6 @@ const COLUMNS = [
     ],
   },
 ];
-
-const TAGLINE = "A Division of Ogeechee Technical College";
-const ADDRESS = "66 AJ Riggs Road, Statesboro, GA 30458";
-const PHONE = "(800) 646-1316";
 
 export default function Footer() {
   return (
@@ -45,7 +42,7 @@ export default function Footer() {
             height={200}
             className="h-20 w-auto sm:h-24"
           />
-          <p className="mt-4 text-sm text-brand-silver">{TAGLINE}</p>
+          <p className="mt-4 text-sm text-brand-silver">{ORG.tagline}</p>
         </div>
 
         {COLUMNS.map((col) => (
@@ -74,8 +71,8 @@ export default function Footer() {
         <div>
           <p className="font-display text-sm text-brand-gold">Contact</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm text-brand-silver">
-            <li>{ADDRESS}</li>
-            <li>Phone: {PHONE}</li>
+            <li>{ORG.address}</li>
+            <li>{`Phone: ${ORG.phone}`}</li>
           </ul>
         </div>
       </div>
@@ -83,7 +80,7 @@ export default function Footer() {
       <div className="border-t border-white/10 px-6 py-5 sm:px-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 text-xs text-brand-silver sm:flex-row sm:justify-between">
           <p>
-            © <Year /> Georgia Training Center for Industrial Operations. All rights reserved.
+            © <Year />{` ${ORG.name}. All rights reserved.`}
           </p>
           {/* Red pipe separator matches the utility banner at the top of the page. */}
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center sm:justify-end sm:text-right">
