@@ -122,9 +122,7 @@ export default function FacilityPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.focusAreasTitle}</h2>
-          {page.focusAreasIntro && (
-            <p className="mt-3 max-w-3xl text-brand-gray">{page.focusAreasIntro}</p>
-          )}
+          <p className="mt-3 max-w-3xl text-brand-gray">{page.focusAreasIntro}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {page.focusAreas.map((area, i) => (
               <div key={i} className="border-l-4 border-brand-red pl-5">

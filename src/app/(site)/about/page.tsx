@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import AboutTimeline from "@/components/AboutTimeline";
-import { safeHref } from "@/lib/links";
+import type { TimelineEvent } from "@/components/AboutTimeline";
 
 export const metadata: Metadata = {
   title: "About | GTCIO",
@@ -19,7 +19,6 @@ const DEFAULTS = {
   missionStatement: "Building a workforce ready for industry transformation.",
   missionBody:
     "GTCIO trains people for jobs in industrial operations and automation, the employees that Georgia employers are actively seeking. These jobs pay well, and the demand isn't slowing down. GTCIO exists to meet that demand: training new workers coming up, and helping employers upskill the ones they already have.",
-  missionNote: "",
   missionQuote:
     "We are surrounded by industries that are looking for employees with these skill sets. The jobs pay well, offer excellent career growth opportunities, and the demand continues to increase.",
   missionQuoteAttribution: "Jan Moore — Vice President for Economic Development, Ogeechee Technical College",
@@ -120,7 +119,6 @@ const DEFAULTS = {
       highlight: true,
     },
   ],
-  historyNote: "",
   advisoryTitle: "Advisory Board",
   advisoryBody:
     "GTCIO's curriculum is shaped by an advisory board of regional employers and industry leaders, so what we teach stays aligned with the equipment and skills the workforce actually needs.",
@@ -216,7 +214,6 @@ const DEFAULTS = {
       category: "exOfficio",
     },
   ],
-  advisoryNote: "",
   faqs: [
     {
       question: "Who runs GTCIO?",
@@ -241,17 +238,7 @@ const DEFAULTS = {
   ],
 };
 
-type TimelineEvent = {
-  _key?: string;
-  date: string;
-  title: string;
-  detail?: string;
-  highlight?: boolean;
-  sourceUrl?: string;
-};
-
 type BoardMember = {
-  _key?: string;
   name: string;
   title: string;
   organization: string;
@@ -265,10 +252,7 @@ export default function AboutPage() {
   const advisoryMembers: BoardMember[] = DEFAULTS.advisoryMembers as BoardMember[];
   const boardMembers = advisoryMembers.filter((m) => m.category !== "exOfficio");
   const exOfficioMembers = advisoryMembers.filter((m) => m.category === "exOfficio");
-  const bdaWebsite = safeHref(page.bdaWebsite);
 
-  // No CMS hero photo override anymore — the banner always plays GTCIO's own
-  // footage of the robotics lab.
   return (
     <>
       <PageHero
@@ -288,7 +272,6 @@ export default function AboutPage() {
             </p>
           )}
           <p className="mt-6 text-brand-black">{page.missionBody}</p>
-          {page.missionNote && <p className="mt-4 text-sm text-brand-gray">{page.missionNote}</p>}
           <blockquote className="mt-6 border-l-4 border-brand-black pl-5">
             <p className="text-lg italic text-brand-black">&ldquo;{page.missionQuote}&rdquo;</p>
             <p className="mt-3 text-sm text-brand-gray">{page.missionQuoteAttribution}</p>
@@ -303,9 +286,7 @@ export default function AboutPage() {
             <p key={i} className="mt-4 text-brand-black">{paragraph}</p>
           ))}
 
-          {timeline.length > 0 && <AboutTimeline items={timeline} />}
-
-          {page.historyNote && <p className="mt-8 text-sm text-brand-gray">{page.historyNote}</p>}
+          <AboutTimeline items={timeline} />
         </div>
       </section>
 
@@ -314,41 +295,35 @@ export default function AboutPage() {
           <h2 className="font-heading text-2xl font-bold text-brand-red">{page.advisoryTitle}</h2>
           <p className="mt-4 text-brand-black">{page.advisoryBody}</p>
 
-          {boardMembers.length > 0 && (
-            <div className="mt-10">
-              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-gray uppercase">
-                Board Members
-              </h3>
-              <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                {boardMembers.map((member, i) => (
-                  <div key={member._key ?? i} className="border-l-4 border-brand-red pl-4">
-                    <p className="font-heading font-bold text-brand-black">{member.name}</p>
-                    <p className="text-sm text-brand-gray">{member.title}</p>
-                    <p className="text-sm text-brand-gray">{member.organization}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="mt-10">
+            <h3 className="font-heading text-sm font-bold tracking-wide text-brand-gray uppercase">
+              Board Members
+            </h3>
+            <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              {boardMembers.map((member) => (
+                <div key={member.name} className="border-l-4 border-brand-red pl-4">
+                  <p className="font-heading font-bold text-brand-black">{member.name}</p>
+                  <p className="text-sm text-brand-gray">{member.title}</p>
+                  <p className="text-sm text-brand-gray">{member.organization}</p>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
 
-          {exOfficioMembers.length > 0 && (
-            <div className="mt-10">
-              <h3 className="font-heading text-sm font-bold tracking-wide text-brand-gray uppercase">
-                Ex Officio
-              </h3>
-              <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                {exOfficioMembers.map((member, i) => (
-                  <div key={member._key ?? i} className="border-l-4 border-brand-black pl-4">
-                    <p className="font-heading font-bold text-brand-black">{member.name}</p>
-                    <p className="text-sm text-brand-gray">{member.title}</p>
-                    <p className="text-sm text-brand-gray">{member.organization}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="mt-10">
+            <h3 className="font-heading text-sm font-bold tracking-wide text-brand-gray uppercase">
+              Ex Officio
+            </h3>
+            <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              {exOfficioMembers.map((member) => (
+                <div key={member.name} className="border-l-4 border-brand-black pl-4">
+                  <p className="font-heading font-bold text-brand-black">{member.name}</p>
+                  <p className="text-sm text-brand-gray">{member.title}</p>
+                  <p className="text-sm text-brand-gray">{member.organization}</p>
+                </div>
+              ))}
             </div>
-          )}
-
-          {page.advisoryNote && <p className="mt-8 text-sm text-brand-gray">{page.advisoryNote}</p>}
+          </div>
         </div>
       </section>
 
@@ -360,16 +335,14 @@ export default function AboutPage() {
             <p className="text-lg italic text-brand-black">&ldquo;{page.bdaQuote}&rdquo;</p>
             <p className="mt-3 text-sm text-brand-gray">{page.bdaQuoteAttribution}</p>
           </blockquote>
-          {bdaWebsite && (
-            <a
-              href={bdaWebsite}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-ui mt-6 inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
-            >
-              LEARN MORE
-            </a>
-          )}
+          <a
+            href={page.bdaWebsite}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-ui mt-6 inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
+          >
+            LEARN MORE
+          </a>
         </div>
       </section>
 

@@ -130,9 +130,7 @@ export default function TrainingPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.employersTitle}</h2>
           <p className="mt-4 max-w-3xl text-brand-gray">{page.employersBody}</p>
-          {page.employersBody2 && (
-            <p className="mt-4 max-w-3xl text-brand-gray">{page.employersBody2}</p>
-          )}
+          <p className="mt-4 max-w-3xl text-brand-gray">{page.employersBody2}</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <CtaButton button={page.employersButton} variant="primary" />
             <CtaButton button={page.catalogButton} variant="primary" />
@@ -146,11 +144,9 @@ export default function TrainingPage() {
       <section className="border-b border-brand-silver/30 bg-brand-black px-6 py-16 text-brand-white sm:px-10">
         <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="max-w-2xl">
-            {page.catalogEyebrow && (
-              <p className="font-display text-sm text-brand-gold">{page.catalogEyebrow}</p>
-            )}
+            <p className="font-display text-sm text-brand-gold">{page.catalogEyebrow}</p>
             <h2 className="font-heading mt-2 text-3xl font-bold">{page.catalogTitle}</h2>
-            {page.catalogBody && <p className="mt-3 text-brand-silver">{page.catalogBody}</p>}
+            <p className="mt-3 text-brand-silver">{page.catalogBody}</p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-4">
             <CtaButton button={page.catalogButton} variant="primary" />
@@ -192,9 +188,7 @@ export default function TrainingPage() {
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <h2 className="font-heading text-2xl font-bold text-brand-black">{page.courseAreasTitle}</h2>
-          {page.courseAreasIntro && (
-            <p className="mt-3 max-w-3xl text-brand-gray">{page.courseAreasIntro}</p>
-          )}
+          <p className="mt-3 max-w-3xl text-brand-gray">{page.courseAreasIntro}</p>
           <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {courseAreas.map((c, i) => (
               <div key={i} className="border-t-2 border-brand-red pt-4">

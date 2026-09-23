@@ -4,7 +4,6 @@ import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import InquiryForm from "@/components/InquiryForm";
 import ScrollToHash from "@/components/ScrollToHash";
-import { safeHref } from "@/lib/links";
 import { PARTNERS } from "@/lib/partners";
 
 export const metadata: Metadata = {
@@ -153,9 +152,7 @@ export default function PartnersPage() {
               right — the layout of the Georgia Cyber Center partners directory
               this page is modelled on. */}
           <div className="mt-8 flex flex-col gap-6">
-            {partners.map((partner) => {
-              const website = safeHref(partner.website);
-              return (
+            {partners.map((partner) => (
               <div
                 key={partner.id}
                 id={partnerSlug(partner.name)}
@@ -176,10 +173,10 @@ export default function PartnersPage() {
                     <p className="mt-2 text-brand-gray">{partner.description}</p>
                   </div>
                 </div>
-                {website && (
+                {partner.website && (
                   <div className="flex justify-end px-8 pb-8">
                     <a
-                      href={website}
+                      href={partner.website}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-ui inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
@@ -189,8 +186,7 @@ export default function PartnersPage() {
                   </div>
                 )}
               </div>
-              );
-            })}
+            ))}
           </div>
         </div>
       </section>

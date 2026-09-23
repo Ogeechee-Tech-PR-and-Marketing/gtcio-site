@@ -39,7 +39,6 @@ export const DOWNLOAD_DESTINATIONS = new Set<string>(["iotProgramPdf"]);
 export type Destination = keyof typeof DESTINATIONS | "external";
 
 export type CtaButton = {
-  _key?: string;
   label?: string;
   destination?: Destination;
   externalUrl?: string;

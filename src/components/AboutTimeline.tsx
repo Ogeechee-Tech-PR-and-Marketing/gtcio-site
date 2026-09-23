@@ -2,8 +2,7 @@
 
 import { useRef } from "react";
 
-type TimelineEvent = {
-  _key?: string;
+export type TimelineEvent = {
   date: string;
   title: string;
   detail?: string;
@@ -12,10 +11,9 @@ type TimelineEvent = {
 };
 
 // "July 2022" -> { year: "2022", rest: "July" }. "October 15, 2026" -> { year: "2026", rest: "October 15" }.
-// Tolerates a missing `date` so a half-filled milestone renders instead of crashing.
-function splitDate(date: string | undefined) {
-  const parts = (date ?? "").trim().split(" ");
-  const year = parts[parts.length - 1]?.replace(",", "") ?? date;
+function splitDate(date: string) {
+  const parts = date.trim().split(" ");
+  const year = parts[parts.length - 1].replace(",", "");
   const rest = parts.slice(0, -1).join(" ");
   return { year, rest: rest || year };
 }
@@ -59,11 +57,11 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
           // overflow clip and widens the whole page on mobile.
           className="relative flex snap-x snap-mandatory gap-0 overflow-x-auto scroll-smooth pb-2"
         >
-          {items.map((item, i) => {
+          {items.map((item) => {
             const { year, rest } = splitDate(item.date);
             return (
               <div
-                key={item._key ?? `${item.date}-${i}`}
+                key={item.date}
                 role="listitem"
                 className="w-[82%] shrink-0 snap-start pr-8 last:pr-0 @min-[560px]:w-[300px]"
               >
