@@ -45,6 +45,15 @@ const nextConfig: NextConfig = {
         destination: "/credentials",
         permanent: true,
       },
+      {
+        // Short vanity URL for print/QR (gtcio.org/diploma). The canonical-
+        // host proxy (src/proxy.ts) moves gtcio.org to SITE_URL keeping the
+        // path, so a relative destination covers every host. Temporary so it
+        // can be repointed without browsers having cached the old target.
+        source: "/diploma",
+        destination: "/iot-diploma-program",
+        permanent: false,
+      },
     ];
   },
   async headers() {

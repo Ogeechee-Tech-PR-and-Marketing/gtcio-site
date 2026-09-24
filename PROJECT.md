@@ -309,6 +309,9 @@ off again.
   integration must add that config back or its images 500.
 - `/iot-diploma-program/certifications` 308-redirects to `/credentials`
   (an old published URL).
+- `/diploma` 307-redirects to `/iot-diploma-program` — short vanity URL
+  for print/QR (`gtcio.org/diploma`). Temporary on purpose, so it can be
+  repointed.
 
 **The canonical origin is `SITE_URL` in `src/lib/site.ts`** — feeds
 `metadataBase`, `robots.ts`, `sitemap.ts`. On a domain move change it there.
