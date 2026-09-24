@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 
 /**
  * Skip link, header, <main> and footer around a page. Used by the (site)
@@ -22,6 +23,7 @@ export default function SiteChrome({ children }: Readonly<{ children: React.Reac
         {children}
       </main>
       <Footer />
+      <BackToTop />
     </>
   );
 }
