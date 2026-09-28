@@ -61,7 +61,7 @@ const DEFAULTS = {
         "The Technical College System of Georgia's state board approves the project on its FY24 capital outlay list, clearing the way from idea to plan.",
     },
     {
-      date: "June 2023",
+      date: "March 2023",
       title: "State budget funds the project",
       detail:
         "Governor Brian Kemp signs the project's construction funding into Georgia's amended FY23 budget.",
