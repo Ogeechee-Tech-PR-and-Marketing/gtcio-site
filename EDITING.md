@@ -16,6 +16,8 @@ the site lives directly in the source code.** Changes require a developer:
 - Banner text and newsletter copy: constants at the top of
   `src/components/Header.tsx` and `src/components/NewsletterSignup.tsx`.
 - The page list in the header, footer and `sitemap.xml`: `src/lib/nav.ts`.
+- The phone-only "back to top" button (its look, label, and when it appears):
+  `src/components/BackToTop.tsx`.
 
 A change goes live the same way any code change does: edit the file, commit,
 push to `main` — Vercel auto-deploys. See `PROJECT.md` for the full layout of
