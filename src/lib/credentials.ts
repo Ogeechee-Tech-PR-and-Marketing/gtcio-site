@@ -52,7 +52,7 @@ export const SACA_TIERS: CredentialTier[] = [
     inProgram: true,
     hideName: true,
     detail:
-      "Each Specialist credential is modular — a set of core micro-credentials that apply everywhere, plus electives matched to a region or employer. Earn the core set and SACA grants the Specialist credential. The diploma's C-2xx and C-3xx credentials are these building blocks, and they stack toward several Specialist tracks including electrical, control, mechanical, and robotics systems.",
+      "Each tier 1 credential is modular — a set of core micro-credentials that apply everywhere, plus electives matched to a region or employer. Earn the core set and SACA grants the Specialist credential. The diploma's C-2xx and C-3xx credentials are these building blocks, and they stack toward several Specialist tracks including electrical, control, mechanical, and robotics systems.",
     url: "https://www.saca.org/smart-automation-certifications/specialist-certifications/",
   },
   {
