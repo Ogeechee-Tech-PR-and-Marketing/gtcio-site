@@ -20,6 +20,17 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    id: "newsItem-statesboro-herald-inside-look-2026-10",
+    category: "media",
+    title:
+      "An inside look at Ogeechee Technical College's new industrial training center",
+    date: "2026-10-09",
+    source: "Statesboro Herald",
+    url: "https://www.statesboroherald.com/local/an-inside-look-at-ogeechee-technical-colleges-new-industrial-training-center/",
+    excerpt:
+      "The Herald tours the Georgia Training Center for Industrial Operations in its first week of classes, days ahead of the grand opening. OTC VP for Economic Development Jan Moore and Development Authority of Bulloch County CEO Benjy Thompson explain how regional demand for industrial maintenance technicians shaped the center, and instructors describe the new labs, the first Industrial Operations Technology cohort, and training for employers' existing workers.",
+  },
+  {
     id: "newsItem-otc-iot-program-launch-2026-07",
     category: "press",
     title:
