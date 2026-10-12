@@ -120,6 +120,12 @@ const DEFAULTS = {
       detail: "The building is scheduled to be finished and handed over.",
     },
     {
+      date: "October 5, 2026",
+      title: "Classes move into the new building",
+      detail:
+        "Industrial Operations Technology students begin classes in GTCIO's new building on AJ Riggs Road, ahead of the grand opening.",
+    },
+    {
       date: "October 15, 2026",
       title: "Grand opening",
       detail: "GTCIO officially opens its doors.",
@@ -240,7 +246,7 @@ const DEFAULTS = {
     {
       question: "Where is GTCIO located?",
       answer:
-        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Until it opens — the grand opening is October 15, 2026 — classes are held in the Industrial Technology Building on Ogeechee Tech's main campus. The Facility page has more about the building.",
+        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Students began classes in the new building on October 5, 2026, and the grand opening is October 15, 2026. The Facility page has more about the building.",
     },
   ],
 };

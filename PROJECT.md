@@ -472,10 +472,13 @@ directly; don't relitigate them in new copy.
 - **Program facts (current, confirmed):** four semesters · ~$9,500 before
   aid (HOPE Grant, HOPE Career Grant, Pell apply) · 53 credit hours across
   15 courses (12 program + 3 gen-ed).
-- **Dates:** construction completes 9/26 · grand opening **10/15/26** ·
-  tours from 10/26 · first classes 8/17/26 (on OTC's main campus, moving to
-  the new building when it opens — that's deliberate and explained on the
+- **Dates:** construction targeted 9/26 (crews were still finishing in the
+  first week of October — don't claim "complete") · grand opening
+  **10/15/26** · tours from 10/26 · first classes 8/17/26 on OTC's main
+  campus, moved into the new building **10/5/26** (both explained on the
   site). Never publish "opening September 2026" (an old brochure's claim).
+  Exterior photography/drone video is pending until the new logo signage is
+  on the building; the Facility page keeps its labelled rendering until then.
 - **Address: 66 AJ Riggs Road, Statesboro, GA 30458.** "1 Joe Kennedy Blvd"
   is OTC's main campus, not GTCIO — it appears in old source documents;
   don't harvest it. The address is `ORG.address` in `src/lib/site.ts`

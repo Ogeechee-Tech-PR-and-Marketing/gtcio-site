@@ -24,11 +24,10 @@ const DEFAULTS = {
   overviewBody:
     "GTCIO's facility serves both credit students and incumbent workers. The building holds 12 industrial labs alongside classrooms, computer labs, and meeting space, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. It was planned as a regional center rather than a single college's building: Ogeechee Tech partnered with Southeastern Technical College to train manufacturers across their service areas once the center came online, which avoids duplicating facilities across the region. The space also trains and certifies instructors from across Georgia and the nation.",
   renderingTitle: "What it will look like",
-  // Labelled as a rendering on purpose — the building is under construction
-  // until autumn 2026, and an unlabelled render reads as a photo of something
-  // that already exists.
+  // Still a rendering, and labelled as one on purpose. Swap in real exterior
+  // photography once the new logo signage is on the building (shoot pending).
   renderingCaption:
-    "Architectural rendering of the GTCIO facility on AJ Riggs Road. Construction is scheduled for completion in September 2026, with a grand opening on October 15, 2026.",
+    "Architectural rendering of the GTCIO facility on AJ Riggs Road. The grand opening is October 15, 2026.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
   focusAreasTitle: "What the center is built around",
