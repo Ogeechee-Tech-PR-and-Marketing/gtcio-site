@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import AboutTimeline from "@/components/AboutTimeline";
 import type { TimelineEvent } from "@/components/AboutTimeline";
+import PhotoGallery from "@/components/PhotoGallery";
+import type { GalleryPhoto } from "@/components/PhotoGallery";
 
 export const metadata: Metadata = {
   title: "About",
@@ -123,7 +125,7 @@ const DEFAULTS = {
       date: "October 5, 2026",
       title: "Classes move into the new building",
       detail:
-        "Industrial Operations Technology students begin classes in GTCIO's new building on AJ Riggs Road, ahead of the grand opening.",
+        "Industrial Operations Technology students begin classes in GTCIO's new building on AJ Riggs Road, ten days before the grand opening.",
     },
     {
       date: "October 15, 2026",
@@ -227,6 +229,88 @@ const DEFAULTS = {
       category: "exOfficio",
     },
   ] satisfies BoardMember[],
+  galleryTitle: "Grand Opening",
+  galleryBody:
+    "State and local leaders, educators, and community partners filled the lobby on October 15, 2026, for the grand opening of the Georgia Training Center for Industrial Operations.",
+  // First photo leads full-width; speakers are interleaved with audience shots so
+  // no grid row is all podium. Speaker names from Jake; titles checked 2026-10-19
+  // (Summers spells it "Micheal" on OTC's own board page).
+  galleryPhotos: [
+    {
+      src: "/images/grand-opening/grand-opening-ribbon.jpg",
+      alt: "State and local leaders, OTC staff, and community partners cut the ribbon outside the Georgia Training Center for Industrial Operations.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-01.jpg",
+      alt: 'A "Welcome to the Grand Opening" sign with a rendering of the building, set up in the GTCIO lobby.',
+      position: "50% 30%",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-02.jpg",
+      alt: "Two guests pose together in the lobby as visitors arrive for the grand opening.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-03.jpg",
+      alt: "The Statesboro High School band performs in front of the GTCIO sign in the lobby.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-04.jpg",
+      alt: "A packed lobby of guests faces the stage during the grand opening program.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-05.jpg",
+      alt: "Greg Dozier speaks at the podium during the grand opening program.",
+      caption: "Greg Dozier, Commissioner of the Technical College System of Georgia",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-06.jpg",
+      alt: "Sen. Billy Hickman speaks at the podium during the grand opening program.",
+      caption: "Sen. Billy Hickman, Georgia State Senate, District 4",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-12.jpg",
+      alt: "Guests at a lobby table smile and cheer during the program.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-07.jpg",
+      alt: "Jon Burns speaks at the podium during the grand opening program.",
+      caption: "Jon Burns, Speaker of the Georgia House of Representatives",
+      position: "50% 28%",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-08.jpg",
+      alt: "Jan Moore speaks at the podium during the grand opening program.",
+      caption: "Jan Moore, Vice President for Economic Development, Ogeechee Technical College",
+      position: "50% 25%",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-13.jpg",
+      alt: "Guests laugh together while listening to the program.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-09.jpg",
+      alt: "Micheal Summers speaks at the podium during the grand opening program.",
+      caption: "Micheal Summers, Chair, Ogeechee Technical College Board of Directors",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-10.jpg",
+      alt: "Benjy Thompson speaks at the podium during the grand opening program.",
+      caption: "Benjy Thompson, CEO, Development Authority of Bulloch County",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-14.jpg",
+      alt: "Guests embrace and mingle in the lobby during the grand opening.",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-11.jpg",
+      alt: "Rep. Lehman Franklin speaks at the podium during the grand opening program.",
+      caption: "Rep. Lehman Franklin, Georgia House of Representatives, District 160",
+    },
+    {
+      src: "/images/grand-opening/grand-opening-15.jpg",
+      alt: "Guests pose for a group photo outside the building’s main entrance.",
+    },
+  ] satisfies GalleryPhoto[],
   faqs: [
     {
       question: "Who runs GTCIO?",
@@ -246,7 +330,7 @@ const DEFAULTS = {
     {
       question: "Where is GTCIO located?",
       answer:
-        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Students began classes in the new building on October 5, 2026, and the grand opening is October 15, 2026. The Facility page has more about the building.",
+        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Students began classes in the new building on October 5, 2026, and the center held its grand opening on October 15, 2026. The Facility page has more about the building.",
     },
   ],
 };
@@ -346,6 +430,16 @@ export default function AboutPage() {
           >
             LEARN MORE
           </a>
+        </div>
+      </section>
+
+      <section id="grand-opening" className="scroll-mt-52 sm:scroll-mt-60 border-b border-brand-silver/30 px-6 py-16 sm:px-10">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="font-heading text-2xl font-bold text-brand-red">{page.galleryTitle}</h2>
+          <p className="mt-4 text-brand-black">{page.galleryBody}</p>
+          <div className="mt-8">
+            <PhotoGallery photos={page.galleryPhotos} />
+          </div>
         </div>
       </section>
 

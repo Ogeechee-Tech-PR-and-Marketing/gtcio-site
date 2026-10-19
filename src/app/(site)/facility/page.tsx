@@ -27,7 +27,7 @@ const DEFAULTS = {
   // Still a rendering, and labelled as one on purpose. Swap in real exterior
   // photography once the new logo signage is on the building (shoot pending).
   renderingCaption:
-    "Architectural rendering of the GTCIO facility on AJ Riggs Road. The grand opening is October 15, 2026.",
+    "Architectural rendering of the GTCIO facility on AJ Riggs Road. GTCIO held its grand opening on October 15, 2026.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
   focusAreasTitle: "What the center is built around",
