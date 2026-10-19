@@ -20,6 +20,21 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    id: "newsItem-otc-grand-opening-2026-10",
+    category: "press",
+    title:
+      "OTC Unlocks Expanded Capacity For Training in New Georgia Training Center for Industrial Operations",
+    date: "2026-10-15",
+    source: "Ogeechee Technical College",
+    url: "https://www.ogeecheetech.edu/about/news/post/otc-unlocks-expanded-capacity-for-training-in-new-georgia-training-center-for-industrial-operations-",
+    excerpt:
+      "OTC celebrates the grand opening of the Georgia Training Center for Industrial Operations with state and local leaders, educators, and community partners. OTC President Lori Durden, TCSG Commissioner Greg Dozier, OTC VP for Economic Development Jan Moore, and Development Authority of Bulloch County CEO Benjy Thompson speak to what the center means for students, employers, and recruiting new industry to the region.",
+    image: "/images/news/grand-opening.jpg",
+    imageAlt:
+      "State and local leaders, OTC staff, and community partners cut an Ogeechee Technical College and Georgia Training Center for Industrial Operations ribbon outside the new building.",
+    imagePosition: "49.0% 45.0%",
+  },
+  {
     id: "newsItem-statesboro-herald-inside-look-2026-10",
     category: "media",
     title:
