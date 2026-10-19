@@ -12,8 +12,14 @@ import { preload as preloadResource } from "react-dom";
  * The <video> is aria-hidden (purely decorative; the hero copy carries the
  * meaning); the button is the only thing assistive tech sees.
  */
+type HeroVideoSource = { src: string; type: string };
+
 type HeroVideoProps = {
-  src: string;
+  /**
+   * One file, or encodes in preference order (e.g. AV1 → HEVC → H.264);
+   * the browser plays the first `type` it can decode.
+   */
+  src: string | HeroVideoSource[];
   /** A frame FROM the video, so the swap from poster to first frame doesn't jump. */
   poster?: string;
   preload?: "auto" | "metadata" | "none";
@@ -59,7 +65,7 @@ export default function HeroVideo({
     <>
       <video
         ref={videoRef}
-        src={src}
+        src={typeof src === "string" ? src : undefined}
         poster={poster}
         autoPlay
         loop
@@ -72,7 +78,10 @@ export default function HeroVideo({
         onPause={() => setPlaying(false)}
         className={className}
         style={style}
-      />
+      >
+        {typeof src !== "string" &&
+          src.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+      </video>
       <button
         type="button"
         onClick={toggle}

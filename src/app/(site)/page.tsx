@@ -54,7 +54,15 @@ export default function Home() {
   return (
     <>
       <section className="relative overflow-hidden bg-brand-black px-6 py-24 text-brand-white sm:px-10 sm:py-32">
-        <HeroVideo src="/videos/hero-construction-8.mp4" poster="/images/hero-construction-poster-6.jpg" />
+        <HeroVideo
+          src={[
+            // Same cut, three encodes: browsers take the first they can decode.
+            { src: "/videos/hero-home-1-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.10"' },
+            { src: "/videos/hero-home-1-hevc.mp4", type: 'video/mp4; codecs="hvc1.1.6.L120.B0"' },
+            { src: "/videos/hero-home-1.mp4", type: 'video/mp4; codecs="avc1.640028"' },
+          ]}
+          poster="/images/hero-home-poster-1.jpg"
+        />
         <div className="relative mx-auto max-w-7xl">
           {/*
             Kept in sync with PageHero.tsx's hero scrim: a blurred rectangle
