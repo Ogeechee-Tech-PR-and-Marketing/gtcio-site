@@ -23,11 +23,9 @@ const DEFAULTS = {
   overviewTitle: "Overview",
   overviewBody:
     "GTCIO's facility serves both credit students and incumbent workers. The building holds 12 industrial labs alongside classrooms, computer labs, and meeting space, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. It was planned as a regional center rather than a single college's building: Ogeechee Tech partnered with Southeastern Technical College to train manufacturers across their service areas once the center came online, which avoids duplicating facilities across the region. The space also trains and certifies instructors from across Georgia and the nation.",
-  renderingTitle: "What it will look like",
-  // Still a rendering, and labelled as one on purpose. Swap in real exterior
-  // photography once the new logo signage is on the building (shoot pending).
-  renderingCaption:
-    "Architectural rendering of the GTCIO facility on AJ Riggs Road. GTCIO held its grand opening on October 15, 2026.",
+  exteriorTitle: "The building",
+  exteriorCaption:
+    "The Georgia Training Center for Industrial Operations at 66 AJ Riggs Road in Statesboro. GTCIO held its grand opening on October 15, 2026.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
   focusAreasTitle: "What the center is built around",
@@ -94,25 +92,22 @@ export default function FacilityPage() {
         </div>
       </section>
 
-      {/* The exterior rendering, from Ogeechee Tech's own Industrial Operations
-          Program brochure. Its own band rather than a slot in the square
-          Equipment Gallery below — it is 16:9 and a square crop loses the
-          building. */}
+      {/* Exterior photo, shown at its own wide aspect: its own band rather than a
+          slot in the square Equipment Gallery below, which would crop the building. */}
       <section className="border-b border-brand-silver/30 px-6 py-16 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.renderingTitle}</h2>
+          <h2 className="font-heading text-2xl font-bold text-brand-black">{page.exteriorTitle}</h2>
           <figure className="mt-8">
-            <div className="relative aspect-video overflow-hidden">
-              <Image
-                src="/images/facility-rendering.jpg"
-                alt="Architectural rendering of the GTCIO building: a single-storey brick and white-panel facility with a two-storey glass entrance atrium"
-                fill
-                sizes="(min-width: 1024px) 64rem, 100vw"
-                className="object-cover"
-              />
-            </div>
+            <Image
+              src="/images/facility-exterior-1.jpg"
+              alt="The GTCIO building on a clear day: brick and white-panel walls, a two-storey glass atrium, a shaded patio with tables, and the Georgia Training Center for Industrial Operations sign"
+              width={2560}
+              height={1179}
+              sizes="(min-width: 1024px) 64rem, 100vw"
+              className="h-auto w-full"
+            />
             <figcaption className="mt-3 text-sm text-brand-gray">
-              {page.renderingCaption}
+              {page.exteriorCaption}
             </figcaption>
           </figure>
         </div>

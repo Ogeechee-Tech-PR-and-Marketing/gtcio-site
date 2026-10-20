@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/images/facility-rendering.jpg",
-        width: 2400,
-        height: 1350,
-        alt: "Architectural rendering of the GTCIO facility on AJ Riggs Road, Statesboro, Georgia",
+        url: "/images/og-gtcio-exterior-1.jpg",
+        width: 1200,
+        height: 630,
+        alt: "The Georgia Training Center for Industrial Operations building on AJ Riggs Road, Statesboro, Georgia",
       },
     ],
   },
