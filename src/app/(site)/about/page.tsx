@@ -117,9 +117,9 @@ const DEFAULTS = {
       highlight: true,
     },
     {
-      date: "September 2026",
-      title: "Construction targeted for completion",
-      detail: "The building is scheduled to be finished and handed over.",
+      date: "October 2, 2026",
+      title: "Building handed over",
+      detail: "The building is handed over to Ogeechee Tech, clearing the way for classes to move in.",
     },
     {
       date: "October 5, 2026",
