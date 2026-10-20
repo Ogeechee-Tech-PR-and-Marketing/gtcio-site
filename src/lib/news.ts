@@ -20,6 +20,39 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    id: "newsItem-statesboro-herald-grand-opening-2026-10",
+    category: "media",
+    title:
+      "From dream to reality: Georgia Training Center for Industrial Operations officially opens",
+    date: "2026-10-15",
+    source: "Statesboro Herald",
+    url: "https://www.statesboroherald.com/local/from-dream-to-reality-georgia-training-center-for-industrial-operations-officially-opens/",
+    excerpt:
+      "The Herald covers the official opening, where about 200 people filled the center's lobby. OTC President Lori Durden, TCSG Commissioner Greg Dozier, House Speaker Jon Burns, Sen. Billy Hickman, and Development Authority of Bulloch County CEO Benjy Thompson speak to what the center means for regional employers, recruiting new industry, and keeping young people working close to home.",
+  },
+  {
+    id: "newsItem-grice-connect-grand-opening-2026-10",
+    category: "media",
+    title:
+      "Ogeechee Tech celebrates grand opening of $27 million industrial training center in Statesboro",
+    date: "2026-10-15",
+    source: "Grice Connect",
+    url: "https://www.griceconnect.com/local-news/ogeechee-tech-celebrates-grand-opening-of-27-million-industrial-training-center-in-statesboro-12897577",
+    excerpt:
+      "Grice Connect recounts the grand opening and the years of planning behind it, from OTC's first pitch to the Development Authority of Bulloch County in 2021 to state funding in 2023. TCSG Commissioner Greg Dozier, House Speaker Jon Burns, Sen. Billy Hickman, and Rep. Lehman Franklin spoke, and the story looks at the center's role for employers and the Industrial Operations Technology diploma.",
+  },
+  {
+    id: "newsItem-wsav-grand-opening-2026-10",
+    category: "media",
+    title:
+      "Ogeechee Tech opens new training center",
+    date: "2026-10-15",
+    source: "WSAV-TV",
+    url: "https://www.wsav.com/news/education/ogeechee-tech-opens-new-training-center/",
+    excerpt:
+      "WSAV reports from the ribbon cutting, where OTC VP for Economic Development Jan Moore traces the center to a need the college saw six years ago, and OTC's Justin Goodman explains how the building serves students, employers' current workers, and instructors who carry the training to other regions.",
+  },
+  {
     id: "newsItem-otc-grand-opening-2026-10",
     category: "press",
     title:

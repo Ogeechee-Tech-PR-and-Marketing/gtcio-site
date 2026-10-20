@@ -14,7 +14,7 @@ export type TimelineEvent = {
 function splitDate(date: string) {
   const parts = date.trim().split(" ");
   const year = parts[parts.length - 1].replace(",", "");
-  const rest = parts.slice(0, -1).join(" ");
+  const rest = parts.slice(0, -1).join(" ").replace(/,$/, "");
   return { year, rest: rest || year };
 }
 

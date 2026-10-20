@@ -130,8 +130,11 @@ const DEFAULTS = {
     {
       date: "October 15, 2026",
       title: "Grand opening",
-      detail: "GTCIO officially opens its doors.",
+      detail:
+        "About 200 people fill the lobby as OTC opens the center with a ribbon cutting. TCSG Commissioner Greg Dozier, House Speaker Jon Burns, Sen. Billy Hickman, Rep. Lehman Franklin, and Development Authority of Bulloch County CEO Benjy Thompson join OTC President Lori Durden and OTC VP of Economic Development Jan Moore in marking the milestone.",
       highlight: true,
+      sourceUrl:
+        "https://www.ogeecheetech.edu/about/news/post/otc-unlocks-expanded-capacity-for-training-in-new-georgia-training-center-for-industrial-operations-",
     },
   ] satisfies TimelineEvent[],
   advisoryTitle: "Advisory Board",
