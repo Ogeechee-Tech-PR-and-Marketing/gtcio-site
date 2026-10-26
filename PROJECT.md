@@ -513,8 +513,8 @@ directly; don't relitigate them in new copy.
 - **The IOT Diploma FAQ is ordered as a student funnel** (when → experience →
   apply → where → online → how long → cost → credential → earnings). Insert
   new questions into that flow, don't append.
-- **The desktop nav is 9 items and just fits at the `xl` breakpoint.** A
-  tenth item or longer labels need re-measuring — there's no overflow
+- **The desktop nav is 9 items + the ogeecheetech.edu link and just fits at the `xl` breakpoint.** Another
+  item or longer labels need re-measuring — there's no overflow
   handling.
 - **`public/SITEMAP.html` is a stakeholder deliverable** (goes to the VP for
   sign-off, served publicly, noindex). Keep it in sync when routes,

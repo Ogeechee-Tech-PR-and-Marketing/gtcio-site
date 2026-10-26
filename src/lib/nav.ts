@@ -5,9 +5,10 @@
  * are its in-page anchors; only the header renders them.
  *
  * Two constraints before adding an item:
- * - 9 items fit the desktop nav at the xl breakpoint with only ~21px to
- *   spare and no overflow handling — a 10th item or longer labels need
- *   re-measuring, or the nav collides with the logo.
+ * - These 9 items plus Header's external "ogeecheetech.edu" link fit the
+ *   desktop nav at the xl breakpoint (13px labels, 14px gaps) with only
+ *   ~22px to spare and no overflow handling — another item or longer
+ *   labels need re-measuring, or the nav collides with the logo.
  * - A new route also needs a DESTINATIONS key in links.ts if buttons should
  *   target it, and an entry in public/SITEMAP.html (PROJECT.md §13).
  */

@@ -5,9 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/nav";
+import { ORG } from "@/lib/site";
 
 const BANNER_ORG_TEXT = "WELCOME TO THE GTCIO";
 const BANNER_PARENT_TEXT = "A DIVISION OF OGEECHEE TECHNICAL COLLEGE";
+// Last nav item, deliberately outside NAV_ITEMS so the footer and
+// sitemap.xml don't list an external site.
+const OTC_LINK_TEXT = "ogeecheetech.edu";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -34,7 +38,13 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-brand-white">
       <div className="bg-brand-black px-4 py-2 text-center">
         <p className="font-ui text-xs font-bold tracking-widest text-brand-white sm:text-sm">
-          {BANNER_ORG_TEXT} <span className="text-brand-red">|</span> {BANNER_PARENT_TEXT}
+          {BANNER_ORG_TEXT} <span className="text-brand-red">|</span>{" "}
+          <a
+            href={ORG.parent.url}
+            className="underline decoration-brand-red decoration-2 underline-offset-4 hover:decoration-brand-white focus-visible:decoration-brand-white"
+          >
+            {BANNER_PARENT_TEXT}
+          </a>
         </p>
       </div>
 
@@ -62,7 +72,7 @@ export default function Header() {
             </p>
           </Link>
 
-          <nav aria-label="Main" className="hidden items-center gap-4 xl:flex xl:gap-6">
+          <nav aria-label="Main" className="hidden items-center gap-3.5 xl:flex">
             {NAV_ITEMS.map((item) =>
               item.children ? (
                 // The dropdown is CSS-driven (group-hover + group-focus-within)
@@ -72,7 +82,7 @@ export default function Header() {
                   <Link
                     href={item.href}
                     aria-current={current(item.href)}
-                    className="font-ui text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
+                    className="font-ui text-[13px] font-bold tracking-wide text-brand-black hover:text-brand-red"
                   >
                     {item.label}
                   </Link>
@@ -93,12 +103,18 @@ export default function Header() {
                   key={item.label}
                   href={item.href}
                   aria-current={current(item.href)}
-                  className="font-ui text-sm font-bold tracking-wide text-brand-black hover:text-brand-red"
+                  className="font-ui text-[13px] font-bold tracking-wide text-brand-black hover:text-brand-red"
                 >
                   {item.label}
                 </Link>
               )
             )}
+            <a
+              href={ORG.parent.url}
+              className="font-ui text-[13px] font-bold tracking-wide text-brand-teal hover:text-brand-red"
+            >
+              {OTC_LINK_TEXT}
+            </a>
           </nav>
 
           <button
@@ -141,6 +157,12 @@ export default function Header() {
                 )}
               </div>
             ))}
+            <a
+              href={ORG.parent.url}
+              className="font-ui block py-2 text-sm font-bold tracking-wide text-brand-teal"
+            >
+              {OTC_LINK_TEXT}
+            </a>
           </nav>
         )}
       </div>
