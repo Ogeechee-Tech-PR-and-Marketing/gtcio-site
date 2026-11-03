@@ -20,6 +20,20 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    id: "newsItem-otc-das-north-america-donation-2026-10",
+    category: "press",
+    title: "DAS North America Donates $1,000 to OTC Foundation",
+    date: "2026-10-28",
+    source: "Ogeechee Technical College",
+    url: "https://www.ogeecheetech.edu/about/news/post/das-north-america-donates-1-000-to-otc-foundation",
+    excerpt:
+      "DAS North America, one of the GTCIO's newest industry partners, presents a $1,000 check to the OTC Foundation at its Metter facility. OTC VP for Economic Development Jan Moore and VP for College Advancement Larry Mays accept on the college's behalf, and Moore explains what partners gain: access to the center's students, specialized training for their employees, and a hand in steering its industrial operations curriculum.",
+    image: "/images/news/das-north-america-donation.jpg",
+    imageAlt:
+      "DAS North America representatives and OTC staff hold an oversized $1,000 donation check made out to the Ogeechee Technical College Foundation.",
+    imagePosition: "50.0% 40.0%",
+  },
+  {
     id: "newsItem-statesboro-herald-grand-opening-2026-10",
     category: "media",
     title:
