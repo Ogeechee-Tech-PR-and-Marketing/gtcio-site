@@ -318,7 +318,7 @@ const DEFAULTS = {
     {
       question: "Who runs GTCIO?",
       answer:
-        "GTCIO is a division of Ogeechee Technical College, part of the Technical College System of Georgia. Ogeechee Tech already delivers the system's most comprehensive noncredit industrial systems and robotics training, and it runs the center as a regional resource rather than a single college's building: it partnered with Southeastern Technical College so manufacturers across both service areas can use it instead of duplicating facilities.",
+        "GTCIO is a division of Ogeechee Technical College, part of the Technical College System of Georgia. Ogeechee Tech already delivers the system's most comprehensive noncredit industrial systems and robotics training.",
     },
     {
       question: "Is GTCIO only for students?",

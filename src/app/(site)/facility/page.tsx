@@ -22,7 +22,7 @@ const DEFAULTS = {
     "A $27 million, 39,700-square-foot center built to train the industrial systems and robotics workforce southeast Georgia's manufacturers are short on.",
   overviewTitle: "Overview",
   overviewBody:
-    "GTCIO's facility serves both credit students and incumbent workers. The building holds 12 industrial labs alongside classrooms, computer labs, and meeting space, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. It was planned as a regional center rather than a single college's building: Ogeechee Tech partnered with Southeastern Technical College to train manufacturers across their service areas once the center came online, which avoids duplicating facilities across the region. The space also trains and certifies instructors from across Georgia and the nation.",
+    "GTCIO's facility serves both credit students and incumbent workers. The building holds 12 industrial labs alongside classrooms, computer labs, and meeting space, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. The space also trains and certifies instructors from across Georgia and the nation.",
   exteriorTitle: "The building",
   exteriorCaption:
     "The Georgia Training Center for Industrial Operations at 66 AJ Riggs Road in Statesboro. GTCIO held its grand opening on October 15, 2026.",
