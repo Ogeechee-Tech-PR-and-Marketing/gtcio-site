@@ -26,16 +26,16 @@ type Payload = {
   botcheck?: string;
 };
 
-// Fixed recipients (src/lib/site.ts — the same two people Contact prints).
-// Every provider in src/lib/mail.ts sends to any address from one credential,
-// so there's no per-recipient config.
+// Fixed recipients (src/lib/site.ts). Every provider in src/lib/mail.ts sends
+// to any address from one credential, so there's no per-recipient config.
 const NOTIFY_EMAIL = CONTACTS.general.email;
 const NOTIFY_EMAIL_MEDIA = CONTACTS.media.email;
+const NOTIFY_EMAIL_PARTNERS = CONTACTS.partners.email;
 
 // Test hook: when set, EVERY notification goes to this address instead of the
 // staff above, with the intended recipient named in the subject. Meant for a
 // preview deployment (`vercel deploy -e NOTIFY_EMAIL_OVERRIDE=you@…`) so the
-// real send path can be exercised without emailing Jan or Sean. Never set it
+// real send path can be exercised without emailing staff. Never set it
 // in Production.
 const NOTIFY_EMAIL_OVERRIDE = process.env.NOTIFY_EMAIL_OVERRIDE?.trim() || null;
 
@@ -50,7 +50,10 @@ const RATE_LIMIT = { limit: 5, windowSeconds: 10 * 60 }; // per IP
 
 // Shown when a submission could be neither emailed nor stored. Names the
 // inbox explicitly — the Partners page has no email address on it.
-const FAILURE_MESSAGE = `Something went wrong on our end. Please email us directly at ${NOTIFY_EMAIL}.`;
+function failureMessage(formType: FormType) {
+  const inbox = formType === "partner" ? NOTIFY_EMAIL_PARTNERS : NOTIFY_EMAIL;
+  return `Something went wrong on our end. Please email us directly at ${inbox}.`;
+}
 
 /**
  * The exact label of the Contact form option (DEFAULTS.contactReasons in
@@ -133,18 +136,22 @@ export async function POST(request: Request) {
   const message = (body.message ?? "").trim().slice(0, MAX_MESSAGE);
   const subject = buildSubject(formType, reasonText, organization || name);
 
-  // "Media inquiry" routes to Sean Payne; everything else (and a submission with
-  // no reason at all, e.g. the Partner/Tour forms which don't use this concept)
-  // routes to Jan Moore. Both fire when a Contact submission checks "Media
-  // inquiry" alongside another reason, since each covers a different audience.
-  const includesMedia = reasons.some((r) => r.toLowerCase() === MEDIA_REASON);
-  const includesOther = reasons.length === 0 || reasons.some((r) => r.toLowerCase() !== MEDIA_REASON);
+  // Partner form → Jamie Calloway, whatever boxes are checked. Otherwise
+  // "Media inquiry" routes to Sean Payne and everything else (including a
+  // submission with no reason, e.g. Tour) to Jan Moore. Both fire when a
+  // Contact submission checks "Media inquiry" alongside another reason.
   const recipients: { to: string; audience: string }[] = [];
-  if (includesOther) {
-    recipients.push({ to: NOTIFY_EMAIL, audience: "general (Jan Moore)" });
-  }
-  if (includesMedia) {
-    recipients.push({ to: NOTIFY_EMAIL_MEDIA, audience: "media (Sean Payne)" });
+  if (formType === "partner") {
+    recipients.push({ to: NOTIFY_EMAIL_PARTNERS, audience: "partners (Jamie Calloway)" });
+  } else {
+    const includesMedia = reasons.some((r) => r.toLowerCase() === MEDIA_REASON);
+    const includesOther = reasons.length === 0 || reasons.some((r) => r.toLowerCase() !== MEDIA_REASON);
+    if (includesOther) {
+      recipients.push({ to: NOTIFY_EMAIL, audience: "general (Jan Moore)" });
+    }
+    if (includesMedia) {
+      recipients.push({ to: NOTIFY_EMAIL_MEDIA, audience: "media (Sean Payne)" });
+    }
   }
 
   // Contact form's "sign me up for the newsletter" checkbox. Best-effort and
@@ -203,7 +210,7 @@ export async function POST(request: Request) {
   }
 
   // "Delivered" means every intended recipient got it — a partial send (e.g.
-  // Jan's address rejected the message but Sean's went through) still needs
+  // one address rejected the message but another went through) still needs
   // manual follow-up.
   const emailDelivered = anyRecipientConfigured && allDelivered;
   if (emailDelivered) {
@@ -236,5 +243,5 @@ export async function POST(request: Request) {
     console.error("[inquiry] no fallback store configured — submission LOST");
   }
 
-  return NextResponse.json({ error: FAILURE_MESSAGE }, { status: 500 });
+  return NextResponse.json({ error: failureMessage(formType) }, { status: 500 });
 }

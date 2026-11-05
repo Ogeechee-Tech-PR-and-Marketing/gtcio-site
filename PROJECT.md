@@ -156,8 +156,9 @@ which:
 4. Emails staff through `src/lib/mail.ts`, which uses the first configured
    provider — **Resend** (`RESEND_API_KEY`) or Microsoft Graph (`MS_GRAPH_*`).
    Subject is built from the chosen reason(s); Reply-To is the submitter, so
-   staff just hit Reply. A Contact submission with "Media inquiry" goes to
-   Sean; everything else goes to Jan.
+   staff just hit Reply. Partners-form submissions go to Jamie Calloway; a
+   Contact submission with "Media inquiry" goes to Sean; everything else
+   goes to Jan.
 
 **The email is the primary record of a submission.** If delivery fails
 (or no provider is configured), the route parks the full inquiry on a capped
@@ -165,13 +166,16 @@ Redis list in the KV store (`inquiryStore.ts`, key `inquiries:undelivered`)
 and still shows the visitor a success message. **Someone must collect those:**
 `npx vercel env pull .env.local && npm run inquiries` prints them, newest
 first. Delivered inquiries are not stored. Only if KV is also unavailable
-does the visitor see a 500 with Jan's address to email directly.
+does the visitor see a 500 naming an address to email directly (Jamie's
+for the Partners form, Jan's otherwise).
 
-Recipients come from `CONTACTS` in `src/lib/site.ts` — the same two people
-the Contact page prints — bound in the route as `NOTIFY_EMAIL`
-(jmoore@ogeecheetech.edu — everything) and `NOTIFY_EMAIL_MEDIA`
-(spayne@ogeecheetech.edu — fires when "Media inquiry" is checked). Changing
-an address there changes both what visitors see and where forms deliver.
+Recipients come from `CONTACTS` in `src/lib/site.ts`, bound in the route as
+`NOTIFY_EMAIL_PARTNERS` (ljcalloway@ogeecheetech.edu — every Partners-form
+submission; not printed on the site), `NOTIFY_EMAIL`
+(jmoore@ogeecheetech.edu — Contact and Tour) and `NOTIFY_EMAIL_MEDIA`
+(spayne@ogeecheetech.edu — fires when "Media inquiry" is checked). Jan and
+Sean are also the two people the Contact page prints, so changing their
+addresses changes both what visitors see and where forms deliver.
 ⚠️ `MEDIA_REASON` in the route must match the Contact form's "Media inquiry"
 label exactly — renaming one without the other silently breaks the routing.
 

@@ -25,10 +25,11 @@ export const ORG = {
 };
 
 /**
- * The two staff the site names. Contact and News print them; the inquiry
- * route emails them — "Media inquiry" submissions go to `media`, everything
- * else to `general` (PROJECT.md §5). Changing an address here changes both
- * what visitors see and where the forms deliver.
+ * Staff the site names or emails. Contact and News print `general` and
+ * `media`; the inquiry route emails all three — Partners-page submissions go
+ * to `partners`, Contact "Media inquiry" to `media`, everything else to
+ * `general` (PROJECT.md §5). Changing an address here changes both what
+ * visitors see and where the forms deliver.
  */
 export const CONTACTS = {
   general: {
@@ -42,5 +43,10 @@ export const CONTACTS = {
     title: "Executive Director for Public Relations & Marketing",
     email: "spayne@ogeecheetech.edu",
     phone: "912-871-8559",
+  },
+  // Not printed anywhere — only the Partners form delivers here.
+  partners: {
+    name: "Jamie Calloway",
+    email: "ljcalloway@ogeecheetech.edu",
   },
 };
