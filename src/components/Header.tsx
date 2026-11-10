@@ -77,8 +77,10 @@ export default function Header() {
               item.children ? (
                 // The dropdown is CSS-driven (group-hover + group-focus-within)
                 // rather than mouse-event state, so keyboard users tabbing
-                // through the About link reach its sub-links too.
-                <div key={item.label} className="group relative">
+                // through the About link reach its sub-links too. `flex` makes
+                // the link a flex item like its siblings; as an inline child
+                // it sat on the div's 16px-body baseline, ~1px low.
+                <div key={item.label} className="group relative flex">
                   <Link
                     href={item.href}
                     aria-current={current(item.href)}
