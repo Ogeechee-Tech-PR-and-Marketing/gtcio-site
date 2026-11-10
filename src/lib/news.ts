@@ -20,6 +20,20 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    id: "newsItem-otc-rockwell-aam-2026-11",
+    category: "press",
+    title: "Rockwell Academy of Advanced Manufacturing to Start at GTCIO",
+    date: "2026-11-10",
+    source: "Ogeechee Technical College",
+    url: "https://www.ogeecheetech.edu/about/news/post/rockwell-academy-of-advanced-automation-to-start-at-gtcio",
+    excerpt:
+      "OTC will deliver Rockwell Automation's Academy of Advanced Manufacturing at the Georgia Training Center for Industrial Operations: a six-week, hands-on program that trains employers' workers as industrial controls technicians. Once open only to veterans, the program welcomes its first cohort in February 2027, and Rockwell's Rob Campbell describes it as a way to build a pipeline of skilled people for manufacturers growing in the region.",
+    image: "/images/news/rockwell-aam-visit.jpg",
+    imageAlt:
+      "Rockwell Automation, Wesco, and Ogeechee Technical College representatives stand together in the GTCIO lobby.",
+    imagePosition: "50.0% 20.0%",
+  },
+  {
     id: "newsItem-otc-das-north-america-donation-2026-10",
     category: "press",
     title: "DAS North America Donates $1,000 to OTC Foundation",
