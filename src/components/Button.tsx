@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NewTabNote from "@/components/NewTabNote";
 
 type ButtonProps = {
   href: string;
@@ -23,7 +24,7 @@ export default function Button({ href, children, variant = "primary", className 
   const label = (
     <>
       {children}
-      {newTab && <span className="sr-only"> (opens in a new tab)</span>}
+      {newTab && <NewTabNote />}
     </>
   );
 

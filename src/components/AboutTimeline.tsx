@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import NewTabNote from "@/components/NewTabNote";
 
 export type TimelineEvent = {
   date: string;
@@ -82,6 +83,7 @@ export default function AboutTimeline({ items }: { items: TimelineEvent[] }) {
                     className="font-heading mt-2 inline-block text-xs font-bold tracking-wide text-brand-red hover:text-brand-black"
                   >
                     Read more<span className="sr-only"> about {item.title}</span> &rarr;
+                    <NewTabNote />
                   </a>
                 )}
               </div>

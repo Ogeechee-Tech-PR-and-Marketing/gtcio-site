@@ -4,6 +4,7 @@ import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import InquiryForm from "@/components/InquiryForm";
 import { PARTNERS } from "@/lib/partners";
+import NewTabNote from "@/components/NewTabNote";
 
 export const metadata: Metadata = {
   title: "Partners",
@@ -45,8 +46,8 @@ const DEFAULTS = {
   pathways: [
     { title: "Hire Our Graduates", description: "Access a pipeline of technicians and specialists trained in maintenance, automation, and industrial operations." },
     { title: "Sponsorship Opportunities", description: "Invest in the machinery and robotics students train on, and put your company's name on the tools that build careers." },
-    { title: "Training Program Partner", description: "Details on this partnership pathway are coming soon." },
-    { title: "K-12 Partner", description: "Details on this partnership pathway are coming soon." },
+    { title: "Training Program Partner", description: "Work alongside GTCIO to shape training that meets the region's workforce needs." },
+    { title: "K-12 Partner", description: "Help introduce K-12 students to careers in industrial operations." },
   ],
   directoryTitle: "Our Partners",
   directoryIntro: "A few of the organizations working with GTCIO to build Georgia's industrial workforce.",
@@ -177,7 +178,8 @@ export default function PartnersPage() {
                       rel="noopener noreferrer"
                       className="font-ui inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
                     >
-                      LEARN MORE
+                      LEARN MORE<span className="sr-only"> about {partner.name}</span>
+                      <NewTabNote />
                     </a>
                   </div>
                 )}
@@ -204,11 +206,11 @@ export default function PartnersPage() {
                   halfWidth: false,
                   options: pathwayOptions,
                 },
-                { name: "firstName", label: "First Name", required: true },
-                { name: "lastName", label: "Last Name", required: true },
-                { name: "organization", label: "Company Name", required: true, halfWidth: false },
-                { name: "email", label: "Email Address", type: "email", required: true },
-                { name: "phone", label: "Phone Number", type: "tel" },
+                { name: "firstName", label: "First Name", required: true, autoComplete: "given-name" },
+                { name: "lastName", label: "Last Name", required: true, autoComplete: "family-name" },
+                { name: "organization", label: "Company Name", required: true, halfWidth: false, autoComplete: "organization" },
+                { name: "email", label: "Email Address", type: "email", required: true, autoComplete: "email" },
+                { name: "phone", label: "Phone Number", type: "tel", autoComplete: "tel" },
                 { name: "message", label: "Message", type: "textarea", halfWidth: false },
               ]}
               submitLabel="SUBMIT INQUIRY"

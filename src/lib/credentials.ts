@@ -77,7 +77,7 @@ export const OTHER_CREDENTIALS = [
     name: "OSHA 10 – General Industry",
     issuer: "U.S. Department of Labor",
     detail:
-      "Earned alongside Operations Technology I. The standard 10-hour general industry safety card, recognised on any industrial site in the country and asked for by most employers before you set foot on a floor.",
+      "Earned alongside Operations Technology I. The standard 10-hour general industry safety card, recognized on any industrial site in the country and asked for by most employers before you set foot on a floor.",
   },
 ];
 

@@ -132,7 +132,7 @@ export default function TrainingPage() {
             <CtaButton button={page.employersButton} variant="primary" />
             <CtaButton button={page.catalogButton} variant="primary" />
             <Button href={CATALOG_PDF_URL} download variant="primary">
-              DOWNLOAD THE CATALOG
+              DOWNLOAD THE CATALOG (PDF, 4.8 MB)
             </Button>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function TrainingPage() {
           <div className="flex shrink-0 flex-wrap gap-4">
             <CtaButton button={page.catalogButton} variant="primary" />
             <Button href={CATALOG_PDF_URL} download variant="primary">
-              DOWNLOAD THE CATALOG
+              DOWNLOAD THE CATALOG (PDF, 4.8 MB)
             </Button>
           </div>
         </div>

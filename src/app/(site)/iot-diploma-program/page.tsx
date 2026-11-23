@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import LinkifyEmail from "@/components/LinkifyEmail";
+import NewTabNote from "@/components/NewTabNote";
 
 export const metadata: Metadata = {
   title: "IOT Diploma Program",
   description:
-    "Ogeechee Tech's Industrial Operations Technology diploma: four semesters of hands-on training in mechanical, electrical, robotics, and PLC systems, with SACA credentials built in.",
+    "Ogeechee Tech's Industrial Operations Technology diploma: four semesters of hands-on mechanical, electrical, robotics, and PLC training, with SACA credentials.",
   alternates: { canonical: "/iot-diploma-program" },
 };
 
@@ -31,7 +32,7 @@ const DEFAULTS = {
     { label: "WIM Georgia", url: "https://www.womeninmanufacturing.org/georgia" },
   ],
   viewProgramButton: { label: "VIEW IOT PROGRAM CATALOG (FLIP)", destination: "iotProgramFlipbook" as const },
-  downloadProgramButton: { label: "DOWNLOAD IOT PROGRAM (PDF)", destination: "iotProgramPdf" as const },
+  downloadProgramButton: { label: "DOWNLOAD IOT PROGRAM (PDF, 8.6 MB)", destination: "iotProgramPdf" as const },
   curriculumTitle: "Curriculum & credentials",
   curriculumStages: [
     { stage: "Foundation", detail: "Mechanical, electrical, hydraulic, and pneumatic systems." },
@@ -100,7 +101,7 @@ const DEFAULTS = {
     { question: "When does the program start?", answer: "The Industrial Operations Technology diploma program is open for enrollment now, with new students starting each semester." },
     { question: "Do I need any experience to start?", answer: "No. The program is built for people coming into the field, whatever their background. You start with the fundamentals — mechanical, electrical, hydraulic, and pneumatic systems — and move on to robotics, PLCs, and automation controls from there." },
     { question: "How do I apply?", answer: "Applications go through Ogeechee Technical College — any of the Apply Now buttons on this page take you straight there. Admissions will walk you through what's needed. If you'd rather talk to a person first, Jan Moore is the program contact: jmoore@ogeecheetech.edu, 912-688-6026." },
-    { question: "Where are classes held?", answer: "Classes are held in GTCIO's new building at 66 AJ Riggs Road in Statesboro. The program began in August in the Industrial Technology Building on Ogeechee Tech's main campus, and students moved into the new building on October 5, 2026. The center held its grand opening on October 15, 2026." },
+    { question: "Where are classes held?", answer: "Classes are held in GTCIO's new building at 66 AJ Riggs Road in Statesboro. The program began in August in the Industrial Technology Building on Ogeechee Tech's main campus, and students moved into the new building on Oct. 5, 2026. The center held its grand opening on Oct. 15, 2026." },
     { question: "Is this an online program?", answer: "Some lectures are available online, but labs are not. Skills are acquired through hands-on labs at Ogeechee Tech." },
     { question: "How long does it take to finish?", answer: "The entire program can be completed in four semesters." },
     { question: "How much does the program cost?", answer: "The program costs approximately $9,500 before financial aid — such as the HOPE Grant, HOPE Career Grant, and Pell Grant — is applied." },
@@ -196,6 +197,7 @@ export default function IotDiplomaProgramPage() {
                   className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
                 >
                   View OTC catalog page →
+                  <NewTabNote />
                 </a>
               </div>
             ))}
@@ -292,6 +294,7 @@ export default function IotDiplomaProgramPage() {
                     className="text-sm font-bold text-brand-red underline hover:text-brand-black"
                   >
                     {resource.label}
+                    <NewTabNote />
                   </a>
                 </li>
               ))}

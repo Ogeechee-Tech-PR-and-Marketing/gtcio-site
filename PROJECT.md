@@ -441,8 +441,8 @@ the same URL.
 
 ## 10. Hidden-but-restorable sections
 
-- **Book a Tour is off the site until 2026-10-26** (tours begin after the
-  10/15 grand opening). The backend still supports `formType: "tour"`;
+- **Book a Tour is still off the site.** It was planned to return 2026-10-26,
+  after the 10/15 grand opening, but hasn't been restored as of 2026-11-23. The backend still supports `formType: "tour"`;
   restoring means writing the section copy fresh in `facility/page.tsx`
   (`<section id="book-a-tour">`), re-adding the Header/Footer links, and a
   `tour` destination in `links.ts`. Keep `SITEMAP.html` in sync.
@@ -478,7 +478,7 @@ directly; don't relitigate them in new copy.
   15 courses (12 program + 3 gen-ed).
 - **Dates:** building handed over to OTC **10/2/26** but still not finished —
   don't claim "complete" or "finished" · grand opening
-  **10/15/26** · tours from 10/26 · first classes 8/17/26 on OTC's main
+  **10/15/26** · tours not yet restored (§10) · first classes 8/17/26 on OTC's main
   campus, moved into the new building **10/5/26** (both explained on the
   site). Never publish "opening September 2026" (an old brochure's claim).
   The Facility page shows a real exterior photo (shot 10/15/26, signage up)

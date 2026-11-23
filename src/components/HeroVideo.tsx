@@ -12,7 +12,7 @@ import { preload as preloadResource } from "react-dom";
  * The <video> is aria-hidden (purely decorative; the hero copy carries the
  * meaning); the button is the only thing assistive tech sees.
  */
-type HeroVideoSource = { src: string; type: string };
+export type HeroVideoSource = { src: string; type: string };
 
 type HeroVideoProps = {
   /**
@@ -86,7 +86,6 @@ export default function HeroVideo({
         type="button"
         onClick={toggle}
         aria-label={playing ? "Pause background video" : "Play background video"}
-        aria-pressed={!playing}
         className="absolute bottom-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-brand-white transition-colors hover:bg-brand-red"
       >
         {playing ? (

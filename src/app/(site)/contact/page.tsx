@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import InquiryForm from "@/components/InquiryForm";
-import { CONTACTS, ORG } from "@/lib/site";
+import { CONTACTS, ORG, telHref } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -48,21 +48,23 @@ export default function ContactPage() {
             <p className="mt-1 text-brand-gray">{ORG.tagline}</p>
             <div className="mt-6 flex flex-col gap-2 text-brand-black">
               <p>{ORG.address}</p>
-              <p>{`Phone: ${ORG.phone}`}</p>
+              <p>
+                Phone: <a href={telHref(ORG.phone)} className="hover:text-brand-red">{ORG.phone}</a>
+              </p>
             </div>
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Program Questions</h2>
             <div className="mt-3 flex flex-col gap-2 text-brand-black">
               <p>{`${CONTACTS.general.name}, ${CONTACTS.general.title}`}</p>
               <p>Office 1110, Jack Hill Building</p>
-              <p>{CONTACTS.general.phone}</p>
+              <p><a href={telHref(CONTACTS.general.phone)} className="hover:text-brand-red">{CONTACTS.general.phone}</a></p>
               <p><a href={`mailto:${CONTACTS.general.email}`} className="font-bold text-brand-red hover:text-brand-black">{CONTACTS.general.email}</a></p>
             </div>
 
             <h2 className="font-heading mt-10 text-xl font-bold text-brand-black">Media Inquiries</h2>
             <div className="mt-3 flex flex-col gap-2 text-brand-black">
               <p>{`${CONTACTS.media.name}, ${CONTACTS.media.title}`}</p>
-              <p>{CONTACTS.media.phone}</p>
+              <p><a href={telHref(CONTACTS.media.phone)} className="hover:text-brand-red">{CONTACTS.media.phone}</a></p>
               <p><a href={`mailto:${CONTACTS.media.email}`} className="font-bold text-brand-red hover:text-brand-black">{CONTACTS.media.email}</a></p>
             </div>
           </div>
@@ -79,10 +81,10 @@ export default function ContactPage() {
                   options: page.contactReasons,
                   placeholder: "Select a reason…",
                 },
-                { name: "firstName", label: "First Name", required: true },
-                { name: "lastName", label: "Last Name", required: true },
-                { name: "email", label: "Email Address", type: "email", required: true },
-                { name: "phone", label: "Phone Number", type: "tel" },
+                { name: "firstName", label: "First Name", required: true, autoComplete: "given-name" },
+                { name: "lastName", label: "Last Name", required: true, autoComplete: "family-name" },
+                { name: "email", label: "Email Address", type: "email", required: true, autoComplete: "email" },
+                { name: "phone", label: "Phone Number", type: "tel", autoComplete: "tel" },
                 { name: "message", label: "Message", type: "textarea", required: true, halfWidth: false },
                 {
                   name: "newsletterOptIn",

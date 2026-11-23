@@ -50,3 +50,6 @@ export const CONTACTS = {
     email: "ljcalloway@ogeecheetech.edu",
   },
 };
+
+/** "912-688-6026" -> "tel:+19126886026" for tap-to-call links. */
+export const telHref = (phone: string) => `tel:+1${phone.replace(/\D/g, "")}`;

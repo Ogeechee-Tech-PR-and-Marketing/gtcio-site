@@ -4,6 +4,7 @@ import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
 import { CONTACTS } from "@/lib/site";
+import NewTabNote from "@/components/NewTabNote";
 
 export const metadata: Metadata = {
   title: "News",
@@ -23,17 +24,16 @@ const DEFAULTS = {
   mediaTitle: "In the News",
 };
 
+// AP style (OTC editorial guide): abbreviate Jan., Feb., Aug., Sept., Oct.,
+// Nov. and Dec. before a day; spell out March through July.
+const AP_MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+
 function formatDate(date: string) {
-  // Date-only strings ("2026-07-09") parse as UTC midnight; format in UTC so the
-  // day never slips backward in a US timezone.
+  // Date-only strings ("2026-07-09") parse as UTC midnight; read them in UTC so
+  // the day never slips backward in a US timezone.
   const parsed = new Date(`${date}T00:00:00Z`);
   if (Number.isNaN(parsed.getTime())) return "";
-  return parsed.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
+  return `${AP_MONTHS[parsed.getUTCMonth()]} ${parsed.getUTCDate()}, ${parsed.getUTCFullYear()}`;
 }
 
 function NewsList({ items }: { items: NewsItem[] }) {
@@ -69,6 +69,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
                     className="hover:text-brand-red"
                   >
                     {item.title}
+                    <NewTabNote />
                   </a>
                 ) : (
                   item.title
@@ -83,6 +84,7 @@ function NewsList({ items }: { items: NewsItem[] }) {
                   className="font-heading mt-3 inline-block text-sm font-bold tracking-wide text-brand-red hover:text-brand-black"
                 >
                   Read more<span className="sr-only">: {item.title}</span> →
+                  <NewTabNote />
                 </a>
               )}
             </div>

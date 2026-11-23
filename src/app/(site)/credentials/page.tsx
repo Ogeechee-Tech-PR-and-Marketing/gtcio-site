@@ -17,6 +17,7 @@ import {
   affiliationsFor,
 } from "@/lib/credentials";
 import { DESTINATIONS } from "@/lib/links";
+import NewTabNote from "@/components/NewTabNote";
 
 export const metadata: Metadata = {
   title: "Credentials",
@@ -196,6 +197,7 @@ export default function CredentialsPage() {
                   className="mt-3 inline-block text-sm font-bold text-brand-red underline hover:text-brand-black"
                 >
                   {tier.name} Certifications on saca.org →
+                  <NewTabNote />
                 </a>
               </li>
             ))}

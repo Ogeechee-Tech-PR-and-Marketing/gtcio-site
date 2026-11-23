@@ -25,7 +25,7 @@ const DEFAULTS = {
     "GTCIO's facility serves both credit students and incumbent workers. The building holds 12 industrial labs alongside classrooms, computer labs, and meeting space, and it's stocked with real industrial equipment (maintenance, automation, controls) so students train on the same tools they'll use on the job. The space also trains and certifies instructors from across Georgia and the nation.",
   exteriorTitle: "The building",
   exteriorCaption:
-    "The Georgia Training Center for Industrial Operations at 66 AJ Riggs Road in Statesboro. GTCIO held its grand opening on October 15, 2026.",
+    "The Georgia Training Center for Industrial Operations at 66 AJ Riggs Road in Statesboro. GTCIO held its grand opening on Oct. 15, 2026.",
   galleryTitle: "Equipment Gallery",
   galleryLabels: ["Shop Floor", "Automation Lab", "Classroom", "Equipment Bay"],
   focusAreasTitle: "What the center is built around",
@@ -100,7 +100,7 @@ export default function FacilityPage() {
           <figure className="mt-8">
             <Image
               src="/images/facility-exterior-1.jpg"
-              alt="The GTCIO building on a clear day: brick and white-panel walls, a two-storey glass atrium, a shaded patio with tables, and the Georgia Training Center for Industrial Operations sign"
+              alt="The GTCIO building on a clear day: brick and white-panel walls, a two-story glass atrium, a shaded patio with tables, and the Georgia Training Center for Industrial Operations sign"
               width={2560}
               height={1179}
               sizes="(min-width: 1024px) 64rem, 100vw"

@@ -15,6 +15,8 @@ type InquiryField = {
   halfWidth?: boolean;
   options?: string[];
   placeholder?: string;
+  /** HTML autocomplete token (WCAG 1.3.5), e.g. "given-name", "email". */
+  autoComplete?: string;
 };
 
 type InquiryFormProps = {
@@ -115,13 +117,24 @@ export default function InquiryForm({
         className="hidden"
       />
 
+      {fields.some((field) => field.required) && (
+        <p className="text-xs text-brand-gray sm:col-span-2">
+          <span aria-hidden="true" className="text-brand-red">*</span> Required field
+        </p>
+      )}
+
       {fields.map((field) => (
         <div key={field.name} className={field.halfWidth === false ? "sm:col-span-2" : ""}>
           {field.type === "checkboxes" ? (
             <fieldset>
               <legend className="font-heading mb-1 block text-xs font-bold tracking-wide text-brand-black">
                 {field.label}
-                {field.required && <span className="text-brand-red"> *</span>}
+                {field.required && (
+                  <>
+                    <span aria-hidden="true" className="text-brand-red"> *</span>
+                    <span className="sr-only"> (required)</span>
+                  </>
+                )}
               </legend>
               <div className="flex flex-col gap-2 border border-brand-silver bg-brand-white px-3 py-3">
                 {field.options?.map((option) => (
@@ -144,7 +157,7 @@ export default function InquiryForm({
                 className="font-heading mb-1 block text-xs font-bold tracking-wide text-brand-black"
               >
                 {field.label}
-                {field.required && <span className="text-brand-red"> *</span>}
+                {field.required && <span aria-hidden="true" className="text-brand-red"> *</span>}
               </label>
 
               {field.type === "select" ? (
@@ -179,6 +192,7 @@ export default function InquiryForm({
                   name={field.name}
                   type={field.type ?? "text"}
                   required={field.required}
+                  autoComplete={field.autoComplete}
                   maxLength={field.type === "email" ? MAX_EMAIL : MAX_SHORT}
                   className={FIELD_CLASSES}
                 />

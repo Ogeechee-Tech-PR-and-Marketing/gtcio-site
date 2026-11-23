@@ -122,7 +122,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
-            className="font-ui text-sm font-bold tracking-wide text-brand-black xl:hidden"
+            className="font-ui -m-3 p-3 text-sm font-bold tracking-wide text-brand-black xl:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}

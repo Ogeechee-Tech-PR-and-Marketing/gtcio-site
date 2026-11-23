@@ -12,9 +12,10 @@ import {
 } from "@/lib/iot-curriculum";
 import { DESTINATIONS } from "@/lib/links";
 
+
 export const metadata: Metadata = {
   title: "Courses & Credit Hours | IOT Diploma Program",
-  description: `Every course in Ogeechee Tech's Industrial Operations Technology diploma — ${PROGRAM_COURSES.length} program courses plus ${GENERAL_EDUCATION_COURSES.length} general education courses, ${TOTAL_CREDITS} credit hours total, and the SACA credential each program course prepares you for.`,
+  description: `All ${PROGRAM_COURSES.length + GENERAL_EDUCATION_COURSES.length} courses in Ogeechee Tech's Industrial Operations Technology diploma, with credit hours and the SACA credential each program course prepares you for.`,
   alternates: { canonical: "/iot-diploma-program/curriculum" },
 };
 

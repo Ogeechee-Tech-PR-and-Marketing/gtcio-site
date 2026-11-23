@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { safeNextPath } from "@/lib/site-pin";
 
 export const metadata: Metadata = {
@@ -11,6 +12,8 @@ export default async function SitePinPage({
 }: {
   searchParams: Promise<{ next?: string; error?: string }>;
 }) {
+  // Nothing to unlock while the PIN gate is off.
+  if (!process.env.SITE_ACCESS_PIN) notFound();
   const params = await searchParams;
   const next = safeNextPath(params.next);
   const hasError = params.error === "1";

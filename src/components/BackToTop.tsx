@@ -9,12 +9,31 @@ import { useEffect, useState } from "react";
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
 
+  const [typing, setTyping] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > window.innerHeight);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Get out of the way while someone is filling in a form: on a phone the
+  // button would otherwise sit over the right edge of full-width fields.
+  useEffect(() => {
+    const isField = (el: EventTarget | null) =>
+      el instanceof HTMLElement && el.matches("input, textarea, select");
+    const onFocusIn = (e: FocusEvent) => setTyping(isField(e.target));
+    const onFocusOut = () => setTyping(false);
+    document.addEventListener("focusin", onFocusIn);
+    document.addEventListener("focusout", onFocusOut);
+    return () => {
+      document.removeEventListener("focusin", onFocusIn);
+      document.removeEventListener("focusout", onFocusOut);
+    };
+  }, []);
+
+  const show = visible && !typing;
 
   const toTop = () => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -31,8 +50,8 @@ export default function BackToTop() {
       aria-label="Back to top"
       // `invisible` takes it out of the tab order while hidden; visibility is
       // in the transition list so it flips after the fade-out, not before.
-      className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-brand-red text-brand-white shadow-lg transition-[opacity,translate,visibility] duration-200 hover:bg-brand-black md:hidden ${
-        visible ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"
+      className={`fixed bottom-4 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-brand-red text-brand-white shadow-lg transition-[opacity,translate,visibility] duration-200 hover:bg-brand-black md:hidden ${
+        show ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"
       }`}
     >
       <svg aria-hidden viewBox="0 0 20 20" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">

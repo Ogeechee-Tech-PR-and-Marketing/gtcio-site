@@ -4,6 +4,7 @@ import AboutTimeline from "@/components/AboutTimeline";
 import type { TimelineEvent } from "@/components/AboutTimeline";
 import PhotoGallery from "@/components/PhotoGallery";
 import type { GalleryPhoto } from "@/components/PhotoGallery";
+import NewTabNote from "@/components/NewTabNote";
 
 export const metadata: Metadata = {
   title: "About",
@@ -117,18 +118,18 @@ const DEFAULTS = {
       highlight: true,
     },
     {
-      date: "October 2, 2026",
+      date: "Oct. 2, 2026",
       title: "Building handed over",
       detail: "The building is handed over to Ogeechee Tech, clearing the way for classes to move in.",
     },
     {
-      date: "October 5, 2026",
+      date: "Oct. 5, 2026",
       title: "Classes move into the new building",
       detail:
         "Industrial Operations Technology students begin classes in GTCIO's new building on AJ Riggs Road, ten days before the grand opening.",
     },
     {
-      date: "October 15, 2026",
+      date: "Oct. 15, 2026",
       title: "Grand opening",
       detail:
         "About 200 people fill the lobby as OTC opens the center with a ribbon cutting. TCSG Commissioner Greg Dozier, House Speaker Jon Burns, Sen. Billy Hickman, Rep. Lehman Franklin, and Development Authority of Bulloch County CEO Benjy Thompson join OTC President Lori Durden and OTC VP of Economic Development Jan Moore in marking the milestone.",
@@ -234,7 +235,7 @@ const DEFAULTS = {
   ] satisfies BoardMember[],
   galleryTitle: "Grand Opening",
   galleryBody:
-    "State and local leaders, educators, and community partners filled the lobby on October 15, 2026, for the grand opening of the Georgia Training Center for Industrial Operations.",
+    "State and local leaders, educators, and community partners filled the lobby on Oct. 15, 2026, for the grand opening of the Georgia Training Center for Industrial Operations.",
   // First photo leads full-width; speakers are interleaved with audience shots so
   // no grid row is all podium. Speaker names from Jake; titles checked 2026-10-19
   // (Summers spells it "Micheal" on OTC's own board page).
@@ -333,7 +334,7 @@ const DEFAULTS = {
     {
       question: "Where is GTCIO located?",
       answer:
-        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Students began classes in the new building on October 5, 2026, and the center held its grand opening on October 15, 2026. The Facility page has more about the building.",
+        "GTCIO's new home is at 66 AJ Riggs Road, Statesboro, GA 30458. Students began classes in the new building on Oct. 5, 2026, and the center held its grand opening on Oct. 15, 2026. The Facility page has more about the building.",
     },
   ],
 };
@@ -349,7 +350,12 @@ export default function AboutPage() {
         eyebrow={page.heroEyebrow}
         title={page.heroTitle}
         description={page.heroDescription}
-        video="/videos/hero-about-3.mp4"
+        video={[
+          // Same cut, three encodes: browsers take the first they can decode.
+          { src: "/videos/hero-about-4-av1.mp4", type: 'video/mp4; codecs="av01.0.08M.10"' },
+          { src: "/videos/hero-about-4-hevc.mp4", type: 'video/mp4; codecs="hvc1.1.6.L120.B0"' },
+          { src: "/videos/hero-about-3.mp4", type: 'video/mp4; codecs="avc1.640032"' },
+        ]}
         videoPoster="/images/hero-about-poster.jpg"
       />
 
@@ -431,7 +437,8 @@ export default function AboutPage() {
             rel="noopener noreferrer"
             className="font-ui mt-6 inline-block bg-brand-red px-5 py-2.5 text-xs font-bold tracking-widest text-brand-white transition-colors hover:bg-brand-black"
           >
-            LEARN MORE
+            LEARN MORE<span className="sr-only"> about the Development Authority of Bulloch County</span>
+            <NewTabNote />
           </a>
         </div>
       </section>

@@ -2,9 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { DESTINATIONS, isExternal } from "@/lib/links";
 import { NAV_ITEMS } from "@/lib/nav";
-import { ORG } from "@/lib/site";
+import { ORG, telHref } from "@/lib/site";
 import NewsletterSignup from "./NewsletterSignup";
 import Year from "./Year";
+import NewTabNote from "@/components/NewTabNote";
 
 const COLUMNS = [
   {
@@ -60,6 +61,7 @@ export default function Footer() {
                       className="text-sm text-brand-silver hover:text-brand-white"
                     >
                       {link.label}
+                      {external && <NewTabNote />}
                     </Link>
                   </li>
                 );
@@ -72,7 +74,12 @@ export default function Footer() {
           <p className="font-display text-sm text-brand-gold">Contact</p>
           <ul className="mt-4 flex flex-col gap-2 text-sm text-brand-silver">
             <li>{ORG.address}</li>
-            <li>{`Phone: ${ORG.phone}`}</li>
+            <li>
+              Phone:{" "}
+              <a href={telHref(ORG.phone)} className="hover:text-brand-white">
+                {ORG.phone}
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -91,6 +98,7 @@ export default function Footer() {
               className="hover:text-brand-white"
             >
               Equal Opportunity Institution
+              <NewTabNote />
             </a>
             <span aria-hidden className="text-brand-red">
               |

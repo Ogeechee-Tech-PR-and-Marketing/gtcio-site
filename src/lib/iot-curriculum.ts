@@ -546,7 +546,7 @@ export const CREDENTIAL_FAMILIES: Credential["family"][] = [
 
 /** SACA's own description of itself, condensed from the brochure's p3 sidebar. */
 export const SACA_INTRO = [
-  "The Smart Automation Certification Alliance (SACA) is a non-profit organization whose mission is to develop and deploy modular Industry 4.0 credentials for a wide range of industries. It is the credentialing agency for every credential listed in this program.",
+  "The Smart Automation Certification Alliance (SACA) is a non-profit organization whose mission is to develop and deploy modular Industry 4.0 credentials for a wide range of industries. It is the credentialing agency for every SACA credential listed in this program.",
   "Built with industry at the table, SACA credentials are designed to meet the needs of modern employers who demand both knowledge and hands-on ability. Whether a company is hiring for advanced manufacturing, industrial automation, or smart systems integration, SACA credentials offer a reliable signal of a candidate's workforce readiness.",
   "SACA credentials are developed in accordance with ISO 17024 standards, the global benchmark for personnel certification — so they are not just well-designed, but credible, consistent, and globally recognized.",
 ];

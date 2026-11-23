@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HeroCard from "@/components/HeroCard";
-import HeroVideo from "@/components/HeroVideo";
+import HeroVideo, { type HeroVideoSource } from "@/components/HeroVideo";
 
 type PageHeroProps = {
   eyebrow?: string;
@@ -10,7 +10,7 @@ type PageHeroProps = {
   imageAlt?: string;
   imagePosition?: string;
   /** Background video (muted, looping). Takes the place of `image` when set. */
-  video?: string;
+  video?: string | HeroVideoSource[];
   /** Still shown while the video loads. Use a frame FROM the video so it doesn't jump. */
   videoPoster?: string;
   /** Optional CTA (e.g. a Button) rendered under the description. */
